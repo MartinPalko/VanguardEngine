@@ -1,0 +1,1 @@
+IMPLEMENT_MODULE(Core "Foundation")

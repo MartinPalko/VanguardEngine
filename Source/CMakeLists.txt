@@ -1,5 +1,7 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
 
+# ---------------- Macros ----------------
+
 # Macro that returns a list of all the directories that contain the specified files.
 MACRO(GET_DIRECTORIES return_list fileList)
     SET(dir_list "")
@@ -11,9 +13,8 @@ MACRO(GET_DIRECTORIES return_list fileList)
     SET(${return_list} ${dir_list})
 ENDMACRO()
 
-
-# Macro to easily implement a project. Automatically includes all code files, and links dependencies.
-MACRO (IMPLEMENT_PROJECT projType projName projFolder projDependencies)
+# Macro to easily implement a project. Automatically includes all code files, and writes dependencies to "recordedProjectDependencies" for linking later.
+MACRO (IMPLEMENT_PROJECT projType projName projDependencies)
 	MESSAGE("Creating project \"${projName}\"")
 
 	FILE (GLOB_RECURSE sourceFiles "*.h" "*.cpp")
@@ -38,15 +39,12 @@ MACRO (IMPLEMENT_PROJECT projType projName projFolder projDependencies)
 	
 	# Need to include directories of source files so headers can be found
 	GET_DIRECTORIES(includeDirs "${sourceFiles}")
-	TARGET_INCLUDE_DIRECTORIES(${projName} PUBLIC ${includeDirs})	
-	#INCLUDE_DIRECTORIES("${includeDirs}")
+	TARGET_INCLUDE_DIRECTORIES(${projName} PUBLIC ${includeDirs})
 	
 	# Put all cross project dependencies into a list to be linked later, after all projects have been added.
 	FOREACH (dependency ${projDependencies})
 		LIST(APPEND recordedProjectDependencies "${projName}=${dependency}")
 		MESSAGE("    Dependency: ${dependency}")
-		#ADD_DEPENDENCIES(${projName} ${dependency})
-		#INCLUDE_DIRECTORIES(${dependency})
 	ENDFOREACH()	
 	SET (recordedProjectDependencies "${recordedProjectDependencies}" PARENT_SCOPE) # Update the variable in parent scope
 	
@@ -54,55 +52,48 @@ ENDMACRO ()
 
 # Macro for implementing modules
 MACRO (IMPLEMENT_MODULE moduleName dependencies)
-	IMPLEMENT_PROJECT("MODULE" "${moduleName}" "Modules" "${dependencies}")
+	IMPLEMENT_PROJECT("MODULE" "${moduleName}" "${dependencies}")
 ENDMACRO ()
 
 # Macro for implementing static libraries
 MACRO (IMPLEMENT_STATIC_LIB libName dependencies)
-	IMPLEMENT_PROJECT("STATIC" "${libName}" "Libraries" "${dependencies}")
+	IMPLEMENT_PROJECT("STATIC" "${libName}" "${dependencies}")
 ENDMACRO ()
 
 # Macro for implementing static libraries
 MACRO (IMPLEMENT_DYNAMIC_LIB libName dependencies)
-	IMPLEMENT_PROJECT("SHARED" "${libName}" "Libraries" "${dependencies}")
+	IMPLEMENT_PROJECT("SHARED" "${libName}" "${dependencies}")
 ENDMACRO ()
 
 # Macro for implementing executables
 MACRO (IMPLEMENT_EXECUTABLE executableName dependencies)
-	IMPLEMENT_PROJECT("EXECUTABLE" "${executableName}" "Executables" "${dependencies}")
-	
+	IMPLEMENT_PROJECT("EXECUTABLE" "${executableName}" "${dependencies}")	
 ENDMACRO ()
 
-
-
-SET (recordedProjectDependencies "")
+# ---------------- End Macros ----------------
 
 # Makelist script starts here
 PROJECT (Vanguard)
 
-# -----------  Settings  -----------
-SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS "ON") # Use folders to organize libs
+# Enable folders in the solution
+SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS "ON")
 
-# Engine root is one up from source directory.
-GET_FILENAME_COMPONENT(EngineRoot "${CMAKE_SOURCE_DIR}" DIRECTORY)
-# Create path for the bin folder
+# Create variable for engine root folder
+GET_FILENAME_COMPONENT(EngineRoot "${CMAKE_SOURCE_DIR}" DIRECTORY) # Engine root is one up from source directory.
+# Create variable for bin folder
 SET(BinFolder "${EngineRoot}/Bin")
-#SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${BinFolder}")
-#SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${BinFolder}")
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${BinFolder}")
 
-MESSAGE(${CMAKE_BINARY_DIR})
-MESSAGE(${BinFolder})
+# Output all runtime files to the bin folder on build.
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${BinFolder}")
 
 # Find all sub directories containting CMakeLists.txt files
 FILE(GLOB_RECURSE subMakeLists *CMakeLists.txt)
 GET_DIRECTORIES(libDirectories "${subMakeLists}")
 
-LIST(REMOVE_ITEM libDirectories ${CMAKE_CURRENT_SOURCE_DIR}) # Make sure we're not adding our own (root) directory
+ # Make sure we're not adding our own (root) directory
+LIST(REMOVE_ITEM libDirectories ${CMAKE_CURRENT_SOURCE_DIR})
 
-# First include all root folders. This means only .h files in the root folders will be able to be included in other modules.
-# INCLUDE_DIRECTORIES(${libDirectories})
-
+# Run CmakeLists.txt scripts for each project.
 FOREACH(file_path ${libDirectories})
 		add_subdirectory (${file_path})
 ENDFOREACH()

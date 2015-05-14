@@ -87,6 +87,13 @@ MACRO (IMPLEMENT_PROJECT_AUTOFINDSOURCES projType projName projDependencies)
 	IMPLEMENT_PROJECT("${projType}" "${projName}" "${projDependencies}" "${sourceFiles}")
 ENDMACRO()
 
+MACRO(PUT_IN_FOLDER_RELATIVE_ROOT in_projectName in_additionalSorting)
+	# Put us in a IDE folder to match the disk folder relative to root cmake file.
+	GET_FILENAME_COMPONENT(prent_path "${CMAKE_CURRENT_SOURCE_DIR}" DIRECTORY)
+	file (RELATIVE_PATH relativeCurrentSourceDir "${CMAKE_SOURCE_DIR}" "${prent_path}")
+	SET_TARGET_PROPERTIES("${in_projectName}" PROPERTIES FOLDER "${relativeCurrentSourceDir}${in_additionalSorting}")
+ENDMACRO()
+
 # Macro to easily implement a project. Automatically includes all code files, and writes dependencies to "recordedProjectDependencies" for linking later.
 MACRO (IMPLEMENT_PROJECT projType projName projDependencies sourceFiles)
 	MESSAGE("Creating project \"${projName}\"")
@@ -108,10 +115,7 @@ MACRO (IMPLEMENT_PROJECT projType projName projDependencies sourceFiles)
 		ADD_LIBRARY(${projName} ${projType} ${absoluteSourceFiles})
 	ENDIF()
 	
-	# Put us in a IDE folder to match the disk folder relative to root cmake file.
-	GET_FILENAME_COMPONENT(prent_path "${CMAKE_CURRENT_SOURCE_DIR}" DIRECTORY)
-	file (RELATIVE_PATH relativeCurrentSourceDir "${CMAKE_SOURCE_DIR}" "${prent_path}")
-	SET_TARGET_PROPERTIES(${projName} PROPERTIES FOLDER "${relativeCurrentSourceDir}")
+	PUT_IN_FOLDER_RELATIVE_ROOT(${projName} "")
 	
 	# Group source files in the same way that they are found in the folders
 	FOREACH (file ${absoluteSourceFiles})

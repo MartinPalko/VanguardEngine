@@ -1,1 +1,1 @@
-IMPLEMENT_STATIC_LIB(Foundation "")
+IMPLEMENT_STATIC_LIB(Foundation "juce_core")

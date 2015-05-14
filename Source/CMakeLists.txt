@@ -13,11 +13,8 @@ MACRO(GET_DIRECTORIES return_list fileList)
     SET(${return_list} ${dir_list})
 ENDMACRO()
 
-MACRO (IMPLEMENT_PROJECT_AUTOFINDSOURCES projType projName projDependencies)
-	FILE (GLOB_RECURSE sourceFiles "*.h" "*.cpp")
-	IMPLEMENT_PROJECT("${projType}" "${projName}" "${projDependencies}" "${sourceFiles}")
-ENDMACRO()
 
+# Decode a string saved as "Project=Dependency" to two seperate strings.
 MACRO (DECODE_DEPENDENCY_PAIR return_project return_dependency pair)
 	STRING(FIND ${pair} "=" seperatorPosition)
 	MATH(EXPR seperatorPositionPlusOne "${seperatorPosition}+1")		
@@ -25,10 +22,38 @@ MACRO (DECODE_DEPENDENCY_PAIR return_project return_dependency pair)
 	STRING(SUBSTRING ${dependencyPair} ${seperatorPositionPlusOne} -1 ${return_dependency})
 ENDMACRO()
 
+# Recursively find all "CMakeLists.txt" files. Only finds "top level" files, so recursion stops when it finds one.
+FUNCTION (FIND_TOPLEVEL_MAKELISTS return_list)
+	#FILE(GLOB_RECURSE subMakeLists *CMakeLists.txt)
+	FILE(GLOB subDirectories "${CMAKE_CURRENT_SOURCE_DIR}/*")
+	FOREACH (directory ${subDirectories})
+		FIND_MAKELISTS_RECURSIVE(${return_list} ${directory})
+	ENDFOREACH()
+	
+	SET(${return_list} ${subMakeLists} PARENT_SCOPE)
+ENDFUNCTION()
+
+# Recursively searches the specified folder for "CMakeLists.txt" files. Recursion stops when it finds one.
+FUNCTION (FIND_MAKELISTS_RECURSIVE return_lists directoryToSearch)
+	FILE(GLOB makelistInDir "${directoryToSearch}/CMakeLists.txt")
+	IF("${makelistInDir}" STREQUAL "")		
+		FILE(GLOB subDirectories "${directoryToSearch}/*")
+		FOREACH (directory ${subDirectories})
+			FIND_MAKELISTS_RECURSIVE(${return_list} ${directory})
+		ENDFOREACH()
+	ELSE()
+		MESSAGE("${makelistInDir}")
+		LIST(APPEND ${return_list} "${makelistInDir}")
+	ENDIF()
+	SET(${return_list} ${subMakeLists} PARENT_SCOPE)
+
+ENDFUNCTION()
+
+# Solves dependencies based on those found in the global variable "recordedProjectDependencies".
+# Functions recursively, so if the dependency has dependencies, it solves those first.
 FUNCTION (RECURSIVE_SOLVE_DEPENDENCIES in_project)
 	FOREACH (dependencyPair ${recordedProjectDependencies})
 		DECODE_DEPENDENCY_PAIR(temp_project temp_dependency "${dependencyPair}")
-		MESSAGE("\n${in_project} depends on ${temp_dependency}\n")
 		#Determine if this is a dependency we need
 		IF(${in_project} MATCHES ${temp_project})
 			LIST(FIND solvedProjects ${temp_dependency} isInSolvedList)
@@ -53,9 +78,14 @@ FUNCTION (RECURSIVE_SOLVE_DEPENDENCIES in_project)
 	LIST(APPEND solvedProjects "${in_project}")
 	# Update the variable in parent scope, since we want to use it globally.
 	SET (solvedProjects "${solvedProjects}" PARENT_SCOPE)
-	MESSAGE("Solved ${in_project}\n")
-
+	MESSAGE("Solved dependencies for ${in_project}")
 ENDFUNCTION()
+
+# Same as IMPLEMENT_PROJECT, but .h and .cpp are found automatically by scanning sub-directories.
+MACRO (IMPLEMENT_PROJECT_AUTOFINDSOURCES projType projName projDependencies)
+	FILE (GLOB_RECURSE sourceFiles "*.h" "*.cpp")
+	IMPLEMENT_PROJECT("${projType}" "${projName}" "${projDependencies}" "${sourceFiles}")
+ENDMACRO()
 
 # Macro to easily implement a project. Automatically includes all code files, and writes dependencies to "recordedProjectDependencies" for linking later.
 MACRO (IMPLEMENT_PROJECT projType projName projDependencies sourceFiles)
@@ -143,7 +173,7 @@ SET(BinFolder "${EngineRoot}/Bin")
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${BinFolder}")
 
 # Find all sub directories containting CMakeLists.txt files
-FILE(GLOB_RECURSE subMakeLists *CMakeLists.txt)
+FIND_TOPLEVEL_MAKELISTS(subMakeLists)
 GET_DIRECTORIES(libDirectories "${subMakeLists}")
 
  # Make sure we're not adding our own (root) directory

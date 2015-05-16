@@ -62,6 +62,13 @@ FUNCTION (RECURSIVE_SOLVE_DEPENDENCIES in_project)
 				RECURSIVE_SOLVE_DEPENDENCIES(${temp_dependency})				
 			ENDIF()
 			
+			GET_TARGET_PROPERTY(DependencyType ${temp_dependency} TYPE)
+			
+			# Have the linker also compile it's dependencies source files if it's a static lib.
+			IF (${DependencyType} STREQUAL "STATIC_LIBRARY")
+				SET_TARGET_PROPERTIES(${in_project} PROPERTIES LINK_LIBRARIES ${temp_dependency})				
+			ENDIF()
+			
 			# Add dependency to platform
 			ADD_DEPENDENCIES(${in_project} ${temp_dependency})
 			# Append project include directories with that of it's dependency's
@@ -88,10 +95,14 @@ MACRO (IMPLEMENT_PROJECT_AUTOFINDSOURCES projType projName projDependencies)
 ENDMACRO()
 
 MACRO(PUT_IN_FOLDER_RELATIVE_ROOT in_projectName in_additionalSorting)
-	# Put us in a IDE folder to match the disk folder relative to root cmake file.
-	GET_FILENAME_COMPONENT(prent_path "${CMAKE_CURRENT_SOURCE_DIR}" DIRECTORY)
-	file (RELATIVE_PATH relativeCurrentSourceDir "${CMAKE_SOURCE_DIR}" "${prent_path}")
-	SET_TARGET_PROPERTIES("${in_projectName}" PROPERTIES FOLDER "${relativeCurrentSourceDir}${in_additionalSorting}")
+	IF(TARGET "${in_projectName}") #Check to make sure target exists
+		# Put us in a IDE folder to match the disk folder relative to root cmake file.
+		GET_FILENAME_COMPONENT(prent_path "${CMAKE_CURRENT_SOURCE_DIR}" DIRECTORY)
+		file (RELATIVE_PATH relativeCurrentSourceDir "${CMAKE_SOURCE_DIR}" "${prent_path}")
+		SET_TARGET_PROPERTIES("${in_projectName}" PROPERTIES FOLDER "${relativeCurrentSourceDir}${in_additionalSorting}")
+	ELSE()
+		MESSAGE("Warning: Cannot place project \"${in_projectName}\" in folder; project does not exist.")
+	ENDIF()
 ENDMACRO()
 
 # Macro to easily implement a project. Automatically includes all code files, and writes dependencies to "recordedProjectDependencies" for linking later.
@@ -172,9 +183,11 @@ SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS "ON")
 GET_FILENAME_COMPONENT(EngineRoot "${CMAKE_SOURCE_DIR}" DIRECTORY) # Engine root is one up from source directory.
 # Create variable for bin folder
 SET(BinFolder "${EngineRoot}/Bin")
+SET(LibFolder "${EngineRoot}/Lib")
 
 # Output all runtime files to the bin folder on build.
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${BinFolder}")
+#SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${LibFolder}")
 
 # Find all sub directories containting CMakeLists.txt files
 FIND_TOPLEVEL_MAKELISTS(subMakeLists)
@@ -183,9 +196,12 @@ GET_DIRECTORIES(libDirectories "${subMakeLists}")
  # Make sure we're not adding our own (root) directory
 LIST(REMOVE_ITEM libDirectories ${CMAKE_CURRENT_SOURCE_DIR})
 
+LINK_DIRECTORIES(${libDirectories})
+
 # Run CmakeLists.txt scripts for each project.
 FOREACH(file_path ${libDirectories})
-		add_subdirectory (${file_path})
+		
+		add_subdirectory (${file_path})		
 ENDFOREACH()
 
 # Now link dependencies. "recordedProjectDependencies" is written to from the macros.

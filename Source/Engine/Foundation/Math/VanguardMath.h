@@ -1,7 +1,5 @@
 #pragma once
-class VanguardMath
-{
-public:
-	VanguardMath();
-	~VanguardMath();
-};
+
+#include "MathFunctions.h"
+#include "Vector3.h"
+

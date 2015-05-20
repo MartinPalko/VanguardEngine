@@ -2,5 +2,5 @@
 
 int main()
 {
-	FoundationBaseClass* Test = new FoundationBaseClass();
+	//FoundationBaseClass* Test = new FoundationBaseClass();
 }

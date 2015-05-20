@@ -6,11 +6,11 @@
 
 namespace Vanguard
 {
-	struct WindowsPlatform : public BasePlatform
+	struct LinuxPlatform : public BasePlatform
 	{
 
 	};
-	typedef WindowsPlatform Platform;
+	typedef LinuxPlatform Platform;
 }
 
 #endif //_VANGUARD_PLATFORM_IMPLEMENTATION

@@ -1,6 +1,8 @@
 #pragma once
 #include "Platform.h"
-#include <string>
+
+#include "List.h"
+#include "Dictionary.h"
 
 namespace Vanguard
 {

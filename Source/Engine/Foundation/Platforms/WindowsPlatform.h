@@ -8,7 +8,6 @@ namespace Vanguard
 {
 	struct WindowsPlatform : public BasePlatform
 	{
-
 	};
 	typedef WindowsPlatform Platform;
 }

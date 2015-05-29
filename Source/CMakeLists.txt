@@ -65,8 +65,14 @@ FUNCTION (RECURSIVE_SOLVE_DEPENDENCIES in_project)
 			GET_TARGET_PROPERTY(DependencyType ${temp_dependency} TYPE)
 			
 			# Have the linker also compile it's dependencies source files if it's a static lib.
-			IF (${DependencyType} STREQUAL "STATIC_LIBRARY")
-				SET_TARGET_PROPERTIES(${in_project} PROPERTIES LINK_LIBRARIES ${temp_dependency})				
+			IF (${DependencyType} STREQUAL "STATIC_LIBRARY")				
+				GET_TARGET_PROPERTY(newLinkLibs ${in_project} LINK_LIBRARIES)
+				IF ("${newLinkLibs}" STREQUAL "newLinkLibs-NOTFOUND")
+					SET_TARGET_PROPERTIES(${in_project} PROPERTIES LINK_LIBRARIES "${temp_dependency}")		
+				ELSE()
+					LIST(APPEND newLinkLibs "${temp_dependency}")
+					SET_TARGET_PROPERTIES(${in_project} PROPERTIES LINK_LIBRARIES "${newLinkLibs}")		
+				ENDIF()
 			ENDIF()
 			
 			# Add dependency to platform

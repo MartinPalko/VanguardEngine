@@ -140,13 +140,13 @@ namespace Vanguard
 		// Create an empty file on the disk if it doesn't already exist. Returns the result (error message if failed)
 		string CreateFileOnDisk() const
 		{
-			return StringUtils::FromJuceString(file.createDirectory().getErrorMessage());
+			return StringUtils::FromJuceString(file.create().getErrorMessage());
 		}
 
 		// Create an empty directory on the disk if it doesn't already exist. Returns the result (error message if failed)
 		string CreateDirectoryOnDisk() const
 		{
-			return StringUtils::FromJuceString(file.create().getErrorMessage());
+			return StringUtils::FromJuceString(file.createDirectory().getErrorMessage());
 		}
 
 		// Deletes a file or directory from the disk. Returns false if delete fails.

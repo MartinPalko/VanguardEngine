@@ -1,12 +1,12 @@
 #pragma once
 
 #include "juce_core.h"
-#include "Types.h"
-#include "StringUtils.h"
+#include "VanguardTypes.h"
 
 namespace Vanguard
 {
 	// Represents either a file or directory on the machines filesystem.
+	// It's basically just a string, but with functionality to querey with the assumption of it being a file path (like getting file extension, parent directory, etc)
 	// Is actually just a Wrapper for juce::File
 	class FilePath
 	{
@@ -35,59 +35,65 @@ namespace Vanguard
 
 		// ----------- Operators -----------
 
-		operator juce::File() const { return file; }
-		operator string() const { return GetFullPathName(); }
+		inline operator const juce::File&() const { return file; }
+		inline operator const string&() const { return GetFullPathName(); }
+		inline operator const char*() const
+		{
+			// NOTE: Returning a const char* will only work with "getFullPathName" because it returns a reference to the string stored inside the file class, not a value. Therefore it's still valid outside the scope of this function.
+			return file.getFullPathName().getCharPointer();
+		}
 
-		bool operator== (const FilePath& other) const { return other.file == file; }
-		bool operator!= (const FilePath& other) const { return other.file != file; }
+		inline bool operator== (const FilePath& other) const { return other.file == file; }
+		inline bool operator!= (const FilePath& other) const { return other.file != file; }
 		
-		FilePath operator+ (const FilePath& other) const { return GetRelative(other.GetFullPathName()); }
-		FilePath operator+ (const string& str) const { return GetRelative(str); }
+		inline FilePath operator+ (const FilePath& other) const { return GetRelative(other.GetFullPathName()); }
+		inline FilePath operator+ (const string& str) const { return GetRelative(str); }
+		inline FilePath operator+ (const char* charPointer) const { return GetRelative(charPointer); }
 
-		FilePath operator-- () const { return GetParentDirectory(); }
+		inline FilePath operator-- () const { return GetParentDirectory(); }
 
 		// ----------- Methods -----------
 
 		// Gets the entire path name, including drive, filename, and extension if applicable.		
-		string GetFullPathName() const
+		inline const string& GetFullPathName() const
 		{
-			return StringUtils::FromJuceString(file.getFullPathName());
+			return string(file.getFullPathName());
 		}
 
 		// Gets the filename including extension. If it's a directory, will get the name of the final folder.
-		string GetFilename() const
+		inline string GetFilename() const
 		{
-			return StringUtils::FromJuceString(file.getFileName());
+			return file.getFileName();
 		}
 
 		// Returns filename, excluding the extension
-		string GetFilenameWithoutExtension() const
+		inline string GetFilenameWithoutExtension() const
 		{
-			return StringUtils::FromJuceString(file.getFileNameWithoutExtension());
+			return file.getFileNameWithoutExtension();
 		}
 
 		// Gets the extension of the file, including the period.
-		string GetFileExtension() const
+		inline string GetFileExtension() const
 		{
-			return StringUtils::FromJuceString(file.getFileExtension());
+			return file.getFileExtension();
 		}
 
 		// Check if the file has the given extension.
-		bool HasFileExtension(const string& aExtension) const
+		inline bool HasFileExtension(const string& aExtension) const
 		{
-			return file.hasFileExtension(juce::StringRef(aExtension));
+			return file.hasFileExtension(aExtension);
 		}
 
 		// Get the directory this filepath resides in.
-		FilePath GetParentDirectory() const
+		inline FilePath GetParentDirectory() const
 		{
 			return file.getParentDirectory();
 		}
 		
 		// Make a new filepath that is relative to this one based on the provided relative path
-		FilePath GetRelative(string aRelativePath) const
+		inline FilePath GetRelative(string aRelativePath) const
 		{
-			return file.getChildFile(juce::StringRef(aRelativePath));
+			return file.getChildFile(aRelativePath);
 		}
 	};
 }

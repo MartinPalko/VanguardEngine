@@ -1,8 +1,8 @@
 #pragma once
-
+#include "VanguardTypes.h"
 #include "juce_core.h"
-#include "Types.h"
-#include "StringUtils.h"
+
+
 
 #include "FilePath.h"
 
@@ -70,7 +70,7 @@ namespace Vanguard
 		// Gets a human readable string of the file size, for example "100 bytes", "2KB", or "2 MB".
 		static string GetHumanReadableSizeFromBytes(uint64 aNumBytes)
 		{
-			return StringUtils::FromJuceString(juce::File::descriptionOfSizeInBytes(aNumBytes));
+			return juce::File::descriptionOfSizeInBytes(aNumBytes);
 		}
 
 		// Checks to see if we have write access to a file or directory.
@@ -94,13 +94,13 @@ namespace Vanguard
 		// Create an empty file on the disk if it doesn't already exist. Returns the result (error message if failed)
 		static string CreateFile(const FilePath& aFilePath)
 		{
-			return StringUtils::FromJuceString(aFilePath.file.create().getErrorMessage());
+			return aFilePath.file.create().getErrorMessage();
 		}
 
 		// Create an empty directory on the disk if it doesn't already exist. Returns the result (error message if failed)
 		static string CreateDirectory(const FilePath& aFilePath)
 		{
-			return StringUtils::FromJuceString(aFilePath.file.createDirectory().getErrorMessage());
+			return aFilePath.file.createDirectory().getErrorMessage();
 		}
 
 		// Deletes a file or directory from the disk. Returns false if delete fails.
@@ -189,7 +189,7 @@ namespace Vanguard
 		// Reads the contents of the file as if it were plain text.
 		static string LoadFileAsString(const FilePath& aFilePath)
 		{
-			return StringUtils::FromJuceString(aFilePath.file.loadFileAsString());
+			return aFilePath.file.loadFileAsString();
 		}
 
 		// Reads the contents of the file as if it were plain text. Creates a new string at every line break.
@@ -203,7 +203,7 @@ namespace Vanguard
 
 			for (int i = 0; i < juceDestLines.size(); i++)
 			{
-				returnList[i] = StringUtils::FromJuceString(juceDestLines[i]);
+				returnList[i] = juceDestLines[i];
 			}
 
 			return returnList;

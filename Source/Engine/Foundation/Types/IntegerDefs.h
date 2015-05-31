@@ -1,13 +1,7 @@
-#pragma once
 #include "Platform.h"
-
-#include "List.h"
-#include "Dictionary.h"
 
 namespace Vanguard
 {
-	typedef Platform::string string;
-
 	typedef Platform::int64 int64;
 	typedef Platform::int32 int32;
 	typedef Platform::int16 int16;

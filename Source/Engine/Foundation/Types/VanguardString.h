@@ -36,6 +36,19 @@ namespace Vanguard
 		inline operator const juce::String() const { return juce::String(data.c_str()); }
 		inline operator const juce::StringRef() const { return data.c_str(); }
 
+		inline void operator += (const string& aOther) { data = Append(aOther).data; }
+
+		// Access character by index
+		inline char operator[](int32 aIndex) const
+		{
+#if VANGUARD_DEBUG
+			// Guard aginst out of range
+			if (aIndex < 0 || aIndex >= GetLength())
+				throw std::invalid_argument("String index out of range");
+#endif
+			return data[aIndex]; 
+		}
+
 		// To and from boolean
 		static const string TRUE_STRING;
 		static const string FALSE_STRING;
@@ -51,9 +64,22 @@ namespace Vanguard
 		inline float ToFloat() const { return std::stof(data); }
 
 		// Returns the number of characters in this string
-		inline uint32 GetLength() const
+		inline int32 GetLength() const
 		{
 			return data.length();
+		}
+
+		inline bool IsEmpty() const
+		{
+			return Trim().GetLength() == 0;
+		}
+
+		// Returns a string with the specified string appended to the end of it.
+		inline string Append(const string& aString) const
+		{
+			std::string newString = data;
+			newString.append(aString.data);
+			return newString;
 		}
 
 		// Split the string into a list of strings by the specified character.
@@ -72,11 +98,98 @@ namespace Vanguard
 			return splitList;
 		}
 
+		// Joins an array of strings into a single string, with the specified seperator between each element.
+		static string Join(const List<string>& aStringList, const char& aSeperatorCharacter)
+		{
+			if (aStringList.size() <= 0)
+				return string();
+
+			string newString = aStringList[0];
+
+			for (uint32 i = 1; i < aStringList.size(); i++)
+			{
+				newString += ";";
+				newString += aStringList[i];
+			}
+			return newString;
+		}
+
+		// Returns true if the string contains at least one instance of the specified substring
+		inline bool Contains(const string& aString) const
+		{
+			return !(data.find(aString) == std::string::npos);
+		}
+
+		// Returns true if the string contains at least one instance of the specified character
+		inline bool Contains(const char& aCharacter) const
+		{
+			return !(data.find(aCharacter) == std::string::npos);
+		}
+
+		// Returns true if the string contains at least one instance of any of the specified characters
+		inline bool ContainsAny(const string& aCharacters) const
+		{
+			for (int i = 0; i < aCharacters.GetLength(); i++)
+			{
+				if (!(data.find(aCharacters[i]) == std::string::npos))
+					return true;
+			}
+			return false;
+		}
+
+		// Returns the index of the first of the specified character
+		inline int32 FirstIndexOf(const char& aCharacter) const
+		{
+			return data.find_first_of(aCharacter);
+		}
+
+		// Returns the index of the first of any of the specified characters
+		inline int32 FirstIndexOfAny(const string& aCharacters) const
+		{
+			return data.find_first_of(aCharacters);
+		}
+
+		// Returns the index of the last of the specified character
+		inline int32 LastIndexOf(const char& aCharacter) const
+		{
+			return data.find_last_of(aCharacter);
+		}
+
+		// Returns the index of the last of any of the specified characters
+		inline int32 LastIndexOfAny(const string& aCharacters) const
+		{
+			return data.find_last_of(aCharacters);
+		}
+
+		// Returns the index of the first character not to match the specified character
+		inline int32 FirstIndexNotOf(const char& aCharacter) const
+		{
+			return data.find_first_not_of(aCharacter);
+		}
+
+		// Returns the index of the first character not to match the and of the specified characters
+		inline int32 FirstIndexNotOfAny(const string& aCharacters) const
+		{
+			return data.find_first_not_of(aCharacters);
+		}
+
+		// Returns the index of the last character not to match the specified character
+		inline int32 LastIndexNotOf(const char& aCharacter) const
+		{
+			return data.find_last_not_of(aCharacter);
+		}
+
+		// Returns the index of the last character not to match the and of the specified characters
+		inline int32 LastIndexNotOfAny(const string& aCharacters) const
+		{
+			return data.find_last_not_of(aCharacters);
+		}
+
 		// Returns a string with all instances of a specified character withplaced with another.
 		inline string Replace(const char& aChar, const char& aWithChar) const
 		{
 			std::string newString = data;
-			std:replace(newString.begin(), newString.end(), aChar, aWithChar);
+			std::replace(newString.begin(), newString.end(), aChar, aWithChar);
 			return newString;
 		}
 
@@ -89,10 +202,37 @@ namespace Vanguard
 			while ((start_pos = newString.find(aString, start_pos)) != std::string::npos)
 			{
 				newString.replace(start_pos, aString.GetLength(), aWithString);
-				start_pos += aWithString.GetLength(); // Handles case where 'to' is a substring of 'from'
+				start_pos += aWithString.GetLength(); // Handles case where 'aWithString' is a substring of 'aString'
 			}
 			return newString;
-		}		
+		}
+
+		// Returns a string with the given string insterted starting at the given index.
+		inline string Insert(const int32& aAtIndex, const string& aStringToInsert) const
+		{
+			std::string newString = data;
+			newString.insert(aAtIndex, aStringToInsert);
+			return newString;
+		}
+
+		// Returns a string with the given string insterted starting at the given index.
+		inline string Remove(const int32& aAtIndex, const int32& aCharactersToRemove) const
+		{
+			std::string newString = data;
+			newString.erase(aAtIndex,aCharactersToRemove);
+			return newString;
+		}
+
+		// Returns a string with all characters between the two indexes removed.
+		inline string RemoveBetween(const int32& aFirstIndex, const int32& aSecondIndex) const
+		{
+			std::string newString = data;
+			if (aFirstIndex < aSecondIndex)
+				newString.erase(aFirstIndex, aSecondIndex - aFirstIndex);
+			else if (aSecondIndex < aFirstIndex)
+				newString.erase(aSecondIndex, aFirstIndex - aSecondIndex);
+			return newString;
+		}
 
 		// Returns a string with all instances of the specified character removed.
 		inline string Remove(const char& aChar) const
@@ -103,7 +243,10 @@ namespace Vanguard
 		}
 
 		// Returns a string with all instances of the specified string removed.
-		inline string Remove(const string& aString) const { return Replace(aString, ""); }
+		inline string Remove(const string& aString) const
+		{
+			return Replace(aString, ""); 
+		}
 
 		// Returns a string that has all instances of all characters specified removed from the string.
 		inline string RemoveCharacters(const char* aCharacters) const
@@ -189,6 +332,9 @@ namespace Vanguard
 	// Comparison to std::string
 	inline bool operator == (const string& lhs, const std::string& rhs) { return (std::string)lhs == rhs; }
 	inline bool operator == (const std::string& lhs, const string& rhs) { return (std::string)rhs == lhs; }
+
+	// Addition
+	inline string operator+ (const string& lhs, const string& rhs) { return lhs.Append(rhs); }
 
 	// Comparison to char*
 	inline bool operator == (const string& lhs, const char* rhs) { return (std::string)lhs == rhs; }

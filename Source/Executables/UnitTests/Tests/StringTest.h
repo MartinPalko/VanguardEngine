@@ -65,6 +65,74 @@ namespace Vanguard
 		EXPECT_EQ("test", vanguardFromCharPointer);
 	}
 
+	TEST_F(StringTest, MiscQuery)
+	{
+		string testString = "0123456789";
+		EXPECT_EQ(10, testString.GetLength());
+
+		string emptyString = "   \n\n    \n";
+		EXPECT_TRUE(emptyString.IsEmpty());
+	}
+
+	TEST_F(StringTest, IndexAccess)
+	{
+		string testString = "0123456789";
+
+		EXPECT_EQ('4', testString[4]);
+		EXPECT_EQ('9', testString[9]);
+	}
+
+	TEST_F(StringTest, Searching)
+	{
+		string testString = "abc123abc";
+
+		EXPECT_TRUE(testString.Contains('a'));
+		EXPECT_FALSE(testString.Contains('f'));
+
+		EXPECT_TRUE(testString.Contains("c123"));
+		EXPECT_TRUE(testString.Contains("abc"));
+		EXPECT_FALSE(testString.Contains("cds"));
+		EXPECT_FALSE(testString.Contains("abc324"));
+
+		EXPECT_TRUE(testString.ContainsAny("cds"));
+		EXPECT_FALSE(testString.ContainsAny("fgw"));
+
+		EXPECT_EQ(0, testString.FirstIndexOf('a'));
+		EXPECT_EQ(-1, testString.FirstIndexOf('w'));
+
+		EXPECT_EQ(3, testString.FirstIndexOfAny("312"));
+		EXPECT_EQ(-1, testString.FirstIndexOfAny("946ASD"));
+
+		EXPECT_EQ(6, testString.LastIndexOf('a'));
+		EXPECT_EQ(-1, testString.LastIndexOf('w'));
+
+		EXPECT_EQ(5, testString.LastIndexOfAny("312"));
+		EXPECT_EQ(-1, testString.LastIndexOfAny("946ASD"));
+
+		EXPECT_EQ(1, testString.FirstIndexNotOf('a'));
+		EXPECT_EQ(0, testString.FirstIndexNotOf('c'));
+		
+		EXPECT_EQ(3, testString.FirstIndexNotOfAny("cba"));
+		EXPECT_EQ(0, testString.FirstIndexNotOfAny("123"));
+
+		EXPECT_EQ(7, testString.LastIndexNotOf('c'));
+		EXPECT_EQ(8, testString.LastIndexNotOf('a'));
+
+		EXPECT_EQ(5, testString.LastIndexNotOfAny("asdfbc"));
+		EXPECT_EQ(8, testString.LastIndexNotOfAny("wasd"));
+	}
+
+	TEST_F(StringTest, Appending)
+	{
+		string stringOne = "one";
+		string stringTwo = "two";
+		
+		EXPECT_EQ("onetwo", stringOne.Append(stringTwo));
+		EXPECT_EQ("onetwo", stringOne + stringTwo);
+
+		EXPECT_EQ("one test", stringOne + " test");
+	}
+
 	TEST_F(StringTest, ToUpperAndLower)
 	{
 		string mixed = "TeSt";
@@ -78,7 +146,7 @@ namespace Vanguard
 		EXPECT_EQ(mixed.ToLower(), upper.ToLower());
 	}
 
-	TEST_F(StringTest, StringSplit)
+	TEST_F(StringTest, StringSplitAndJoin)
 	{
 		string conjoinedString = "Thing1;Thing2;Thing3;Thing4";
 
@@ -90,17 +158,21 @@ namespace Vanguard
 		EXPECT_EQ("Thing2", splitString[1]);
 		EXPECT_EQ("Thing3", splitString[2]);
 		EXPECT_EQ("Thing4", splitString[3]);
+
+		string rejoinedString = string::Join(splitString, ';');
+
+		EXPECT_EQ(conjoinedString, rejoinedString);
 	}
 
-	TEST_F(StringTest, RemoveAndReplace)
+	TEST_F(StringTest, RemoveReplaceAndInsert)
 	{
 		string helloString = "Hello";
 		string helloString_ReplacedLwithD = helloString.Replace('l', 'd');
 		EXPECT_EQ("Heddo", helloString_ReplacedLwithD);
 
-		string smartString = "I am Smart";
-		string notSmartString = smartString.Replace("Smart", "Stupid");
-		EXPECT_EQ("I am Stupid", notSmartString);
+		string smartString = "I am smart";
+		string notSmartString = smartString.Replace("smart", "stupid");
+		EXPECT_EQ("I am stupid", notSmartString);
 
 		string goodAdvice = "Don't run with scissors";
 		string badAdvice = goodAdvice.Remove("n't");
@@ -113,6 +185,19 @@ namespace Vanguard
 		string stringWithLotsOfGrabage = "Howdy there partner#!@)$)!#@%)%$#&^&$%^))!()@!";
 		string stringWithoutGarbage = stringWithLotsOfGrabage.RemoveCharacters("!@#$%^&*()");
 		EXPECT_EQ("Howdy there partner", stringWithoutGarbage);
+
+		string nonsenseAdvice = goodAdvice.Remove(5, 9);
+		EXPECT_EQ("Don't scissors", nonsenseAdvice);
+		
+		string sureBud = smartString.RemoveBetween(1, 4);
+		string iBeleiveYou = smartString.RemoveBetween(4, 1);
+		EXPECT_EQ("I smart", sureBud);
+		EXPECT_EQ("I smart", iBeleiveYou);
+
+		string motivationalString = "You can do it!";
+		string demotivationalString = motivationalString.Insert(7, " not");
+
+		EXPECT_EQ("You can not do it!", demotivationalString);
 	}
 
 	TEST_F(StringTest, Trimming)
@@ -172,6 +257,5 @@ namespace Vanguard
 		EXPECT_EQ(-42.f, string("-42").ToFloat());
 		EXPECT_EQ(0.002156f, string("0.002156f").ToFloat());
 		EXPECT_EQ(100.0f, string("100").ToFloat());
-
 	}
 }

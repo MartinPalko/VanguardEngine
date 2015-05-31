@@ -36,7 +36,7 @@ namespace Vanguard
 		// ----------- Operators -----------
 
 		inline operator const juce::File&() const { return file; }
-		inline operator const string&() const { return GetFullPathName(); }
+		inline operator const string() const { return GetFullPathName(); }
 		inline operator const char*() const
 		{
 			// NOTE: Returning a const char* will only work with "getFullPathName" because it returns a reference to the string stored inside the file class, not a value. Therefore it's still valid outside the scope of this function.
@@ -55,7 +55,7 @@ namespace Vanguard
 		// ----------- Methods -----------
 
 		// Gets the entire path name, including drive, filename, and extension if applicable.		
-		inline const string& GetFullPathName() const
+		inline const string GetFullPathName() const
 		{
 			return string(file.getFullPathName());
 		}

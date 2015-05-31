@@ -5,8 +5,6 @@ namespace Vanguard
 {
 	struct BasePlatform
 	{
-		typedef ::std::string string; // Use an std string as our string class.
-
 		typedef __int64 int64;
 		typedef __int32 int32;
 		typedef __int16 int16;

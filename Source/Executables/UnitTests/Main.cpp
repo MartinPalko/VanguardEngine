@@ -3,6 +3,7 @@
 // Uncomment headers for which unit tests you want to run.
 #include "StringTest.h"
 #include "FileSystemTest.h"
+#include "DictionaryTest.h"
 
 int main(int argc, char **argv)
 {

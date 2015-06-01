@@ -20,6 +20,6 @@ namespace Vanguard
 
 	TEST_F(DictionaryTest, AddingElement)
 	{
-		//EXPECT_TRUE(false);		
+		//EXPECT_TRUE(false);
 	}
 }

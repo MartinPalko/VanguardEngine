@@ -1,1 +1,1 @@
-IMPLEMENT_EXECUTABLE(UnitTests "juce_core;Foundation;gtest")
+IMPLEMENT_EXECUTABLE(UnitTests "Foundation;gtest")

@@ -21,7 +21,8 @@ namespace Vanguard
 		string(const string& aString) { data.assign(aString.data); }
 
 		// Comparison to other vanguard::string
-		inline bool operator == (const string& aOther) const {return this->data == aOther.data; }
+		inline bool operator == (const string& aOther) const {return data == aOther.data; }
+		inline bool operator != (const string& aOther) const { return data != aOther.data; }
 
 		// Create from and cast to std string
 		string(const std::string& aSTDString){ data = aSTDString; }

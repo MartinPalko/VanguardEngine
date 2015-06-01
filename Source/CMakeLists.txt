@@ -54,7 +54,7 @@ ENDFUNCTION()
 FUNCTION (RECURSIVE_SOLVE_DEPENDENCIES in_project)
 	FOREACH (dependencyPair ${recordedProjectDependencies})
 		DECODE_DEPENDENCY_PAIR(temp_project temp_dependency "${dependencyPair}")
-		#Determine if this is a dependency we need
+		# Determine if this is a dependency we need
 		IF(${in_project} MATCHES ${temp_project})
 			LIST(FIND solvedProjects ${temp_dependency} isInSolvedList)
 			#If dependency hasn't had it's dependencies solved yet, solve it.
@@ -65,19 +65,27 @@ FUNCTION (RECURSIVE_SOLVE_DEPENDENCIES in_project)
 			GET_TARGET_PROPERTY(DependencyType ${temp_dependency} TYPE)
 			
 			# Have the linker also compile it's dependencies source files if it's a static lib.
+			# Should this maybe be done for all types of libraries? Need to test when we start using dynamic libs as well.
 			IF (${DependencyType} STREQUAL "STATIC_LIBRARY")				
 				GET_TARGET_PROPERTY(newLinkLibs ${in_project} LINK_LIBRARIES)
 				IF ("${newLinkLibs}" STREQUAL "newLinkLibs-NOTFOUND")
-					SET_TARGET_PROPERTIES(${in_project} PROPERTIES LINK_LIBRARIES "${temp_dependency}")		
+					SET(newLinkLibs "${temp_dependency}")
 				ELSE()
-					LIST(APPEND newLinkLibs "${temp_dependency}")
-					SET_TARGET_PROPERTIES(${in_project} PROPERTIES LINK_LIBRARIES "${newLinkLibs}")		
+					LIST(APPEND newLinkLibs "${temp_dependency}")					
 				ENDIF()
+				
+				#Also add all of new dependency's dependencies.
+				GET_TARGET_PROPERTY(depsDeps "${temp_dependency}" LINK_LIBRARIES)
+				IF (NOT "${depsDeps}" STREQUAL "depsDeps-NOTFOUND")
+					LIST(APPEND newLinkLibs "${depsDeps}")	
+				ENDIF()
+				
+				SET_TARGET_PROPERTIES(${in_project} PROPERTIES LINK_LIBRARIES "${newLinkLibs}")
 			ENDIF()
 			
-			# Add dependency to platform
+			## Add dependency to target
 			ADD_DEPENDENCIES(${in_project} ${temp_dependency})
-			# Append project include directories with that of it's dependency's
+			## Append project include directories with that of it's dependency's
 			GET_TARGET_PROPERTY(dependencyPublicIncludes ${temp_dependency} INCLUDE_DIRECTORIES)
 			GET_TARGET_PROPERTY(projectPublicIncludes ${in_project} INCLUDE_DIRECTORIES)
 			

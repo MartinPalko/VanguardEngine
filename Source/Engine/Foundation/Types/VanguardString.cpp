@@ -2,6 +2,6 @@
 
 namespace Vanguard
 {
-	const string string::TRUE_STRING = "true";
-	const string string::FALSE_STRING = "false";
+	const String String::TRUE_STRING = "true";
+	const String String::FALSE_STRING = "false";
 }

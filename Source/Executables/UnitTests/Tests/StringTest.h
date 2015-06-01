@@ -20,8 +20,8 @@ namespace Vanguard
 
 	TEST_F(StringTest, CastsAndComparisons)
 	{
-		string vanguardFromLiteral = "test";
-		string vanguardFromLiteral2 = "test";
+		String vanguardFromLiteral = "test";
+		String vanguardFromLiteral2 = "test";
 
 		std::string stdFromVanguard = vanguardFromLiteral;
 		std::string stdFromLiteral = "test";
@@ -32,9 +32,9 @@ namespace Vanguard
 		const char* charPointerFromVanguard = vanguardFromLiteral;
 		const char* charPointerFromLiteral = "test";
 
-		string vanguardFromStd = stdFromLiteral;
-		string vanguardFromJuce = juceFromLiteral;
-		string vanguardFromCharPointer = charPointerFromLiteral;
+		String vanguardFromStd = stdFromLiteral;
+		String vanguardFromJuce = juceFromLiteral;
+		String vanguardFromCharPointer = charPointerFromLiteral;
 		
 		// Verify all types have their values set properly, and can be compared interchangeably with vanguard string
 
@@ -67,16 +67,16 @@ namespace Vanguard
 
 	TEST_F(StringTest, MiscQuery)
 	{
-		string testString = "0123456789";
+		String testString = "0123456789";
 		EXPECT_EQ(10, testString.GetLength());
 
-		string emptyString = "   \n\n    \n";
+		String emptyString = "   \n\n    \n";
 		EXPECT_TRUE(emptyString.IsEmpty());
 	}
 
 	TEST_F(StringTest, IndexAccess)
 	{
-		string testString = "0123456789";
+		String testString = "0123456789";
 
 		EXPECT_EQ('4', testString[4]);
 		EXPECT_EQ('9', testString[9]);
@@ -84,7 +84,7 @@ namespace Vanguard
 
 	TEST_F(StringTest, Searching)
 	{
-		string testString = "abc123abc";
+		String testString = "abc123abc";
 
 		EXPECT_TRUE(testString.Contains('a'));
 		EXPECT_FALSE(testString.Contains('f'));
@@ -124,8 +124,8 @@ namespace Vanguard
 
 	TEST_F(StringTest, Appending)
 	{
-		string stringOne = "one";
-		string stringTwo = "two";
+		String stringOne = "one";
+		String stringTwo = "two";
 		
 		EXPECT_EQ("onetwo", stringOne.Append(stringTwo));
 		EXPECT_EQ("onetwo", stringOne + stringTwo);
@@ -135,9 +135,9 @@ namespace Vanguard
 
 	TEST_F(StringTest, ToUpperAndLower)
 	{
-		string mixed = "TeSt";
-		string upper = "TEST";
-		string lower = "test";
+		String mixed = "TeSt";
+		String upper = "TEST";
+		String lower = "test";
 
 		EXPECT_EQ("TEST", mixed.ToUpper());
 		EXPECT_EQ("test", mixed.ToLower());
@@ -148,9 +148,9 @@ namespace Vanguard
 
 	TEST_F(StringTest, StringSplitAndJoin)
 	{
-		string conjoinedString = "Thing1;Thing2;Thing3;Thing4";
+		String conjoinedString = "Thing1;Thing2;Thing3;Thing4";
 
-		List<string> splitString = conjoinedString.Split(';');
+		List<String> splitString = conjoinedString.Split(';');
 
 		EXPECT_EQ(4, splitString.size());
 
@@ -159,103 +159,103 @@ namespace Vanguard
 		EXPECT_EQ("Thing3", splitString[2]);
 		EXPECT_EQ("Thing4", splitString[3]);
 
-		string rejoinedString = string::Join(splitString, ';');
+		String rejoinedString = String::Join(splitString, ';');
 
 		EXPECT_EQ(conjoinedString, rejoinedString);
 	}
 
 	TEST_F(StringTest, RemoveReplaceAndInsert)
 	{
-		string helloString = "Hello";
-		string helloString_ReplacedLwithD = helloString.Replace('l', 'd');
+		String helloString = "Hello";
+		String helloString_ReplacedLwithD = helloString.Replace('l', 'd');
 		EXPECT_EQ("Heddo", helloString_ReplacedLwithD);
 
-		string smartString = "I am smart";
-		string notSmartString = smartString.Replace("smart", "stupid");
+		String smartString = "I am smart";
+		String notSmartString = smartString.Replace("smart", "stupid");
 		EXPECT_EQ("I am stupid", notSmartString);
 
-		string goodAdvice = "Don't run with scissors";
-		string badAdvice = goodAdvice.Remove("n't");
+		String goodAdvice = "Don't run with scissors";
+		String badAdvice = goodAdvice.Remove("n't");
 		EXPECT_EQ("Do run with scissors", badAdvice);
 
-		string whatString = "Whhhhhhhat";
-		string watString = whatString.Remove('h');
+		String whatString = "Whhhhhhhat";
+		String watString = whatString.Remove('h');
 		EXPECT_EQ("Wat", watString);
 
-		string stringWithLotsOfGrabage = "Howdy there partner#!@)$)!#@%)%$#&^&$%^))!()@!";
-		string stringWithoutGarbage = stringWithLotsOfGrabage.RemoveCharacters("!@#$%^&*()");
+		String stringWithLotsOfGrabage = "Howdy there partner#!@)$)!#@%)%$#&^&$%^))!()@!";
+		String stringWithoutGarbage = stringWithLotsOfGrabage.RemoveCharacters("!@#$%^&*()");
 		EXPECT_EQ("Howdy there partner", stringWithoutGarbage);
 
-		string nonsenseAdvice = goodAdvice.Remove(5, 9);
+		String nonsenseAdvice = goodAdvice.Remove(5, 9);
 		EXPECT_EQ("Don't scissors", nonsenseAdvice);
 		
-		string sureBud = smartString.RemoveBetween(1, 4);
-		string iBeleiveYou = smartString.RemoveBetween(4, 1);
+		String sureBud = smartString.RemoveBetween(1, 4);
+		String iBeleiveYou = smartString.RemoveBetween(4, 1);
 		EXPECT_EQ("I smart", sureBud);
 		EXPECT_EQ("I smart", iBeleiveYou);
 
-		string motivationalString = "You can do it!";
-		string demotivationalString = motivationalString.Insert(7, " not");
+		String motivationalString = "You can do it!";
+		String demotivationalString = motivationalString.Insert(7, " not");
 
 		EXPECT_EQ("You can not do it!", demotivationalString);
 	}
 
 	TEST_F(StringTest, Trimming)
 	{
-		string stringWithWhitespace = "  \n\n\n test string      \n    \n\n";
-		string trimmedString = stringWithWhitespace.Trim();
+		String stringWithWhitespace = "  \n\n\n test string      \n    \n\n";
+		String trimmedString = stringWithWhitespace.Trim();
 		EXPECT_EQ("test string", trimmedString);
 
-		string stringNeedingTrimming = "+_THE_STRING_+";
+		String stringNeedingTrimming = "+_THE_STRING_+";
 
-		string stringEndTrimmed = stringNeedingTrimming.TrimEnd("_+");
+		String stringEndTrimmed = stringNeedingTrimming.TrimEnd("_+");
 		EXPECT_EQ("+_THE_STRING", stringEndTrimmed);
 
-		string stringStartTrimmed = stringNeedingTrimming.TrimStart("_+");
+		String stringStartTrimmed = stringNeedingTrimming.TrimStart("_+");
 		EXPECT_EQ("THE_STRING_+", stringStartTrimmed);
 	}
 
 	TEST_F(StringTest, BooleanConversion)
 	{
-		string trueString = string::FromBoolean(true);
-		string falseString = string::FromBoolean(false);		
+		String trueString = String::FromBoolean(true);
+		String falseString = String::FromBoolean(false);		
 
-		EXPECT_EQ(string::TRUE_STRING, trueString);
-		EXPECT_EQ(string::FALSE_STRING, falseString);
+		EXPECT_EQ(String::TRUE_STRING, trueString);
+		EXPECT_EQ(String::FALSE_STRING, falseString);
 
-		EXPECT_NE(string::TRUE_STRING, falseString);
-		EXPECT_NE(string::FALSE_STRING, trueString);
+		EXPECT_NE(String::TRUE_STRING, falseString);
+		EXPECT_NE(String::FALSE_STRING, trueString);
 
 
-		EXPECT_TRUE(string("true").ToBoolean());
-		EXPECT_TRUE(string("TRUE").ToBoolean());
-		EXPECT_TRUE(string("TrUe").ToBoolean());
+		EXPECT_TRUE(String("true").ToBoolean());
+		EXPECT_TRUE(String("TRUE").ToBoolean());
+		EXPECT_TRUE(String("TrUe").ToBoolean());
 
-		EXPECT_FALSE(string("false").ToBoolean());
-		EXPECT_FALSE(string("FALSE").ToBoolean());
-		EXPECT_FALSE(string("fAlSe").ToBoolean());
+		EXPECT_FALSE(String("false").ToBoolean());
+		EXPECT_FALSE(String("FALSE").ToBoolean());
+		EXPECT_FALSE(String("fAlSe").ToBoolean());
 	}
 
 	TEST_F(StringTest, IntegerConversion)
 	{
-		EXPECT_EQ("15", string::FromInt32(15));
-		EXPECT_EQ("-64", string::FromInt32(-64));
+		EXPECT_EQ("15", String::FromInt32(15));
+		EXPECT_EQ("-64", String::FromInt32(-64));
 
-		EXPECT_EQ(87, string("87").ToInt32());
-		EXPECT_EQ(-42, string("-42").ToInt32());
+		EXPECT_EQ(87, String("87").ToInt32());
+		EXPECT_EQ(-42, String("-42").ToInt32());
 	}
 
 	TEST_F(StringTest, FloatConversion)
 	{
-		EXPECT_EQ("15", string::FromFloat(15));
-		EXPECT_EQ("-64", string::FromFloat(-64));
-		EXPECT_EQ("-7.64", string::FromFloat(-7.64f));
-		EXPECT_EQ("6000", string::FromFloat(6000));
+		EXPECT_EQ("15", String::FromFloat(15));
+		EXPECT_EQ("-64", String::FromFloat(-64));
+		EXPECT_EQ("-7.64", String::FromFloat(-7.64f));
+		EXPECT_EQ("6000", String::FromFloat(6000));
 
 
-		EXPECT_EQ(87, string("87.0f").ToFloat());
-		EXPECT_EQ(-42.f, string("-42").ToFloat());
-		EXPECT_EQ(0.002156f, string("0.002156f").ToFloat());
-		EXPECT_EQ(100.0f, string("100").ToFloat());
+		EXPECT_EQ(87, String("87.0f").ToFloat());
+		EXPECT_EQ(-42.f, String("-42").ToFloat());
+		EXPECT_EQ(0.002156f, String("0.002156f").ToFloat());
+		EXPECT_EQ(100.0f, String("100").ToFloat());
 	}
 }

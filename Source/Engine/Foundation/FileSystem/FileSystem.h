@@ -62,13 +62,13 @@ namespace Vanguard
 		}
 
 		// Gets a human readable string of the file size, for example "100 bytes", "2KB", or "2 MB".
-		static string GetHumanReadableSize(const FilePath& aFilePath)
+		static String GetHumanReadableSize(const FilePath& aFilePath)
 		{
 			return GetHumanReadableSizeFromBytes(GetFileSizeInBytes(aFilePath));
 		}
 
 		// Gets a human readable string of the file size, for example "100 bytes", "2KB", or "2 MB".
-		static string GetHumanReadableSizeFromBytes(uint64 aNumBytes)
+		static String GetHumanReadableSizeFromBytes(uint64 aNumBytes)
 		{
 			return juce::File::descriptionOfSizeInBytes(aNumBytes);
 		}
@@ -92,13 +92,13 @@ namespace Vanguard
 		}
 
 		// Create an empty file on the disk if it doesn't already exist. Returns the result (error message if failed)
-		static string CreateFile(const FilePath& aFilePath)
+		static String CreateFile(const FilePath& aFilePath)
 		{
 			return aFilePath.file.create().getErrorMessage();
 		}
 
 		// Create an empty directory on the disk if it doesn't already exist. Returns the result (error message if failed)
-		static string CreateDirectory(const FilePath& aFilePath)
+		static String CreateDirectory(const FilePath& aFilePath)
 		{
 			return aFilePath.file.createDirectory().getErrorMessage();
 		}
@@ -160,7 +160,7 @@ namespace Vanguard
 		}
 
 		// Searches directory for files, or other directories matching the wildcard criteria.
-		static List<FilePath> Find(const FilePath& aDirectoryToSearch, const string& aWildCardPattern = "*", bool aSearchRecursively = true, bool aFindFiles = true, bool aFindDirectories = false, bool aIgnoreHiddenFiles = false)
+		static List<FilePath> Find(const FilePath& aDirectoryToSearch, const String& aWildCardPattern = "*", bool aSearchRecursively = true, bool aFindFiles = true, bool aFindDirectories = false, bool aIgnoreHiddenFiles = false)
 		{
 			if (!DirectoryExists(aDirectoryToSearch))
 				return List<FilePath>(); // Directory needs to exist, otherwise there's no sense.
@@ -187,18 +187,18 @@ namespace Vanguard
 		}
 
 		// Reads the contents of the file as if it were plain text.
-		static string LoadFileAsString(const FilePath& aFilePath)
+		static String LoadFileAsString(const FilePath& aFilePath)
 		{
 			return aFilePath.file.loadFileAsString();
 		}
 
 		// Reads the contents of the file as if it were plain text. Creates a new string at every line break.
-		static List<string> LoadFileAsStringArray(const FilePath& aFilePath)
+		static List<String> LoadFileAsStringArray(const FilePath& aFilePath)
 		{
 			juce::StringArray juceDestLines;
 			aFilePath.file.readLines(juceDestLines);
 
-			List<string> returnList = List<string>();
+			List<String> returnList = List<String>();
 			returnList.resize(juceDestLines.size());
 
 			for (int i = 0; i < juceDestLines.size(); i++)

@@ -11,7 +11,7 @@ namespace Vanguard
 	private:
 		uint32 Hash;
 
-		inline void HashString(const string& aString)
+		inline void HashString(const String& aString)
 		{
 			Hash = 0;
 			Hash = crc32(Hash, (const Byte*)((const char*)aString), aString.GetLength());
@@ -22,7 +22,7 @@ namespace Vanguard
 		inline bool operator==(const StringID& aOther) const { return Hash == aOther.Hash; }
 		inline bool operator!=(const StringID& aOther) const { return Hash != aOther.Hash; }
 
-		StringID(const string& aString)
+		StringID(const String& aString)
 		{
 			HashString(aString);
 		}

@@ -18,7 +18,7 @@ namespace Vanguard
 	public:
 		// ----------- Constructors -----------
 
-		FilePath (const string& aAbsolutePath)
+		FilePath(const String& aAbsolutePath)
 		{
 			file = juce::File(aAbsolutePath);
 		}
@@ -36,7 +36,7 @@ namespace Vanguard
 		// ----------- Operators -----------
 
 		inline operator const juce::File&() const { return file; }
-		inline operator const string() const { return GetFullPathName(); }
+		inline operator const String() const { return GetFullPathName(); }
 		inline operator const char*() const
 		{
 			// NOTE: Returning a const char* will only work with "getFullPathName" because it returns a reference to the string stored inside the file class, not a value. Therefore it's still valid outside the scope of this function.
@@ -47,7 +47,7 @@ namespace Vanguard
 		inline bool operator!= (const FilePath& other) const { return other.file != file; }
 		
 		inline FilePath operator+ (const FilePath& other) const { return GetRelative(other.GetFullPathName()); }
-		inline FilePath operator+ (const string& str) const { return GetRelative(str); }
+		inline FilePath operator+ (const String& str) const { return GetRelative(str); }
 		inline FilePath operator+ (const char* charPointer) const { return GetRelative(charPointer); }
 
 		inline FilePath operator-- () const { return GetParentDirectory(); }
@@ -55,31 +55,31 @@ namespace Vanguard
 		// ----------- Methods -----------
 
 		// Gets the entire path name, including drive, filename, and extension if applicable.		
-		inline const string GetFullPathName() const
+		inline const String GetFullPathName() const
 		{
-			return string(file.getFullPathName());
+			return String(file.getFullPathName());
 		}
 
 		// Gets the filename including extension. If it's a directory, will get the name of the final folder.
-		inline string GetFilename() const
+		inline String GetFilename() const
 		{
 			return file.getFileName();
 		}
 
 		// Returns filename, excluding the extension
-		inline string GetFilenameWithoutExtension() const
+		inline String GetFilenameWithoutExtension() const
 		{
 			return file.getFileNameWithoutExtension();
 		}
 
 		// Gets the extension of the file, including the period.
-		inline string GetFileExtension() const
+		inline String GetFileExtension() const
 		{
 			return file.getFileExtension();
 		}
 
 		// Check if the file has the given extension.
-		inline bool HasFileExtension(const string& aExtension) const
+		inline bool HasFileExtension(const String& aExtension) const
 		{
 			return file.hasFileExtension(aExtension);
 		}
@@ -91,7 +91,7 @@ namespace Vanguard
 		}
 		
 		// Make a new filepath that is relative to this one based on the provided relative path
-		inline FilePath GetRelative(string aRelativePath) const
+		inline FilePath GetRelative(const String& aRelativePath) const
 		{
 			return file.getChildFile(aRelativePath);
 		}

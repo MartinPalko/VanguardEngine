@@ -20,7 +20,7 @@ namespace Vanguard
 
 	TEST_F(StringIDTest, HashGeneration)
 	{
-		StringID testID = string("Test");
+		StringID testID = String("Test");
 		StringID testIDIdentical = "Test";
 		StringID testIDDifferent = StringID("Test2");
 

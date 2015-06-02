@@ -19,8 +19,10 @@ namespace Vanguard
 
 	public:
 
-		inline bool operator==(const StringID& aOther) const { return Hash == aOther.Hash; }
-		inline bool operator!=(const StringID& aOther) const { return Hash != aOther.Hash; }
+		inline bool operator == (const StringID& aOther) const { return Hash == aOther.Hash; }
+		inline bool operator != (const StringID& aOther) const { return Hash != aOther.Hash; }
+		inline bool operator < (const StringID& aOther) const { return Hash < aOther.Hash; }
+		inline bool operator > (const StringID& aOther) const { return Hash > aOther.Hash; }
 
 		StringID(const String& aString)
 		{

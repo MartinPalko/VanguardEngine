@@ -6,7 +6,7 @@
 
 #include "juce_core.h"
 
-#include "List.h"
+#include "VanguardList.h"
 #include "IntegerDefs.h"
 
 namespace Vanguard
@@ -96,7 +96,7 @@ namespace Vanguard
 
 			while (std::getline(strStream, segment, aSplitBy))
 			{
-				splitList.push_back(segment);
+				splitList.PushBack(segment);
 			}
 
 			return splitList;
@@ -105,12 +105,12 @@ namespace Vanguard
 		// Joins an array of strings into a single string, with the specified seperator between each element.
 		static String Join(const List<String>& aStringList, const char& aSeperatorCharacter)
 		{
-			if (aStringList.size() <= 0)
+			if (aStringList.Size() <= 0)
 				return String();
 
 			String newString = aStringList[0];
 
-			for (uint32 i = 1; i < aStringList.size(); i++)
+			for (uint32 i = 1; i < aStringList.Size(); i++)
 			{
 				newString += ";";
 				newString += aStringList[i];

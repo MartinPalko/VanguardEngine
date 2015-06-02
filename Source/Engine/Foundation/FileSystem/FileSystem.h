@@ -137,7 +137,7 @@ namespace Vanguard
 
 			while (!inStream->isExhausted())
 			{
-				fileLines.push_back(inStream->readNextLine());
+				fileLines.PushBack(inStream->readNextLine());
 			}
 
 			delete inStream;
@@ -217,7 +217,7 @@ namespace Vanguard
 			aDirectoryToSearch.file.findChildFiles(result, whatToLookFor, aSearchRecursively, aWildCardPattern);
 
 			List<FilePath> returnList = List<FilePath>();
-			returnList.resize(result.size());
+			returnList.Resize(result.size());
 
 			for (int32 i = 0; i < result.size(); i++)
 			{
@@ -246,7 +246,7 @@ namespace Vanguard
 			aFilePath.file.readLines(juceDestLines);
 
 			List<String> returnList = List<String>();
-			returnList.resize(juceDestLines.size());
+			returnList.Resize(juceDestLines.size());
 
 			for (int32 i = 0; i < juceDestLines.size(); i++)
 			{

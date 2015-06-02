@@ -21,9 +21,11 @@ namespace Vanguard
 
 	TEST_F(EngineConfigTest, GeneralTests)
 	{
-		//EXPECT_TRUE(EngineConfig::LoadConfigFromDisk());
+		EXPECT_TRUE(EngineConfig::LoadConfigFromDisk());
 
 		const Int32ConfigVar configBasedInt = Int32ConfigVar("ConfigBasedInt",50);
+
+		std::cout << "\n" << configBasedInt << "\n";
 
 		//int32 intToSet = 4;
 		//float floatToSet = 5.643f;

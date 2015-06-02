@@ -3,5 +3,5 @@
 #include "IntegerDefs.h"
 #include "VanguardString.h"
 #include "StringID.h"
-#include "List.h"
-#include "Dictionary.h"
+#include "VanguardList.h"
+#include "VanguardHashtable.h"

@@ -164,7 +164,7 @@ namespace Vanguard
 
 		List<String> splitString = conjoinedString.Split(';');
 
-		EXPECT_EQ(4, splitString.size());
+		EXPECT_EQ(4, splitString.Size());
 
 		EXPECT_EQ("Thing1",splitString[0]);
 		EXPECT_EQ("Thing2", splitString[1]);

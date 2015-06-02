@@ -69,7 +69,7 @@ namespace Vanguard
 
 			List<String> lines = FileSystem::ReadFileLinesAsText(configFile);
 
-			for (int32 i = 0; i < lines.size(); i++)
+			for (int32 i = 0; i < lines.Size(); i++)
 			{
 				// Disregard full line comments
 				if (lines[i].BeginsWithAny(";#"))
@@ -81,7 +81,7 @@ namespace Vanguard
 					lines[i] = lines[i].RemoveAfter(commentStartIndex - 1);
 
 				List<String> pair = lines[i].Split('=');
-				if (pair.size() != 2) // Line is invalid, so skip
+				if (pair.Size() != 2) // Line is invalid, so skip
 					continue;
 
 				configValues[pair[0]] = pair[1];

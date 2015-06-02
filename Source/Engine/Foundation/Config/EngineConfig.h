@@ -4,17 +4,11 @@
 #include "IntegerDefs.h"
 #include "VanguardString.h"
 #include "FileSystem.h"
-
-#define CONFIGVAR_STRING(VarName, DefaultValue)
+#include "ConfigVar.h"
 
 namespace Vanguard
 {
 	static const FilePath configFile = FileSystem::GetEngineConfigDirectory() + "Engine.cfg";
-
-	class ConfigDefault
-	{
-
-	};
 
 	class EngineConfig
 	{
@@ -24,24 +18,18 @@ namespace Vanguard
 	private:
 		static std::map <String, String> configValues;
 
-		static void SetConfigString(const String& aConfigName, const String& aConfigValue)
+	public:
+		static void OnConfigVarCreated (const String& aConfigName, const String& aConfigDefault)
 		{
-			configValues[aConfigName] = aConfigValue;
+			if (configValues.find(aConfigName) == configValues.end())
+			{
+				configValues[aConfigName] = aConfigDefault;
+			}
 		}
 
-		static void SetConfigBoolean(const String& aConfigName, const bool& aConfigValue)
+		static String GetConfigValueText (const String& aConfigName)
 		{
-			configValues[aConfigName] = String::FromBoolean(aConfigValue);
-		}
-
-		static void SetConfigFloat(const String& aConfigName, const float& aConfigValue)
-		{
-			configValues[aConfigName] = String::FromFloat(aConfigValue);
-		}
-
-		static void SetConfigInt(const String& aConfigName, const int32& aConfigValue)
-		{
-			configValues[aConfigName] = String::FromInt32(aConfigValue);
+			return configValues[aConfigName];
 		}
 
 	public:
@@ -88,17 +76,5 @@ namespace Vanguard
 			}
 			return true;
 		}
-
-		static String GetConfigString(const String& aConfigName, const String& aDefaultValue)
-		{
-			for (auto const& item : configValues)
-			{
-				if (item.first == aConfigName)
-					return item.second;
-			}
-			SetConfigString(aConfigName, aDefaultValue);
-			return aDefaultValue;
-		}
-
 	};
 }

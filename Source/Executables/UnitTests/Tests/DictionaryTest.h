@@ -21,5 +21,13 @@ namespace Vanguard
 	TEST_F(DictionaryTest, AddingElement)
 	{
 		//EXPECT_TRUE(false);
+
+		std::map<String, String> map = std::map<String, String>();
+
+		map["one"] = "1";
+		map["two"] = "2";
+
+		EXPECT_EQ("1",map["one"]);
+
 	}
 }

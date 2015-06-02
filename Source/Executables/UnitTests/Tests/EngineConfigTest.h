@@ -17,33 +17,22 @@ namespace Vanguard
 		{
 
 		}
+
+		int32_Config(TestInt, 10);
+		float_Config(TestFloat, 3.1415f);
+		bool_Config(TestBool, true);
+		String_Config(TestString, "Test");
 	};
 
 	TEST_F(EngineConfigTest, GeneralTests)
 	{
 		EXPECT_TRUE(EngineConfig::LoadConfigFromDisk());
 
-		const Int32ConfigVar configBasedInt = Int32ConfigVar("ConfigBasedInt",50);
+		EXPECT_EQ(10, TestInt);
+		EXPECT_EQ(3.1415f, TestFloat);
+		EXPECT_EQ(true, TestBool);
+		EXPECT_EQ("Test", TestString);
 
-		std::cout << "\n" << configBasedInt << "\n";
-
-		//int32 intToSet = 4;
-		//float floatToSet = 5.643f;
-		//bool booleanToSet = false;
-		//String stringToSet = "TestString";
-
-		////EngineConfig::SetConfigInt("TestInt",intToSet);
-		////EngineConfig::SetConfigFloat("TestFloat",floatToSet);
-		////EngineConfig::SetConfigBoolean("TestBoolean", booleanToSet);
-		////EngineConfig::SetConfigString("TestString", stringToSet);
-
-		////EngineConfig::SaveConfigToDisk();
-
-		//EngineConfig::LoadConfigFromDisk();
-
-		//EXPECT_EQ(4, EngineConfig::GetConfigInt("TestInt",0));
-		//EXPECT_EQ(5.643f, EngineConfig::GetConfigFloat("TestFloat",0.1f));
-		//EXPECT_EQ(false, EngineConfig::GetConfigBoolean("TestBoolean",true));
-		//EXPECT_EQ("TestString", EngineConfig::GetConfigString("TestString","NOT_THERE"));
+		EngineConfig::SaveConfigToDisk();
 	}
 }

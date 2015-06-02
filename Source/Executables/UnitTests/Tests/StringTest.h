@@ -120,6 +120,18 @@ namespace Vanguard
 
 		EXPECT_EQ(5, testString.LastIndexNotOfAny("asdfbc"));
 		EXPECT_EQ(8, testString.LastIndexNotOfAny("wasd"));
+
+		EXPECT_TRUE(testString.BeginsWith('a'));
+		EXPECT_FALSE(testString.BeginsWith('s'));
+
+		EXPECT_TRUE(testString.EndsWith('c'));
+		EXPECT_FALSE(testString.EndsWith('s'));
+
+		EXPECT_TRUE(testString.BeginsWithAny("asf"));
+		EXPECT_FALSE(testString.BeginsWithAny("sdrf"));
+
+		EXPECT_TRUE(testString.EndsWithAny("cas"));
+		EXPECT_FALSE(testString.EndsWithAny("swg"));
 	}
 
 	TEST_F(StringTest, Appending)
@@ -198,6 +210,9 @@ namespace Vanguard
 		String demotivationalString = motivationalString.Insert(7, " not");
 
 		EXPECT_EQ("You can not do it!", demotivationalString);
+
+		EXPECT_EQ("He", helloString.RemoveAfter(helloString.FirstIndexOf('l') - 1));
+		EXPECT_EQ("lo", helloString.RemoveBefore(2));
 	}
 
 	TEST_F(StringTest, Trimming)

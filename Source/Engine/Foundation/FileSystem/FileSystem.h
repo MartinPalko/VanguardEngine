@@ -97,6 +97,53 @@ namespace Vanguard
 			return aFilePath.file.create().getErrorMessage();
 		}
 
+		// Write a plain text file containing the current string. If the file exists, it will be completely overwritten.
+		static bool WriteToFile(const FilePath& aFilePath, const String& aStringContents)
+		{
+			if (FileExists(aFilePath))
+				if (!Delete(aFilePath))
+					return false;
+
+			if (!(CreateFile(aFilePath) == ""))
+				return false;
+
+			juce::FileOutputStream* outStream = aFilePath.file.createOutputStream();
+			outStream->setPosition(0);
+			outStream->writeText(aStringContents, false, false);
+			delete outStream;
+			return true;
+		}
+
+		static String ReadFileAsText(const FilePath& aFilePath)
+		{
+			if (!FileExists(aFilePath))
+				return "";
+
+			juce::FileInputStream* inStream = aFilePath.file.createInputStream();			
+			String fileText = inStream->readEntireStreamAsString();
+			delete inStream;
+			return fileText;
+		}
+
+		static List<String> ReadFileLinesAsText(const FilePath& aFilePath)
+		{
+			if (!FileExists(aFilePath))
+				return List <String>();
+
+			List<String> fileLines = List <String>();
+
+			juce::FileInputStream* inStream = aFilePath.file.createInputStream();
+			inStream->setPosition(0);
+
+			while (!inStream->isExhausted())
+			{
+				fileLines.push_back(inStream->readNextLine());
+			}
+
+			delete inStream;
+			return fileLines;
+		}
+
 		// Create an empty directory on the disk if it doesn't already exist. Returns the result (error message if failed)
 		static String CreateDirectory(const FilePath& aFilePath)
 		{
@@ -172,7 +219,7 @@ namespace Vanguard
 			List<FilePath> returnList = List<FilePath>();
 			returnList.resize(result.size());
 
-			for (int i = 0; i < result.size(); i++)
+			for (int32 i = 0; i < result.size(); i++)
 			{
 				returnList[i] = result[i];
 			}
@@ -201,7 +248,7 @@ namespace Vanguard
 			List<String> returnList = List<String>();
 			returnList.resize(juceDestLines.size());
 
-			for (int i = 0; i < juceDestLines.size(); i++)
+			for (int32 i = 0; i < juceDestLines.size(); i++)
 			{
 				returnList[i] = juceDestLines[i];
 			}

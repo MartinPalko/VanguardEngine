@@ -58,7 +58,10 @@ namespace Vanguard
 
 		// To and from int32
 		static String FromInt32(int32 aInt32) { return ::std::to_string(aInt32); }
-		inline int32 ToInt32() const { return std::stoi(data); }
+		inline int32 ToInt32() const 
+		{
+			return std::stoi(data); 
+		}
 
 		//// To and from float
 		static String FromFloat(float aFloat){ return String(::std::to_string(aFloat)).TrimEnd("0").TrimEnd("."); }
@@ -136,6 +139,30 @@ namespace Vanguard
 					return true;
 			}
 			return false;
+		}
+
+		// Returns true if the first character of the string is the specified character
+		inline bool BeginsWith(const char& aCharacter) const
+		{
+			return FirstIndexOf(aCharacter) == 0;
+		}
+
+		// Returns true if the first character of the string is any of the specified characters
+		inline bool BeginsWithAny(const String& aCharacters) const
+		{
+			return FirstIndexOfAny(aCharacters) == 0;
+		}
+
+		// Returrns true if the last character of the string is the specified character
+		inline bool EndsWith(const char& aCharacter) const
+		{
+			return LastIndexOf(aCharacter) == GetLength() - 1;
+		}
+
+		// Returns true if the first character of the string is any of the specified characters
+		inline bool EndsWithAny(const String& aCharacters) const
+		{
+			return LastIndexOfAny(aCharacters) == GetLength() - 1;
 		}
 
 		// Returns the index of the first of the specified character
@@ -224,17 +251,6 @@ namespace Vanguard
 			return newString;
 		}
 
-		// Returns a string with all characters between the two indexes removed.
-		inline String RemoveBetween(const int32& aFirstIndex, const int32& aSecondIndex) const
-		{
-			std::string newString = data;
-			if (aFirstIndex < aSecondIndex)
-				newString.erase(aFirstIndex, aSecondIndex - aFirstIndex);
-			else if (aSecondIndex < aFirstIndex)
-				newString.erase(aSecondIndex, aFirstIndex - aSecondIndex);
-			return newString;
-		}
-
 		// Returns a string with all instances of the specified character removed.
 		inline String Remove(const char& aChar) const
 		{
@@ -247,6 +263,29 @@ namespace Vanguard
 		inline String Remove(const String& aString) const
 		{
 			return Replace(aString, ""); 
+		}
+
+		// Returns a string with all characters between the two indexes removed.
+		inline String RemoveBetween(const int32& aFirstIndex, const int32& aSecondIndex) const
+		{
+			std::string newString = data;
+			if (aFirstIndex < aSecondIndex)
+				newString.erase(aFirstIndex, aSecondIndex - aFirstIndex);
+			else if (aSecondIndex < aFirstIndex)
+				newString.erase(aSecondIndex, aFirstIndex - aSecondIndex);
+			return newString;
+		}
+
+		// Returns a string with all characters after the specified index removed.
+		inline String RemoveAfter(const int32& aIndex)
+		{
+			return RemoveBetween(aIndex + 1, GetLength());
+		}
+
+		// Returns a string with all characters before the specified index removed.
+		inline String RemoveBefore(const int32& aIndex)
+		{
+			return RemoveBetween(0, aIndex + 1);
 		}
 
 		// Returns a string that has all instances of all characters specified removed from the string.

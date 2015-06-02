@@ -1,64 +1,104 @@
 #pragma once
-#include "VanguardTypes.h"
+#include <map>
+
+#include "IntegerDefs.h"
+#include "VanguardString.h"
+#include "FileSystem.h"
+
+#define CONFIGVAR_STRING(VarName, DefaultValue)
 
 namespace Vanguard
 {
+	static const FilePath configFile = FileSystem::GetEngineConfigDirectory() + "Engine.cfg";
+
+	class ConfigDefault
+	{
+
+	};
+
 	class EngineConfig
 	{
-	//private:
-	//	static Dictionary <string,string> configValues;
+		template <class T> class ConfigVar;
+		friend class ConfigVar<class T>;
 
-	//public:
+	private:
+		static std::map <String, String> configValues;
 
-	//	static bool SaveConfigToDisk()
-	//	{
+		static void SetConfigString(const String& aConfigName, const String& aConfigValue)
+		{
+			configValues[aConfigName] = aConfigValue;
+		}
 
-	//	}
+		static void SetConfigBoolean(const String& aConfigName, const bool& aConfigValue)
+		{
+			configValues[aConfigName] = String::FromBoolean(aConfigValue);
+		}
 
-	//	static bool ReadConfigFromDisk()
-	//	{
+		static void SetConfigFloat(const String& aConfigName, const float& aConfigValue)
+		{
+			configValues[aConfigName] = String::FromFloat(aConfigValue);
+		}
 
-	//	}
+		static void SetConfigInt(const String& aConfigName, const int32& aConfigValue)
+		{
+			configValues[aConfigName] = String::FromInt32(aConfigValue);
+		}
 
-	//	static void SetConfigstring(string aConfigName, string aConfigValue)
-	//	{
-	//		configValues.Set(aConfigName, aConfigValue);
-	//	}
+	public:
 
-	//	static void SetConfigBoolean(string aConfigName, bool aConfigValue)
-	//	{
-	//		//configValues.Set(aConfigName, StringUtils::FromBoolean(aConfigValue));
-	//	}
+		static bool SaveConfigToDisk()
+		{
+			String fileContent = String();
 
-	//	static void SetConfigFloat(string aConfigName, float aConfigValue)
-	//	{
-	//		//configValues.Set(aConfigName, StringUtils::FromFloat(aConfigValue));
-	//	}
+			for (auto const& item : configValues)
+			{
+				fileContent += item.first.Trim();
+				fileContent += "=";
+				fileContent += item.second.Trim();
+				fileContent += "\n";
+			}
 
-	//	static void SetConfigInt(string aConfigName, int32 aConfigValue)
-	//	{
-	//		//configValues.Set(aConfigName, StringUtils::FromInt(aConfigValue));
-	//	}
+			return FileSystem::WriteToFile(configFile, fileContent);
 
-	//	static string GetConfigstring(string aConfigName)
-	//	{
-	//		return configValues.Get(aConfigName);
-	//	}
+		}
 
-	//	static bool GetConfigBoolean(string aConfigName)
-	//	{
-	//		//return StringUtils::ToBoolean(aConfigName);
-	//	}
+		static bool LoadConfigFromDisk()
+		{
+			if (!FileSystem::FileExists(configFile))
+				return false;
 
-	//	static float GetConfigFloat(string aConfigName)
-	//	{
-	//		//return StringUtils::ToFloat(configValues.Get(aConfigName));
-	//	}
+			List<String> lines = FileSystem::ReadFileLinesAsText(configFile);
 
-	//	static int32 GetConfigInt(string aConfigName)
-	//	{
-	//		//return StringUtils::ToInt(configValues.Get(aConfigName));
-	//	}
+			for (int32 i = 0; i < lines.size(); i++)
+			{
+				// Disregard full line comments
+				if (lines[i].BeginsWithAny(";#"))
+					continue; 
+
+				// Remove inline comments
+				uint32 commentStartIndex = lines[i].FirstIndexOfAny(";#");
+				if (commentStartIndex != -1)
+					lines[i] = lines[i].RemoveAfter(commentStartIndex - 1);
+
+				List<String> pair = lines[i].Split('=');
+				if (pair.size() != 2) // Line is invalid, so skip
+					continue;
+
+				configValues[pair[0]] = pair[1];
+			}
+			return true;
+		}
+
+		static String GetConfigString(const String& aConfigName, const String& aDefaultValue)
+		{
+			for (auto const& item : configValues)
+			{
+				if (item.first == aConfigName)
+					return item.second;
+			}
+			SetConfigString(aConfigName, aDefaultValue);
+			return aDefaultValue;
+		}
 
 	};
 }

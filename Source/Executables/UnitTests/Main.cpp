@@ -5,6 +5,7 @@
 #include "StringIDTest.h"
 #include "FileSystemTest.h"
 #include "DictionaryTest.h"
+#include "EngineConfigTest.h"
 
 int main(int argc, char **argv)
 {

@@ -23,6 +23,10 @@ namespace Vanguard
 		// Comparison to other vanguard::string
 		inline bool operator == (const String& aOther) const { return data == aOther.data; }
 		inline bool operator != (const String& aOther) const { return data != aOther.data; }
+		inline bool operator < (const String& aOther) const { return data < aOther.data; }
+		inline bool operator <= (const String& aOther) const { return data <= aOther.data; }
+		inline bool operator > (const String& aOther) const { return data > aOther.data; }
+		inline bool operator >= (const String& aOther) const { return data >= aOther.data; }
 
 		// Create from and cast to std string
 		String(const std::string& aSTDString){ data = aSTDString; }

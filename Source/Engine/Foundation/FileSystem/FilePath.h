@@ -46,9 +46,9 @@ namespace Vanguard
 		inline bool operator== (const FilePath& other) const { return other.file == file; }
 		inline bool operator!= (const FilePath& other) const { return other.file != file; }
 		
-		inline FilePath operator+ (const FilePath& other) const { return GetRelative(other.GetFullPathName()); }
-		inline FilePath operator+ (const String& str) const { return GetRelative(str); }
-		inline FilePath operator+ (const char* charPointer) const { return GetRelative(charPointer); }
+		inline FilePath operator+ (const FilePath& other) const { return Append(other.GetFullPathName()); }
+		inline FilePath operator+ (const String& str) const { return Append(str); }
+		inline FilePath operator+ (const char* charPointer) const { return Append(charPointer); }
 
 		inline FilePath operator-- () const { return GetParentDirectory(); }
 
@@ -95,5 +95,13 @@ namespace Vanguard
 		{
 			return file.getChildFile(aRelativePath);
 		}
+
+		// Return a new FilePah with text appended directly to the full path name. Useful for adding file extensions.
+		inline FilePath Append(const String& aRelativePath) const
+		{
+			return FilePath(GetFullPathName() + aRelativePath);
+		}
+
+
 	};
 }

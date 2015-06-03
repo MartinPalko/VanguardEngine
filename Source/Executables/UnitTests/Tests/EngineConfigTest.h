@@ -18,15 +18,29 @@ namespace Vanguard
 
 		}
 
-		int32_Config(TestInt, 10);
-		float_Config(TestFloat, 3.1415f);
-		bool_Config(TestBool, true);
-		String_Config(TestString, "Test");
+		int32_Config(TestInt,"ConfigTest", 10);
+		float_Config(TestFloat, "ConfigTest", 3.1415f);
+		bool_Config(TestBool, "ConfigTest", true);
+		String_Config(TestString, "ConfigTest", "Test");
+	};
+
+	class OtherTestClass
+	{
+		int32_Config(TestInt, "ConfigTest", 10);
+		float_Config(TestFloat, "ConfigTest", 3.1415f);
+		bool_Config(TestBool, "ConfigTest", true);
+		String_Config(TestString, "ConfigTest", "Test");
+		int32_Config(OtherTestInt, "ConfigTest", 10);
+		float_Config(OtherTestFloat, "ConfigTest", 3.1415f);
+		bool_Config(OtherTestBool, "ConfigTest", true);
+		String_Config(OtherTestString, "ConfigTest", "Test");
 	};
 
 	TEST_F(EngineConfigTest, GeneralTests)
 	{
-		EXPECT_TRUE(EngineConfig::LoadConfigFromDisk());
+		OtherTestClass otherClass = OtherTestClass();
+
+		EngineConfig::LoadConfigFromDisk();
 
 		EXPECT_EQ(10, TestInt);
 		EXPECT_EQ(3.1415f, TestFloat);

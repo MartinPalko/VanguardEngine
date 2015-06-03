@@ -38,7 +38,7 @@ namespace Vanguard
 		//printf(tempDir.GetFullPathName());
 		//printf("\n");
 
-		EXPECT_TRUE(FileSystem::DirectoryExists(engineRoot + "Bin"));
+		EXPECT_TRUE(FileSystem::DirectoryExists(engineRoot + "/Bin"));
 		EXPECT_EQ(configDir, engineRoot.GetRelative("Config"));
 		EXPECT_TRUE(FileSystem::DirectoryExists(tempDir));
 	}
@@ -46,7 +46,7 @@ namespace Vanguard
 	TEST_F(FileSystemTest, FileCreationAndDeletion)
 	{
 		// Create a file on c drive called test.txt
-		FilePath File = FileSystem::GetEngineTempDirectory() + "Test.txt";
+		FilePath File = FileSystem::GetEngineTempDirectory() + "/Test.txt";
 
 		// Shouldn't exist initially
 		EXPECT_FALSE(FileSystem::FileExists(File));

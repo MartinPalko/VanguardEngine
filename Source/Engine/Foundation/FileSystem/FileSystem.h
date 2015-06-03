@@ -213,15 +213,14 @@ namespace Vanguard
 				return List<FilePath>(); // Directory needs to exist, otherwise there's no sense.
 
 			juce::Array<juce::File> result;
-			int whatToLookFor = 0 + (aFindFiles ? 1 : 0) + (aFindDirectories ? 2 : 0) + (aIgnoreHiddenFiles ? 4 : 0);
+			int whatToLookFor = 0 + (aFindFiles ? 2 : 0) + (aFindDirectories ? 1 : 0) + (aIgnoreHiddenFiles ? 4 : 0);
 			aDirectoryToSearch.file.findChildFiles(result, whatToLookFor, aSearchRecursively, aWildCardPattern);
 
 			List<FilePath> returnList = List<FilePath>();
-			returnList.Resize(result.size());
 
 			for (int32 i = 0; i < result.size(); i++)
 			{
-				returnList[i] = result[i];
+				returnList.PushBack(result[i]);
 			}
 
 			return returnList;

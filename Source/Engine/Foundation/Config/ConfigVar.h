@@ -5,20 +5,29 @@
 
 namespace Vanguard
 {
-	template <class T> class ConfigVar
+	class IConfigVar
 	{
-	private:
+		friend class EngineConfig;
+	protected:
+		String file;
+		String section;
 		String name;
+	};
+
+	template <class T> class ConfigVar : IConfigVar
+	{
 		T defaultValue;
 	protected:
 		virtual T FromText(const String& aString) const = 0;
 		virtual String ToText(const T& aTypeInstance) const = 0;
 
-		void Initialize(String aName, T aDefaultValue)
+		void Initialize(const String& aConfigFile, const String& aConfigSection, const String& aName, T aDefaultValue)
 		{
+			file = aConfigFile;
+			section = aConfigSection;
 			name = aName;
 			defaultValue = aDefaultValue;
-			EngineConfig::OnConfigVarCreated(aName, ToText(aDefaultValue));
+			EngineConfig::OnConfigVarCreated(*this, ToText(aDefaultValue));
 		}
 	public:
 
@@ -31,16 +40,16 @@ namespace Vanguard
 		operator T() const
 		{
 			// TODO: Cache the value somewhere so it doesn't have to be de-serialized every time it's used.
-			return FromText(EngineConfig::GetConfigValueText(name));
+			return FromText(EngineConfig::GetConfigValueText(*this));
 		}
 	};
 
 	class Int32ConfigVar : public ConfigVar<int32>
 	{
 	public:
-		Int32ConfigVar(const String& aName, const int32& aDefaultValue)
-		{ 
-			Initialize(aName, aDefaultValue);
+		Int32ConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, const int32& aDefaultValue)
+		{
+			Initialize(aConfigFile, aConfigSection, aName, aDefaultValue);
 		}
 	private:
 		int32 FromText(const String& aString) const
@@ -57,9 +66,9 @@ namespace Vanguard
 	class FloatConfigVar : public ConfigVar<float>
 	{
 	public:
-		FloatConfigVar(String aName, float aDefaultValue)
+		FloatConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, const float& aDefaultValue)
 		{
-			Initialize(aName, aDefaultValue);
+			Initialize(aConfigFile, aConfigSection, aName, aDefaultValue);
 		}
 	private:
 		virtual float FromText(const String& aString) const
@@ -76,9 +85,9 @@ namespace Vanguard
 	class BooleanConfigVar : public ConfigVar<bool>
 	{
 	public:
-		BooleanConfigVar(String aName, bool aDefaultValue)
+		BooleanConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, const bool& aDefaultValue)
 		{
-			Initialize(aName, aDefaultValue);
+			Initialize(aConfigFile, aConfigSection, aName, aDefaultValue);
 		}
 	private:
 		virtual bool FromText(const String& aString) const
@@ -95,9 +104,9 @@ namespace Vanguard
 	class StringConfigVar : public ConfigVar<String>
 	{
 	public:
-		StringConfigVar(String aName, String aDefaultValue)
+		StringConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, const String& aDefaultValue)
 		{
-			Initialize(aName, aDefaultValue);
+			Initialize(aConfigFile, aConfigSection, aName, aDefaultValue);
 		}
 	private:
 		virtual String FromText(const String& aString) const
@@ -113,7 +122,7 @@ namespace Vanguard
 }
 
 // Macros for ease of use.
-#define int32_Config(varName, defaultValue) const Vanguard::Int32ConfigVar varName = Vanguard::Int32ConfigVar(#varName,defaultValue);
-#define float_Config(varName, defaultValue) const Vanguard::FloatConfigVar varName = Vanguard::FloatConfigVar(#varName,defaultValue);
-#define bool_Config(varName, defaultValue) const Vanguard::BooleanConfigVar varName = Vanguard::BooleanConfigVar(#varName,defaultValue);
-#define String_Config(varName, defaultValue) const Vanguard::StringConfigVar varName = Vanguard::StringConfigVar(#varName,defaultValue);
+#define int32_Config(varName, configFile, defaultValue) const Vanguard::Int32ConfigVar varName = Vanguard::Int32ConfigVar(configFile,typeid(*this).name(),#varName,defaultValue);
+#define float_Config(varName, configFile, defaultValue) const Vanguard::FloatConfigVar varName = Vanguard::FloatConfigVar(configFile,typeid(*this).name(),#varName,defaultValue)
+#define bool_Config(varName, configFile, defaultValue) const Vanguard::BooleanConfigVar varName = Vanguard::BooleanConfigVar(configFile,typeid(*this).name(),#varName,defaultValue)
+#define String_Config(varName, configFile, defaultValue) const Vanguard::StringConfigVar varName = Vanguard::StringConfigVar(configFile,typeid(*this).name(),#varName,defaultValue)

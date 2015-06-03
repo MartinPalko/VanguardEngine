@@ -35,6 +35,18 @@ namespace Vanguard
 			data.resize(aSize);
 		}
 
+		inline bool Contains(const T& aItem) const
+		{
+			for (std::vector<T>::const_iterator it = data.begin(); it != data.end(); it++)
+			{
+				if (*it == aItem)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		//operators
 		inline List& operator=(const List& others)
 		{

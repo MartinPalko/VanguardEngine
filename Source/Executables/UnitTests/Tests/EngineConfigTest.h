@@ -1,7 +1,6 @@
 #include "gtest\gtest.h"
 
-#include "EngineConfig.h"
-#include "ConfigVar.h"
+#include "Config.h"
 
 namespace Vanguard
 {
@@ -40,13 +39,13 @@ namespace Vanguard
 	{
 		OtherTestClass otherClass = OtherTestClass();
 
-		EngineConfig::LoadConfigFromDisk();
+		ConfigTable::LoadConfigFromDisk();
 
 		EXPECT_EQ(10, TestInt);
 		EXPECT_EQ(3.1415f, TestFloat);
 		EXPECT_EQ(true, TestBool);
 		EXPECT_EQ("Test", TestString);
 
-		EngineConfig::SaveConfigToDisk();
+		ConfigTable::SaveConfigToDisk();
 	}
 }

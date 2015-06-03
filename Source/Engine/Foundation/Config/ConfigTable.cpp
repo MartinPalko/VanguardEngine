@@ -1,13 +1,12 @@
 #pragma once
-#include "EngineConfig.h"
-
+#include "ConfigTable.h"
 #include "ConfigVar.h"
 
 namespace Vanguard
 {
-	std::map <String, std::map <String, std::map <String, String>>> EngineConfig::configValues = std::map <String, std::map <String, std::map <String, String>>>();
+	std::map <String, std::map <String, std::map <String, String>>> ConfigTable::configValues = std::map <String, std::map <String, std::map <String, String>>>();
 
-	void EngineConfig::OnConfigVarCreated(const IConfigVar& aNewVar, const String& aConfigDefault)
+	void ConfigTable::OnConfigVarCreated(const IConfigVar& aNewVar, const String& aConfigDefault)
 	{
 		// Set to default if it doesn't exist yet.
 		if (configValues.find(aNewVar.file) == configValues.end() ||
@@ -18,12 +17,12 @@ namespace Vanguard
 		}
 	}
 
-	String EngineConfig::GetConfigValueText(const IConfigVar& aConfigVar)
+	String ConfigTable::GetConfigValueText(const IConfigVar& aConfigVar)
 	{
 		return configValues[aConfigVar.file][aConfigVar.section][aConfigVar.name];
 	}
 
-	bool EngineConfig::SaveConfigToDisk()
+	bool ConfigTable::SaveConfigToDisk()
 	{
 		for (auto const& file : configValues)
 		{
@@ -52,11 +51,11 @@ namespace Vanguard
 		return true;
 	}
 
-	bool EngineConfig::LoadConfigFromDisk()
+	bool ConfigTable::LoadConfigFromDisk()
 	{
 		List<FilePath> ConfigFiles = FileSystem::Find(FileSystem::GetEngineConfigDirectory(), "*.cfg");
 
-		for (int32 f = 0; f < ConfigFiles.Size(); f++)
+		for (uint32 f = 0; f < ConfigFiles.Size(); f++)
 		{
 			FilePath configFile = ConfigFiles[f];
 			String fileName = configFile.GetFilenameWithoutExtension();
@@ -68,7 +67,7 @@ namespace Vanguard
 
 			String CurrentSection = "";
 
-			for (int32 i = 0; i < lines.Size(); i++)
+			for (uint32 i = 0; i < lines.Size(); i++)
 			{
 				// Disregard full line comments
 				if (lines[i].BeginsWithAny(";#"))

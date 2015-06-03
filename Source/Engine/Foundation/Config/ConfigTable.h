@@ -5,12 +5,14 @@
 #include "VanguardString.h"
 #include "FileSystem.h"
 
+#include "ConfigVar.h"
+
 namespace Vanguard
 {
 	class IConfigVar;
 	template <class T> class ConfigVar;
 
-	class EngineConfig
+	class ConfigTable
 	{
 		friend class ConfigVar<class T>;
 

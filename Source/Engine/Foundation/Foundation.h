@@ -3,5 +3,5 @@
 #include "Platform.h"
 #include "VanguardTypes.h"
 #include "VanguardMath.h"
-#include "EngineConfig.h"
+#include "Config.h"
 #include "FileSystem.h"

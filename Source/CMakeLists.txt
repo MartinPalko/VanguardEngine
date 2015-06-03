@@ -146,7 +146,8 @@ MACRO (IMPLEMENT_PROJECT projType projName projDependencies sourceFiles)
 	FOREACH (file ${absoluteSourceFiles})
 		file (RELATIVE_PATH relative_file "${CMAKE_CURRENT_SOURCE_DIR}" ${file}) # Make relative to CMakeLists
 		GET_FILENAME_COMPONENT(dir_path ${relative_file} DIRECTORY) # Get folder path
-		SOURCE_GROUP("${dir_path}" FILES ${file}) # Put in group		
+		STRING (REPLACE "/" "\\" fixed "${dir_path}") # On windows the dir_path will have forward slashes and subgroups use backslashes, so convert them.
+		SOURCE_GROUP("${fixed}" FILES ${file}) # Put in group		
 	ENDFOREACH()
 	
 	# Need to include directories of source files so headers can be found

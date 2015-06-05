@@ -1,5 +1,6 @@
 #pragma once
 #include "ConfigVar.h"
+#include "CoreMacros.h"
 
 namespace Vanguard
 {

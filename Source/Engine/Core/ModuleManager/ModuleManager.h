@@ -27,7 +27,6 @@ namespace Vanguard
 		//IModule* GetModule(const string aModuleName);
 
 		//ModuleInfo GetModuleInfo(const string aModuleName);
-
 	};
 }
 

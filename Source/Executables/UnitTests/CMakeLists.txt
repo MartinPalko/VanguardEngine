@@ -1,1 +1,1 @@
-IMPLEMENT_EXECUTABLE(UnitTests "Foundation;gtest")
+IMPLEMENT_EXECUTABLE(UnitTests "Core;Foundation;gtest")

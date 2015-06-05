@@ -2,6 +2,7 @@
 #include "IntegerDefs.h"
 #include "VanguardString.h"
 #include "ConfigTable.h"
+#include "CoreMacros.h"
 
 namespace Vanguard
 {

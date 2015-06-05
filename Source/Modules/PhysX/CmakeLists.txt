@@ -1,1 +1,1 @@
-IMPLEMENT_MODULE(PhysX "Foundation")
+IMPLEMENT_MODULE(PhysX "Core")

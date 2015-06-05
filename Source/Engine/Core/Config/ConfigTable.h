@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 
+#include "CoreMacros.h"
 #include "IntegerDefs.h"
 #include "VanguardString.h"
 #include "FileSystem.h"
@@ -12,7 +13,7 @@ namespace Vanguard
 	class IConfigVar;
 	template <class T> class ConfigVar;
 
-	class ConfigTable
+	class CORE_API ConfigTable
 	{
 		friend class ConfigVar<class T>;
 

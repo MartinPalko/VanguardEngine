@@ -6,6 +6,7 @@
 #include "FileSystemTest.h"
 #include "DictionaryTest.h"
 #include "EngineConfigTest.h"
+#include "HashtableTest.h"
 
 int main(int argc, char **argv)
 {

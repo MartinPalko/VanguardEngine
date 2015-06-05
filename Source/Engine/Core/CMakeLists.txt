@@ -1,1 +1,1 @@
-IMPLEMENT_MODULE(Core "Foundation")
+IMPLEMENT_DYNAMIC_LIB(Core "Foundation")

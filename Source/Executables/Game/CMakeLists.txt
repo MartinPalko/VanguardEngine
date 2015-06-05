@@ -1,1 +1,1 @@
-IMPLEMENT_EXECUTABLE(Game "Foundation;Core")
+IMPLEMENT_EXECUTABLE(Game "Core")

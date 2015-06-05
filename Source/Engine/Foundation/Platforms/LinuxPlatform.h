@@ -4,6 +4,9 @@
 
 #include "BasePlatform.h"
 
+// Expands to nothing because not needed on this platform.
+#define API_EXPORT
+
 namespace Vanguard
 {
 	struct LinuxPlatform : public BasePlatform

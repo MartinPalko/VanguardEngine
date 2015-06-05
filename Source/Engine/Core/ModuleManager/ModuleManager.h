@@ -1,26 +1,23 @@
 #pragma once
 
-#include "Core.h"
+#include "CoreMacros.h"
 
 namespace Vanguard
 {
 	struct ModuleInfo;
 	class IModule;
 
-	class ModuleManager
+	class CORE_API ModuleManager
 	{
 	public:
 		ModuleManager();
 		~ModuleManager();
 
-		// Retrieve Singleton
-		static ModuleManager& Get();
-
 	private:
 		//List<IModule*> LoadedModules;
 		//List<ModuleInfo*> ModuleInfoes;
 
-		void RefreshModuleInfoes();
+		//void RefreshModuleInfoes();
 
 
 		//bool LoadModule(const string aModuleName);

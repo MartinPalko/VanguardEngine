@@ -66,7 +66,7 @@ FUNCTION (RECURSIVE_SOLVE_DEPENDENCIES in_project)
 			
 			# Have the linker also compile it's dependencies source files if it's a static lib.
 			# Should this maybe be done for all types of libraries? Need to test when we start using dynamic libs as well.
-			IF (${DependencyType} STREQUAL "STATIC_LIBRARY")				
+			IF (${DependencyType} STREQUAL "STATIC_LIBRARY" OR ${DependencyType} STREQUAL "SHARED_LIBRARY")				
 				GET_TARGET_PROPERTY(newLinkLibs ${in_project} LINK_LIBRARIES)
 				IF ("${newLinkLibs}" STREQUAL "newLinkLibs-NOTFOUND")
 					SET(newLinkLibs "${temp_dependency}")
@@ -139,6 +139,8 @@ MACRO (IMPLEMENT_PROJECT projType projName projDependencies sourceFiles)
 	ELSE()
 		ADD_LIBRARY(${projName} ${projType} ${absoluteSourceFiles})
 	ENDIF()
+	
+	ADD_DEFINITIONS( -DLIBRARY_NAME=${projName} )
 	
 	PUT_IN_FOLDER_RELATIVE_ROOT(${projName} "")
 	

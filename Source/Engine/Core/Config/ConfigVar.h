@@ -1,6 +1,5 @@
 #pragma once
-#include "IntegerDefs.h"
-#include "VanguardString.h"
+#include "Foundation.h"
 #include "ConfigTable.h"
 #include "CoreMacros.h"
 

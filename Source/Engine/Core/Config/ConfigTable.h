@@ -2,7 +2,6 @@
 #include <map>
 
 #include "CoreMacros.h"
-#include "IntegerDefs.h"
 #include "VanguardString.h"
 #include "FileSystem.h"
 

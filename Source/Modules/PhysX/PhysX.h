@@ -1,6 +1,10 @@
 #include "Core.h"
+#include "IModule.h"
 
-class PhysXModule : public IModule
+namespace Vanguard
 {
+	class PhysXModule : public IModule
+	{
 
-};
+	};
+}

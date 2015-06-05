@@ -29,6 +29,11 @@ namespace Vanguard
 			return engineExecutable.GetParentDirectory();
 		}
 
+		static FilePath GetEngineModuleDirectory()
+		{
+			return GetEngineExecutableDirectory();
+		}
+
 		static FilePath GetEngineRootDirectory()
 		{
 			// Two up from engine executable dir is root (since executable is either in Bin/Debug or Bin/Release)

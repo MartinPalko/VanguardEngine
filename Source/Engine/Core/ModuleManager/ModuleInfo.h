@@ -12,8 +12,8 @@ namespace Vanguard
 		~ModuleInfo();
 
 		//string Name;
-		//string FilePath;
-		bool IsLoaded;
+		FilePath filePath;
+		bool isLoaded;
 
 		void* Handle;
 		IModule* Module;

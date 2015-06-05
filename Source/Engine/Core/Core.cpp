@@ -5,6 +5,7 @@ namespace Vanguard
 {
 	void Core::Initialize()
 	{
+		moduleManager.UpdateModuleList();
 		std::cout << "Initialized Core" << "\n" << "\n";
 	}
 

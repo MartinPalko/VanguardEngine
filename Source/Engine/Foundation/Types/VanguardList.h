@@ -54,7 +54,7 @@ namespace Vanguard
 			{
 				data = others.data;
 			}
-			retu *this;
+			return *this;
 		}
 
 		inline T operator[] (const int index) const

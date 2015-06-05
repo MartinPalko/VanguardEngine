@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Foundation.h"
 #include "CoreMacros.h"
 
 namespace Vanguard
@@ -13,9 +14,12 @@ namespace Vanguard
 		ModuleManager();
 		~ModuleManager();
 
+		// Create or update the module list with all modules found in the bin folder.
+		void UpdateModuleList();
+
 	private:
 		//List<IModule*> LoadedModules;
-		//List<ModuleInfo*> ModuleInfoes;
+		List<ModuleInfo*> moduleList;
 
 		//void RefreshModuleInfoes();
 

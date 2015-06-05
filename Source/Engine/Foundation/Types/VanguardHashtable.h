@@ -26,15 +26,40 @@ namespace Vanguard
 
 		//methods 
 
-		inline void Add(const K& aKey, const V& aValue){
+		inline void Add(const K& aKey, const V& aValue)
+		{
 			data.emplace(aKey, aValue);
 		}
 
-		inline void Remove(const K& aKey){
-			if(data.count(aKey) == 1){
+		inline void Remove(const K& aKey)
+		{
+			if(data.count(aKey) == 1)
+			{
 				data.erase(aKey);
 			}
 		}
+
+		inline bool Contains(const K& aKey) const
+		{
+			return data.count(aKey) == 1;
+		}
+
+		inline bool ContainsKey(const K& aKey) const
+		{
+			return Contains(aKey);
+		}
+
+		inline bool ContainsValue(const V& aValue) const
+		{
+			Vanguard::List<V> values = Values();
+			return values.Contains(aValue);
+		}
+
+		inline void Clear()
+		{
+			data.clear();
+		}
+
 
 		inline uint32 Count() const{
 			return data.size();
@@ -48,8 +73,8 @@ namespace Vanguard
 			return keys;
 		}
 
-		inline List<K> Values() const{
-			List<K> values = List<K>();
+		inline List<V> Values() const{
+			List<V> values = List<V>();
 			for (auto& item : data){
 				values.PushBack(item.second);
 			}

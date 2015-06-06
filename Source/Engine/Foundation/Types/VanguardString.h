@@ -95,8 +95,7 @@ namespace Vanguard
 		{
 			List<String> splitList = List<String>();
 
-            // Have to use pointer here b/c on gcc the copy constructor gives an error.
-			std::stringstream strStream;
+			std::stringstream strStream(data);
 			std::string segment;
 
 			while (std::getline(strStream, segment, aSplitBy))

@@ -5,8 +5,6 @@
 #include "VanguardString.h"
 #include "FileSystem.h"
 
-#include "ConfigVar.h"
-
 namespace Vanguard
 {
 	class IConfigVar;

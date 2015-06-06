@@ -139,6 +139,11 @@ MACRO (IMPLEMENT_PROJECT projType projName projDependencies sourceFiles)
 	ELSE()
 		ADD_LIBRARY(${projName} ${projType} ${absoluteSourceFiles})
 	ENDIF()
+
+	#on Unix, link libraries needed for dynamic links.
+	IF(UNIX AND NOT ${projType} MATCHES "STATIC")
+		target_link_libraries(${projName} ${CMAKE_DL_LIBS})
+	ENDIF()
 	
 	ADD_DEFINITIONS( -DLIBRARY_NAME=${projName} )
 	
@@ -192,6 +197,16 @@ ENDMACRO()
 
 # Makelist script starts here
 PROJECT (Vanguard)
+
+# Enable C++11
+ADD_DEFINITIONS(-std=c++11)
+
+IF(UNIX)
+	# -fPIC : Position independent code (needed for shared libs on UNIX based OS).
+	# -fexceptions -pthread : exeptions and threading.
+	set (CMAKE_CXX_FLAGS "-fPIC -fexceptions -pthread")
+ENDIF()
+
 
 # Enable folders in the solution
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS "ON")

@@ -1,4 +1,3 @@
-#pragma once
 #include "ConfigTable.h"
 #include "ConfigVar.h"
 
@@ -92,7 +91,7 @@ namespace Vanguard
 				configValues[fileName][CurrentSection][pair[0]] = pair[1];
 			}
 
-		}		
+		}
 		return true;
 	}
 }

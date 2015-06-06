@@ -20,7 +20,7 @@ namespace Vanguard
 
 		for (uint32 i = 0; i < dynamicLibsInModuleDirectory.Size(); i++)
 		{
-			std::cout << dynamicLibsInModuleDirectory[i] << "\n";
-		}		
+			std::cout << dynamicLibsInModuleDirectory[i].GetFullPathName() << "\n";
+		}
 	}
 }

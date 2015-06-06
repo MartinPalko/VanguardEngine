@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
-#include <algorithm>
 #include <sstream>
+#include <algorithm>
 #include <cctype>
 
 #include "juce_core.h"
@@ -51,7 +51,7 @@ namespace Vanguard
 			if (aIndex < 0 || aIndex >= GetLength())
 				throw std::invalid_argument("String index out of range");
 #endif
-			return data[aIndex]; 
+			return data[aIndex];
 		}
 
 		// To and from boolean
@@ -62,9 +62,9 @@ namespace Vanguard
 
 		// To and from int32
 		static String FromInt32(int32 aInt32) { return ::std::to_string(aInt32); }
-		inline int32 ToInt32() const 
+		inline int32 ToInt32() const
 		{
-			return std::stoi(data); 
+			return std::stoi(data);
 		}
 
 		//// To and from float
@@ -95,7 +95,8 @@ namespace Vanguard
 		{
 			List<String> splitList = List<String>();
 
-			std::stringstream strStream = std::stringstream(data);
+            // Have to use pointer here b/c on gcc the copy constructor gives an error.
+			std::stringstream strStream;
 			std::string segment;
 
 			while (std::getline(strStream, segment, aSplitBy))
@@ -225,7 +226,7 @@ namespace Vanguard
 			return newString;
 		}
 
-		// Returns a string with all instances of a specified string withplaced with another. 
+		// Returns a string with all instances of a specified string withplaced with another.
 		// If possible, use the overloaded version that takes a character, as it's much faster.
 		inline String Replace(const String& aString, const String& aWithString) const
 		{
@@ -266,7 +267,7 @@ namespace Vanguard
 		// Returns a string with all instances of the specified string removed.
 		inline String Remove(const String& aString) const
 		{
-			return Replace(aString, ""); 
+			return Replace(aString, "");
 		}
 
 		// Returns a string with all characters between the two indexes removed.

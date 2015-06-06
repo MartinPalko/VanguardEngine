@@ -5,7 +5,7 @@
 
 namespace Vanguard
 {
-	template<class T> 
+	template<class T>
 	class List
 	{
 	private:
@@ -37,7 +37,7 @@ namespace Vanguard
 
 		inline bool Contains(const T& aItem) const
 		{
-			for (std::vector<T>::const_iterator it = data.begin(); it != data.end(); it++)
+			for (typename std::vector<T>::const_iterator it = data.begin(); it != data.end(); it++)
 			{
 				if (*it == aItem)
 				{

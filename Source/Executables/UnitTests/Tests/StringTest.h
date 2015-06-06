@@ -35,7 +35,7 @@ namespace Vanguard
 		String vanguardFromStd = stdFromLiteral;
 		String vanguardFromJuce = juceFromLiteral;
 		String vanguardFromCharPointer = charPointerFromLiteral;
-		
+
 		// Verify all types have their values set properly, and can be compared interchangeably with vanguard string
 
 		EXPECT_EQ(vanguardFromLiteral, vanguardFromLiteral2); // Vanguard String to Vanguard string
@@ -111,7 +111,7 @@ namespace Vanguard
 
 		EXPECT_EQ(1, testString.FirstIndexNotOf('a'));
 		EXPECT_EQ(0, testString.FirstIndexNotOf('c'));
-		
+
 		EXPECT_EQ(3, testString.FirstIndexNotOfAny("cba"));
 		EXPECT_EQ(0, testString.FirstIndexNotOfAny("123"));
 
@@ -138,7 +138,7 @@ namespace Vanguard
 	{
 		String stringOne = "one";
 		String stringTwo = "two";
-		
+
 		EXPECT_EQ("onetwo", stringOne.Append(stringTwo));
 		EXPECT_EQ("onetwo", stringOne + stringTwo);
 
@@ -200,7 +200,7 @@ namespace Vanguard
 
 		String nonsenseAdvice = goodAdvice.Remove(5, 9);
 		EXPECT_EQ("Don't scissors", nonsenseAdvice);
-		
+
 		String sureBud = smartString.RemoveBetween(1, 4);
 		String iBeleiveYou = smartString.RemoveBetween(4, 1);
 		EXPECT_EQ("I smart", sureBud);
@@ -233,7 +233,7 @@ namespace Vanguard
 	TEST_F(StringTest, BooleanConversion)
 	{
 		String trueString = String::FromBoolean(true);
-		String falseString = String::FromBoolean(false);		
+		String falseString = String::FromBoolean(false);
 
 		EXPECT_EQ(String::TRUE_STRING, trueString);
 		EXPECT_EQ(String::FALSE_STRING, falseString);

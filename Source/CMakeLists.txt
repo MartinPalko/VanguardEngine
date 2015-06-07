@@ -198,6 +198,8 @@ SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${EngineRoot}/Bin")
 FIND_TOPLEVEL_MAKELISTS(subMakeLists)
 GET_DIRECTORIES(libDirectories "${subMakeLists}")
 
+MESSAGE("${libDirectories}")
+
  # Make sure we're not adding our own (root) directory
 LIST(REMOVE_ITEM libDirectories ${CMAKE_CURRENT_SOURCE_DIR})
 

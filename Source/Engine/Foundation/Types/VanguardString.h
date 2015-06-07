@@ -30,7 +30,7 @@ namespace Vanguard
 
 		// Create from and cast to std string
 		String(const std::string& aSTDString){ data = aSTDString; }
-		//inline operator std::string& () { return data; }
+		inline operator std::string () { return data; }
 
 		// Create from and cast to const char*
 		String(const char* aCharPointer){ data.assign(aCharPointer); }

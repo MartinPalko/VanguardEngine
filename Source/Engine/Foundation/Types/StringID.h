@@ -1,6 +1,6 @@
 #pragma once
 
-#include "zlib.h"
+#include "ThirdParty/ZLib/zlib-1.2.8/zlib.h"
 
 #include "IntegerDefs.h"
 
@@ -25,6 +25,11 @@ namespace Vanguard
 		StringID(const String& aString)
 		{
 			HashString(aString);
+		}
+
+		StringID(const char* aCharPointer)
+		{
+            HashString(aCharPointer);
 		}
 
 		uint32 GetHash()

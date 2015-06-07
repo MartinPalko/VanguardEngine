@@ -36,8 +36,13 @@ namespace Vanguard
 
 		static FilePath GetEngineRootDirectory()
 		{
+            // HACK: Figure out a more elegant way of doing this!
+        #if _WIN32
 			// Two up from engine executable dir is root (since executable is either in Bin/Debug or Bin/Release)
 			return GetEngineExecutableDirectory().GetParentDirectory().GetParentDirectory();
+        #else
+			return GetEngineExecutableDirectory().GetParentDirectory();
+        #endif
 		}
 
 		static FilePath GetEngineConfigDirectory()
@@ -124,7 +129,7 @@ namespace Vanguard
 			if (!FileExists(aFilePath))
 				return "";
 
-			juce::FileInputStream* inStream = aFilePath.file.createInputStream();			
+			juce::FileInputStream* inStream = aFilePath.file.createInputStream();
 			String fileText = inStream->readEntireStreamAsString();
 			delete inStream;
 			return fileText;

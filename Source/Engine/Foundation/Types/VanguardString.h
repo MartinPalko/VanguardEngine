@@ -230,7 +230,7 @@ namespace Vanguard
 		// If possible, use the overloaded version that takes a character, as it's much faster.
 		inline String Replace(const String& aString, const String& aWithString) const
 		{
-			uint32 start_pos = 0;
+			size_t start_pos = 0;
 			std::string newString = data;
 			while ((start_pos = newString.find(aString.GetCharPointer(), start_pos)) != std::string::npos)
 			{

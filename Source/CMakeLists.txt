@@ -42,64 +42,10 @@ FUNCTION (FIND_MAKELISTS_RECURSIVE return_lists directoryToSearch)
 			FIND_MAKELISTS_RECURSIVE(${return_list} ${directory})
 		ENDFOREACH()
 	ELSE()
-		MESSAGE("${makelistInDir}")
 		LIST(APPEND ${return_list} "${makelistInDir}")
 	ENDIF()
 	SET(${return_list} ${subMakeLists} PARENT_SCOPE)
 
-ENDFUNCTION()
-
-# Solves dependencies based on those found in the global variable "recordedProjectDependencies".
-# Functions recursively, so if the dependency has dependencies, it solves those first.
-FUNCTION (RECURSIVE_SOLVE_DEPENDENCIES in_project)
-	FOREACH (dependencyPair ${recordedProjectDependencies})
-		DECODE_DEPENDENCY_PAIR(temp_project temp_dependency "${dependencyPair}")
-		# Determine if this is a dependency we need
-		IF(${in_project} MATCHES ${temp_project})
-			LIST(FIND solvedProjects ${temp_dependency} isInSolvedList)
-			#If dependency hasn't had it's dependencies solved yet, solve it.
-			IF(${isInSolvedList} EQUAL -1)
-				RECURSIVE_SOLVE_DEPENDENCIES(${temp_dependency})				
-			ENDIF()
-			
-			GET_TARGET_PROPERTY(DependencyType ${temp_dependency} TYPE)
-			
-			# Have the linker also compile it's dependencies source files if it's a static lib.
-			# Should this maybe be done for all types of libraries? Need to test when we start using dynamic libs as well.
-			IF (${DependencyType} STREQUAL "STATIC_LIBRARY" OR ${DependencyType} STREQUAL "SHARED_LIBRARY")				
-				GET_TARGET_PROPERTY(newLinkLibs ${in_project} LINK_LIBRARIES)
-				IF ("${newLinkLibs}" STREQUAL "newLinkLibs-NOTFOUND")
-					SET(newLinkLibs "${temp_dependency}")
-				ELSE()
-					LIST(APPEND newLinkLibs "${temp_dependency}")					
-				ENDIF()
-				
-				#Also add all of new dependency's dependencies.
-				GET_TARGET_PROPERTY(depsDeps "${temp_dependency}" LINK_LIBRARIES)
-				IF (NOT "${depsDeps}" STREQUAL "depsDeps-NOTFOUND")
-					LIST(APPEND newLinkLibs "${depsDeps}")	
-				ENDIF()
-				
-				SET_TARGET_PROPERTIES(${in_project} PROPERTIES LINK_LIBRARIES "${newLinkLibs}")
-			ENDIF()
-			
-			## Add dependency to target
-			ADD_DEPENDENCIES(${in_project} ${temp_dependency})
-			## Append project include directories with that of it's dependency's
-			GET_TARGET_PROPERTY(dependencyPublicIncludes ${temp_dependency} INCLUDE_DIRECTORIES)
-			GET_TARGET_PROPERTY(projectPublicIncludes ${in_project} INCLUDE_DIRECTORIES)
-			
-			SET(appendedDependencies "${projectPublicIncludes}")
-			LIST(APPEND appendedDependencies "${dependencyPublicIncludes}")
-			TARGET_INCLUDE_DIRECTORIES(${in_project} PUBLIC ${appendedDependencies})
-		ENDIF()		
-	ENDFOREACH()
-	
-	# All our dependencies have been solved. Now we can enter the solved list.
-	LIST(APPEND solvedProjects "${in_project}")
-	# Update the variable in parent scope, since we want to use it globally.
-	SET (solvedProjects "${solvedProjects}" PARENT_SCOPE)
-	MESSAGE("Solved dependencies for ${in_project}")
 ENDFUNCTION()
 
 # Same as IMPLEMENT_PROJECT, but .h and .cpp are found automatically by scanning sub-directories.
@@ -134,40 +80,72 @@ MACRO (IMPLEMENT_PROJECT projType projName projDependencies sourceFiles)
 		ENDIF()
 	ENDFOREACH()
 	
-	IF (${projType} MATCHES "EXECUTABLE")
-		ADD_EXECUTABLE(${projName} ${absoluteSourceFiles})
-	ELSE()
-		ADD_LIBRARY(${projName} ${projType} ${absoluteSourceFiles})
-	ENDIF()
+	#Add it to list of projects to add at a later time.
+	LIST(APPEND deferredAddProjects ${projName})
+	SET(deferredAddProjects ${deferredAddProjects} PARENT_SCOPE)
+	
+	#Create variables for project type, sources, and dependencies for use later.
+	SET("${projName}_Type" "${projType}" PARENT_SCOPE)
+	SET("${projName}_Sources" "${absoluteSourceFiles}" PARENT_SCOPE)
+	SET("${projName}_Dependencies" "${projDependencies}" PARENT_SCOPE)
+	SET("${projName}_Path" "${CMAKE_CURRENT_SOURCE_DIR}" PARENT_SCOPE)	
+ENDMACRO ()
 
-	#on Unix, link libraries needed for dynamic links.
-	IF(UNIX AND NOT ${projType} MATCHES "STATIC")
-		target_link_libraries(${projName} ${CMAKE_DL_LIBS})
-	ENDIF()
+FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
+	SET(projectName ${in_project})
+	SET(projectType "${${in_project}_Type}")
+	SET(projectSources "${${in_project}_Sources}")
+	SET(projectDependencies "${${in_project}_Dependencies}")
+	SET(projectPath "${${in_project}_Path}")	
 	
-	ADD_DEFINITIONS( -DLIBRARY_NAME=${projName} )
-	
-	PUT_IN_FOLDER_RELATIVE_ROOT(${projName} "")
-	
-	# Group source files in the same way that they are found in the folders
-	FOREACH (file ${absoluteSourceFiles})
-		file (RELATIVE_PATH relative_file "${CMAKE_CURRENT_SOURCE_DIR}" ${file}) # Make relative to CMakeLists
-		GET_FILENAME_COMPONENT(dir_path ${relative_file} DIRECTORY) # Get folder path
-		STRING (REPLACE "/" "\\" fixed "${dir_path}") # On windows the dir_path will have forward slashes and subgroups use backslashes, so convert them.
-		SOURCE_GROUP("${fixed}" FILES ${file}) # Put in group		
+	#For each dependency we have, add it first
+	FOREACH(dependency ${projectDependencies})
+		IF(NOT TARGET "${dependency}")
+			ADD_DEFFERED_PROJECTS_RECURSIVE(${dependency})
+		ENDIF()
 	ENDFOREACH()
 	
-	# Need to include directories of source files so headers can be found
-	GET_DIRECTORIES(includeDirs "${absoluteSourceFiles}")
-	TARGET_INCLUDE_DIRECTORIES(${projName} PUBLIC ${includeDirs})
+	#If target does not exist, it needs to be added, so do it.
+	IF(NOT TARGET "${projectName}")
+		MESSAGE("${projectName}")
+		IF (${projectType} MATCHES "EXECUTABLE")
+			ADD_EXECUTABLE(${projectName} ${projectSources})
+		ELSE()
+			ADD_LIBRARY(${projectName} ${projectType} ${projectSources})
+		ENDIF()
+		
+		#On Unix, link libraries needed for dynamic links.
+		IF(UNIX AND NOT ${projectType} MATCHES "STATIC")
+			target_link_libraries(${projectName} PUBLIC ${CMAKE_DL_LIBS})
+		ENDIF()
+			
+		#PUT_IN_FOLDER_RELATIVE_ROOT(${projectName} "")
+		file (RELATIVE_PATH folder "${CMAKE_SOURCE_DIR}" "${projectPath}")
+		SET_TARGET_PROPERTIES("${projectName}" PROPERTIES FOLDER "${folder}")
+		
+		# Group source files in the same way that they are found in the folders
+		FOREACH (file ${projectSources})
+			file (RELATIVE_PATH relative_file "${projectPath}" ${file}) # Make relative to CMakeLists
+			GET_FILENAME_COMPONENT(dir_path ${relative_file} DIRECTORY) # Get folder path
+			STRING (REPLACE "/" "\\" fixed "${dir_path}") # On windows the dir_path will have forward slashes and subgroups use backslashes, so convert them.
+			SOURCE_GROUP("${fixed}" FILES ${file}) # Put in group
+		ENDFOREACH()
+		
+		# Need to include directories of source files so headers can be found
+		GET_DIRECTORIES(includeDirs "${projectSources}")
+		TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${includeDirs})
+	ENDIF()
 	
-	# Put all cross project dependencies into a list to be linked later, after all projects have been added.
-	FOREACH (dependency ${projDependencies})
-		LIST(APPEND recordedProjectDependencies "${projName}=${dependency}")
-		MESSAGE("    Dependency: ${dependency}")
-	ENDFOREACH()	
-	SET (recordedProjectDependencies "${recordedProjectDependencies}" PARENT_SCOPE) # Update the variable in parent scope	
-ENDMACRO ()
+	#Now link us to our dependencies
+	FOREACH(dependency ${projectDependencies})
+		
+		GET_TARGET_PROPERTY(publicIncludeDirectories ${dependency} INCLUDE_DIRECTORIES)
+		INCLUDE_DIRECTORIES(${publicIncludeDirectories})
+	
+		TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${dependency})
+		
+	ENDFOREACH()
+ENDFUNCTION()
 
 # Macro for implementing modules
 MACRO (IMPLEMENT_MODULE moduleName dependencies)
@@ -198,15 +176,13 @@ ENDMACRO()
 # Makelist script starts here
 PROJECT (Vanguard)
 
-# Enable C++11
-ADD_DEFINITIONS(-std=c++11)
-
 IF(UNIX)
+	# Enable C++11
+	ADD_DEFINITIONS(-std=c++11)
 	# -fPIC : Position independent code (needed for shared libs on UNIX based OS).
 	# -fexceptions -pthread : exeptions and threading.
 	set (CMAKE_CXX_FLAGS "-fPIC -fexceptions -pthread")
 ENDIF()
-
 
 # Enable folders in the solution
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS "ON")
@@ -232,20 +208,14 @@ LINK_DIRECTORIES(${libDirectories})
 
 # Run CmakeLists.txt scripts for each project.
 FOREACH(file_path ${libDirectories})
-		
-		add_subdirectory (${file_path})		
+		MESSAGE("Executing makelist at: ${file_path}")
+		add_subdirectory (${file_path})
+		MESSAGE("")
 ENDFOREACH()
 
-# Now link dependencies. "recordedProjectDependencies" is written to from the macros.
-FOREACH (dependencyPair ${recordedProjectDependencies})
-	DECODE_DEPENDENCY_PAIR(platform dependency "${dependencyPair}")
+# Create all the deferred projects
+MESSAGE("Creating deferred projects:")
 	
-	LIST(FIND solvedProjects ${platform} alreadySolved)
-	#MESSAGE(" ${alreadySolved}\nplatform  : ${platform}\ndependency  : ${dependency}\nsolved list  : ${solvedProjects}\n"  )
-	#If dependency hasn't had it's dependencies solved yet, solve it.
-	IF(${alreadySolved} EQUAL -1)
-		
-		# Recursively solve dependencies for each project that has at least one dependency
-		RECURSIVE_SOLVE_DEPENDENCIES(${platform})	
-	ENDIF()
+FOREACH(project ${deferredAddProjects})
+	ADD_DEFFERED_PROJECTS_RECURSIVE(${project})
 ENDFOREACH()

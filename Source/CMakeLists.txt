@@ -189,13 +189,10 @@ SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS "ON")
 
 # Create variable for engine root folder
 GET_FILENAME_COMPONENT(EngineRoot "${CMAKE_SOURCE_DIR}" DIRECTORY) # Engine root is one up from source directory.
-# Create variable for bin folder
-SET(BinFolder "${EngineRoot}/Bin")
-SET(LibFolder "${EngineRoot}/Lib")
 
 # Output all runtime files to the bin folder on build.
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${BinFolder}")
-#SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${LibFolder}")
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${EngineRoot}/Bin")
+SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${EngineRoot}/Bin")
 
 # Find all sub directories containting CMakeLists.txt files
 FIND_TOPLEVEL_MAKELISTS(subMakeLists)

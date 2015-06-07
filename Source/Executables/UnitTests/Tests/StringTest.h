@@ -29,7 +29,7 @@ namespace Vanguard
 		juce::String juceFromVanguard = vanguardFromLiteral;
 		juce::String juceFromLiteral = "test";
 
-		const char* charPointerFromVanguard = vanguardFromLiteral;
+		const char* charPointerFromVanguard = vanguardFromLiteral.GetCharPointer();
 		const char* charPointerFromLiteral = "test";
 
 		String vanguardFromStd = stdFromLiteral;

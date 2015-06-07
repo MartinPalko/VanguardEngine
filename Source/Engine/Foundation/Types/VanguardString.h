@@ -30,11 +30,12 @@ namespace Vanguard
 
 		// Create from and cast to std string
 		String(const std::string& aSTDString){ data = aSTDString; }
-		inline operator std::string () { return data; }
+		inline operator const std::string& () const { return data; }
 
 		// Create from and cast to const char*
 		String(const char* aCharPointer){ data.assign(aCharPointer); }
-		inline operator const char*() const { return data.c_str(); }
+		inline operator const char* () const { return GetCharPointer(); }
+		inline const char* GetCharPointer() const { return data.c_str(); }
 
 		// Create from and cast to juce string
 		String(const juce::String& aJuceString) { data = std::string(aJuceString.getCharPointer()); }
@@ -57,7 +58,7 @@ namespace Vanguard
 		// To and from boolean
 		static const String TRUE_STRING;
 		static const String FALSE_STRING;
-		static String FromBoolean(const bool& aBool) { return std::string(aBool ? TRUE_STRING : FALSE_STRING); }
+		static String FromBoolean(const bool& aBool) { return aBool ? TRUE_STRING : FALSE_STRING; }
 		inline bool ToBoolean() const {	return this->ToLower() == TRUE_STRING; }
 
 		// To and from int32
@@ -125,7 +126,7 @@ namespace Vanguard
 		// Returns true if the string contains at least one instance of the specified substring
 		inline bool Contains(const String& aString) const
 		{
-			return !(data.find(aString) == std::string::npos);
+			return !(data.find((std::string)aString) == std::string::npos);
 		}
 
 		// Returns true if the string contains at least one instance of the specified character
@@ -178,7 +179,7 @@ namespace Vanguard
 		// Returns the index of the first of any of the specified characters
 		inline int32 FirstIndexOfAny(const String& aCharacters) const
 		{
-			return data.find_first_of(aCharacters);
+			return data.find_first_of((std::string)aCharacters);
 		}
 
 		// Returns the index of the last of the specified character
@@ -190,7 +191,7 @@ namespace Vanguard
 		// Returns the index of the last of any of the specified characters
 		inline int32 LastIndexOfAny(const String& aCharacters) const
 		{
-			return data.find_last_of(aCharacters);
+			return data.find_last_of((std::string)aCharacters);
 		}
 
 		// Returns the index of the first character not to match the specified character
@@ -202,7 +203,7 @@ namespace Vanguard
 		// Returns the index of the first character not to match the and of the specified characters
 		inline int32 FirstIndexNotOfAny(const String& aCharacters) const
 		{
-			return data.find_first_not_of(aCharacters);
+			return data.find_first_not_of((std::string)aCharacters);
 		}
 
 		// Returns the index of the last character not to match the specified character
@@ -214,7 +215,7 @@ namespace Vanguard
 		// Returns the index of the last character not to match the and of the specified characters
 		inline int32 LastIndexNotOfAny(const String& aCharacters) const
 		{
-			return data.find_last_not_of(aCharacters);
+			return data.find_last_not_of((std::string)aCharacters);
 		}
 
 		// Returns a string with all instances of a specified character withplaced with another.
@@ -231,9 +232,9 @@ namespace Vanguard
 		{
 			uint32 start_pos = 0;
 			std::string newString = data;
-			while ((start_pos = newString.find(aString, start_pos)) != std::string::npos)
+			while ((start_pos = newString.find((std::string)aString, start_pos)) != std::string::npos)
 			{
-				newString.replace(start_pos, aString.GetLength(), aWithString);
+				newString.replace(start_pos, aString.GetLength(), (std::string)aWithString);
 				start_pos += aWithString.GetLength(); // Handles case where 'aWithString' is a substring of 'aString'
 			}
 			return newString;
@@ -243,7 +244,7 @@ namespace Vanguard
 		inline String Insert(const int32& aAtIndex, const String& aStringToInsert) const
 		{
 			std::string newString = data;
-			newString.insert(aAtIndex, aStringToInsert);
+			newString.insert(aAtIndex, (std::string)aStringToInsert);
 			return newString;
 		}
 

@@ -126,7 +126,7 @@ namespace Vanguard
 		// Returns true if the string contains at least one instance of the specified substring
 		inline bool Contains(const String& aString) const
 		{
-			return !(data.find((std::string)aString) == std::string::npos);
+			return !(data.find(aString.GetCharPointer()) == std::string::npos);
 		}
 
 		// Returns true if the string contains at least one instance of the specified character
@@ -179,7 +179,7 @@ namespace Vanguard
 		// Returns the index of the first of any of the specified characters
 		inline int32 FirstIndexOfAny(const String& aCharacters) const
 		{
-			return data.find_first_of((std::string)aCharacters);
+			return data.find_first_of(aCharacters.GetCharPointer());
 		}
 
 		// Returns the index of the last of the specified character
@@ -191,7 +191,7 @@ namespace Vanguard
 		// Returns the index of the last of any of the specified characters
 		inline int32 LastIndexOfAny(const String& aCharacters) const
 		{
-			return data.find_last_of((std::string)aCharacters);
+			return data.find_last_of(aCharacters.GetCharPointer());
 		}
 
 		// Returns the index of the first character not to match the specified character
@@ -203,7 +203,7 @@ namespace Vanguard
 		// Returns the index of the first character not to match the and of the specified characters
 		inline int32 FirstIndexNotOfAny(const String& aCharacters) const
 		{
-			return data.find_first_not_of((std::string)aCharacters);
+			return data.find_first_not_of(aCharacters.GetCharPointer());
 		}
 
 		// Returns the index of the last character not to match the specified character
@@ -215,7 +215,7 @@ namespace Vanguard
 		// Returns the index of the last character not to match the and of the specified characters
 		inline int32 LastIndexNotOfAny(const String& aCharacters) const
 		{
-			return data.find_last_not_of((std::string)aCharacters);
+			return data.find_last_not_of(aCharacters.GetCharPointer());
 		}
 
 		// Returns a string with all instances of a specified character withplaced with another.
@@ -232,9 +232,9 @@ namespace Vanguard
 		{
 			uint32 start_pos = 0;
 			std::string newString = data;
-			while ((start_pos = newString.find((std::string)aString, start_pos)) != std::string::npos)
+			while ((start_pos = newString.find(aString.GetCharPointer(), start_pos)) != std::string::npos)
 			{
-				newString.replace(start_pos, aString.GetLength(), (std::string)aWithString);
+				newString.replace(start_pos, aString.GetLength(), aWithString.GetCharPointer());
 				start_pos += aWithString.GetLength(); // Handles case where 'aWithString' is a substring of 'aString'
 			}
 			return newString;
@@ -244,7 +244,7 @@ namespace Vanguard
 		inline String Insert(const int32& aAtIndex, const String& aStringToInsert) const
 		{
 			std::string newString = data;
-			newString.insert(aAtIndex, (std::string)aStringToInsert);
+			newString.insert(aAtIndex, aStringToInsert.GetCharPointer());
 			return newString;
 		}
 
@@ -375,21 +375,21 @@ namespace Vanguard
 	};
 
 	// Comparison to std::string
-	inline bool operator == (const String& lhs, const std::string& rhs) { return (std::string)lhs == rhs; }
-	inline bool operator == (const std::string& lhs, const String& rhs) { return (std::string)rhs == lhs; }
+	inline bool operator == (const String& lhs, const std::string& rhs) { return lhs == (String)rhs; }
+	inline bool operator == (const std::string& lhs, const String& rhs) { return rhs == (String)lhs; }
 
 	// Addition
 	inline String operator+ (const String& lhs, const String& rhs) { return lhs.Append(rhs); }
 
 	// Comparison to char*
-	inline bool operator == (const String& lhs, const char* rhs) { return (std::string)lhs == rhs; }
-	inline bool operator == (const char* lhs, const String& rhs) { return (std::string)rhs == lhs; }
+	inline bool operator == (const String& lhs, const char* rhs) { return lhs == String(rhs); }
+	inline bool operator == (const char* lhs, const String& rhs) { return rhs == String(lhs); }
 
 	// Comparison to juce::String
-	inline bool operator == (const String& lhs, const juce::String& rhs) { return (std::string)lhs == rhs.getCharPointer(); }
-	inline bool operator == (const juce::String& lhs, const String& rhs) { return (std::string)rhs == lhs.getCharPointer(); }
+	inline bool operator == (const String& lhs, const juce::String& rhs) { return lhs == String(rhs); }
+	inline bool operator == (const juce::String& lhs, const String& rhs) { return rhs == String(lhs); }
 
 	// Implement osstream support
-	inline ::std::ostream& operator<<(::std::ostream& os, const String& aString) { return os << (std::string)aString; }
+	inline ::std::ostream& operator<<(::std::ostream& os, const String& aString) { return os << aString.GetCharPointer(); }
 
 }

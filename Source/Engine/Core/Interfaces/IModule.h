@@ -10,6 +10,9 @@ namespace Vanguard
 
 		virtual void LoadModule(){}
 		virtual void UnloadModule(){}
+
+		virtual String GetPluginName() = 0;
+		virtual String GetPluginType() = 0;
 	};
 }
 

@@ -1,11 +1,14 @@
 #include "Core.h"
 #include <ostream>
 
+#include "ModuleManager.h"
+
 namespace Vanguard
 {
 	void Core::Initialize()
 	{
-		moduleManager.UpdateModuleList();
+		moduleManager = new ModuleManager();
+
 		std::cout << "Initialized Core" << "\n" << "\n";
 	}
 
@@ -16,6 +19,8 @@ namespace Vanguard
 
 	void Core::ShutDown()
 	{
+		delete moduleManager;
+
 		std::cout << "Shut Down Core" << "\n";
 	}
 

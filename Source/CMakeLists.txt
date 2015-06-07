@@ -120,7 +120,8 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 		ENDIF()
 			
 		#PUT_IN_FOLDER_RELATIVE_ROOT(${projectName} "")
-		file (RELATIVE_PATH folder "${CMAKE_SOURCE_DIR}" "${projectPath}")
+		FILE (RELATIVE_PATH folder "${CMAKE_SOURCE_DIR}" "${projectPath}")
+		GET_FILENAME_COMPONENT(folder "${folder}" DIRECTORY)
 		SET_TARGET_PROPERTIES("${projectName}" PROPERTIES FOLDER "${folder}")
 		
 		# Group source files in the same way that they are found in the folders

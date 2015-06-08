@@ -118,8 +118,8 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 		IF(UNIX AND NOT ${projectType} MATCHES "STATIC")
 			target_link_libraries(${projectName} PUBLIC ${CMAKE_DL_LIBS})
 		ENDIF()
-			
-		#PUT_IN_FOLDER_RELATIVE_ROOT(${projectName} "")
+		
+		# Put project in folder inside of solution
 		FILE (RELATIVE_PATH folder "${CMAKE_SOURCE_DIR}" "${projectPath}")
 		GET_FILENAME_COMPONENT(folder "${folder}" DIRECTORY)
 		SET_TARGET_PROPERTIES("${projectName}" PROPERTIES FOLDER "${folder}")
@@ -138,13 +138,19 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 	ENDIF()
 	
 	#Now link us to our dependencies
-	FOREACH(dependency ${projectDependencies})
+	FOREACH(dependency ${projectDependencies})		
+		GET_TARGET_PROPERTY(publicIncludeDirectories ${dependency} INCLUDE_DIRECTORIES)		
+		#Verify target has include directories first
+		IF (publicIncludeDirectories)
+			INCLUDE_DIRECTORIES(${publicIncludeDirectories})
+		ENDIF()
 		
-		GET_TARGET_PROPERTY(publicIncludeDirectories ${dependency} INCLUDE_DIRECTORIES)
-		INCLUDE_DIRECTORIES(${publicIncludeDirectories})
+		IF (${dependency}_INCLUDES)
+			MESSAGE("${dependency}_INCLUDES = ${${dependency}_INCLUDES}")
+			INCLUDE_DIRECTORIES(${${dependency}_INCLUDES})
+		ENDIF()
 	
-		TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${dependency})
-		
+		TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${dependency})		
 	ENDFOREACH()
 ENDFUNCTION()
 

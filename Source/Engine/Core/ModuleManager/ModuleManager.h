@@ -9,7 +9,7 @@ namespace Vanguard
 	struct ModuleLib;
 	class IModule;
 
-	class ModuleManager
+	class CORE_API ModuleManager
 	{
 	public:
 		ModuleManager();

@@ -1,17 +1,19 @@
 #pragma once
 
+#include "Config.h"
 #include "Foundation.h"
 #include "CoreMacros.h"
 
-
 namespace Vanguard
 {
-	class CORE_API ModuleManager;
+	class ModuleManager;
+	class Mono;
 
 	class CORE_API Core
 	{
 	private:
 		class ModuleManager* moduleManager;
+		class Mono* monoInstance;
 
 	public:
 		int i;

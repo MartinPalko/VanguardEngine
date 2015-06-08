@@ -34,6 +34,11 @@ namespace Vanguard
 			return GetEngineExecutableDirectory();
 		}
 
+		static FilePath GetSystemProgramsDirectory()
+		{
+			return juce::File::getSpecialLocation(juce::File::globalApplicationsDirectory);
+		}
+
 		static FilePath GetEngineRootDirectory()
 		{
             // HACK: Figure out a more elegant way of doing this!

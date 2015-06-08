@@ -2,12 +2,16 @@
 #include <ostream>
 
 #include "ModuleManager.h"
+#include "Mono.h"
 
 namespace Vanguard
 {
 	void Core::Initialize()
 	{
+		ConfigTable::LoadConfigFromDisk();
+
 		moduleManager = new ModuleManager();
+		monoInstance = new Mono();
 
 		std::cout << "Initialized Core" << "\n" << "\n";
 	}
@@ -22,6 +26,8 @@ namespace Vanguard
 		delete moduleManager;
 
 		std::cout << "Shut Down Core" << "\n";
+
+		ConfigTable::SaveConfigToDisk();
 	}
 
 	String Core::ReturningFoundationType()

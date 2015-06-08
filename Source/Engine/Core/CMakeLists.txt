@@ -1,1 +1,1 @@
-IMPLEMENT_DYNAMIC_LIB(Core "Foundation")
+IMPLEMENT_DYNAMIC_LIB(Core "Foundation;Mono")

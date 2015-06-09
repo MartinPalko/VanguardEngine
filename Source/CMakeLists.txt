@@ -107,8 +107,6 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 
 	#If target does not exist, it needs to be added, so do it.	
 	IF(NOT TARGET "${projectName}" AND projectType)
-		MESSAGE("${projectName}")
-		MESSAGE("Project Type >>${projectType}<<")
 		IF (${projectType} MATCHES "EXECUTABLE")
 			ADD_EXECUTABLE(${projectName} ${projectSources})
 		ELSE()

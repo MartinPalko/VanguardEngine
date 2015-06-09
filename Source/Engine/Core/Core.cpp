@@ -9,6 +9,8 @@ namespace Vanguard
 	void Core::Initialize()
 	{
 		ConfigTable::LoadConfigFromDisk();
+		ConfigTable::SaveConfigToDisk(); // Save right away, to generate defaults if they don't exist. TODO: More elequently
+
 		moduleManager = new ModuleManager();
 		managedCore = new ManagedAssembly("ManagedCore");
 

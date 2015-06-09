@@ -4,23 +4,29 @@
 #include "CoreMacros.h"
 #include "IModule.h"
 
+#include "ManagedObject.h"
+
 namespace Vanguard
 {
-	struct ModuleLib;
+	struct ModuleInfo;
 	class IModule;
 
 	class CORE_API ModuleManager
 	{
 	public:
-		ModuleManager();
+		ModuleManager(ManagedAssembly* aManagedCoreAssembly);
 		~ModuleManager();
 
 		// Create or update the module list with all modules found in the bin folder.
 		void UpdateModuleList();
+		void LoadModule(const String& aModuleName);
+		void UnloadModule(const String& aModuleName);
+		void UnloadAllModules();
 
 	private:
 		// List of all recognized modules.
-		Hashtable<String,ModuleLib*> moduleLibs;
+		std::map<String, ModuleInfo*> moduleInfos;
+		ManagedObject* managedModuleManager;
 	};
 }
 	

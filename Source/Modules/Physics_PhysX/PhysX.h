@@ -5,7 +5,7 @@ namespace Vanguard
 {
 	class PhysXModule : public IModule
 	{
-		virtual String GetPluginName() { return "PhysX"; }
-		virtual String GetPluginType() { return "Physics"; }
+		virtual String GetModuleName() { return "PhysX"; }
+		virtual String GetModuleType() { return "Physics"; }
 	};
 }

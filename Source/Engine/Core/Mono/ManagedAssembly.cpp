@@ -32,12 +32,6 @@ namespace Vanguard
 		if (!image)
 			std::cout << "error loading image for " << aMonoBinaryName << "\n";
 
-		//mono_jit_exec(domain, assembly, __argc - 1, __argv + 1);
-
-		ManagedClass* testClass = new ManagedClass("VanguardManagedCore", "ManagedCore", this);
-		testClass->CallMethod("Test");
-
-
 		// Revert working dir to what it was previously.
 		FileSystem::SetCurrentWorkingDir(previousWorkingDirectory);
 	}

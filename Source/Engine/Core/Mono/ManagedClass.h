@@ -1,22 +1,23 @@
+#pragma once
 #include "Foundation.h"
 
-#include <mono/jit/jit.h>
-#include <mono/metadata/assembly.h>
-#include <mono/metadata/debug-helpers.h>
-#include <mono/metadata/mono-config.h>
+struct _MonoClass;
 
 namespace Vanguard
 {
+	class ManagedAssembly;
+
 	class ManagedClass
 	{
-		friend class ManagedAssembly;
-	private:
-		MonoClass* monoClass;
-		MonoObject* instance;
+		friend ManagedAssembly;
+	protected:
+		ManagedAssembly* assembly;
+		_MonoClass* monoClass;
 		String namespaceName;
 		String className;
-		ManagedClass(const String& aNamespace, const String& aClass, const ManagedAssembly* aAssembly);
 	public:
-		void CallMethod(const String& aMethodName);
+		ManagedClass(const String& aNamespace, const String& aClass, ManagedAssembly* aAssembly);
+	public:
+		void CallStaticMethod(const String& aMethodName);
 	};
 }

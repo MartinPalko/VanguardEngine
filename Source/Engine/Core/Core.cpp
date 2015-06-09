@@ -1,6 +1,7 @@
 #include "Core.h"
 #include <ostream>
 
+#include "ManagedClass.h"
 #include "ModuleManager.h"
 #include "ManagedAssembly.h"
 
@@ -11,15 +12,18 @@ namespace Vanguard
 		ConfigTable::LoadConfigFromDisk();
 		ConfigTable::SaveConfigToDisk(); // Save right away, to generate defaults if they don't exist. TODO: More elequently
 
-		moduleManager = new ModuleManager();
 		managedCore = new ManagedAssembly("ManagedCore");
+		moduleManager = new ModuleManager(managedCore);
 
-		std::cout << "Initialized Core" << "\n" << "\n";
+		moduleManager->LoadModule("PhysX");
+		moduleManager->LoadModule("ManagedModule");
+
+		std::cout << "Initialized Core" << "\n\n";
 	}
 
 	void Core::Run()
 	{
-		std::cout << "Ran Core" << "\n";
+		std::cout << "Ran Core" << "\n\n";
 	}
 
 	void Core::ShutDown()
@@ -27,7 +31,7 @@ namespace Vanguard
 		delete moduleManager;
 		delete managedCore;
 
-		std::cout << "Shut Down Core" << "\n";
+		std::cout << "Shut Down Core" << "\n\n";
 
 		ConfigTable::SaveConfigToDisk();
 	}
@@ -35,9 +39,5 @@ namespace Vanguard
 	String Core::ReturningFoundationType()
 	{
 		return "ReturnValue";
-	}
-	void Core::TakingFoundationType(String aArgument)
-	{
-		std::cout << aArgument << "\n";
 	}
 }

@@ -1,11 +1,11 @@
-#include "ModuleLib.h"
+#include "ModuleInfo.h"
 
 namespace Vanguard
 {
 	typedef IModule * (*MODULE_INST_FUNCTION)();
 	static const String InstantiateFunctionName = "InstantiateVanguardModule";
 
-	ModuleLib::ModuleLib(const FilePath& aLibPath, const String& aName, const String& aType)
+	ModuleInfo::ModuleInfo(const FilePath& aLibPath, const String& aName, const String& aType)
 	{
 		moduleName = aName;
 		moduleType = aType;
@@ -17,13 +17,13 @@ namespace Vanguard
 		moduleInstance = nullptr;
 	}
 
-	ModuleLib::~ModuleLib()
+	ModuleInfo::~ModuleInfo()
 	{
 		delete moduleInstance;
 		delete dynamicLibReference;
 	}
 
-	ModuleLib* ModuleLib::LoadModuleAtPath(FilePath aModulePath)
+	ModuleInfo* ModuleInfo::LoadModuleAtPath(FilePath aModulePath)
 	{
 		juce::DynamicLibrary* tempLoadedLib = new juce::DynamicLibrary(aModulePath.GetFilename());
 
@@ -46,13 +46,46 @@ namespace Vanguard
 
 		IModule* tempModuleInstance = InstantiationFunction();
 
-		String moduleName = tempModuleInstance->GetPluginName();
-		String moduleType = tempModuleInstance->GetPluginType();
+		String moduleName = tempModuleInstance->GetModuleName();
+		String moduleType = tempModuleInstance->GetModuleType();
 
 		// Got name and type, done with the temp stuff, so it can be unloaded.
 		delete tempModuleInstance;
 		delete tempLoadedLib;
 
-		return new ModuleLib(aModulePath, moduleName, moduleType);
+		return new ModuleInfo(aModulePath, moduleName, moduleType);
+	}
+
+	void ModuleInfo::LoadModule()
+	{
+		if (!GetIsLoaded())
+		{
+			dynamicLibReference = new juce::DynamicLibrary(filePath.GetFilename());
+
+			if (dynamicLibReference == nullptr)
+			{
+				throw std::exception("Could not load module " + filePath.GetFullPathName());
+			}
+
+			MODULE_INST_FUNCTION InstantiationFunction = (MODULE_INST_FUNCTION)dynamicLibReference->getFunction(InstantiateFunctionName);
+
+			if (InstantiationFunction == nullptr)
+			{
+				throw std::exception("Could not locate instantiation function for " + filePath.GetFullPathName());
+			}
+
+			moduleInstance = InstantiationFunction();
+			moduleInstance->LoadModule();
+		}
+	}
+
+	void ModuleInfo::UnloadModule()
+	{
+		if (GetIsLoaded())
+		{
+			moduleInstance->UnloadModule();
+			delete moduleInstance;
+			delete dynamicLibReference;
+		}
 	}
 }

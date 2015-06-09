@@ -1,23 +1,27 @@
+#pragma once
+
 #include "Foundation.h"
 #include "Config.h"
 
-#include <mono/jit/jit.h>
-#include <mono/metadata/assembly.h>
-#include <mono/metadata/debug-helpers.h>
-#include <mono/metadata/mono-config.h>
+struct _MonoDomain;
+struct _MonoAssembly;
+struct _MonoImage;
 
 namespace Vanguard
 {
 	class ManagedAssembly
 	{
 		friend class ManagedClass;
+		friend class ManagedObject;
 	private:
 		String_Config(monoLibPath, "Core", (FileSystem::GetSystemProgramsDirectory() + "/Mono/lib").GetFullPathName())
 		String_Config(monoConfigPath, "Core", (FileSystem::GetSystemProgramsDirectory() + "/Mono/etc").GetFullPathName())
 
-		MonoDomain* domain;
-		MonoAssembly* assembly;
-		MonoImage* image;
+		_MonoDomain* domain;
+		_MonoAssembly* assembly;
+		_MonoImage* image;
+
+		Hashtable<String, ManagedClass*> classes;
 
 	public:
 		ManagedAssembly(const String& aMonoAssemblyName);

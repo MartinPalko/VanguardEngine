@@ -6,15 +6,18 @@
 
 namespace Vanguard
 {
-	struct ModuleLib
+	struct ModuleInfo
 	{
 		friend class ModuleManager;
 
 	public:
-		~ModuleLib();
+		~ModuleInfo();
+		bool GetIsLoaded(){ return moduleInstance != nullptr; }
+		void LoadModule();
+		void UnloadModule();
 
 	private:
-		ModuleLib(const FilePath& aLibPath, const String& aName, const String& aType);
+		ModuleInfo(const FilePath& aLibPath, const String& aName, const String& aType);
 		String moduleName;
 		String moduleType;
 		FilePath filePath;
@@ -23,6 +26,6 @@ namespace Vanguard
 
 	protected:
 		// Tries to load a module library at a given path, returns nullptr if it can't be loaded.
-		static ModuleLib* LoadModuleAtPath(FilePath aModulePath);
+		static ModuleInfo* LoadModuleAtPath(FilePath aModulePath);
 	};
 }

@@ -26,9 +26,9 @@ namespace Vanguard
 
 		//methods 
 
-		inline void Add(const K& aKey, const V& aValue)
+		inline void Set(const K& aKey, const V& aValue)
 		{
-			data.emplace(aKey, aValue);
+			data[aKey] = aValue;
 		}
 
 		inline void Remove(const K& aKey)
@@ -87,6 +87,11 @@ namespace Vanguard
 				data = other.data;
 			}
 			return *this;
+		}
+
+		inline V& operator[](const K& aKey)
+		{
+			return data[aKey];
 		}
 	};
 }

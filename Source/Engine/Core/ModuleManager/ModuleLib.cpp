@@ -9,7 +9,7 @@ namespace Vanguard
 	{
 		moduleName = aName;
 		moduleType = aType;
-		
+
 		filePath = aLibPath;
 
 		// Not loaded yet.
@@ -30,7 +30,7 @@ namespace Vanguard
 		if (tempLoadedLib == nullptr)
 		{
 			// Could not load dynamic library
-			std::cout << "Could not load lib " << aModulePath << "\n";
+			std::cout << "Could not load lib " << aModulePath.GetFullPathName() << "\n";
 			return nullptr;
 		}
 
@@ -39,7 +39,7 @@ namespace Vanguard
 		if (InstantiationFunction == nullptr)
 		{
 			// Could not find instantiation function (not a module library)
-			std::cout << "could not locate instantiation function for " << aModulePath << "\n";
+			std::cout << "could not locate instantiation function for " << aModulePath.GetFullPathName() << "\n";
 			delete tempLoadedLib;
 			return nullptr;
 		}

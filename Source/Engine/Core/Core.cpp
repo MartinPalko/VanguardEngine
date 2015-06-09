@@ -11,6 +11,7 @@ namespace Vanguard
 		ConfigTable::LoadConfigFromDisk();
 
 		moduleManager = new ModuleManager();
+		std::cout << "Mono Initializing";
 		monoInstance = new Mono();
 
 		std::cout << "Initialized Core" << "\n" << "\n";

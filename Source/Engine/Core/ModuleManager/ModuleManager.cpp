@@ -33,7 +33,7 @@ namespace Vanguard
 			if (moduleLib != nullptr)
 			{
 				moduleLibs.Add(moduleLib->moduleName,moduleLib);
-				std::cout << "Found module " << moduleLib->moduleName << " of type " << moduleLib->moduleType << "\n";
+				//std::cout << "Found module " << moduleLib->moduleName << " of type " << moduleLib->moduleType << "\n";
 			}
 		}
 	}

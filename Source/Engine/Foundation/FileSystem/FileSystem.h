@@ -23,7 +23,7 @@ namespace Vanguard
 			return engineTempDirectory;
 		}
 
-		static FilePath GetEngineExecutableDirectory()
+		static FilePath GetEngineBinDirectory()
 		{
 			FilePath engineExecutable = juce::File::getSpecialLocation(juce::File::hostApplicationPath);
 			return engineExecutable.GetParentDirectory();
@@ -31,7 +31,7 @@ namespace Vanguard
 
 		static FilePath GetEngineModuleDirectory()
 		{
-			return GetEngineExecutableDirectory();
+			return GetEngineBinDirectory();
 		}
 
 		static FilePath GetSystemProgramsDirectory()
@@ -39,14 +39,24 @@ namespace Vanguard
 			return juce::File::getSpecialLocation(juce::File::globalApplicationsDirectory);
 		}
 
+		static void SetCurrentWorkingDir(const FilePath& aFilePath)
+		{
+			aFilePath.file.setAsCurrentWorkingDirectory();
+		}
+
+		static FilePath GetCurrentWorkingDir()
+		{
+			return juce::File::getCurrentWorkingDirectory();
+		}
+
 		static FilePath GetEngineRootDirectory()
 		{
             // HACK: Figure out a more elegant way of doing this!
         #if _WIN32
 			// Two up from engine executable dir is root (since executable is either in Bin/Debug or Bin/Release)
-			return GetEngineExecutableDirectory().GetParentDirectory().GetParentDirectory();
+			return GetEngineBinDirectory().GetParentDirectory().GetParentDirectory();
         #else
-			return GetEngineExecutableDirectory().GetParentDirectory();
+			return GetEngineBinDirectory().GetParentDirectory();
         #endif
 		}
 

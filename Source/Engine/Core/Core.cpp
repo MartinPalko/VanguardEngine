@@ -2,16 +2,15 @@
 #include <ostream>
 
 #include "ModuleManager.h"
-#include "Mono.h"
+#include "ManagedAssembly.h"
 
 namespace Vanguard
 {
 	void Core::Initialize()
 	{
 		ConfigTable::LoadConfigFromDisk();
-
 		moduleManager = new ModuleManager();
-		monoInstance = new Mono();
+		managedCore = new ManagedAssembly("ManagedCore");
 
 		std::cout << "Initialized Core" << "\n" << "\n";
 	}
@@ -24,6 +23,7 @@ namespace Vanguard
 	void Core::ShutDown()
 	{
 		delete moduleManager;
+		delete managedCore;
 
 		std::cout << "Shut Down Core" << "\n";
 

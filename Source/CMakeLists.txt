@@ -104,10 +104,11 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 			ADD_DEFFERED_PROJECTS_RECURSIVE(${dependency})
 		ENDIF()
 	ENDFOREACH()
-	
-	#If target does not exist, it needs to be added, so do it.
-	IF(NOT TARGET "${projectName}")
+
+	#If target does not exist, it needs to be added, so do it.	
+	IF(NOT TARGET "${projectName}" AND projectType)
 		MESSAGE("${projectName}")
+		MESSAGE("Project Type >>${projectType}<<")
 		IF (${projectType} MATCHES "EXECUTABLE")
 			ADD_EXECUTABLE(${projectName} ${projectSources})
 		ELSE()
@@ -117,6 +118,10 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 		#On Unix, link libraries needed for dynamic links.
 		IF(UNIX AND NOT ${projectType} MATCHES "STATIC")
 			target_link_libraries(${projectName} PUBLIC ${CMAKE_DL_LIBS})
+
+		#SUPER HACKY
+		target_link_libraries(${projectName} PUBLIC ${CMAKE_CXX_FLAGS})
+
 		ENDIF()
 		
 		# Put project in folder inside of solution
@@ -138,19 +143,21 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 	ENDIF()
 	
 	#Now link us to our dependencies
-	FOREACH(dependency ${projectDependencies})		
-		GET_TARGET_PROPERTY(publicIncludeDirectories ${dependency} INCLUDE_DIRECTORIES)		
-		#Verify target has include directories first
-		IF (publicIncludeDirectories)
-			INCLUDE_DIRECTORIES(${publicIncludeDirectories})
-		ENDIF()
+	FOREACH(dependency ${projectDependencies})
+		if (TARGET ${dependency})	
+			GET_TARGET_PROPERTY(publicIncludeDirectories ${dependency} INCLUDE_DIRECTORIES)		
+			#Verify target has include directories first
+			IF (publicIncludeDirectories)
+				INCLUDE_DIRECTORIES(${publicIncludeDirectories})
+			ENDIF()
 		
-		IF (${dependency}_INCLUDES)
-			MESSAGE("${dependency}_INCLUDES = ${${dependency}_INCLUDES}")
-			INCLUDE_DIRECTORIES(${${dependency}_INCLUDES})
-		ENDIF()
+			IF (${dependency}_INCLUDES)
+				MESSAGE("${dependency}_INCLUDES = ${${dependency}_INCLUDES}")
+				INCLUDE_DIRECTORIES(${${dependency}_INCLUDES})
+			ENDIF()
 	
-		TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${dependency})		
+			TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${dependency})
+		ENDIF()
 	ENDFOREACH()
 ENDFUNCTION()
 
@@ -225,3 +232,6 @@ MESSAGE("Creating deferred projects:")
 FOREACH(project ${deferredAddProjects})
 	ADD_DEFFERED_PROJECTS_RECURSIVE(${project})
 ENDFOREACH()
+
+add_compile_options(-lHILLABULLU)
+MESSAGE("Flags ${CMAKE_CXX_FLAGS}")

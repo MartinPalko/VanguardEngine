@@ -7,13 +7,13 @@
 namespace Vanguard
 {
 	class ModuleManager;
-	class Mono;
+	class ManagedAssembly;
 
 	class CORE_API Core
 	{
 	private:
 		class ModuleManager* moduleManager;
-		class Mono* monoInstance;
+		class ManagedAssembly* managedCore;
 
 	public:
 		int i;

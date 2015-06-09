@@ -1,22 +1,26 @@
 #include "Foundation.h"
 #include "Config.h"
-//#include <glib/glib.h>
+
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>
+#include <mono/metadata/debug-helpers.h>
+#include <mono/metadata/mono-config.h>
 
 namespace Vanguard
 {
-	class Mono
+	class ManagedAssembly
 	{
+		friend class ManagedClass;
 	private:
 		String_Config(monoLibPath, "Core", (FileSystem::GetSystemProgramsDirectory() + "/Mono/lib").GetFullPathName())
 		String_Config(monoConfigPath, "Core", (FileSystem::GetSystemProgramsDirectory() + "/Mono/etc").GetFullPathName())
 
 		MonoDomain* domain;
 		MonoAssembly* assembly;
+		MonoImage* image;
 
 	public:
-		Mono();
-		~Mono();
+		ManagedAssembly(const String& aMonoAssemblyName);
+		~ManagedAssembly();
 	};
 }

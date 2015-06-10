@@ -22,6 +22,8 @@ namespace Vanguard
 		typedef uint16_t uint16;
 
 		static inline const char* DynamicLibExtension(){ return ".so"; }
+
+		typedef std::runtime_error Exception;
 	};
 	typedef LinuxPlatform Platform;
 

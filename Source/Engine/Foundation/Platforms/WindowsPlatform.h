@@ -17,6 +17,8 @@ namespace Vanguard
 		typedef unsigned __int16 uint16;
 
 		static inline const char* DynamicLibExtension(){ return ".dll"; }
+
+		typedef std::exception Exception;
 	};
 	typedef WindowsPlatform Platform;
 }

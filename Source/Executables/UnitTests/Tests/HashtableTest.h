@@ -23,7 +23,7 @@ namespace Vanguard
 	{
 		Vanguard::Hashtable<std::string, int> testData;
 
-		testData.Add("one", 1);
+		//testData.Add("one", 1);
 		EXPECT_TRUE(testData.ContainsValue(1));
 	}
 }

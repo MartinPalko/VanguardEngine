@@ -188,10 +188,10 @@ PROJECT (Vanguard)
 
 IF(UNIX)
 	# Enable C++11
-	ADD_DEFINITIONS(-std=c++11)
+	#ADD_DEFINITIONS(-std=c++11)
 	# -fPIC : Position independent code (needed for shared libs on UNIX based OS).
 	# -fexceptions -pthread : exeptions and threading.
-	set (CMAKE_CXX_FLAGS "-fPIC -fexceptions -pthread")
+	set (CMAKE_CXX_FLAGS "-std=c++11 -fPIC -fexceptions -pthread")
 ENDIF()
 
 # Enable folders in the solution

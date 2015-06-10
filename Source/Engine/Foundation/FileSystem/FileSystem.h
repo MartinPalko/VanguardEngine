@@ -51,13 +51,7 @@ namespace Vanguard
 
 		static FilePath GetEngineRootDirectory()
 		{
-            // HACK: Figure out a more elegant way of doing this!
-        #if _WIN32
-			// Two up from engine executable dir is root (since executable is either in Bin/Debug or Bin/Release)
-			return GetEngineBinDirectory().GetParentDirectory().GetParentDirectory();
-        #else
 			return GetEngineBinDirectory().GetParentDirectory();
-        #endif
 		}
 
 		static FilePath GetEngineConfigDirectory()

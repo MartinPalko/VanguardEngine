@@ -116,10 +116,8 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 		#On Unix, link libraries needed for dynamic links.
 		IF(UNIX AND NOT ${projectType} MATCHES "STATIC")
 			target_link_libraries(${projectName} PUBLIC ${CMAKE_DL_LIBS})
-
-		#SUPER HACKY
-		target_link_libraries(${projectName} PUBLIC ${CMAKE_CXX_FLAGS})
-
+			#SUPER HACKY
+			target_link_libraries(${projectName} PUBLIC ${CMAKE_CXX_FLAGS})
 		ENDIF()
 		
 		# Put project in folder inside of solution
@@ -205,6 +203,13 @@ GET_FILENAME_COMPONENT(EngineRoot "${CMAKE_SOURCE_DIR}" DIRECTORY) # Engine root
 # Output all runtime files to the bin folder on build.
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${EngineRoot}/Bin")
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${EngineRoot}/Bin")
+# Put all configurations into the same folder
+foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${youroutputdirectory} )
+endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 # Find all sub directories containting CMakeLists.txt files
 FIND_TOPLEVEL_MAKELISTS(subMakeLists)
@@ -231,5 +236,4 @@ FOREACH(project ${deferredAddProjects})
 	ADD_DEFFERED_PROJECTS_RECURSIVE(${project})
 ENDFOREACH()
 
-add_compile_options(-lHILLABULLU)
-MESSAGE("Flags ${CMAKE_CXX_FLAGS}")
+

@@ -2,7 +2,9 @@
 #include "Foundation.h"
 #include "ManagedClass.h"
 
-struct _MonoObject;
+#include <mono/jit/jit.h>
+#include <mono/metadata/assembly.h>
+#include <mono/metadata/debug-helpers.h>
 
 namespace Vanguard
 {
@@ -11,11 +13,11 @@ namespace Vanguard
 	class ManagedObject : public ManagedClass
 	{
 	private:
-		_MonoObject* monoObject;
+		MonoObject* monoObject;
 	public:
 		ManagedObject(const String& aNamespace, const String& aClass, ManagedAssembly* aAssembly);
 	public:
-		_MonoObject* CallMethod(const String& aMethodName);
-		_MonoObject* CallMethod(const String& aMethodName, const String& aStringArgument);
+		MonoObject* CallMethod(const String& aMethodName);
+		MonoObject* CallMethod(const String& aMethodName, const String& aStringArgument);
 	};
 }

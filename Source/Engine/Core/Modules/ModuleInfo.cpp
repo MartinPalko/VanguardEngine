@@ -64,14 +64,14 @@ namespace Vanguard
 
 			if (dynamicLibReference == nullptr)
 			{
-				throw std::exception("Could not load module " + filePath.GetFullPathName());
+				throw std::runtime_error("Could not load module " + filePath.GetFullPathName());
 			}
 
 			MODULE_INST_FUNCTION InstantiationFunction = (MODULE_INST_FUNCTION)dynamicLibReference->getFunction(InstantiateFunctionName);
 
 			if (InstantiationFunction == nullptr)
 			{
-				throw std::exception("Could not locate instantiation function for " + filePath.GetFullPathName());
+				throw std::runtime_error("Could not locate instantiation function for " + filePath.GetFullPathName());
 			}
 
 			moduleInstance = InstantiationFunction();

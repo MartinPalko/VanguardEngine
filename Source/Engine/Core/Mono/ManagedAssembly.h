@@ -9,10 +9,13 @@ struct _MonoImage;
 
 namespace Vanguard
 {
+    class ManagedClass;
+    class ManagedObject;
+
 	class ManagedAssembly
 	{
-		friend class ManagedClass;
-		friend class ManagedObject;
+		friend ManagedClass;
+		friend ManagedObject;
 	private:
 		String_Config(monoLibPath, "Core", (FileSystem::GetSystemProgramsDirectory() + "/Mono/lib").GetFullPathName())
 		String_Config(monoConfigPath, "Core", (FileSystem::GetSystemProgramsDirectory() + "/Mono/etc").GetFullPathName())

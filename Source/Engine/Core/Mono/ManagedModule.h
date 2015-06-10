@@ -1,5 +1,9 @@
 #pragma once
 
+#include <mono/jit/jit.h>
+#include <mono/metadata/assembly.h>
+#include <mono/metadata/debug-helpers.h>
+
 #include "IModule.h"
 #include "ManagedObject.h"
 
@@ -20,6 +24,6 @@ namespace Vanguard
 		virtual String GetModuleName();
 		virtual String GetModuleType();
 
-		
+
 	};
 }

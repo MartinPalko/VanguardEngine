@@ -1,9 +1,5 @@
 #include "ManagedModule.h"
 
-#include <mono/jit/jit.h>
-#include <mono/metadata/assembly.h>
-#include <mono/metadata/debug-helpers.h>
-
 namespace Vanguard
 {
 	ManagedModule::ManagedModule(ManagedObject* aManagedObject)
@@ -15,15 +11,15 @@ namespace Vanguard
 	void ManagedModule::UnloadModule(){}
 
 	String ManagedModule::GetModuleName()
-	{ 
-		_MonoObject* returnValue = managedObject->CallMethod("GetModuleName");
+	{
+		MonoObject* returnValue = managedObject->CallMethod("GetModuleName");
 		const char* result = (const char*)mono_object_unbox(returnValue);
 		return result;
 	}
 
 	String ManagedModule::GetModuleType()
-	{ 
-		_MonoObject* returnValue = managedObject->CallMethod("GetModuleType");
+	{
+		MonoObject* returnValue = managedObject->CallMethod("GetModuleType");
 		const char* result = (const char*)mono_object_unbox(returnValue);
 		return result;
 	}

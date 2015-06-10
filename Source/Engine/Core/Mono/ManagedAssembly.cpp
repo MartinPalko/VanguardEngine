@@ -19,7 +19,7 @@ namespace Vanguard
 		std::cout << "Mono Lib Path: " << monoLibPath << "\n";
 
 		mono_config_parse(NULL);
-		mono_set_dirs(String(monoLibPath).GetCharPointer(), String(monoConfigPath).GetCharPointer());
+		//mono_set_dirs(String(monoLibPath).GetCharPointer(), String(monoConfigPath).GetCharPointer());
 
 		domain = mono_jit_init(aMonoBinaryName);
 		assembly = mono_domain_assembly_open(domain, aMonoBinaryName.Append(".dll"));

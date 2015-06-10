@@ -2,10 +2,6 @@
 
 #include "ManagedAssembly.h"
 
-#include <mono/jit/jit.h>
-#include <mono/metadata/assembly.h>
-#include <mono/metadata/debug-helpers.h>
-
 namespace Vanguard
 {
 	ManagedObject::ManagedObject(const String& aNamespace, const String& aClass, ManagedAssembly* aAssembly)

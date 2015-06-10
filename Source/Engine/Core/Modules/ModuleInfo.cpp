@@ -64,14 +64,14 @@ namespace Vanguard
 
 			if (dynamicLibReference == nullptr)
 			{
-				throw Exception("Could not load module " + filePath.GetFullPathName());
+				throw Exception(String("Could not load module " + filePath.GetFullPathName()).GetCharPointer());
 			}
 
 			MODULE_INST_FUNCTION InstantiationFunction = (MODULE_INST_FUNCTION)dynamicLibReference->getFunction(InstantiateFunctionName);
 
 			if (InstantiationFunction == nullptr)
 			{
-				throw Exception("Could not locate instantiation function for " + filePath.GetFullPathName());
+				throw Exception(String("Could not load module " + filePath.GetFullPathName()).GetCharPointer());
 			}
 
 			moduleInstance = InstantiationFunction();

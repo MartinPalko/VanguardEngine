@@ -16,7 +16,7 @@ namespace Vanguard
 
 	private:
 		// Map goes <File,<Section,<Name,Value>>>
-		static std::map <String, std::map <String, std::map <String, String>>> configValues;
+		static std::map <String, std::map <String, std::map <String, String> > > configValues;
 
 	public:
 		static void OnConfigVarCreated(const IConfigVar& aNewVar, const String& aConfigDefault);

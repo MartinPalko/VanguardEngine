@@ -13,9 +13,9 @@
 #if _WIN32
 #include "WindowsPlatform.h"
 #define VANGUARD_WINDOWS 1
-#elif TARGET_OS_MAC
+#elif __APPLE__
 #include "OSXPlatform.h"
-#define VANGUARD_MAC 1
+#define VANGUARD_APPLE 1
 #elif __linux || __GNUC__
 #include "LinuxPlatform.h"
 #define VANGUARD_LINUX 1

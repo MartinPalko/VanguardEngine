@@ -117,7 +117,9 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 		IF(UNIX AND NOT ${projectType} MATCHES "STATIC")
 			target_link_libraries(${projectName} PUBLIC ${CMAKE_DL_LIBS})
 			#SUPER HACKY
+			IF(NOT APPLE)
 			target_link_libraries(${projectName} PUBLIC ${CMAKE_CXX_FLAGS})
+			ENDIF()
 		ENDIF()
 		
 		# Put project in folder inside of solution
@@ -140,20 +142,23 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 	
 	#Now link us to our dependencies
 	FOREACH(dependency ${projectDependencies})
+		IF (${dependency}_INCLUDES)
+			MESSAGE("${dependency}_INCLUDES = ${${dependency}_INCLUDES}")
+			TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${${dependency}_INCLUDES})
+		ENDIF()
+
 		if (TARGET ${dependency})	
 			GET_TARGET_PROPERTY(publicIncludeDirectories ${dependency} INCLUDE_DIRECTORIES)		
 			#Verify target has include directories first
 			IF (publicIncludeDirectories)
 				INCLUDE_DIRECTORIES(${publicIncludeDirectories})
 			ENDIF()
-		
-			IF (${dependency}_INCLUDES)
-				MESSAGE("${dependency}_INCLUDES = ${${dependency}_INCLUDES}")
-				INCLUDE_DIRECTORIES(${${dependency}_INCLUDES})
-			ENDIF()
-	
 			TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${dependency})
+		ELSEIF(${dependency})#Could be linking directly to lib file.
+			TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${${dependency}})
+			MESSAGE("Linking ${projectName} to ${${dependency}}")
 		ENDIF()
+
 	ENDFOREACH()
 ENDFUNCTION()
 
@@ -177,21 +182,21 @@ MACRO (IMPLEMENT_EXECUTABLE executableName dependencies)
 	IMPLEMENT_PROJECT_AUTOFINDSOURCES("EXECUTABLE" "${executableName}" "${dependencies}")	
 ENDMACRO ()
 
-MACRO (IMPLEMENT_THIRDPARTY_STATIC_LIB libName dependencies sourceFiles)
-	IMPLEMENT_PROJECT("STATIC" "${libName}" "${dependencies}" "${sourceFiles}")
-ENDMACRO()
-
 # ---------------- End Macros ----------------
 
 # Makelist script starts here
 PROJECT (Vanguard)
 
-IF(UNIX)
+IF(UNIX AND NOT APPLE)
 	# Enable C++11
 	#ADD_DEFINITIONS(-std=c++11)
 	# -fPIC : Position independent code (needed for shared libs on UNIX based OS).
 	# -fexceptions -pthread : exeptions and threading.
 	set (CMAKE_CXX_FLAGS "-std=c++11 -fPIC -fexceptions -pthread")
+ENDIF()
+
+IF (APPLE)
+	set (CMAKE_CXX_FLAGS "-x objective-c++")
 ENDIF()
 
 # Enable folders in the solution

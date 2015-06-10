@@ -16,7 +16,7 @@ namespace Vanguard
 		monoClass = mono_class_from_name(aAssembly->image, aNamespace, aClass);
 
 		if (!monoClass)
-			throw Exception(String("Error: Class named ") + aClass + " not found in namespace " + aNamespace + "\n\n");
+			throw Exception((String("Error: Class named ") + aClass + " not found in namespace " + aNamespace + "\n\n").GetCharPointer());
 	}
 
 	void ManagedClass::CallStaticMethod(const String& aMethodName)

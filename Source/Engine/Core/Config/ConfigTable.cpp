@@ -3,7 +3,7 @@
 
 namespace Vanguard
 {
-	std::map <String, std::map <String, std::map <String, String>>> ConfigTable::configValues = std::map <String, std::map <String, std::map <String, String>>>();
+	std::map <String, std::map <String, std::map <String, String> > > ConfigTable::configValues = std::map <String, std::map <String, std::map <String, String> > >();
 
 	void ConfigTable::OnConfigVarCreated(const IConfigVar& aNewVar, const String& aConfigDefault)
 	{

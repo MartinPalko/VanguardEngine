@@ -19,8 +19,6 @@ namespace Vanguard
 			Z = aZ;
 		}
 
-		Vector3() : Vector3(0.0f, 0.0f, 0.0f){}
-
 		// Defaults
 
 		static const Vector3 Up;

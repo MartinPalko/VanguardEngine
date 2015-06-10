@@ -23,7 +23,7 @@ namespace Vanguard
 
 		static inline const char* DynamicLibExtension(){ return ".so"; }
 
-		typedef std::runtime_error Exception;
+        typedef std::runtime_error Exception;
 	};
 	typedef OSXPlatform Platform;
 }

@@ -3,6 +3,8 @@
 #include "Config.h"
 #include "Foundation.h"
 #include "CoreMacros.h"
+#include "EntityComponentSystem.h"
+#include "NativeReflection.h"
 
 namespace Vanguard
 {
@@ -21,8 +23,5 @@ namespace Vanguard
 		void Initialize();
 		void Run();
 		void ShutDown();
-
-		String ReturningFoundationType();
-		void TakingFoundationType(String aArgument);
 	};
 }

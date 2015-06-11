@@ -14,7 +14,7 @@ namespace Vanguard
 		inline void HashString(const String& aString)
 		{
 			Hash = 0;
-			Hash = crc32(Hash, (const Byte*)((const char*)aString), aString.GetLength());
+			Hash = crc32(Hash, (const Byte*)(aString.GetCharPointer()), aString.GetLength());
 		}
 	public:
 		inline bool operator == (const StringID& aOther) const { return Hash == aOther.Hash; }

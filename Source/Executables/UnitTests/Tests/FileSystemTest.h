@@ -27,15 +27,15 @@ namespace Vanguard
 		// Uncomment to print to log, so they can be verified manually.
 
 		printf("Engine Root: ");
-		printf(engineRoot.GetFullPathName());
+		printf(engineRoot.GetFullPathName().GetCharPointer());
 		printf("\n");
 
 		printf("Config Directory: ");
-		printf(configDir.GetFullPathName());
+		printf(configDir.GetFullPathName().GetCharPointer());
 		printf("\n");
 
 		printf("Engine Temp: ");
-		printf(tempDir.GetFullPathName());
+		printf(tempDir.GetFullPathName().GetCharPointer());
 		printf("\n");
 
 		EXPECT_TRUE(FileSystem::DirectoryExists(engineRoot + "/Bin"));

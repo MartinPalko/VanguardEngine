@@ -6,17 +6,17 @@ namespace Vanguard
 	class Vector3
 	{
 	public:
-		float X;
-		float Y;
-		float Z;
+		float x;
+		float y;
+		float z;
 
 		// Constructors
 
 		Vector3(float aX, float aY, float aZ)
 		{
-			X = aX;
-			Y = aY;
-			Z = aZ;
+			x = aX;
+			y = aY;
+			z = aZ;
 		}
 
 		// Defaults
@@ -31,29 +31,29 @@ namespace Vanguard
 
 		// Operators
 
-		inline Vector3 operator-() const { return Vector3(-X, -Y, -Z); }
+		inline Vector3 operator-() const { return Vector3(-z, -y, -z); }
 
-		inline bool operator==(const Vector3& aV) { return X == aV.X && Y == aV.Y && Z == aV.Z; }
+		inline bool operator==(const Vector3& aV) { return x == aV.x && y == aV.y && z == aV.z; }
 
-		inline Vector3 operator+(const Vector3& aV) const { return Vector3(X + aV.X, Y + aV.Y, Z + aV.Z); }
-		inline Vector3 operator-(const Vector3& aV) const { return Vector3(X - aV.X, Y - aV.Y, Z - aV.Z); }
-		inline Vector3 operator*(const Vector3& aV) const { return Vector3(X * aV.X, Y * aV.Y, Z * aV.Z); }
-		inline Vector3 operator/(const Vector3& aV) const { return Vector3(X / aV.X, Y / aV.Y, Z / aV.Z); }
+		inline Vector3 operator+(const Vector3& aV) const { return Vector3(x + aV.x, y + aV.y, z + aV.z); }
+		inline Vector3 operator-(const Vector3& aV) const { return Vector3(x - aV.x, y - aV.y, z - aV.z); }
+		inline Vector3 operator*(const Vector3& aV) const { return Vector3(x * aV.x, y * aV.y, z * aV.z); }
+		inline Vector3 operator/(const Vector3& aV) const { return Vector3(x / aV.x, y / aV.y, z / aV.z); }
 
-		inline Vector3 operator+(const float& aF) const	{ return Vector3(X + aF, Y + aF, Z + aF); }
-		inline Vector3 operator-(const float& aF) const	{ return Vector3(X - aF, Y - aF, Z - aF); }
-		inline Vector3 operator*(const float& aF) const { return Vector3(X * aF, Y * aF, Z * aF); }
-		inline Vector3 operator/(const float& aF) const { return Vector3(X / aF, Y / aF, Z / aF); }
+		inline Vector3 operator+(const float& aF) const	{ return Vector3(z + aF, y + aF, z + aF); }
+		inline Vector3 operator-(const float& aF) const	{ return Vector3(z - aF, y - aF, z - aF); }
+		inline Vector3 operator*(const float& aF) const { return Vector3(z * aF, y * aF, z * aF); }
+		inline Vector3 operator/(const float& aF) const { return Vector3(z / aF, y / aF, z / aF); }
 
 		// Functions
 
-		inline float Dot(const Vector3& aV) const { return X*aV.X + Y*aV.Y + Z*aV.Z; }
+		inline float Dot(const Vector3& aV) const { return x*aV.x + y*aV.y + z*aV.z; }
 
-		inline Vector3 Cross(const Vector3& aV) const { return Vector3(Y*aV.Z - Z*aV.Y, Z*aV.X - X*aV.Z, X*aV.Y - Y*aV.X); }
+		inline Vector3 Cross(const Vector3& aV) const { return Vector3(y*aV.z - z*aV.y, z*aV.x - x*aV.z, x*aV.y - y*aV.x); }
 
 		inline float Length() const { return Math::Sqrt(SqrLength()); }
 
-		inline float SqrLength() const { return X*X + Y*Y + Z*Z; }
+		inline float SqrLength() const { return x*x + y*y + z*z; }
 
 	};
 }

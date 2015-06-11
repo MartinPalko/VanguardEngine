@@ -13,7 +13,7 @@ namespace Vanguard
 
 	MonoObject* ManagedObject::CallMethod(const String& aMethodName)
 	{
-		MonoMethodDesc* methodDescription = mono_method_desc_new(namespaceName + "." + className + ":" + aMethodName + "()", true);
+		MonoMethodDesc* methodDescription = mono_method_desc_new((namespaceName + "." + className + ":" + aMethodName + "()").GetCharPointer(), true);
 		MonoMethod* method = mono_method_desc_search_in_class(methodDescription, monoClass);
 		if (method)
 		{
@@ -29,7 +29,7 @@ namespace Vanguard
 
 	MonoObject* ManagedObject::CallMethod(const String& aMethodName, const String& aStringArgument)
 	{
-		MonoMethod* method = mono_class_get_method_from_name(monoClass, aMethodName, 1);
+		MonoMethod* method = mono_class_get_method_from_name(monoClass, aMethodName.GetCharPointer(), 1);
 		if (method)
 		{
 			void* args[1];

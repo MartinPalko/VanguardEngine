@@ -34,7 +34,6 @@ namespace Vanguard
 
 		// Create from and cast to const char*
 		String(const char* aCharPointer){ data.assign(aCharPointer); }
-		inline operator const char* () const { return GetCharPointer(); }
 		inline const char* GetCharPointer() const { return data.c_str(); }
 
 		// Create from and cast to juce string
@@ -380,6 +379,8 @@ namespace Vanguard
 
 	// Addition
 	inline String operator+ (const String& lhs, const String& rhs) { return lhs.Append(rhs); }
+	inline String operator+ (const char* lhs, const String& rhs) { return String(lhs).Append(rhs); }
+	inline String operator+ (const String& lhs, const char* rhs) { return lhs.Append(rhs); }
 
 	// Comparison to char*
 	inline bool operator == (const String& lhs, const char* rhs) { return lhs == String(rhs); }

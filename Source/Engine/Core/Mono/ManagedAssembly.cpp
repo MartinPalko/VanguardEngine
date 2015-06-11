@@ -20,8 +20,8 @@ namespace Vanguard
 		mono_config_parse(NULL);
 		mono_set_dirs(String(FileSystem::GetEngineBinDirectory().GetFullPathName() + "/mono/lib/").GetCharPointer(), String(FileSystem::GetEngineBinDirectory().GetFullPathName() + "/mono/lib/").GetCharPointer());
 
-		domain = mono_jit_init(aMonoBinaryName);
-		assembly = mono_domain_assembly_open(domain, aMonoBinaryName.Append(".dll"));
+		domain = mono_jit_init(aMonoBinaryName.GetCharPointer());
+		assembly = mono_domain_assembly_open(domain, aMonoBinaryName.Append(".dll").GetCharPointer());
 
 		if (!assembly)
 			std::cout << "error loading assembly " << aMonoBinaryName << "\n";

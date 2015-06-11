@@ -3,11 +3,11 @@
 
 namespace Vanguard
 {
-	class Vector3
+	class Quaternion
 	{
-		float X;
-		float Y;
-		float Z;
-		float W;
+		float x;
+		float y;
+		float z;
+		float w;
 	};
 }

@@ -2,5 +2,5 @@
 
 namespace Vanguard
 {
-	REFLECTED_CLASS_DEFINITION(Entity)
+	REFLECTED_BASECLASS_DEFINITION(Entity)
 }

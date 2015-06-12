@@ -56,8 +56,8 @@ namespace Vanguard
 
 	void Core::ShutDown()
 	{
-		//delete moduleManager;
-		//delete managedCore;
+		delete moduleManager;
+		delete managedCore;
 
 		std::cout << "Shut Down Core" << "\n\n";
 

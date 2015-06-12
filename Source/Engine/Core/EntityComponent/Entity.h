@@ -9,9 +9,10 @@ namespace Vanguard
 
 	class CORE_API Entity
 	{
-		REFLECTED_CLASS_DECLARATION(Entity)
-
 		friend class World;
+
+		REFLECTED_BASECLASS_DECLARATION(Entity)
+		
 	public:
 		Entity(){}
 		virtual ~Entity(){}

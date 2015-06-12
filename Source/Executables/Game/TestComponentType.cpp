@@ -2,5 +2,5 @@
 
 namespace Vanguard
 {
-	REFLECTED_CLASS_DEFINITION(TestComponentType)
+	REFLECTED_BASECLASS_DEFINITION(TestComponentType)
 }

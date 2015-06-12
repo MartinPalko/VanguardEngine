@@ -13,7 +13,7 @@ namespace Vanguard
 	ModuleManager::ModuleManager(ManagedAssembly* aManagedCoreAssembly)
 	{
 		managedModuleManager = new ManagedObject("Vanguard.ManagedCore.Modules", "ModuleManager", aManagedCoreAssembly);
-		//UpdateModuleList();
+		UpdateModuleList();
 	}
 
 	ModuleManager::~ModuleManager()

@@ -4,6 +4,6 @@ namespace Vanguard
 {
 	class TestComponentType : public Component
 	{
-		REFLECTED_CLASS_DECLARATION(TestComponentType)
+		REFLECTED_BASECLASS_DECLARATION(TestComponentType)
 	};
 }

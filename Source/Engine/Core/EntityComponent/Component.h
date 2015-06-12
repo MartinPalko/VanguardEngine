@@ -8,7 +8,7 @@ namespace Vanguard
 
 	class CORE_API Component
 	{
-		REFLECTED_CLASS_DECLARATION(Component)		
+		REFLECTED_BASECLASS_DECLARATION(Component)
 
 		Entity* entity;
 	};

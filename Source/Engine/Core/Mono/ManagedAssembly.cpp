@@ -20,7 +20,7 @@ namespace Vanguard
 		mono_config_parse(NULL);
 		mono_set_dirs(String(FileSystem::GetEngineBinDirectory().GetFullPathName() + "/mono/lib/").GetCharPointer(), String(FileSystem::GetEngineBinDirectory().GetFullPathName() + "/mono/lib/").GetCharPointer());
 
-		domain = mono_jit_init(aMonoBinaryName.GetCharPointer());
+		domain = mono_jit_init_version(aMonoBinaryName.GetCharPointer(),"v4.0.1");
 		assembly = mono_domain_assembly_open(domain, aMonoBinaryName.Append(".dll").GetCharPointer());
 
 		if (!assembly)

@@ -9,4 +9,5 @@ namespace Vanguard
 	typedef Platform::uint64 uint64;
 	typedef Platform::uint32 uint32;
 	typedef Platform::uint16 uint16;
+	typedef Platform::uint8 uint8;
 }

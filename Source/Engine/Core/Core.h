@@ -18,8 +18,6 @@ namespace Vanguard
 		class ManagedAssembly* managedCore;
 
 	public:
-		int i;
-
 		void Initialize();
 		void Run();
 		void ShutDown();

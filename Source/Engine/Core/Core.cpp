@@ -5,6 +5,9 @@
 #include "ModuleManager.h"
 #include "ManagedAssembly.h"
 #include "NativeReflection.h"
+#include "JobManager.h"
+#include "Job.h"
+#include "Frame.h"
 
 namespace Vanguard
 {
@@ -12,6 +15,8 @@ namespace Vanguard
 	{
 		ConfigTable::LoadConfigFromDisk();
 		ConfigTable::SaveConfigToDisk(); // Save right away, to generate defaults if they don't exist. TODO: More elequently
+
+		JobManager::CreateThreads();
 
 		managedCore = new ManagedAssembly("ManagedCore");
 		moduleManager = new ModuleManager(managedCore);
@@ -35,6 +40,15 @@ namespace Vanguard
 			PrintChildrenRecursively(children[i], currentDepth + 1);
 	}
 
+	void TestJobFunction()
+	{
+		for (int i = 0; i < 100000000; i++)
+		{
+			i--;
+			i++;
+		}
+	}
+
 	void Core::Run()
 	{
 		std::cout << "Ran Core" << "\n\n";
@@ -50,6 +64,16 @@ namespace Vanguard
 
 		World* gameWorld = new World();
 		Transform* transform = new Transform();
+
+		
+		Frame* frame = new Frame(0, 0.03f, gameWorld);
+
+		for (int i = 0; i < 100; i++)
+		{
+			frame->AddJob(new Job(TestJobFunction));
+		}
+		JobManager::ProcessFrame(frame);
+
 
 		delete transform;
 	}

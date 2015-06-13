@@ -5,6 +5,7 @@
 #include "BasePlatform.h"
 
 #include <inttypes.h>
+#include <stdexcept>
 
 // Expands to nothing because not needed on this platform.
 #define API_EXPORT

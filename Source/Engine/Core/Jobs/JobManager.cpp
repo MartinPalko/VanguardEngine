@@ -51,8 +51,8 @@ namespace Vanguard
 
 	void JobManager::CreateThreads()
 	{
-		// TODO: Get actual # of threads
-		int32 targetThreads = 4;
+		int32 targetThreads = SystemInfo::GetNumberOfCores();
+		std::cout << "Created " << targetThreads << " job threads.\n";
 
 		int32 threadsToCreate = targetThreads - jobThreads.Size();
 
@@ -76,7 +76,13 @@ namespace Vanguard
 		}
 
 		while (!aFrame->JobsFinished())
-			std::this_thread::yield;
+			std::this_thread::sleep_for(std::chrono::microseconds(1));
+
+		for (int i = 0; i < jobThreads.Size(); i++)
+		{
+			while (!jobThreads[i]->IsIdle())
+				std::this_thread::sleep_for(std::chrono::microseconds(1));
+		}
 	}
 
 }

@@ -1,12 +1,12 @@
 #include "Frame.h"
 #include "JobManager.h"
 #include "JobThread.h"
-#include "Job.h"
+
 
 namespace Vanguard
 {
-	void Frame::AddJob(Job* aJob)
+	void Frame::AddJob(jobEntryPoint aEntryPoint, JobPriority aPriority)
 	{
-		jobs[(uint8)aJob->GetPriority()].push(aJob);
+		jobs[(uint8)aPriority].push(new Job(aEntryPoint,this));
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "Foundation.h"
 #include "JobEnums.h"
+#include "Job.h"
 #include <queue>
 
 namespace Vanguard
@@ -25,7 +26,7 @@ namespace Vanguard
 			world = aWorld;
 		}
 
-		void AddJob(Job* aJob);
+		void AddJob(jobEntryPoint aEntryPoint, JobPriority aPriority = JobPriority::Normal);
 
 		bool JobsFinished()
 		{

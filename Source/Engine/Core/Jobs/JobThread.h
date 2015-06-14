@@ -6,6 +6,8 @@ namespace Vanguard
 {
 	class JobManager;
 	class Job;
+	class Frame;
+
 	class JobThread
 	{
 		friend JobManager;
@@ -14,6 +16,7 @@ namespace Vanguard
 		std::thread stdthread;
 
 		Job* currentJob;
+		
 		bool running;
 
 		void ThreadLoop();

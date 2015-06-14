@@ -40,9 +40,9 @@ namespace Vanguard
 			PrintChildrenRecursively(children[i], currentDepth + 1);
 	}
 
-	void TestJobFunction()
+	void TestJobFunction(Frame* aFrame)
 	{
-		for (int i = 0; i < 100000000; i++)
+		for (int i = 0; i < 10000000; i++)
 		{
 			i--;
 			i++;
@@ -51,7 +51,7 @@ namespace Vanguard
 
 	void Core::Run()
 	{
-		std::cout << "Ran Core" << "\n\n";
+		std::cout << "Running Core" << "\n\n";
 
 		List<INativeClassInfo*> allTypes = INativeClassInfo::GetAllTypes();
 		std::cout << allTypes.Size() << " types found: \n";
@@ -68,14 +68,17 @@ namespace Vanguard
 		
 		Frame* frame = new Frame(0, 0.03f, gameWorld);
 
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 50; i++)
 		{
-			frame->AddJob(new Job(TestJobFunction));
+			frame->AddJob(TestJobFunction);
 		}
 		JobManager::ProcessFrame(frame);
 
 
 		delete transform;
+		delete gameWorld;
+		delete frame;
+		std::cout << "Ran Core" << "\n\n";
 	}
 
 	void Core::ShutDown()

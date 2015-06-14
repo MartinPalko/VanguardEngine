@@ -3,27 +3,26 @@
 
 namespace Vanguard
 {
-	typedef void(*voidFunction)(void);
+	class Frame;
+	typedef void(*jobEntryPoint)(Frame*);
 
 	class Job
 	{
 	private:
-		JobPriority priority;
+		Frame* frame;
 		bool running;
 
-		voidFunction entryPoint;
+		jobEntryPoint entryPoint;
 	public:
-		Job(voidFunction aEntryPoint, JobPriority aPriority = JobPriority::Normal)
+		Job(jobEntryPoint aEntryPoint, Frame* aFrame)
 		{
-			priority = aPriority;
 			entryPoint = aEntryPoint;
+			frame = aFrame;
 		}
 
 		void Execute()
 		{
-			entryPoint();
+			entryPoint(frame);
 		}
-
-		JobPriority GetPriority(){ return priority; }
 	};
 }

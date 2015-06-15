@@ -17,9 +17,6 @@ namespace Vanguard
 		friend ManagedClass;
 		friend ManagedObject;
 	private:
-		String_Config(monoLibPath, "Core", (FileSystem::GetSystemProgramsDirectory() + "/Mono/lib").GetFullPathName())
-		String_Config(monoConfigPath, "Core", (FileSystem::GetSystemProgramsDirectory() + "/Mono/etc").GetFullPathName())
-
 		_MonoDomain* domain;
 		_MonoAssembly* assembly;
 		_MonoImage* image;

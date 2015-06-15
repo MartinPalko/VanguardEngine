@@ -16,7 +16,7 @@ namespace Vanguard
 		float deltaTime;
 		World* world;
 
-		std::queue<Job*> jobs[(uint8)JobPriority::qty];
+		std::queue<Job*> jobs[JobPriority::qty];
 
 	public:
 		Frame(int aFrameNumber, float aDeltaTime, World* aWorld)
@@ -26,12 +26,12 @@ namespace Vanguard
 			world = aWorld;
 		}
 
-		void AddJob(jobEntryPoint aEntryPoint, JobPriority aPriority = JobPriority::Normal);
+		void AddJob(jobEntryPoint aEntryPoint, JobPriority::Type aPriority = JobPriority::Normal);
 
 		bool JobsFinished()
 		{
 			// TODO: This will return true if the last few jobs are running (removed from the jobs list) but not yet finished. Need to figure out how to fix that.
-			for (int i = 0; i < (uint8)JobPriority::qty; i++)
+			for (int i = 0; i < JobPriority::qty; i++)
 			{
 				if (jobs[i].size() > 0)
 					return false;

@@ -21,5 +21,7 @@ namespace Vanguard
 		void Initialize();
 		void Run();
 		void ShutDown();
+
+		void LoadModule(const String& aModuleName);
 	};
 }

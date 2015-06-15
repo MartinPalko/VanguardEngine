@@ -5,7 +5,7 @@
 
 namespace Vanguard
 {
-	void Frame::AddJob(jobEntryPoint aEntryPoint, JobPriority aPriority)
+	void Frame::AddJob(jobEntryPoint aEntryPoint, JobPriority::Type aPriority)
 	{
 		jobs[(uint8)aPriority].push(new Job(aEntryPoint,this));
 	}

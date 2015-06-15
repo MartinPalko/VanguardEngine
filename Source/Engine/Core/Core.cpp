@@ -21,9 +21,6 @@ namespace Vanguard
 		managedCore = new ManagedAssembly("ManagedCore");
 		moduleManager = new ModuleManager(managedCore);
 
-		moduleManager->LoadModule("PhysX");
-		moduleManager->LoadModule("ManagedModule");
-
 		std::cout << "Initialized Core" << "\n\n";
 	}
 
@@ -89,5 +86,10 @@ namespace Vanguard
 		std::cout << "Shut Down Core" << "\n\n";
 
 		ConfigTable::SaveConfigToDisk();
+	}
+
+	void Core::LoadModule(const String& aModuleName)
+	{
+		moduleManager->LoadModule(aModuleName);
 	}
 }

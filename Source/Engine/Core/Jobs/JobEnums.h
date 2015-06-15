@@ -3,11 +3,14 @@
 
 namespace Vanguard
 {
-	enum class JobPriority : uint8
+	namespace JobPriority
 	{
-		Low = 0,
-		Normal = 1,
-		High = 2,
-		qty = 3
-	};
+		enum Type
+		{
+			Low = 0,
+			Normal = 1,
+			High = 2,
+			qty = 3
+		};
+	}
 }

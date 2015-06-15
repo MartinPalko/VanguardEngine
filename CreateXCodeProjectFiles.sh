@@ -5,4 +5,4 @@ sourceRoot=$(dirname $0)"/Source"
 mkdir -p $projectfileDirectory
 cd $projectfileDirectory
 
-$cmakeExecutable -G "Xcode" -DCMAKE_OSX_ARCHITECTURES=386 $sourceRoot
+$cmakeExecutable -G "Xcode" -DCMAKE_OSX_ARCHITECTURES=i386 $sourceRoot

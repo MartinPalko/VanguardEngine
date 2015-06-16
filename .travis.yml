@@ -2,7 +2,7 @@ language: cpp
 
 # Compile both GCC and Clang
 compiler:
-- clang
+##- clang
 - gcc
 
 # Install prerequisite packages
@@ -11,7 +11,7 @@ install:
 
 # Create makefile
 before_script:
-- ./CreateMakefile.sh
+- CreateMakefile.sh
 
 # Compile makefile
-script: make ./Intermediate/MakeFile/Makefile
+script: make Intermediate/MakeFile/Makefile

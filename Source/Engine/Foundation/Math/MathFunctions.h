@@ -12,7 +12,18 @@ namespace Vanguard
 		inline float Sqrt(float aFloat) { return ::sqrtf(aFloat); }
 
 		inline float FloatPow(float aBase, float aExponent) { return ::powf(aBase, aExponent); }
-		inline int32 IntPow(int32 aBase, int32 aExponent) { return ::_Pow_int<int32>(aBase,aExponent); }
+		inline int32 IntPow(int32 aBase, int32 aExponent)
+		{
+            if (aExponent < 0) return 0;
+
+            int returnValue = 1;
+            while (aExponent > 0 )
+            {
+                aExponent--;
+                returnValue *= aBase;
+            }
+            return returnValue;
+		}
 
 		inline float Squared(float aBase){ return aBase * aBase; }
 		inline int32 Squared(int32 aBase){ return aBase * aBase; }

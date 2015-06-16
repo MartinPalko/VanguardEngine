@@ -196,7 +196,7 @@ IF(UNIX AND NOT APPLE)
 ENDIF()
 
 IF (APPLE)
-	set (CMAKE_CXX_FLAGS "-x objective-c++")
+	set (CMAKE_CXX_FLAGS "-x objective-c++ -std=c++11")
 ENDIF()
 
 # Enable folders in the solution

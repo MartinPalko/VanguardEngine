@@ -85,7 +85,7 @@ namespace Vanguard
 	{
 		std::thread::id thisThreadID = std::this_thread::get_id();
 
-		for (int i = 0; i < jobThreads.Size(); i++)
+		for (uint32 i = 0; i < jobThreads.Size(); i++)
 		{
 			if (jobThreads[i]->stdthread.get_id() == thisThreadID)
 				return jobThreads[i];

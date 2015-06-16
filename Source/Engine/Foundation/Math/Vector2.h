@@ -3,7 +3,7 @@
 
 namespace Vanguard
 {
-	class Vector2
+	struct Vector2
 	{
 	public:
 		float x;
@@ -48,15 +48,41 @@ namespace Vanguard
 		inline Vector2 operator*(const float& aF) const { return Vector2(x * aF, y * aF); }
 		inline Vector2 operator/(const float& aF) const { return Vector2(x / aF, y / aF); }
 
-		// Functions
+		// Static Functions
 
+		// Component-wise maximum
+		inline static Vector2 Max(const Vector2& aVector1, const Vector2& aVector2) 
+		{ 
+			return Vector2(Math::Max(aVector1.x, aVector2.x), Math::Max(aVector1.y, aVector2.y)); 
+		}
+
+		// Component-wise minimum
+		inline static Vector2 Min(const Vector2& aVector1, const Vector2& aVector2)
+		{ 
+			return Vector2(Math::Min(aVector1.x, aVector2.x), Math::Min(aVector1.y, aVector2.y)); 
+		}
+
+		// Member Functions
+
+		// Find dot product
 		inline float Dot(const Vector2& aV) const { return x*aV.x + y*aV.y; }
 
+		// Find the length of the vector
 		inline float Length() const { return Math::Sqrt(SqrLength()); }
 
 		// The squared length of the vector. Much faster than finding the length. If just seeing if one vector is longer than another, comparing the squared lengths is much more efficient.
-		inline float SqrLength() const { return x*x + y*y; }
+		float SqrLength() const { return x*x + y*y; }
 
-		inline Vector2 Normalize() const { return *this / Length(); }
+		// Normalize the vector (becomes length of 1)
+		inline Vector2 Normalize() const { return *this / Math::Sqrt(x*x + y*y); }
+
+		// Component-wise absolute
+		inline Vector2 Abs() const { return Vector2(Math::Abs(x), Math::Abs(y)); }
+
+		// The value of the largest component (x, or y)
+		inline float MaxValue() const { return Math::Max(x, y); }
+
+		// The value of the smallest component (x, or y)
+		inline float MinValue() const { return Math::Min(x, y); }
 	};
 }

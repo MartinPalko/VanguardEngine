@@ -7,6 +7,8 @@
 #include "DictionaryTest.h"
 #include "EngineConfigTest.h"
 #include "HashtableTest.h"
+#include "VectorTest.h"
+#include "MathFunctionsTest.h"
 
 int main(int argc, char **argv)
 {

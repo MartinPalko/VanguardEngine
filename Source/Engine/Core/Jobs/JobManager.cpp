@@ -3,12 +3,17 @@
 #include "Job.h"
 #include "Frame.h"
 
+#include <mutex>
+
 namespace Vanguard
 {
-	std::queue<Frame*> JobManager::queuedFrames;
+	Mutex JobManager::threadMutex;
+	Frame* JobManager::currentFrame;
 
 	List<JobThread*> JobManager::jobThreads = List<JobThread*>();
 	std::queue<JobThread*> JobManager::idleThreads = std::queue<JobThread*>();
+
+	Mutex jobListMutex;
 
 	JobThread* JobManager::GetIdleThread()
 	{
@@ -16,26 +21,8 @@ namespace Vanguard
 		{
 			JobThread* idleThread = idleThreads.front();
 			idleThreads.pop();
+			Log::Write("Thread ceasing idle, idle threads: " + String::FromInt32(idleThreads.size()));
 			return idleThread;
-		}
-		return nullptr;
-	}
-
-	Job* JobManager::GetNextJob()
-	{
-		if (queuedFrames.size() > 0)
-		{
-			Frame* frame = queuedFrames.front();
-
-			for (int i = (uint8)JobPriority::qty - 1; i >= 0; i--)
-			{
-				if (frame->jobs[i].size() > 0)
-				{
-					Job* nextJob = frame->jobs[i].front();
-					frame->jobs[i].pop();
-					return nextJob;
-				}
-			}
 		}
 		return nullptr;
 	}
@@ -43,16 +30,25 @@ namespace Vanguard
 	void JobManager::ThreadFinishedJob(JobThread* aThread, Job* aJob)
 	{
 		delete aJob;
-		std::cout << "Job Finished" << "\n";
-		Job* nextJob = GetNextJob();
+		
+		Job* nextJob = currentFrame->GetNextJob();
 		if (nextJob)
-			aThread->RunJob(nextJob);
+		{
+			std::cout << "Getting next job" << "\n";
+			aThread->StartJob(nextJob);
+		}
+		else
+		{
+			idleThreads.push(aThread);
+			Log::Write("Thread going idle, idle threads: " + String::FromInt32(idleThreads.size()));
+		}
 	}
 
 	void JobManager::CreateThreads()
 	{
 		int32 targetThreads = SystemInfo::GetNumberOfCores();
-		std::cout << "Created " << targetThreads << " job threads.\n";
+
+		Log::Write("Creating " + String::FromInt32(targetThreads) + " job threads.");
 
 		int32 threadsToCreate = targetThreads - jobThreads.Size();
 
@@ -65,24 +61,38 @@ namespace Vanguard
 	}
 
 	void JobManager::ProcessFrame(Frame* aFrame)
-	{
-		queuedFrames.push(aFrame);
+	{		
+		currentFrame = aFrame;
+		currentFrame->processing = true;
 
-		JobThread* idleThread = GetIdleThread();
-		while (idleThread != nullptr)
+		Job* nextJob = currentFrame->GetNextJob();
+		while (nextJob != nullptr && idleThreads.size() > 0)
 		{
-			idleThread->RunJob(GetNextJob());
-			idleThread = GetIdleThread();
+			GetIdleThread()->StartJob(nextJob);
+			nextJob = currentFrame->GetNextJob();
 		}
 
+		// Wait until all jobs have been consumed.
 		while (!aFrame->JobsFinished())
 			std::this_thread::sleep_for(std::chrono::microseconds(1));
 
+		// And again until all threads have become idle.
+		while (idleThreads.size() != jobThreads.Size())
+			std::this_thread::sleep_for(std::chrono::microseconds(1));
+
+		currentFrame->processing = false;
+	}
+
+	JobThread* JobManager::GetJobThread()
+	{
+		std::thread::id thisThreadID = std::this_thread::get_id();
+
 		for (int i = 0; i < jobThreads.Size(); i++)
 		{
-			while (!jobThreads[i]->IsIdle())
-				std::this_thread::sleep_for(std::chrono::microseconds(1));
+			if (jobThreads[i]->stdthread.get_id() == thisThreadID)
+				return jobThreads[i];
 		}
+		return nullptr;
 	}
 
 }

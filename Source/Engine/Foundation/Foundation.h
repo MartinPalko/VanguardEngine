@@ -6,3 +6,5 @@
 #include "FileSystem.h"
 #include "SystemInfo.h"
 #include "Application.h"
+#include "Log.h"
+#include "Threading.h"

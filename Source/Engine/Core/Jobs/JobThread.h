@@ -32,7 +32,7 @@ namespace Vanguard
 
 		bool IsIdle() { return currentJob == nullptr; }
 
-		void RunJob(Job* aJob);
+		void StartJob(Job* aJob);
 
 
 	};

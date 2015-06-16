@@ -9,6 +9,7 @@ int main()
 	VanguardCore.LoadModule("ManagedModule");
 
 	VanguardCore.Run();
+
 	VanguardCore.ShutDown();
 	system("pause");
 }

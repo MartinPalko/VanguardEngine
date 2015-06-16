@@ -8,7 +8,7 @@ namespace Vanguard
 {
 	void JobThread::ThreadLoop()
 	{
-		std::cout << "Started thread loop" << "\n";
+		Log::Write("Started thread loop");
 
 		int i = 0;
 
@@ -17,11 +17,10 @@ namespace Vanguard
 			if (currentJob == nullptr)
 			{
 				std::this_thread::sleep_for(std::chrono::microseconds(1));
-				//std::this_thread::yield();
+				std::this_thread::yield();
 			}
 			else
 			{
-				std::cout << "Executing job" << "\n";
 				currentJob->Execute();
 
 				Job* finishedJob = currentJob;
@@ -31,7 +30,7 @@ namespace Vanguard
 		}
 	}
 
-	void JobThread::RunJob(Job* aJob)
+	void JobThread::StartJob(Job* aJob)
 	{
 		currentJob = aJob;
 	}

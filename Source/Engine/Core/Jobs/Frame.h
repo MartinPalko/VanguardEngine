@@ -1,16 +1,23 @@
 #pragma once
 #include "Foundation.h"
+#include "CoreMacros.h"
 #include "JobEnums.h"
 #include "Job.h"
 #include <queue>
+#include <mutex>
 
 namespace Vanguard
 {
 	class World;
 	class Job;
-	class Frame
+	class CORE_API Frame
 	{
 		friend class JobManager;
+	private:
+		bool processing;
+		Mutex jobListMutex;
+		Job* GetNextJob();
+
 	public:
 		int frameNumber;
 		float deltaTime;
@@ -18,15 +25,18 @@ namespace Vanguard
 
 		std::queue<Job*> jobs[JobPriority::qty];
 
-	public:
+		void WaitForJob(Job* aJob);
+
 		Frame(int aFrameNumber, float aDeltaTime, World* aWorld)
 		{
+			processing = false;
 			frameNumber = aFrameNumber;
 			deltaTime = aDeltaTime;
 			world = aWorld;
 		}
 
-		void AddJob(jobEntryPoint aEntryPoint, JobPriority::Type aPriority = JobPriority::Normal);
+		Job* AddJob(std::function<void()> aEntryPoint, JobPriority::Type aPriority = JobPriority::Normal);
+		
 
 		bool JobsFinished()
 		{

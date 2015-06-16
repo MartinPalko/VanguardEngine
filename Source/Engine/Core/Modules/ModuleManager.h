@@ -23,6 +23,8 @@ namespace Vanguard
 		void UnloadModule(const String& aModuleName);
 		void UnloadAllModules();
 
+		List<IModule*> GetLoadedModules();
+
 	private:
 		// List of all recognized modules.
 		std::map<String, ModuleInfo*> moduleInfos;

@@ -4,25 +4,31 @@
 namespace Vanguard
 {
 	class Frame;
-	typedef void(*jobEntryPoint)(Frame*);
-
 	class Job
 	{
+		friend class Frame;
 	private:
-		Frame* frame;
 		bool running;
+		bool finished;
 
-		jobEntryPoint entryPoint;
+		std::function<void()> entryPoint;
+
 	public:
-		Job(jobEntryPoint aEntryPoint, Frame* aFrame)
+		Job(std::function<void()> aEntryPoint)
 		{
+			running = false;
+			finished = false;
 			entryPoint = aEntryPoint;
-			frame = aFrame;
 		}
 
 		void Execute()
 		{
-			entryPoint(frame);
+			Log::Write("Executing Job");
+			running = true;
+			entryPoint();
+			running = false;
+			finished = true;
+			Log::Write("Job Executed");
 		}
 	};
 }

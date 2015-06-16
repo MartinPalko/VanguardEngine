@@ -29,7 +29,7 @@ namespace Vanguard
 			MonoObject* obj = mono_runtime_invoke(method, NULL, NULL, &exception);
 
 			if (exception != nullptr)
-				std::cout << mono_string_to_utf8(mono_object_to_string(exception, NULL)); // Show the exception
+				Log::Write(mono_string_to_utf8(mono_object_to_string(exception, NULL)));
 		}
 	}
 }

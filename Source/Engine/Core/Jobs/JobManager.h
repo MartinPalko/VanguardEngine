@@ -2,6 +2,7 @@
 #include "Foundation.h"
 #include "JobEnums.h"
 #include <queue>
+#include <mutex>
 
 namespace Vanguard
 {
@@ -12,15 +13,17 @@ namespace Vanguard
 	class JobManager
 	{
 		friend JobThread;
+		friend Frame;
 
-	protected:
-		static std::queue<Frame*> queuedFrames;
+	private:
+		static Frame* currentFrame;
+
+		static Mutex threadMutex;
 
 		static List<JobThread*> jobThreads;
 		static std::queue<JobThread*> idleThreads;
 
 		static JobThread* GetIdleThread();
-		static Job* GetNextJob();
 
 		static void ThreadFinishedJob(JobThread* aThread, Job* aJob);
 
@@ -28,5 +31,7 @@ namespace Vanguard
 		static void CreateThreads();
 
 		static void ProcessFrame(Frame* aFrame);
+
+		static JobThread* GetJobThread();
 	};
 }

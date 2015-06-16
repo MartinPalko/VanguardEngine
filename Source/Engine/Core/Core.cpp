@@ -3,6 +3,7 @@
 
 #include "ManagedClass.h"
 #include "ModuleManager.h"
+#include "IModule.h"
 #include "ManagedAssembly.h"
 #include "NativeReflection.h"
 #include "JobManager.h"
@@ -21,16 +22,18 @@ namespace Vanguard
 		managedCore = new ManagedAssembly("ManagedCore");
 		moduleManager = new ModuleManager(managedCore);
 
-		std::cout << "Initialized Core" << "\n\n";
+		Log::Write("Initialized Core");
 	}
 
 	void PrintChildrenRecursively(INativeClassInfo* Class, int currentDepth)
 	{
+		String logmessage;
 		for (int i = 0; i < currentDepth; i++)
 		{
-			std::cout << "\t";
+			logmessage+= "\t";
 		}
-		std::cout << Class->GetTypeName() << "\n";
+		logmessage += Class->GetTypeName();
+		Log::Write(logmessage);
 
 		List<INativeClassInfo*> children = Class->GetDerivedClasses();
 		for (int i = 0; i < children.Size(); i++)
@@ -48,34 +51,35 @@ namespace Vanguard
 
 	void Core::Run()
 	{
-		std::cout << "Running Core" << "\n\n";
+		Log::Write("Running Core");
 
 		List<INativeClassInfo*> allTypes = INativeClassInfo::GetAllTypes();
-		std::cout << allTypes.Size() << " types found: \n";
+		Log::Write(allTypes.Size() + " types found:");
 		for (int i = 0; i < allTypes.Size(); i++)
 		{
 			if (allTypes[i]->GetBaseClass() == nullptr)
 				PrintChildrenRecursively(allTypes[i], 0);
 		}
-		std::cout << "\n";
 
 		World* gameWorld = new World();
 		Transform* transform = new Transform();
 
-		
+
 		Frame* frame = new Frame(0, 0.03f, gameWorld);
 
-		for (int i = 0; i < 50; i++)
-		{
-			frame->AddJob(TestJobFunction);
-		}
-		JobManager::ProcessFrame(frame);
+		List<IModule*> loadedModules = moduleManager->GetLoadedModules();
 
+		for (int i = 0; i < loadedModules.Size(); i++)
+		{
+			frame->AddJob([=]()-> void { loadedModules[i]->OnFrame(frame); });
+		}
+
+		JobManager::ProcessFrame(frame);
 
 		delete transform;
 		delete gameWorld;
 		delete frame;
-		std::cout << "Ran Core" << "\n\n";
+		Log::Write("Ran Core");
 	}
 
 	void Core::ShutDown()
@@ -83,8 +87,7 @@ namespace Vanguard
 		delete moduleManager;
 		delete managedCore;
 
-		std::cout << "Shut Down Core" << "\n\n";
-
+		Log::Write("Shut Down Core");
 		ConfigTable::SaveConfigToDisk();
 	}
 

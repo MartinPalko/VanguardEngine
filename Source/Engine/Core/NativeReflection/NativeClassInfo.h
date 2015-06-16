@@ -47,8 +47,6 @@ namespace Vanguard
 	public:
 		static INativeClassInfo* Create(const String& aBaseClassName = "")
 		{
-			std::cout << "Getting ref for " << typeid(T).name() << "\n";
-
 			for (int i = 0; i < allClassInfos.Size(); i++)
 			{
 				if (allClassInfos[i]->GetTypeName() == typeid(T).name())
@@ -56,7 +54,6 @@ namespace Vanguard
 					return allClassInfos[i];
 				}
 			}
-			std::cout << "Total classes: " << allClassInfos.Size() << "\n";
 			NativeClassInfo<T>* newClassInfo = new NativeClassInfo<T>(aBaseClassName);
 			allClassInfos.PushBack(newClassInfo);
 			return newClassInfo;

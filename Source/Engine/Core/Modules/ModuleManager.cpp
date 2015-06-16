@@ -68,4 +68,17 @@ namespace Vanguard
 		}
 		managedModuleManager->CallMethod("UnloadAllModules");
 	}
+
+	List<IModule*> ModuleManager::GetLoadedModules()
+	{
+		List<IModule*> returnList = List<IModule*>();
+
+		for (auto& item : moduleInfos)
+		{
+			if (item.second->GetIsLoaded())
+				returnList.PushBack(item.second->moduleInstance);
+		}
+
+		return returnList;
+	}
 }

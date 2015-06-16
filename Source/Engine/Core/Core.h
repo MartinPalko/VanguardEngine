@@ -6,6 +6,10 @@
 #include "EntityComponentSystem.h"
 #include "NativeReflection.h"
 
+#include "JobManager.h"
+#include "Job.h"
+#include "Frame.h"
+
 namespace Vanguard
 {
 	class ModuleManager;

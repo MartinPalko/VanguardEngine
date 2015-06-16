@@ -3,8 +3,6 @@
 #include "Job.h"
 #include "Frame.h"
 
-#include <mutex>
-
 namespace Vanguard
 {
 	Mutex JobManager::threadMutex;

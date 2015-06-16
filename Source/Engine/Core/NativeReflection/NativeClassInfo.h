@@ -47,7 +47,7 @@ namespace Vanguard
 	public:
 		static INativeClassInfo* Create(const String& aBaseClassName = "")
 		{
-			for (int i = 0; i < allClassInfos.Size(); i++)
+			for (uint32 i = 0; i < allClassInfos.Size(); i++)
 			{
 				if (allClassInfos[i]->GetTypeName() == typeid(T).name())
 				{

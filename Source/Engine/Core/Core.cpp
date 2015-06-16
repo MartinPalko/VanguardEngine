@@ -55,7 +55,7 @@ namespace Vanguard
 
 		List<INativeClassInfo*> allTypes = INativeClassInfo::GetAllTypes();
 		Log::Write(allTypes.Size() + " types found:");
-		for (int i = 0; i < allTypes.Size(); i++)
+		for (uint32 i = 0; i < allTypes.Size(); i++)
 		{
 			if (allTypes[i]->GetBaseClass() == nullptr)
 				PrintChildrenRecursively(allTypes[i], 0);

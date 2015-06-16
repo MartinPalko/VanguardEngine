@@ -187,6 +187,10 @@ ENDMACRO ()
 # Makelist script starts here
 PROJECT (Vanguard)
 
+# Disables the "ZERO_CHECK" target, and trying to regenerate on build. (We want to manually regenerate)
+SET(CMAKE_SUPPRESS_REGENERATION true)
+
+
 IF(UNIX AND NOT APPLE)
 	# Enable C++11
 	#ADD_DEFINITIONS(-std=c++11)

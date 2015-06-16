@@ -6,6 +6,8 @@
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/debug-helpers.h>
 
+#include "Log.h"
+
 namespace Vanguard
 {
 	ManagedClass::ManagedClass(const String& aNamespace, const String& aClass, ManagedAssembly* aAssembly)

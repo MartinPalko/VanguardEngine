@@ -5,6 +5,8 @@
 #include "CoreMacros.h"
 #include "EntityComponentSystem.h"
 #include "NativeReflection.h"
+#include "Application.h"
+#include "Log.h"
 
 #include "JobManager.h"
 #include "Job.h"

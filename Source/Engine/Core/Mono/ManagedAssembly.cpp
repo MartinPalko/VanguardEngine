@@ -1,11 +1,13 @@
 #include "ManagedAssembly.h"
 
-#include "ManagedClass.h"
-
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/debug-helpers.h>
 #include <mono/metadata/mono-config.h>
+
+#include "ManagedClass.h"
+#include "Log.h"
+
 
 namespace Vanguard
 {

@@ -1,6 +1,7 @@
 #include "ManagedObject.h"
 
 #include "ManagedAssembly.h"
+#include "Log.h"
 
 namespace Vanguard
 {

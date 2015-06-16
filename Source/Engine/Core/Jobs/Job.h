@@ -1,4 +1,5 @@
 #pragma once
+#include "Log.h"
 #include "JobEnums.h"
 
 namespace Vanguard

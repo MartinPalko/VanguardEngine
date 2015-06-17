@@ -14,12 +14,7 @@ compiler:
 
 # Create makefile
 before_script:
-- vanguardCmakeExecutable= ./Intermediate/CMake/Linux/bin/cmake
-- vanguardSourceRoot= ./Source
-- makefileDirectory= ./Intermediate/MakeFile/Makefile
-- mkdir -p "$makefileDirectory"
-- cd "$makefileDirectory"
-- $vanguardCmakeExecutable -G "Unix Makefiles" $vanguardSourceRoot
+- ./Intermediate/CMake/Linux/bin/cmake -G "Unix Makefiles" ./Source
 
 # Compile makefile
-script: make Intermediate/MakeFile/Makefile
+script: make

@@ -11,8 +11,8 @@ install:
 
 env:
 - vanguardCmakeExecutable= ./Intermediate/CMake/Linux/bin/cmake
-- vanguardSourceRoot= ./Source
-- makefileDirectory= ./Intermediate/MakeFile/Makefile
+ vanguardSourceRoot= ./Source
+ makefileDirectory= ./Intermediate/MakeFile/Makefile
 
 # Create makefile
 before_script:

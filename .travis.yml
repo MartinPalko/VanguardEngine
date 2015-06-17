@@ -6,10 +6,10 @@ compiler:
 - gcc
 
 # Install prerequisite packages
-install:
+#install:
 #todo
 
-env:
+#env:
 
 
 # Create makefile
@@ -19,7 +19,7 @@ before_script:
 - makefileDirectory= ./Intermediate/MakeFile/Makefile
 - mkdir -p "$makefileDirectory"
 - cd "$makefileDirectory"
-- "$vanguardCmakeExecutable" -G "Unix Makefiles" "$vanguardSourceRoot"
+- $vanguardCmakeExecutable -G "Unix Makefiles" $vanguardSourceRoot
 
 # Compile makefile
 script: make Intermediate/MakeFile/Makefile

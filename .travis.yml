@@ -9,6 +9,7 @@ addons:
   apt:
     packages:
     - mono-complete
+    - g++
 
 # # Install prerequisite packages
 # install:

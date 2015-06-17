@@ -9,9 +9,16 @@ compiler:
 install:
 #todo
 
+env:
+- vanguardCmakeExecutable= ./Intermediate/CMake/Linux/bin/cmake
+- vanguardSourceRoot= ./Source
+- makefileDirectory= ./Intermediate/MakeFile/Makefile
+
 # Create makefile
 before_script:
-- CreateMakefile.sh
+- mkdir -p $makefileDirectory
+- cd $makefileDirectory
+- $vanguardCmakeExecutable -G "Unix Makefiles" $vanguardSourceRoot
 
 # Compile makefile
 script: make Intermediate/MakeFile/Makefile

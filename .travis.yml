@@ -4,8 +4,11 @@ sudo: true
 
 # Compile both GCC and Clang
 compiler:
-##- clang
+- clang
 - gcc
+
+notifications:
+  email: false
 
 addons:
   apt:

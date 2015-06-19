@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/MartinPalko/VanguardEngine.svg?branch=master)](https://travis-ci.org/MartinPalko/VanguardEngine)
+[![Build Status](https://travis-ci.org/MartinPalko/VanguardEngine.svg?branch=master)](https://travis-ci.org/MartinPalko/VanguardEngine) [![Build status](https://ci.appveyor.com/api/projects/status/6yi9e7ki2dr9kjsw?svg=true)](https://ci.appveyor.com/project/MartinPalko/vanguardengine)
 
 # VanguardEngine
 A small (for now) game engine, created for fun and learning.

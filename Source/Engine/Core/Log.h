@@ -1,19 +1,20 @@
 #pragma once
+#include "CoreMacros.h"
 #include "VanguardString.h"
 #include "Mutex.h"
 
 namespace Vanguard
 {
-	class Log
+	class CORE_API Log
 	{
 	public:
-		static std::mutex writeMutex;
+		static Mutex writeMutex;
 
 		inline static void Write(const String& aMessage)
 		{
-			writeMutex.lock();
+			writeMutex.Lock();
 			std::cout << aMessage.GetCharPointer() << "\n";
-			writeMutex.unlock();
+			writeMutex.Unlock();
 		}
 	};
 }

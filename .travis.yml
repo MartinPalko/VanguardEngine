@@ -22,6 +22,14 @@ addons:
   apt:
     packages:
     - mono-complete
+  coverity_scan:
+    project:
+      name: "MartinPalko/VanguardEngine"
+      description: "Build submitted vis Travis CI"
+    notification_email: jeeprubi@hotmail.com
+    build_command_prepend: "./Intermediate/CMake/Linux/bin/cmake -G \"Unix Makefiles\" ./Source"
+    build_command: "make"
+    branch_pattern: master
 
 # Upgrade to g++ 4.8 (needed for c++11 features)
 before_install:
@@ -38,13 +46,4 @@ before_script:
 
 # Compile makefile
 script: make
-
-addons:
-  coverity_scan:
-    project:
-      name: "MartinPalko/VanguardEngine"
-      description: "Build submitted vis Travis CI"
-    notification_email: jeeprubi@hotmail.com
-    build_command_prepend: "./Intermediate/CMake/Linux/bin/cmake -G "Unix Makefiles" ./Source"
-    build_command: "make"
-    branch_pattern: coverity_scan
+  

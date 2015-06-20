@@ -1,4 +1,7 @@
-[![Build Status](https://travis-ci.org/MartinPalko/VanguardEngine.svg?branch=master)](https://travis-ci.org/MartinPalko/VanguardEngine) [![Build status](https://ci.appveyor.com/api/projects/status/6yi9e7ki2dr9kjsw?svg=true)](https://ci.appveyor.com/project/MartinPalko/vanguardengine)
+[![Build Status](https://travis-ci.org/MartinPalko/VanguardEngine.svg?branch=master)](https://travis-ci.org/MartinPalko/VanguardEngine) [![Build status](https://ci.appveyor.com/api/projects/status/6yi9e7ki2dr9kjsw?svg=true)](https://ci.appveyor.com/project/MartinPalko/vanguardengine) <a href="https://scan.coverity.com/projects/5497">
+  <img alt="Coverity Scan Build Status"
+       src="https://scan.coverity.com/projects/5497/badge.svg"/>
+</a>
 
 # VanguardEngine
 A small (for now) game engine, created for fun and learning.

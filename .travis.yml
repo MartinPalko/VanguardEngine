@@ -29,7 +29,7 @@ addons:
     notification_email: jeeprubi@hotmail.com
     build_command_prepend: "./Intermediate/CMake/Linux/bin/cmake -G \"Unix Makefiles\" ./Source"
     build_command: "make"
-    branch_pattern: master
+    branch_pattern: coverity_scan
 
 # Upgrade to g++ 4.8 (needed for c++11 features)
 before_install:

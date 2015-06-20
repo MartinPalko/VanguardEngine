@@ -1,13 +1,6 @@
 language: cpp
-
 sudo: true
 
-env:
-  global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
-   - secure: "STmi9l3dlvq170aESx6/gpyN0CkApagvFqnZ2CMCS1GCLfC+XHzMJs3B4oOwHLmRdQ9Lq8T8iXLbaBPLWoOedx6Gjbz6zjKvkGPf7whAJa3OOvsqvLCvcZ9z5cZFOjVPyy/4S99q5JAEcNIiUFrMT+3ZDMp9SqH/R94XrEJ9A0gl/uBDUz+jMki4yqWRDX32fmBEMbKEEGFSe7njgfkfPqBiI//rGa5zAuz3A+PLRH5JeWpTvdPJB+zt2xlYJliYeNP8jcuLJpKfW50Bbrsm1ThpFJ85tPf/NrTSXnEIk/2T4ryOST0yUQoliqknou8YTNSfsE4H7OD2ZGyhXQlEg6tbOfSH54LarpShPcJkWnJrDzvZoDWtUBUOkYN7XhSSDszWX1hv84nCG6LSMVSvbX0WmGY1eNSaUWwiWhl4N2e6eAAlb+hTzX+56yuYj1JQWPh5uImNcv8hlHDZ2xjqxjIRadQV6BNl8eay1ORnIacF4vhXSyxRwc0gfhrW9x3sh9gVhM3JekRe3zv+pq0byvPv46w9cxPAHo9vqosVBeQ2RDwTj6vVFOL1rzs6NMMj7k4PFeTBpIoQE3CIVaZrTcGD0sQ47S3B0If+yLmFr6exMup/OhZ62WYQAjzCe1L9A4Cel8lnsFqWp8fo1StOWlCI8GQ9mekCD05M+5S5CoA="
-   
 # Compile both GCC and Clang
 compiler:
 - clang
@@ -22,14 +15,6 @@ addons:
   apt:
     packages:
     - mono-complete
-  coverity_scan:
-    project:
-      name: "MartinPalko/VanguardEngine"
-      description: "Build submitted vis Travis CI"
-    notification_email: jeeprubi@hotmail.com
-    build_command_prepend: "./Intermediate/CMake/Linux/bin/cmake -G \"Unix Makefiles\" ./Source"
-    build_command: "make"
-    branch_pattern: coverity_scan
 
 # Upgrade to g++ 4.8 (needed for c++11 features)
 before_install:

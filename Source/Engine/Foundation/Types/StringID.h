@@ -22,6 +22,11 @@ namespace Vanguard
 		inline bool operator < (const StringID& aOther) const { return Hash < aOther.Hash; }
 		inline bool operator > (const StringID& aOther) const { return Hash > aOther.Hash; }
 
+		StringID(const int& aHash)
+		{
+			Hash = aHash;
+		}
+
 		StringID(const String& aString)
 		{
 			HashString(aString);

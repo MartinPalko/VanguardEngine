@@ -53,33 +53,33 @@ namespace Vanguard
 	{
 		Log::Write("Running Core");
 
-		List<INativeClassInfo*> allTypes = INativeClassInfo::GetAllTypes();
-		Log::Write(allTypes.Size() + " types found:");
-		for (uint32 i = 0; i < allTypes.Size(); i++)
-		{
-			if (allTypes[i]->GetBaseClass() == nullptr)
-				PrintChildrenRecursively(allTypes[i], 0);
-		}
+		//List<INativeClassInfo*> allTypes = INativeClassInfo::GetAllTypes();
+		//Log::Write(allTypes.Size() + " types found:");
+		//for (uint32 i = 0; i < allTypes.Size(); i++)
+		//{
+		//	if (allTypes[i]->GetBaseClass() == nullptr)
+		//		PrintChildrenRecursively(allTypes[i], 0);
+		//}
 
-		World* gameWorld = new World();
-		Transform* transform = new Transform();
+		//World* gameWorld = new World();
+		//Transform* transform = new Transform();
 
 
-		Frame* frame = new Frame(0, 0.03f, gameWorld);
+		//Frame* frame = new Frame(0, 0.03f, gameWorld);
 
-		List<IModule*> loadedModules = moduleManager->GetLoadedModules();
+		//List<IModule*> loadedModules = moduleManager->GetLoadedModules();
 
-		for (int i = 0; i < loadedModules.Size(); i++)
-		{
-			frame->AddJob([=]()-> void { loadedModules[i]->OnFrame(frame); });
-		}
+		//for (int i = 0; i < loadedModules.Size(); i++)
+		//{
+		//	frame->AddJob([=]()-> void { loadedModules[i]->OnFrame(frame); });
+		//}
 
-		JobManager::ProcessFrame(frame);
+		//JobManager::ProcessFrame(frame);
 
-		delete transform;
-		delete gameWorld;
-		delete frame;
-		Log::Write("Ran Core");
+		//delete transform;
+		//delete gameWorld;
+		//delete frame;
+		//Log::Write("Ran Core");
 	}
 
 	void Core::ShutDown()

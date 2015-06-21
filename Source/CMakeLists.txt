@@ -109,6 +109,9 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 	IF(NOT TARGET "${projectName}" AND projectType)
 		IF (${projectType} MATCHES "EXECUTABLE")
 			ADD_EXECUTABLE(${projectName} ${projectSources})
+			IF(NOT "${${projectName}_IS_CONSOLE}" AND WIN32)
+				set_target_properties(${projectName} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS") # works for all build modes
+			ENDIF()
 		ELSE()
 			ADD_LIBRARY(${projectName} ${projectType} ${projectSources})
 		ENDIF()
@@ -156,7 +159,6 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 			TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${dependency})
 		ELSEIF(${dependency})#Could be linking directly to lib file.
 			TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${${dependency}})
-			MESSAGE("Linking ${projectName} to ${${dependency}}")
 		ENDIF()
 
 	ENDFOREACH()
@@ -177,6 +179,10 @@ MACRO (IMPLEMENT_DYNAMIC_LIB libName dependencies)
 	IMPLEMENT_PROJECT_AUTOFINDSOURCES("SHARED" "${libName}" "${dependencies}")
 ENDMACRO ()
 
+MACRO (IMPLEMENT_CONSOLE_EXECUTABLE executableName dependencies)
+	SET("${executableName}_IS_CONSOLE" TRUE PARENT_SCOPE)
+	IMPLEMENT_PROJECT_AUTOFINDSOURCES("EXECUTABLE" "${executableName}" "${dependencies}")	
+ENDMACRO ()
 # Macro for implementing executables
 MACRO (IMPLEMENT_EXECUTABLE executableName dependencies)
 	IMPLEMENT_PROJECT_AUTOFINDSOURCES("EXECUTABLE" "${executableName}" "${dependencies}")	
@@ -189,7 +195,6 @@ PROJECT (Vanguard)
 
 # Disables the "ZERO_CHECK" target, and trying to regenerate on build. (We want to manually regenerate)
 SET(CMAKE_SUPPRESS_REGENERATION true)
-
 
 IF(UNIX AND NOT APPLE)
 	# Enable C++11

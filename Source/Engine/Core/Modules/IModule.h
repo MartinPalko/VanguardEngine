@@ -1,11 +1,9 @@
 #pragma once
-
 #include "Core.h"
+#include "Frame.h"
 
 namespace Vanguard
 {
-	class Frame;
-
 	class IModule
 	{
 	public:

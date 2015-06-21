@@ -83,7 +83,11 @@ namespace Vanguard
 		{
 			moduleInstance->UnloadModule();
 			delete moduleInstance;
+			moduleInstance = nullptr;
+
+			dynamicLibReference->close();
 			delete dynamicLibReference;
+			dynamicLibReference = nullptr;
 		}
 	}
 }

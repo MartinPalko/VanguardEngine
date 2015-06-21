@@ -26,6 +26,5 @@ namespace Vanguard
 
 		EXPECT_EQ(testID, testIDIdentical);
 		EXPECT_NE(testID, testIDDifferent);
-
 	}
 }

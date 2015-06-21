@@ -1,7 +1,8 @@
 #include "Core.h"
+
 Vanguard::Core VanguardCore;
 
-int main()
+int main (int argc, char **argv)
 {
 	VanguardCore.Initialize();
 
@@ -9,7 +10,9 @@ int main()
 	VanguardCore.LoadModule("ManagedModule");
 
 	VanguardCore.Run();
-
 	VanguardCore.ShutDown();
+
 	system("pause");
+	return 0;
 }
+

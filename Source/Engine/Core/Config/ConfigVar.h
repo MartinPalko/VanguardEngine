@@ -1,7 +1,7 @@
 #pragma once
 #include "Foundation.h"
 #include "ConfigTable.h"
-#include "CoreMacros.h"
+#include "Core_Common.h"
 
 namespace Vanguard
 {

@@ -2,7 +2,7 @@
 
 #include "Config.h"
 #include "Foundation.h"
-#include "CoreMacros.h"
+#include "Core_Common.h"
 #include "EntityComponentSystem.h"
 #include "NativeReflection.h"
 #include "Application.h"
@@ -14,6 +14,18 @@
 
 namespace Vanguard
 {
+	enum class CoreState : uint8
+	{
+		NotInitialized = 0,
+		Initializing,
+		Initialized,
+		Running,
+		PendingShutdown,
+		StartingShutdown,
+		ShuttingDown,
+		ShutDown
+	};
+
 	class ModuleManager;
 	class ManagedAssembly;
 
@@ -25,7 +37,9 @@ namespace Vanguard
 		class ModuleManager* moduleManager;
 		class ManagedAssembly* managedCore;
 
-		bool exiting = false;
+		List<World*> worlds = List<World*>();
+
+		CoreState state = CoreState::NotInitialized;
 
 	public:
 		static Core* GetInstance();
@@ -34,12 +48,14 @@ namespace Vanguard
 		void Run();
 		void ShutDown();
 
-		// Sets exiting to true, will exit the main run() loop when appropriate.
-		void Exit()
-		{
-			exiting = true; 
-		}
+		inline CoreState GetState(){ return state; }
 
 		void LoadModule(const String& aModuleName);
+
+		World* CreateWorld(const String& aWorldName);
+		World* GetWorld(const String& aWorldName);
+		void DestroyWorld(World* aWorld);
 	};
+
+
 }

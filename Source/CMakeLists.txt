@@ -109,9 +109,15 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 	IF(NOT TARGET "${projectName}" AND projectType)
 		IF (${projectType} MATCHES "EXECUTABLE")
 			ADD_EXECUTABLE(${projectName} ${projectSources})
+			
+			# If not specified as a console project, set subsystem to windows (will not spawn console window)
 			IF(NOT "${${projectName}_IS_CONSOLE}" AND WIN32)
-				set_target_properties(${projectName} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS") # works for all build modes
+				set_target_properties(${projectName} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS")
 			ENDIF()
+			
+			#If executable, add all modules as dependencies, so they automatically build when debugging.
+			ADD_DEPENDENCIES(${projectName} ${Modules})
+			
 		ELSE()
 			ADD_LIBRARY(${projectName} ${projectType} ${projectSources})
 		ENDIF()
@@ -166,7 +172,10 @@ ENDFUNCTION()
 
 # Macro for implementing modules
 MACRO (IMPLEMENT_MODULE moduleName dependencies)
-	IMPLEMENT_PROJECT_AUTOFINDSOURCES("MODULE" "${moduleName}" "${dependencies}")
+	SET(Modules ${Modules} ${moduleName} PARENT_SCOPE)
+	#IMPLEMENT_PROJECT_AUTOFINDSOURCES("MODULE" "${moduleName}" "${dependencies}")
+	#Shared libraries behave the same as actual modules, but also allow dependencies.
+	IMPLEMENT_PROJECT_AUTOFINDSOURCES("SHARED" "${moduleName}" "${dependencies}")
 ENDMACRO ()
 
 # Macro for implementing static libraries

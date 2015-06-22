@@ -1,21 +1,19 @@
 #include "Core.h"
 
-Vanguard::Core* VanguardCore = nullptr;
-
 int VanguardMain()
 {
-	VanguardCore = new Vanguard::Core();
+	Vanguard::Application::ShowConsoleWindow();
 
-	VanguardCore->Initialize();
+	Vanguard::Core VanguardCore;
 
-	VanguardCore->LoadModule("Editor_UI");
+	VanguardCore.Initialize();
 
-	VanguardCore->Run();
+	VanguardCore.LoadModule("Juce_EditorUIRenderer");
+	VanguardCore.LoadModule("EditorUI");
+	VanguardCore.LoadModule("PhysX");
 
-	VanguardCore->ShutDown();
+	VanguardCore.Run();
 
-	delete VanguardCore;
-	//system("pause");
 	return 0;
 }
 

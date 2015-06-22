@@ -10,7 +10,6 @@ int main (int argc, char **argv)
 	VanguardCore.LoadModule("ManagedModule");
 
 	VanguardCore.Run();
-	VanguardCore.ShutDown();
 
 	system("pause");
 	return 0;

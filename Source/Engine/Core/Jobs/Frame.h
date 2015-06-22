@@ -1,6 +1,6 @@
 #pragma once
 #include "Foundation.h"
-#include "CoreMacros.h"
+#include "Core_Common.h"
 #include "JobEnums.h"
 #include "Job.h"
 #include <queue>

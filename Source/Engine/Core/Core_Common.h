@@ -1,5 +1,5 @@
 #pragma once
-#include "Platform.h"
+#include "Foundation.h"
 
 #ifdef Core_EXPORTS
 #define CORE_API API_EXPORT

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Foundation.h"
-#include "CoreMacros.h"
+#include "Core_Common.h"
 #include "IModule.h"
 
 #include "ManagedObject.h"

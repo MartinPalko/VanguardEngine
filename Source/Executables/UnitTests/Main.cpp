@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-// Uncomment headers of unit tests you want to run.
+// Comment out headers of unit tests you want to disable
 
 // Foundation
 #include "DictionaryTest.h"

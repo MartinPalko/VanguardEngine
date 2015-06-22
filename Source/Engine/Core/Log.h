@@ -1,5 +1,5 @@
 #pragma once
-#include "CoreMacros.h"
+#include "Core_Common.h"
 #include "VanguardString.h"
 #include "Mutex.h"
 

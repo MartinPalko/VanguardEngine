@@ -1,7 +1,7 @@
 #pragma once
 #include <map>
 
-#include "CoreMacros.h"
+#include "Core_Common.h"
 #include "VanguardString.h"
 #include "FileSystem.h"
 

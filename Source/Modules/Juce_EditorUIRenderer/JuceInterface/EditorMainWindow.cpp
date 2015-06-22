@@ -1,6 +1,6 @@
 #include "EditorMainWindow.h"
 
-namespace Vanguard
+namespace Juce_EditorUIRenderer
 {
 
 }

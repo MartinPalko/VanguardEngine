@@ -1,12 +1,12 @@
 #pragma once
-#include "IntegerDefs.h"
-#include "CoreMacros.h"
-#include "juce_core.h"
+#include "Core_Common.h"
 
 namespace Vanguard
 {
 	class CORE_API Application
 	{
-		
+	public:
+		static void ShowConsoleWindow();
+		static void HideConsoleWindow();
 	};
 }

@@ -16,6 +16,7 @@ namespace Vanguard
 		{
 			worldName = aWorldName;
 		}
+		~World(){}
 
 	public:
 

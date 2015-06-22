@@ -1,19 +1,18 @@
+#pragma once
 #include <thread>
 
-#include "Editor_UI_Common.h"
+#include "Juce_EditorUIRenderer_Common.h"
 #include "IModule.h"
 
 #include "EditorMainWindow.h"
 #include "EditorApplication.h"
 
-
-
-namespace Vanguard_Editor_UI
+namespace Juce_EditorUIRenderer
 {
-	class Editor_UI : public IModule
+	class Juce_EditorUIRenderer : public IModule
 	{
-		virtual String GetModuleName() { return "Editor_UI"; }
-		virtual String GetModuleType() { return "Editor"; }
+		virtual String GetModuleName() { return "Juce_EditorUIRenderer"; }
+		virtual String GetModuleType() { return "EditorUIRenderer"; }
 
 		std::thread* stdthread;
 
@@ -30,17 +29,22 @@ namespace Vanguard_Editor_UI
 		{			
 			juce::JUCEApplicationBase::createInstance = []()->juce::JUCEApplicationBase*{return new EditorApplication(); };
 			juce::JUCEApplicationBase::main();
-			Core::GetInstance()->Exit(); // Tell core to exit when juce app exits.
+			Core::GetInstance()->ShutDown(); // Tell core to exit when juce app exits.
 			juceAppRunning = false;
 		}
 
 		virtual void UnloadModule()
 		{
-			juce::JUCEApplicationBase::quit(); // Tell juce app to quit, which should let the app thread exit properly.
+			if (juceAppRunning)
+			{
+				juce::JUCEApplicationBase::quit(); // Tell juce app to quit, which should let the app thread exit properly.
 
-			// Spin while the juce app shuts down.
-			while (juceAppRunning){}
-
+				// Spin while the juce app shuts down.
+				while (juceAppRunning)
+				{
+					std::this_thread::yield; 
+				}
+			}
 			stdthread->detach();
 		}
 	};

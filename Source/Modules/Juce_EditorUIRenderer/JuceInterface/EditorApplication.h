@@ -1,6 +1,6 @@
-#include "Editor_UI_Common.h"
+#include "Juce_EditorUIRenderer_Common.h"
 
-namespace Vanguard_Editor_UI
+namespace Juce_EditorUIRenderer
 {
 	class EditorApplication : public juce::JUCEApplication
 	{

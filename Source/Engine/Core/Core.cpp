@@ -18,6 +18,7 @@ namespace Vanguard
 
 	void Core::Initialize()
 	{
+		state = CoreState::Initializing;
 		instance = this;
 
 		ConfigTable::LoadConfigFromDisk();
@@ -29,82 +30,100 @@ namespace Vanguard
 		moduleManager = new ModuleManager(managedCore);
 
 		Log::Write("Initialized Core");
-	}
-
-	void PrintChildrenRecursively(INativeClassInfo* Class, int currentDepth)
-	{
-		String logmessage;
-		for (int i = 0; i < currentDepth; i++)
-		{
-			logmessage+= "\t";
-		}
-		logmessage += Class->GetTypeName();
-		Log::Write(logmessage);
-
-		List<INativeClassInfo*> children = Class->GetDerivedClasses();
-		for (int i = 0; i < children.Size(); i++)
-			PrintChildrenRecursively(children[i], currentDepth + 1);
-	}
-
-	void TestJobFunction(Frame* aFrame)
-	{
-		for (int i = 0; i < 10000000; i++)
-		{
-			i--;
-			i++;
-		}
+		state = CoreState::Initialized;
 	}
 
 	void Core::Run()
 	{
-		Log::Write("Running Core");
+		if (state != CoreState::Initialized)
+			throw Exception("Core must be in state \"Initialized\" to run");
 
-		//List<INativeClassInfo*> allTypes = INativeClassInfo::GetAllTypes();
-		//Log::Write(allTypes.Size() + " types found:");
-		//for (uint32 i = 0; i < allTypes.Size(); i++)
-		//{
-		//	if (allTypes[i]->GetBaseClass() == nullptr)
-		//		PrintChildrenRecursively(allTypes[i], 0);
-		//}
+		Log::Write("Core Running");
+		state = CoreState::Running;
 
-		//World* gameWorld = new World();
-		//Transform* transform = new Transform();
-
-
-		//Frame* frame = new Frame(0, 0.03f, gameWorld);
-
-		//List<IModule*> loadedModules = moduleManager->GetLoadedModules();
-
-		//for (int i = 0; i < loadedModules.Size(); i++)
-		//{
-		//	frame->AddJob([=]()-> void { loadedModules[i]->OnFrame(frame); });
-		//}
-
-		//JobManager::ProcessFrame(frame);
-
-		//delete transform;
-		//delete gameWorld;
-		//delete frame;
-		//Log::Write("Ran Core");
-
-		// Main engine loop
-		while (!exiting)
+		// Main engine loop		
+		while (state == CoreState::Running)
 		{
+			// TODO: Tick worlds
+
+			//Frame* frame = new Frame(0, 0.03f, gameWorld);
+
+			//List<IModule*> loadedModules = moduleManager->GetLoadedModules();
+
+			//for (int i = 0; i < loadedModules.Size(); i++)
+			//{
+			//	frame->AddJob([=]()-> void { loadedModules[i]->OnFrame(frame); });
+			//}
+
+			//JobManager::ProcessFrame(frame);
+			//delete frame;
+
 			_sleep(500);
 		}
+
+		if (state != CoreState::PendingShutdown)
+			throw Exception("Core state is invalid, only \"PendingShutdown\" is valid after \"Running\".");
+		
+		state = CoreState::StartingShutdown;
+		ShutDown();
+			
 	}
 
 	void Core::ShutDown()
 	{
-		delete moduleManager;
-		delete managedCore;
+		if (state < CoreState::Running)
+			throw Exception("Core has not yet been running, shut down is invalid.");
 
-		Log::Write("Shut Down Core");
-		ConfigTable::SaveConfigToDisk();
+		if (state >= CoreState::ShutDown)
+			throw Exception("Core has already shut down, calling shut down again is invalid.");
+
+		if (state == CoreState::StartingShutdown)
+		{			
+			state = CoreState::ShuttingDown;
+
+			Log::Write("Shutting down Core");
+
+			delete moduleManager;
+			delete managedCore;
+			ConfigTable::SaveConfigToDisk();
+
+			state == CoreState::ShutDown;
+		}
+		else if (state == CoreState::Running || state == CoreState::PendingShutdown)
+		{
+			state = CoreState::PendingShutdown;
+		}			
 	}
 
 	void Core::LoadModule(const String& aModuleName)
 	{
 		moduleManager->LoadModule(aModuleName);
+	}
+
+	World* Core::CreateWorld(const String& aWorldName)
+	{
+		if (GetWorld(aWorldName) == nullptr)
+			World* newWorld = new World(aWorldName);
+		else 
+			throw Exception(String("World with name \"" + aWorldName + "\" already exists").GetCharPointer());
+	}
+
+	World* Core::GetWorld(const String& aWorldName)
+	{
+		for (int i = 0; i < worlds.Size(); i++)
+		{
+			if (worlds[i]->GetWorldName() == aWorldName)
+				return worlds[i];
+		}
+		return nullptr;
+	}
+
+	void Core::DestroyWorld(World* aWorld)
+	{
+		if (worlds.Contains(aWorld))
+		{
+			delete aWorld;
+			worlds.Remove(aWorld);
+		}
 	}
 }

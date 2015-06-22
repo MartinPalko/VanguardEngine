@@ -79,12 +79,15 @@ namespace Vanguard
 
 	void ModuleInfo::UnloadModule()
 	{
-		if (GetIsLoaded())
+		if (moduleInstance)
 		{
 			moduleInstance->UnloadModule();
 			delete moduleInstance;
 			moduleInstance = nullptr;
+		}
 
+		if (dynamicLibReference)
+		{
 			dynamicLibReference->close();
 			delete dynamicLibReference;
 			dynamicLibReference = nullptr;

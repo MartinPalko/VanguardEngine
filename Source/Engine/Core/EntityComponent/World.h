@@ -6,10 +6,20 @@ namespace Vanguard
 {
 	class World
 	{
+		friend class Core;
 	private:
+		String worldName;
+
 		List<Entity*> entities;
 
+		World(String aWorldName)
+		{
+			worldName = aWorldName;
+		}
+
 	public:
+
+		String GetWorldName(){ return worldName; }
 
 		template <class EntityType>		
 		EntityType* SpawnEntity()

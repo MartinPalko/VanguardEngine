@@ -4,13 +4,17 @@ Vanguard::Core* VanguardCore = nullptr;
 
 int VanguardMain()
 {
+	VanguardCore = new Vanguard::Core();
+
 	VanguardCore->Initialize();
 
-	VanguardCore->LoadModule("Editor");
+	VanguardCore->LoadModule("Editor_UI");
 
 	VanguardCore->Run();
 
 	VanguardCore->ShutDown();
+
+	delete VanguardCore;
 	//system("pause");
 	return 0;
 }
@@ -20,7 +24,6 @@ int VanguardMain()
 #include "Windows.h"
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	VanguardCore = new Vanguard::Core();
 	return VanguardMain();
 }
 
@@ -28,7 +31,6 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 int main (int argc, char **argv)
 {
-	VanguardCore = new Vanguard::Core();
 	return VanguardMain();
 }
 

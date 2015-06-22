@@ -20,13 +20,25 @@ namespace Vanguard
 	class CORE_API Core
 	{
 	private:
+		static Core* instance;
+
 		class ModuleManager* moduleManager;
 		class ManagedAssembly* managedCore;
 
+		bool exiting = false;
+
 	public:
+		static Core* GetInstance();
+
 		void Initialize();
 		void Run();
 		void ShutDown();
+
+		// Sets exiting to true, will exit the main run() loop when appropriate.
+		void Exit()
+		{
+			exiting = true; 
+		}
 
 		void LoadModule(const String& aModuleName);
 	};

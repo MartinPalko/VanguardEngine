@@ -12,8 +12,14 @@
 
 namespace Vanguard
 {
+	Core* Core::instance = nullptr;
+
+	Core* Core::GetInstance() { return instance; }
+
 	void Core::Initialize()
 	{
+		instance = this;
+
 		ConfigTable::LoadConfigFromDisk();
 		ConfigTable::SaveConfigToDisk(); // Save right away, to generate defaults if they don't exist. TODO: More elequently
 
@@ -80,6 +86,12 @@ namespace Vanguard
 		//delete gameWorld;
 		//delete frame;
 		//Log::Write("Ran Core");
+
+		// Main engine loop
+		while (!exiting)
+		{
+			_sleep(500);
+		}
 	}
 
 	void Core::ShutDown()

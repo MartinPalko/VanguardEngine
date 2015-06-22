@@ -1,7 +1,6 @@
-#include "Core.h"
-#include "juce_gui_basics.h"
+#include "Editor_UI_Common.h"
 
-namespace Vanguard
+namespace Vanguard_Editor_UI
 {
 	class EditorMainWindow : public juce::DocumentWindow
 	{
@@ -13,8 +12,13 @@ namespace Vanguard
 			setUsingNativeTitleBar(true);
 			//setContentOwned(new juce::MainContentComponent(), true);
 
-			centreWithSize(getWidth(), getHeight());
+			centreWithSize(300, 300);
 			setVisible(true);
+		}
+
+		virtual void closeButtonPressed() override
+		{
+			juce::JUCEApplicationBase::quit();
 		}
 	};
 }

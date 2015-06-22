@@ -1,1 +1,0 @@
-IMPLEMENT_EXECUTABLE(EditorApplication "Core")

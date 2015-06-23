@@ -114,9 +114,11 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 			IF(NOT "${${projectName}_IS_CONSOLE}" AND WIN32)
 				set_target_properties(${projectName} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS")
 			ENDIF()
-			
-			#If executable, add all modules as dependencies, so they automatically build when debugging.
-			ADD_DEPENDENCIES(${projectName} ${Modules})
+
+			IF (Modules)
+				#If executable, add all modules as dependencies, so they automatically build when debugging.
+				ADD_DEPENDENCIES(${projectName} ${Modules})
+			ENDIF()
 			
 		ELSE()
 			ADD_LIBRARY(${projectName} ${projectType} ${projectSources})

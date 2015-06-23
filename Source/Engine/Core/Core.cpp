@@ -1,5 +1,6 @@
 #include "Core.h"
 #include <ostream>
+#include <thread>
 
 #include "ManagedClass.h"
 #include "ModuleManager.h"
@@ -41,7 +42,7 @@ namespace Vanguard
 		Log::Write("Core Running");
 		state = CoreState::Running;
 
-		// Main engine loop		
+		// Main engine loop
 		while (state == CoreState::Running)
 		{
 			// TODO: Tick worlds
@@ -58,15 +59,15 @@ namespace Vanguard
 			//JobManager::ProcessFrame(frame);
 			//delete frame;
 
-			_sleep(500);
+			std::this_thread::sleep_for(std::chrono::microseconds(10));
 		}
 
 		if (state != CoreState::PendingShutdown)
 			throw Exception("Core state is invalid, only \"PendingShutdown\" is valid after \"Running\".");
-		
+
 		state = CoreState::StartingShutdown;
 		ShutDown();
-			
+
 	}
 
 	void Core::ShutDown()
@@ -78,7 +79,7 @@ namespace Vanguard
 			throw Exception("Core has already shut down, calling shut down again is invalid.");
 
 		if (state == CoreState::StartingShutdown)
-		{			
+		{
 			state = CoreState::ShuttingDown;
 
 			Log::Write("Shutting down Core");
@@ -92,7 +93,7 @@ namespace Vanguard
 		else if (state == CoreState::Running || state == CoreState::PendingShutdown)
 		{
 			state = CoreState::PendingShutdown;
-		}			
+		}
 	}
 
 	void Core::LoadModule(const String& aModuleName)
@@ -104,7 +105,7 @@ namespace Vanguard
 	{
 		if (GetWorld(aWorldName) == nullptr)
 			World* newWorld = new World(aWorldName);
-		else 
+		else
 			throw Exception(String("World with name \"" + aWorldName + "\" already exists").GetCharPointer());
 	}
 

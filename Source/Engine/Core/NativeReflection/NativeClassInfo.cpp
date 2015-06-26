@@ -22,7 +22,7 @@ namespace Vanguard
 		Log::Write(logmessage);
 
 		List<INativeClassInfo*> children = Class->GetDerivedClasses();
-		for (int i = 0; i < children.Size(); i++)
+		for (size_t i = 0; i < children.Size(); i++)
 			PrintChildrenRecursively(children[i], currentDepth + 1);
 	}
 

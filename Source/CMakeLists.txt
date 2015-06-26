@@ -151,25 +151,32 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 		TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${includeDirs})
 	ENDIF()
 	
+	MESSAGE("Linking dependencies for ${projectName}")
+	
 	#Now link us to our dependencies
 	FOREACH(dependency ${projectDependencies})
 		IF (${dependency}_INCLUDES)
-			MESSAGE("${dependency}_INCLUDES = ${${dependency}_INCLUDES}")
 			TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${${dependency}_INCLUDES})
 		ENDIF()
-
-		if (TARGET ${dependency})	
+		
+		if (TARGET ${dependency})
+			MESSAGE("target ${dependency}")
+		
 			GET_TARGET_PROPERTY(publicIncludeDirectories ${dependency} INCLUDE_DIRECTORIES)		
 			#Verify target has include directories first
 			IF (publicIncludeDirectories)
 				INCLUDE_DIRECTORIES(${publicIncludeDirectories})
 			ENDIF()
 			TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${dependency})
+			
 		ELSEIF(${dependency})#Could be linking directly to lib file.
+			MESSAGE("${dependency}")
 			TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${${dependency}})
 		ENDIF()
-
+		
 	ENDFOREACH()
+	
+	MESSAGE("")
 ENDFUNCTION()
 
 # Macro for implementing modules
@@ -260,5 +267,3 @@ MESSAGE("Creating deferred projects:")
 FOREACH(project ${deferredAddProjects})
 	ADD_DEFFERED_PROJECTS_RECURSIVE(${project})
 ENDFOREACH()
-
-

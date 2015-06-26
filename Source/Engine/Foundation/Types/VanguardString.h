@@ -44,7 +44,7 @@ namespace Vanguard
 		inline void operator += (const String& aOther) { data = Append(aOther).data; }
 
 		// Access character by index
-		inline char operator[](int32 aIndex) const
+		inline char operator[](size_t aIndex) const
 		{
 #if VANGUARD_DEBUG
 			// Guard aginst out of range
@@ -72,7 +72,7 @@ namespace Vanguard
 		inline float ToFloat() const { return std::stof(data); }
 
 		// Returns the number of characters in this string
-		inline int32 GetLength() const
+		inline size_t GetLength() const
 		{
 			return data.length();
 		}
@@ -137,7 +137,7 @@ namespace Vanguard
 		// Returns true if the string contains at least one instance of any of the specified characters
 		inline bool ContainsAny(const String& aCharacters) const
 		{
-			for (int i = 0; i < aCharacters.GetLength(); i++)
+			for (size_t i = 0; i < aCharacters.GetLength(); i++)
 			{
 				if (!(data.find(aCharacters[i]) == std::string::npos))
 					return true;
@@ -170,49 +170,49 @@ namespace Vanguard
 		}
 
 		// Returns the index of the first of the specified character
-		inline int32 FirstIndexOf(const char& aCharacter) const
+		inline size_t FirstIndexOf(const char& aCharacter) const
 		{
 			return data.find_first_of(aCharacter);
 		}
 
 		// Returns the index of the first of any of the specified characters
-		inline int32 FirstIndexOfAny(const String& aCharacters) const
+		inline size_t FirstIndexOfAny(const String& aCharacters) const
 		{
 			return data.find_first_of(aCharacters.GetCharPointer());
 		}
 
 		// Returns the index of the last of the specified character
-		inline int32 LastIndexOf(const char& aCharacter) const
+		inline size_t LastIndexOf(const char& aCharacter) const
 		{
 			return data.find_last_of(aCharacter);
 		}
 
 		// Returns the index of the last of any of the specified characters
-		inline int32 LastIndexOfAny(const String& aCharacters) const
+		inline size_t LastIndexOfAny(const String& aCharacters) const
 		{
 			return data.find_last_of(aCharacters.GetCharPointer());
 		}
 
 		// Returns the index of the first character not to match the specified character
-		inline int32 FirstIndexNotOf(const char& aCharacter) const
+		inline size_t FirstIndexNotOf(const char& aCharacter) const
 		{
 			return data.find_first_not_of(aCharacter);
 		}
 
 		// Returns the index of the first character not to match the and of the specified characters
-		inline int32 FirstIndexNotOfAny(const String& aCharacters) const
+		inline size_t FirstIndexNotOfAny(const String& aCharacters) const
 		{
 			return data.find_first_not_of(aCharacters.GetCharPointer());
 		}
 
 		// Returns the index of the last character not to match the specified character
-		inline int32 LastIndexNotOf(const char& aCharacter) const
+		inline size_t LastIndexNotOf(const char& aCharacter) const
 		{
 			return data.find_last_not_of(aCharacter);
 		}
 
 		// Returns the index of the last character not to match the and of the specified characters
-		inline int32 LastIndexNotOfAny(const String& aCharacters) const
+		inline size_t LastIndexNotOfAny(const String& aCharacters) const
 		{
 			return data.find_last_not_of(aCharacters.GetCharPointer());
 		}
@@ -270,7 +270,7 @@ namespace Vanguard
 		}
 
 		// Returns a string with all characters between the two indexes removed.
-		inline String RemoveBetween(const int32& aFirstIndex, const int32& aSecondIndex) const
+		inline String RemoveBetween(const size_t& aFirstIndex, const size_t& aSecondIndex) const
 		{
 			std::string newString = data;
 			if (aFirstIndex < aSecondIndex)
@@ -281,13 +281,13 @@ namespace Vanguard
 		}
 
 		// Returns a string with all characters after the specified index removed.
-		inline String RemoveAfter(const int32& aIndex)
+		inline String RemoveAfter(const size_t& aIndex)
 		{
 			return RemoveBetween(aIndex + 1, GetLength());
 		}
 
 		// Returns a string with all characters before the specified index removed.
-		inline String RemoveBefore(const int32& aIndex)
+		inline String RemoveBefore(const size_t& aIndex)
 		{
 			return RemoveBetween(0, aIndex + 1);
 		}
@@ -327,7 +327,7 @@ namespace Vanguard
 		inline String TrimStart(const char* aChars) const
 		{
 			std::string newString = data;
-			uint32 newStart = newString.find_first_not_of(aChars);
+			size_t newStart = newString.find_first_not_of(aChars);
 			newString.erase(0, newStart);
 			return newString;
 		}
@@ -339,7 +339,7 @@ namespace Vanguard
 		inline String TrimEnd(const char* aChars) const
 		{
 			std::string newString = data;
-			uint32 newLength = newString.find_last_not_of(aChars) + 1;
+			size_t newLength = newString.find_last_not_of(aChars) + 1;
 			newString.resize(newLength);
 			return newString;
 		}

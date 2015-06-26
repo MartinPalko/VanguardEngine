@@ -25,7 +25,7 @@ namespace Vanguard
 			data.push_back(aItem);
 		}
 
-		inline uint32 Size() const
+		inline size_t Size() const
 		{
 			return data.size();
 		}

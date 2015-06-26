@@ -9,12 +9,12 @@ namespace Vanguard
 	class StringID
 	{
 	private:
-		uint32 Hash;
+		uint64 Hash;
 
 		inline void HashString(const String& aString)
 		{
 			Hash = 0;
-			Hash = crc32(Hash, (const Byte*)(aString.GetCharPointer()), aString.GetLength());
+			Hash = crc32(Hash, (const Byte*)(aString.GetCharPointer()), (uLong)aString.GetLength());
 		}
 	public:
 		inline bool operator == (const StringID& aOther) const { return Hash == aOther.Hash; }
@@ -37,7 +37,7 @@ namespace Vanguard
             HashString(aCharPointer);
 		}
 
-		uint32 GetHash()
+		uint64 GetHash()
 		{
 			return Hash;
 		}

@@ -1,10 +1,10 @@
 #pragma once
-#include "EditorUI_Common.h"
+#include "Editor_Common.h"
 #include "IModule.h"
 
-namespace Vanguard_EditorUI
+namespace Vanguard_Editor
 {
-	class EditorUI : public IModule
+	class Editor : public IModule
 	{
 		virtual String GetModuleName() { return "EditorUI"; }
 		virtual String GetModuleType() { return "Editor"; }

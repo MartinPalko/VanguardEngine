@@ -3,43 +3,42 @@
 
 namespace Vanguard
 {
-	//List<INativeClassInfo*> allTypes = INativeClassInfo::GetAllTypes();
-	//Log::Write(allTypes.Size() + " types found:");
-	//for (uint32 i = 0; i < allTypes.Size(); i++)
-	//{
-	//	if (allTypes[i]->GetBaseClass() == nullptr)
-	//		PrintChildrenRecursively(allTypes[i], 0);
-	//}
-
-	void PrintChildrenRecursively(INativeClassInfo* Class, int currentDepth)
+	//List<INativeClassInfo*> INativeClassInfo::allClassInfos = List<INativeClassInfo*>();
+	List<INativeClassInfo*>& INativeClassInfo::GetAllClassInfosList()
 	{
-		String logmessage;
-		for (int i = 0; i < currentDepth; i++)
-		{
-			logmessage += "\t";
-		}
-		logmessage += Class->GetTypeName();
-		Log::Write(logmessage);
-
-		List<INativeClassInfo*> children = Class->GetDerivedClasses();
-		for (size_t i = 0; i < children.Size(); i++)
-			PrintChildrenRecursively(children[i], currentDepth + 1);
+		static List<INativeClassInfo*> allClassInfos;
+		return allClassInfos;
 	}
-
-	List<INativeClassInfo*> INativeClassInfo::allClassInfos = List<INativeClassInfo*>();
 
 	List<INativeClassInfo*> INativeClassInfo::GetAllTypes()
 	{
-		return allClassInfos;
+		return GetAllClassInfosList();
 	}
 
 	INativeClassInfo* INativeClassInfo::GetType(const String& aTypeName)
 	{
+		List<INativeClassInfo*>& allClassInfos = GetAllClassInfosList();
+
 		for (unsigned int i = 0; i < allClassInfos.Size(); i++)
 		{
 			if (allClassInfos[i]->GetTypeName() == aTypeName)
 				return allClassInfos[i];
 		}
 		return nullptr;
+	}
+
+	bool INativeClassInfo::IsA(INativeClassInfo* otherClass) const
+	{
+		const INativeClassInfo* currentClass = this;
+
+		// Recurse up parents until we either find the class we're looking for (and return true) or reach a class with no base class (and return false)
+		while (currentClass != nullptr)
+		{
+			if (currentClass->className == otherClass->className)
+				return true;
+
+			currentClass = currentClass->GetBaseClass();
+		}
+		return false;
 	}
 }

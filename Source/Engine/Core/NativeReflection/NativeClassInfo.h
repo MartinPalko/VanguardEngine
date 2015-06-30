@@ -1,6 +1,7 @@
 #pragma once
 #include "Foundation.h"
 #include "Core_Common.h"
+#include "Log.h"
 
 namespace Vanguard
 {
@@ -9,18 +10,18 @@ namespace Vanguard
 	class CORE_API INativeClassInfo
 	{
 	protected:
-		static List<INativeClassInfo*> allClassInfos;
+		//static List<INativeClassInfo*> allClassInfos;
+		static List<INativeClassInfo*>& GetAllClassInfosList();
 
 		String className;
-		INativeClassInfo* baseClass;
+		String baseClassName;
+		INativeClassInfo* baseClass = nullptr;
 		List<INativeClassInfo*> derivedClasses;
 
 		INativeClassInfo(const String& aClassName, const String& aBaseClassName)
 		{
 			className = aClassName;
-			baseClass = GetType(aBaseClassName);
-			if (baseClass)
-				baseClass->derivedClasses.PushBack(this);
+			baseClassName = aBaseClassName;
 		}
 
 		template<class T> static T* CreateInstance()
@@ -39,31 +40,58 @@ namespace Vanguard
 		static INativeClassInfo* GetType(const String& aTypeName);
 
 		bool IsA(INativeClassInfo* otherClass) const;
+
+		static void UpdateHierarchyReferences()
+		{
+			List<INativeClassInfo*>& allClassInfos = GetAllClassInfosList();
+
+			// First clear all references.
+			for (uint32 i = 0; i < allClassInfos.Size(); i++)
+			{
+				allClassInfos[i]->baseClass = nullptr;
+				allClassInfos[i]->derivedClasses.Clear();
+			}
+			// Now rebuild
+			for (uint32 i = 0; i < allClassInfos.Size(); i++)
+			{
+				allClassInfos[i]->baseClass = GetType(allClassInfos[i]->baseClassName);
+				if (allClassInfos[i]->baseClass)
+					allClassInfos[i]->baseClass->derivedClasses.PushBack(allClassInfos[i]);
+			}
+		}
 	};
 
 	template <class T> class NativeClassInfo : public INativeClassInfo
 	{
 
 	public:
-		static INativeClassInfo* Create(const String& aBaseClassName = "")
+		static INativeClassInfo* Create(const String& aClassName, const String& aBaseClassName = "")
 		{
+			String ClassName = typeid(T).name();
+				
+			List<INativeClassInfo*>& allClassInfos = GetAllClassInfosList();
+
 			for (uint32 i = 0; i < allClassInfos.Size(); i++)
 			{
-				if (allClassInfos[i]->GetTypeName() == typeid(T).name())
+				if (allClassInfos[i]->GetTypeName() == ClassName)
 				{
 					return allClassInfos[i];
 				}
 			}
-			NativeClassInfo<T>* newClassInfo = new NativeClassInfo<T>(aBaseClassName);
+			NativeClassInfo<T>* newClassInfo = new NativeClassInfo<T>(aClassName, aBaseClassName);
 			allClassInfos.PushBack(newClassInfo);
+
+			// TODO: Do this initially, and then again whenever a dll is loaded or unloaded.
+			UpdateHierarchyReferences();
+
 			return newClassInfo;
 		}
 
-		NativeClassInfo(const String& aBaseClassName) : INativeClassInfo(typeid(T).name(),aBaseClassName){ }
+		NativeClassInfo(const String& aClassName, const String& aBaseClassName) : INativeClassInfo(aClassName, aBaseClassName){ }
 
 		virtual void* CreateInstance() const override
 		{
-			return INativeClassInfo::CreateInstance < T >(); // Calle from base, because reflected classes are automaticalled declared friends of the interface.
+			return INativeClassInfo::CreateInstance < T >(); // Called from base, because reflected classes are automaticalled declared friends of the interface.
 		};
 	};
 }

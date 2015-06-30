@@ -3,9 +3,29 @@
 
 namespace Vanguard
 {
-	class CORE_API Application
+	class Core;
+
+	struct ApplicationArguments
 	{
 	public:
+		ApplicationArguments(int aArgC, char** aArgV)
+		{
+			argc = aArgC;
+			argv = aArgV;
+		}
+	
+		int argc;
+		char **argv;
+	};
+
+	class CORE_API Application
+	{
+		friend Core;
+	private:
+		static ApplicationArguments applicationArguments;
+	public:
+		static ApplicationArguments GetApplicationArguments();
+
 		static void ShowConsoleWindow();
 		static void HideConsoleWindow();
 	};

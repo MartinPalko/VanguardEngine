@@ -17,10 +17,12 @@ namespace Vanguard
 
 	Core* Core::GetInstance() { return instance; }
 
-	void Core::Initialize()
+	void Core::Initialize(int aArgC, char** aArgV)
 	{
 		state = CoreState::Initializing;
 		instance = this;
+
+		Application::applicationArguments = ApplicationArguments(aArgC, aArgV);
 
 		ConfigTable::LoadConfigFromDisk();
 		ConfigTable::SaveConfigToDisk(); // Save right away, to generate defaults if they don't exist. TODO: More elequently

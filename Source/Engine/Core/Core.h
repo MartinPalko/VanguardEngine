@@ -44,7 +44,7 @@ namespace Vanguard
 	public:
 		static Core* GetInstance();
 
-		void Initialize();
+		void Initialize(int aArgC, char** aArgV);
 		void Run();
 		void ShutDown();
 

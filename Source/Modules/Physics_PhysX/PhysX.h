@@ -24,19 +24,19 @@ namespace Vanguard
 				firstGroup.PushBack(aFrame->AddJob([=]()-> void { UpdatePhysicsThing(aFrame); }));
 			}
 
-			for (int i = 0; i < firstGroup.Size(); i++)
+			for (size_t i = 0; i < firstGroup.Size(); i++)
 			{
 				aFrame->WaitForJob(firstGroup[i]);
 			}
 
 			Log::Write("NOW DOING SECOND BATCH");
 			List<Job*> secondGroup = List <Job*>();
-			for (int i = 0; i < 15; i++)
+			for (size_t i = 0; i < 15; i++)
 			{
 				secondGroup.PushBack(aFrame->AddJob([=]()-> void { UpdatePhysicsThing(aFrame); }));
 			}
 
-			for (int i = 0; i < secondGroup.Size(); i++)
+			for (size_t i = 0; i < secondGroup.Size(); i++)
 			{
 				aFrame->WaitForJob(secondGroup[i]);
 			}

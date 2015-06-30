@@ -36,6 +36,9 @@ namespace Vanguard
 		String(const char* aCharPointer){ data.assign(aCharPointer); }
 		inline const char* GetCharPointer() const { return data.c_str(); }
 
+		// Create from single char
+		String(const char& aChar) { data = aChar; }
+
 		// Create from and cast to juce string
 		String(const juce::String& aJuceString) { data = std::string(aJuceString.getCharPointer()); }
 		inline operator const juce::String() const { return juce::String(data.c_str()); }

@@ -7,9 +7,10 @@ namespace Vanguard
 {
 	class CORE_API Log
 	{
-	public:
+	private:
 		static Mutex writeMutex;
 
+	public:
 		inline static void Write(const String& aMessage)
 		{
 			writeMutex.Lock();

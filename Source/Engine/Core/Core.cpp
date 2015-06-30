@@ -90,7 +90,7 @@ namespace Vanguard
 			delete managedCore;
 			ConfigTable::SaveConfigToDisk();
 
-			state == CoreState::ShutDown;
+			state = CoreState::ShutDown;
 		}
 		else if (state == CoreState::Running || state == CoreState::PendingShutdown)
 		{

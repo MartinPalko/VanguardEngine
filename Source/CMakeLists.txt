@@ -112,7 +112,7 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 			
 			# If not specified as a console project, set subsystem to windows (will not spawn console window)
 			IF(NOT "${${projectName}_IS_CONSOLE}" AND WIN32)
-				set_target_properties(${projectName} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS")
+				set_target_properties(${projectName} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
 			ENDIF()
 
 			IF (Modules)
@@ -172,6 +172,8 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 		ELSEIF(${dependency})#Could be linking directly to lib file.
 			MESSAGE("${dependency}")
 			TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${${dependency}})
+		ELSE()
+			MESSAGE("ERROR: Dependency ${dependency} not found")
 		ENDIF()
 		
 	ENDFOREACH()

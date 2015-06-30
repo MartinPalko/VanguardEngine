@@ -106,14 +106,20 @@ namespace Vanguard
 	World* Core::CreateWorld(const String& aWorldName)
 	{
 		if (GetWorld(aWorldName) == nullptr)
+		{			
 			World* newWorld = new World(aWorldName);
+
+			return newWorld;
+		}
 		else
 			throw Exception(String("World with name \"" + aWorldName + "\" already exists").GetCharPointer());
+
+		
 	}
 
 	World* Core::GetWorld(const String& aWorldName)
 	{
-		for (int i = 0; i < worlds.Size(); i++)
+		for (size_t i = 0; i < worlds.Size(); i++)
 		{
 			if (worlds[i]->GetWorldName() == aWorldName)
 				return worlds[i];

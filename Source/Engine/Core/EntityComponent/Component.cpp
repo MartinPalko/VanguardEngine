@@ -1,6 +1,7 @@
 #include "Component.h"
+#include "Entity.h"
 
 namespace Vanguard
 {
-	REFLECTED_BASECLASS_DEFINITION(Component)
+	REFLECTED_SUBCLASS_DEFINITION(Component,VanguardObject)
 }

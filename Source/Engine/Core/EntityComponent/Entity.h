@@ -1,28 +1,32 @@
 #pragma once
-#include "Foundation.h"
-#include "NativeReflection.h"
+#include "VanguardObject.h"
+#include "Log.h"
+#include "Component.h"
 
 namespace Vanguard
 {
-	class World;
 	class Component;
 
-	class CORE_API Entity
+	class CORE_API Entity : public VanguardObject
 	{
-		friend class World;
+		REFLECTED_SUBCLASS_DECLARATION(Entity,VanguardObject)
 
-		REFLECTED_BASECLASS_DECLARATION(Entity)
-		
-	public:
-		Entity(){}
-		virtual ~Entity(){}
-
+	private:
 		List<Component*> components;
-		World* world;
+
+		Entity* parent = nullptr;
+		List<Entity*> children;
 
 	public:
-		List<Component*> GetComponents() { return components; }
+		inline size_t GetNumComponents() { return components.Size(); }
+		inline Component* GetComponent(size_t aIndex) { return components[aIndex]; }
 
-		World* GetWorld() { return world; }
+		inline Entity* GetParent() { return parent; }
+		inline bool HasParent() { return parent != nullptr; }
+		
+		inline size_t GetNumChildren() { return children.Size(); }
+		inline Entity* GetChild(size_t aIndex) { return children[aIndex]; }
+
+		Component* AddComponent(INativeClassInfo* aComponentType);
 	};
 }

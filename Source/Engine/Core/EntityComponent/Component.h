@@ -1,14 +1,17 @@
 #pragma once
-#include "Foundation.h"
-#include "NativeReflection.h"
+#include "VanguardObject.h"
 
 namespace Vanguard
 {
 	class Entity;
 
-	class CORE_API Component
+	class CORE_API Component : public VanguardObject
 	{
-		REFLECTED_BASECLASS_DECLARATION(Component)
+		friend class Entity;
+
+		REFLECTED_SUBCLASS_DECLARATION(Component,VanguardObject)
+
+	public:
 
 		Entity* entity;
 	};

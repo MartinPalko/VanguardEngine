@@ -11,6 +11,10 @@
 #include "StringTest.h"
 #include "VectorTest.h"
 
+// Core
+#include "EntityComponentTest.h"
+#include "NativeReflectionTest.h"
+
 int main(int argc, char **argv)
 {
 	testing::InitGoogleTest(&argc, argv);

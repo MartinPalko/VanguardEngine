@@ -4,7 +4,7 @@ Vanguard::Core VanguardCore;
 
 int main (int argc, char **argv)
 {
-	VanguardCore.Initialize();
+	VanguardCore.Initialize(argc,argv);
 
 	VanguardCore.LoadModule("PhysX");
 	VanguardCore.LoadModule("ManagedModule");

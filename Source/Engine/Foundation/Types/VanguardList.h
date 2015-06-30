@@ -35,6 +35,11 @@ namespace Vanguard
 			data.resize(aSize);
 		}
 
+		inline void Clear()
+		{
+			data.clear();
+		}
+
 		inline void Remove(T aItem)
 		{
 			for (int i = data.size() - 1; i >= 0; i--)

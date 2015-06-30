@@ -1,1 +1,0 @@
-IMPLEMENT_MODULE(EditorUI "Core")

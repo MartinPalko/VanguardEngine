@@ -1,1 +1,0 @@
-IMPLEMENT_MODULE(Juce_EditorUIRenderer "Core;EditorUI;juce_gui_basics")

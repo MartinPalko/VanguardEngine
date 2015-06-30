@@ -25,11 +25,12 @@ namespace Vanguard
 
 	ModuleInfo* ModuleInfo::LoadModuleAtPath(FilePath aModulePath)
 	{
-		juce::DynamicLibrary* tempLoadedLib = new juce::DynamicLibrary(aModulePath.GetFilename());
+		juce::DynamicLibrary* tempLoadedLib = new juce::DynamicLibrary();
 
-		if (tempLoadedLib == nullptr)
+		if (!tempLoadedLib->open(aModulePath.GetFilename()))
 		{
 			// Could not load dynamic library
+			delete tempLoadedLib;
 			return nullptr;
 		}
 
@@ -58,10 +59,12 @@ namespace Vanguard
 	{
 		if (!GetIsLoaded())
 		{
-			dynamicLibReference = new juce::DynamicLibrary(filePath.GetFilename());
+			dynamicLibReference = new juce::DynamicLibrary();
 
-			if (dynamicLibReference == nullptr)
+			if (!dynamicLibReference->open(filePath.GetFilename()))
 			{
+				// Could not load dynamic library
+				UnloadModule();
 				throw Exception(String("Could not load module " + filePath.GetFullPathName()).GetCharPointer());
 			}
 

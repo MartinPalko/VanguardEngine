@@ -1,1 +1,1 @@
-IMPLEMENT_EXECUTABLE(EditorLauncher "Core;juce_gui_basics")
+IMPLEMENT_EXECUTABLE(EditorLauncher "Core")

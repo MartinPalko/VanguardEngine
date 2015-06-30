@@ -1,37 +1,21 @@
 #include "Core.h"
 
-int VanguardMain()
+int main (int argc, char **argv)
 {
 	Vanguard::Application::ShowConsoleWindow();
 
 	Vanguard::Core VanguardCore;
 
-	VanguardCore.Initialize();
-
-	VanguardCore.LoadModule("Juce_EditorUIRenderer");
+	VanguardCore.Initialize(argc, argv);
+	
 	VanguardCore.LoadModule("EditorUI");
 	VanguardCore.LoadModule("PhysX");
+
+	//VanguardCore.LoadModule("Juce_EditorUIRenderer");
+	VanguardCore.LoadModule("Qt_EditorUI");
 
 	VanguardCore.Run();
 
 	return 0;
 }
-
-#ifdef VANGUARD_WINDOWS
-
-#include "Windows.h"
-int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-{
-	return VanguardMain();
-}
-
-#else
-
-int main (int argc, char **argv)
-{
-	return VanguardMain();
-}
-
-
-#endif
 

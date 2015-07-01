@@ -56,7 +56,7 @@ namespace Qt_EditorUI
 				Log::Write("Waiting for Qt App to exit");
 				while (QtThreadRunning)
 				{
-					std::this_thread::yield;
+					std::this_thread::yield();
 				}
 			}
 			stdthread->detach();

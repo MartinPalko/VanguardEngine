@@ -11,12 +11,12 @@ namespace Vanguard
 
 		virtual void UpdatePhysicsThing(Frame* aFrame)
 		{
-			Log::Write("Update physics thing");
+			DEBUG_LOG("Update physics thing");
 		}
 
 		virtual void OnFrame(Frame* aFrame) override
 		{
-			Log::Write("PHYSICS ON FRAME");
+			DEBUG_LOG("PHYSICS ON FRAME");
 
 			List<Job*> firstGroup = List <Job*>();
 			for (int i = 0; i < 15; i++)
@@ -29,7 +29,7 @@ namespace Vanguard
 				aFrame->WaitForJob(firstGroup[i]);
 			}
 
-			Log::Write("NOW DOING SECOND BATCH");
+			DEBUG_LOG("NOW DOING SECOND BATCH");
 			List<Job*> secondGroup = List <Job*>();
 			for (size_t i = 0; i < 15; i++)
 			{
@@ -41,7 +41,7 @@ namespace Vanguard
 				aFrame->WaitForJob(secondGroup[i]);
 			}
 
-			Log::Write("ALL PHYSICS JOBS DONE");
+			DEBUG_LOG("ALL PHYSICS JOBS DONE");
 		}
 	};
 }

@@ -51,6 +51,11 @@ namespace Vanguard
 			}
 		}
 
+		inline void RemoveAt(size_t aIndex)
+		{
+			data.erase(data.begin() + aIndex);
+		}
+
 		inline bool Contains(const T& aItem) const
 		{
 			for (typename std::vector<T>::const_iterator it = data.begin(); it != data.end(); it++)

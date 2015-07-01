@@ -8,8 +8,6 @@ namespace Vanguard
 {
 	void JobThread::ThreadLoop()
 	{
-		Log::Write("Started thread loop");
-
 		int i = 0;
 
 		while (running)

@@ -24,12 +24,12 @@ namespace Vanguard
 
 		void Execute()
 		{
-			Log::Write("Executing Job");
+			DEBUG_LOG("Executing Job");
 			running = true;
 			entryPoint();
 			running = false;
 			finished = true;
-			Log::Write("Job Executed");
+			DEBUG_LOG("Job Executed");
 		}
 	};
 }

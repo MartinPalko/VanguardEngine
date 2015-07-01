@@ -13,7 +13,7 @@ namespace Vanguard
 
 		if (!isa)
 		{
-			Log::Write("Cannot add component. Class of type " + aComponentType->GetTypeName() + " does not derive from Component");
+			DEBUG_WARN("Cannot add component. Class of type " + aComponentType->GetTypeName() + " does not derive from Component");
 			return nullptr;
 		}
 

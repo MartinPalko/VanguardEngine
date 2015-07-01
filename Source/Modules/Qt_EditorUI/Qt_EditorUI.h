@@ -22,7 +22,7 @@ namespace Qt_EditorUI
 
 		virtual void LoadModule()
 		{
-			Log::Write("Starting Qt Application Thread");
+			Log::Message("Starting Qt Application Thread","Qt");
 			stdthread = new std::thread(QTAppThread);
 			QtThreadRunning = true;
 		}
@@ -38,7 +38,7 @@ namespace Qt_EditorUI
 			// TODO: Handle error code on return
 			QtApplication->exec();
 
-			Log::Write("Qt App has finished, shutting down core");
+			Log::Message("Qt App has finished, shutting down core", "Qt");
 			QtThreadRunning = false;
 			Core::GetInstance()->ShutDown(); // Tell core to exit when qt app exits.
 		}
@@ -53,7 +53,7 @@ namespace Qt_EditorUI
 				QtApplication->postEvent(QtApplication, &closeEvent);
 
 				// Spin while the Qt app shuts down.
-				Log::Write("Waiting for Qt App to exit");
+				Log::Message("Waiting for Qt App to exit", "Qt");
 				while (QtThreadRunning)
 				{
 					std::this_thread::yield();

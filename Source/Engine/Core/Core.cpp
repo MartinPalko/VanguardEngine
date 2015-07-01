@@ -24,15 +24,20 @@ namespace Vanguard
 
 		Application::applicationArguments = ApplicationArguments(aArgC, aArgV);
 
+		// Load config as early as possible, otherwise some classes might be stuck reading their default values!
 		ConfigTable::LoadConfigFromDisk();
-		ConfigTable::SaveConfigToDisk(); // Save right away, to generate defaults if they don't exist. TODO: More elequently
+
+		// Save right away, to generate defaults if they don't exist. TODO: More elequently
+		ConfigTable::SaveConfigToDisk();
+
+		Log::Initialize();
 
 		JobManager::CreateThreads();
 
 		managedCore = new ManagedAssembly("ManagedCore");
 		moduleManager = new ModuleManager(managedCore);
 
-		Log::Write("Initialized Core");
+		Log::Message("Initialized Core", "Core");
 		state = CoreState::Initialized;
 	}
 
@@ -41,7 +46,7 @@ namespace Vanguard
 		if (state != CoreState::Initialized)
 			throw Exception("Core must be in state \"Initialized\" to run");
 
-		Log::Write("Core Running");
+		Log::Message("Core Running", "Core");
 		state = CoreState::Running;
 
 		// Main engine loop
@@ -84,11 +89,15 @@ namespace Vanguard
 		{
 			state = CoreState::ShuttingDown;
 
-			Log::Write("Shutting down Core");
+			Log::Message("Shutting down Core", "Core");
 
 			delete moduleManager;
 			delete managedCore;
 			ConfigTable::SaveConfigToDisk();
+
+
+			// Want to flush the log as late as possible to make sure all entries get written to disk.
+			Log::Flush();
 
 			state = CoreState::ShutDown;
 		}

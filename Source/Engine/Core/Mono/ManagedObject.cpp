@@ -22,7 +22,7 @@ namespace Vanguard
 			MonoObject* obj = mono_runtime_invoke(method, monoObject, NULL, &exception);
 
 			if (exception != nullptr)
-				Log::Write(mono_string_to_utf8(mono_object_to_string(exception, NULL))); // Show the exception
+				Log::Exception(mono_string_to_utf8(mono_object_to_string(exception, NULL)), "Mono");
 			return obj;
 		}
 		return NULL;
@@ -40,7 +40,7 @@ namespace Vanguard
 			MonoObject* obj = mono_runtime_invoke(method, monoObject, args, &exception);
 
 			if (exception != nullptr)
-				Log::Write( mono_string_to_utf8(mono_object_to_string(exception, NULL)));// Show the exception
+				Log::Exception(mono_string_to_utf8(mono_object_to_string(exception, NULL)), "Mono");
 
 			return obj;
 		}

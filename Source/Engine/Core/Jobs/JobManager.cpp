@@ -19,7 +19,6 @@ namespace Vanguard
 		{
 			JobThread* idleThread = idleThreads.front();
 			idleThreads.pop();
-			Log::Write("Thread ceasing idle, idle threads: " + String::FromInt32(idleThreads.size()));
 			return idleThread;
 		}
 		return nullptr;
@@ -32,13 +31,11 @@ namespace Vanguard
 		Job* nextJob = currentFrame->GetNextJob();
 		if (nextJob)
 		{
-			std::cout << "Getting next job" << "\n";
 			aThread->StartJob(nextJob);
 		}
 		else
 		{
 			idleThreads.push(aThread);
-			Log::Write("Thread going idle, idle threads: " + String::FromInt32(idleThreads.size()));
 		}
 	}
 
@@ -46,7 +43,7 @@ namespace Vanguard
 	{
 		int32 targetThreads = SystemInfo::GetNumberOfCores();
 
-		Log::Write("Creating " + String::FromInt32(targetThreads) + " job threads.");
+		Log::Message("Creating " + String::FromInt32(targetThreads) + " job threads", "JobSystem");
 
 		int32 threadsToCreate = targetThreads - jobThreads.Size();
 

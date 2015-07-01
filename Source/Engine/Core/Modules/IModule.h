@@ -8,8 +8,8 @@ namespace Vanguard
 	{
 	public:
 		virtual ~IModule(){}
-		virtual void LoadModule(){ Log::Write("Loaded Native Module: " + GetModuleName()); }
-		virtual void UnloadModule(){ Log::Write("Unloaded Native Module: " + GetModuleName()); }
+		virtual void LoadModule(){ }
+		virtual void UnloadModule(){ }
 
 		virtual void OnFrame(Frame* aFrame){};
 

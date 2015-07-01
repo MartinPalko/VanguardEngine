@@ -34,6 +34,14 @@ namespace Vanguard
 			return GetEngineBinDirectory();
 		}
 
+		static FilePath GetLogDirectory()
+		{
+			FilePath logDir = GetEngineRootDirectory().GetRelative("Logs");
+			if (!DirectoryExists(logDir))
+				CreateDirectory(logDir);
+			return logDir;
+		}
+
 		static FilePath GetSystemProgramsDirectory()
 		{
 			return juce::File::getSpecialLocation(juce::File::globalApplicationsDirectory);
@@ -60,6 +68,39 @@ namespace Vanguard
 			if (!DirectoryExists(configDir))
 				CreateDirectory(configDir);
 			return configDir;
+		}
+
+		// If a file or directory already exists at this path, this will return a path that does not exist by adding a unique suffix to the file (eg _1 or _2, until a filepath is found that does not already exist.
+		static FilePath MakeUniqueFileName(const FilePath& aFilePath)
+		{
+			FilePath newPath = aFilePath;
+
+			int32 uniqueSuffix = 1;
+			while (FileExists(newPath))
+			{
+				uniqueSuffix++;
+				String newFilename = aFilePath.GetFilenameWithoutExtension() + "_" + String::FromInt32(uniqueSuffix) + aFilePath.GetFileExtension();
+				newPath = aFilePath.GetParentDirectory().GetRelative(newFilename);
+			}
+			return newPath;
+		}
+
+		// Returns the time when the file was last modified. Returns invalid time if file does not exist.
+		static Time GetTimeLastModified(const FilePath& aFilePath)
+		{
+			return aFilePath.file.getLastModificationTime();
+		}
+
+		// Returns the time when the file was created. Returns invalid time if file does not exist.
+		static Time GetTimeCreated(const FilePath& aFilePath)
+		{
+			return aFilePath.file.getCreationTime();
+		}
+
+		// True if filepath exists as either a file or directory.
+		static bool Exists(const FilePath& aFilePath)
+		{
+			return FileExists || DirectoryExists;
 		}
 
 		// True if path points to a file that exists. False if it points to a directory, or a file that doesn't exist.
@@ -128,6 +169,21 @@ namespace Vanguard
 
 			juce::FileOutputStream* outStream = aFilePath.file.createOutputStream();
 			outStream->setPosition(0);
+			outStream->writeText(aStringContents, false, false);
+			delete outStream;
+			return true;
+		}
+
+		// Append text to an existing file. If the file does not exist, will create it and fill it with the supplied text.
+		static bool AppendToFile(const FilePath& aFilePath, const String& aStringContents)
+		{
+			if (!FileExists(aFilePath))
+				return WriteToFile(aFilePath, aStringContents);
+			
+			if (!HasWriteAccess(aFilePath))
+				return false;
+
+			juce::FileOutputStream* outStream = aFilePath.file.createOutputStream();
 			outStream->writeText(aStringContents, false, false);
 			delete outStream;
 			return true;

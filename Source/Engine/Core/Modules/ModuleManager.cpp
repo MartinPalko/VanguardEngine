@@ -38,7 +38,7 @@ namespace Vanguard
 			if (moduleLib != nullptr)
 			{
 				moduleInfos[moduleLib->moduleName] = moduleLib;
-				std::cout << "Found native module " << moduleLib->moduleName << " of type " << moduleLib->moduleType << "\n";
+				DEBUG_LOG("Found native module " + moduleLib->moduleName + " of type " + moduleLib->moduleType);
 			}
 		}
 		managedModuleManager->CallMethod("UpdateModuleList");

@@ -17,7 +17,7 @@ namespace Vanguard
 		FilePath previousWorkingDirectory = FileSystem::GetCurrentWorkingDir();
 		FileSystem::SetCurrentWorkingDir(FileSystem::GetEngineBinDirectory());
 
-		Log::Write("Mono Initializing");
+		Log::Message("Mono Initializing","Mono");
 
 		mono_config_parse(NULL);
 		mono_set_dirs(String(FileSystem::GetEngineBinDirectory().GetFullPathName() + "/mono/lib/").GetCharPointer(), String(FileSystem::GetEngineBinDirectory().GetFullPathName() + "/mono/lib/").GetCharPointer());
@@ -26,12 +26,12 @@ namespace Vanguard
 		assembly = mono_domain_assembly_open(domain, aMonoBinaryName.Append(".dll").GetCharPointer());
 
 		if (!assembly)
-			Log::Write("error loading assembly " + aMonoBinaryName);
+			Log::Exception("Could not load assembly " + aMonoBinaryName, "Mono");
 
 		image = mono_assembly_get_image(assembly);
 
 		if (!image)
-			Log::Write("error loading image for " + aMonoBinaryName);
+			Log::Exception("Could not load image " + aMonoBinaryName, "Mono");
 
 		// Revert working dir to what it was previously.
 		FileSystem::SetCurrentWorkingDir(previousWorkingDirectory);

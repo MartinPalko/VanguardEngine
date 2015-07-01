@@ -5,3 +5,4 @@
 #include "StringID.h"
 #include "VanguardList.h"
 #include "VanguardHashtable.h"
+#include "Time.h"

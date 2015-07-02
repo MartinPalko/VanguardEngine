@@ -1,9 +1,6 @@
 #pragma once
 #include "VanguardTypes.h"
 #include "juce_core.h"
-
-
-
 #include "FilePath.h"
 
 namespace Vanguard

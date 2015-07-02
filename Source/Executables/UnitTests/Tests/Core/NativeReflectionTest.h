@@ -54,11 +54,11 @@ namespace Vanguard
 
 		List<INativeClassInfo*> allTypes = INativeClassInfo::GetAllTypes();
 
-		Log::Write(String::FromInt32(allTypes.Size()) + " types found:");
+		DEBUG_LOG(String::FromInt32(allTypes.Size()) + " types found:");
 		for (uint32 i = 0; i < allTypes.Size(); i++)
 		{
 			if (allTypes[i]->GetBaseClass() == nullptr)
-				Log::Write(GetClassHierarchyString(allTypes[i], 0));
+				DEBUG_LOG(GetClassHierarchyString(allTypes[i], 0));
 		}
 	}
 }

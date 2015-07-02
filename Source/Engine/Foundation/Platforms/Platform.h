@@ -15,7 +15,7 @@
 #define VANGUARD_WINDOWS 1
 #elif __APPLE__
 #include "OSXPlatform.h"
-#define VANGUARD_APPLE 1
+#define VANGUARD_OSX 1
 #elif __linux || __GNUC__
 #include "LinuxPlatform.h"
 #define VANGUARD_LINUX 1

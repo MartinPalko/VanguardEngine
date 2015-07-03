@@ -23,7 +23,7 @@ namespace Vanguard
 		typedef uint16_t uint16;
 		typedef uint8_t uint8;
 
-		static inline const char* DynamicLibExtension(){ return ".so"; }
+		static inline const char* DynamicLibExtension(){ return ".dylib"; }
 
         typedef std::runtime_error Exception;
 	};

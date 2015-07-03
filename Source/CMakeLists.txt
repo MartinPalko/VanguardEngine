@@ -226,6 +226,8 @@ ENDIF()
 
 IF (APPLE)
 	set (CMAKE_CXX_FLAGS "-x objective-c++ -std=c++11")
+	set (CMAKE_CXX_FLAGS_DEBUG "-DDEBUG")
+	set (CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG")
 ENDIF()
 
 # Enable folders in the solution

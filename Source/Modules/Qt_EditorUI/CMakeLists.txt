@@ -1,1 +1,0 @@
-IMPLEMENT_MODULE(Qt_EditorUI "Core;Editor;Qt5::Widgets")

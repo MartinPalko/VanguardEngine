@@ -52,6 +52,7 @@ namespace Vanguard
 		// Main engine loop
 		while (state == CoreState::Running)
 		{
+			ShutDown();
 			// TODO: Tick worlds
 
 			//Frame* frame = new Frame(0, 0.03f, gameWorld);

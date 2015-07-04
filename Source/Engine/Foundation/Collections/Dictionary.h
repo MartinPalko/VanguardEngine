@@ -15,22 +15,22 @@ namespace Vanguard
 
 	public:
 		//default constructor
-		Hashtable() = default;
+		Dictionary() = default;
 
 		//Copy constructor
-		Hashtable(const Hashtable& rhs){
+		Dictionary(const Dictionary& rhs){
 			data = rhs.data;
 		}
         
         //Move semantics C++ 11
-        Hashtable(Hashtable&& rhs)
+		Dictionary(Dictionary&& rhs)
         {
             data = rhs.data;
             rhs.data = nullptr;
         }
 
 		//destrcutor
-		~Hashtable() = default;
+		~Dictionary() = default;
 
 		//methods 
 
@@ -90,7 +90,7 @@ namespace Vanguard
 		}
 
 		// operators
-		inline Hashtable& operator=(const Hashtable& other){
+		inline Dictionary& operator=(const Dictionary& other){
 			if (this != &other){
 				data = other.data;
 			}

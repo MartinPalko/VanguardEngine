@@ -21,7 +21,7 @@ namespace Vanguard
 		_MonoAssembly* assembly;
 		_MonoImage* image;
 
-		Hashtable<String, ManagedClass*> classes;
+		Hashtable<ManagedClass*> classes;
 
 	public:
 		ManagedAssembly(const String& aMonoAssemblyName);

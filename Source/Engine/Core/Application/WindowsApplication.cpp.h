@@ -25,7 +25,7 @@ namespace Vanguard
 
 				// Wait for core to shut down.
 				while (core->GetState() < CoreState::ShutDown)
-					std::this_thread::yield;
+					std::this_thread::yield();
 
 				return true;
 			}

@@ -97,7 +97,7 @@ namespace Vanguard
 		// True if filepath exists as either a file or directory.
 		static bool Exists(const FilePath& aFilePath)
 		{
-			return FileExists || DirectoryExists;
+			return FileExists(aFilePath) || DirectoryExists(aFilePath);
 		}
 
 		// True if path points to a file that exists. False if it points to a directory, or a file that doesn't exist.

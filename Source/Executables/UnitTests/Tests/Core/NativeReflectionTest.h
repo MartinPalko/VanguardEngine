@@ -58,7 +58,7 @@ namespace Vanguard
 		for (uint32 i = 0; i < allTypes.Size(); i++)
 		{
 			if (allTypes[i]->GetBaseClass() == nullptr)
-				DEBUG_LOG(GetClassHierarchyString(allTypes[i], 0));
+				DEBUG_LOG("\n" + GetClassHierarchyString(allTypes[i], 0));
 		}
 	}
 }

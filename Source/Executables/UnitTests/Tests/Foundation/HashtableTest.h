@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "VanguardString.h"
-#include "VanguardHashtable.h"
+#include "StringID.h"
+#include "Hashtable.h"
 
 namespace Vanguard
 {
@@ -21,9 +22,22 @@ namespace Vanguard
 
 	TEST_F(HashtableTest, AddingElement)
 	{
-		Vanguard::Hashtable<std::string, int> testData;
+		Vanguard::Hashtable<String> testData;
 
-		testData["one"] = 1;
-		EXPECT_TRUE(testData.ContainsValue(1));
+		//testData[StringID("one")] = 1;
+		testData[1] = "IntOne";
+		EXPECT_EQ(testData[1], "IntOne");
+
+		StringID id1 = "StringID";
+		StringID id2 = "StringID";
+
+		testData[StringID("StringID")] = "StringID";
+		EXPECT_EQ(testData[StringID("StringID")], "StringID");
+		EXPECT_EQ(testData["StringID"], "StringID");
+
+
+		testData["HashedString"] = "String";
+		EXPECT_EQ(testData["HashedString"], "String");
+		EXPECT_EQ(testData[StringID("HashedString")], "String");
 	}
 }

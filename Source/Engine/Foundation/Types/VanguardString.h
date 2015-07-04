@@ -6,7 +6,7 @@
 
 #include "juce_core.h"
 
-#include "VanguardList.h"
+#include "List.h"
 #include "IntegerDefs.h"
 
 namespace Vanguard

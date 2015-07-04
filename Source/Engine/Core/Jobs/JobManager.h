@@ -20,7 +20,7 @@ namespace Vanguard
 
 		static Mutex threadMutex;
 
-		static List<JobThread*> jobThreads;
+		static DynamicArray<JobThread*> jobThreads;
 		static std::queue<JobThread*> idleThreads;
 
 		static JobThread* GetIdleThread();

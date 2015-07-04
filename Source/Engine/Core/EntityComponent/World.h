@@ -10,7 +10,7 @@ namespace Vanguard
 	private:
 		String worldName;
 
-		List<Entity*> entities;
+		DynamicArray<Entity*> entities;
 
 		World(String aWorldName)
 		{

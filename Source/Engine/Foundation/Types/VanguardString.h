@@ -6,7 +6,7 @@
 
 #include "juce_core.h"
 
-#include "List.h"
+#include "DynamicArray.h"
 #include "IntegerDefs.h"
 
 namespace Vanguard
@@ -94,9 +94,9 @@ namespace Vanguard
 		}
 
 		// Split the string into a list of strings by the specified character.
-		inline List<String> Split(const char& aSplitBy) const
+		inline DynamicArray<String> Split(const char& aSplitBy) const
 		{
-			List<String> splitList = List<String>();
+			DynamicArray<String> splitList = DynamicArray<String>();
 
 			std::stringstream strStream(data);
 			std::string segment;
@@ -110,14 +110,14 @@ namespace Vanguard
 		}
 
 		// Joins an array of strings into a single string, with the specified seperator between each element.
-		static String Join(const List<String>& aStringList, const char& aSeperatorCharacter)
+		static String Join(const DynamicArray<String>& aStringList, const char& aSeperatorCharacter)
 		{
-			if (aStringList.Size() <= 0)
+			if (aStringList.Count() <= 0)
 				return String();
 
 			String newString = aStringList[0];
 
-			for (uint32 i = 1; i < aStringList.Size(); i++)
+			for (uint32 i = 1; i < aStringList.Count(); i++)
 			{
 				newString += ";";
 				newString += aStringList[i];

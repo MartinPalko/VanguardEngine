@@ -2,7 +2,7 @@
 #include <map>
 
 #include "ICollection.h"
-#include "List.h"
+#include "DynamicArray.h"
 #include "IntegerDefs.h"
 
 namespace Vanguard
@@ -21,6 +21,13 @@ namespace Vanguard
 		Hashtable(const Hashtable& rhs){
 			data = rhs.data;
 		}
+        
+        //Move semantics C++ 11
+        Hashtable(Hashtable&& rhs)
+        {
+            data = rhs.data;
+            rhs.data = nullptr;
+        }
 
 		//destrcutor
 		~Hashtable() = default;
@@ -52,7 +59,7 @@ namespace Vanguard
 
 		inline bool ContainsValue(const V& aValue) const
 		{
-			Vanguard::List<V> values = Values();
+			Vanguard::DynamicArray<V> values = Values();
 			return values.Contains(aValue);
 		}
 
@@ -66,16 +73,16 @@ namespace Vanguard
 			return data.size();
 		}
 
-		inline List<K> Keys() const{
-			List<K> keys = List<K>();
+		inline DynamicArray<K> Keys() const{
+			DynamicArray<K> keys = DynamicArray<K>();
 			for (auto& item : data){
 				keys.PushBack(item.first);
 			}
 			return keys;
 		}
 
-		inline List<V> Values() const{
-			List<V> values = List<V>();
+		inline DynamicArray<V> Values() const{
+			DynamicArray<V> values = DynamicArray<V>();
 			for (auto& item : data){
 				values.PushBack(item.second);
 			}

@@ -27,11 +27,11 @@ namespace Vanguard
 	{
 		String pluginWildcard = "*" + String(Platform::DynamicLibExtension());
 
-		List<FilePath> dynamicLibsInModuleDirectory = FileSystem::Find(FileSystem::GetEngineModuleDirectory(), pluginWildcard, false, true, false, true);
+		DynamicArray<FilePath> dynamicLibsInModuleDirectory = FileSystem::Find(FileSystem::GetEngineModuleDirectory(), pluginWildcard, false, true, false, true);
 
 		moduleInfos.clear();
 
-		for (uint32 i = 0; i < dynamicLibsInModuleDirectory.Size(); i++)
+		for (uint32 i = 0; i < dynamicLibsInModuleDirectory.Count(); i++)
 		{
 			ModuleInfo* moduleLib = ModuleInfo::LoadModuleAtPath(dynamicLibsInModuleDirectory[i]);
 
@@ -69,9 +69,9 @@ namespace Vanguard
 		managedModuleManager->CallMethod("UnloadAllModules");
 	}
 
-	List<IModule*> ModuleManager::GetLoadedModules()
+	DynamicArray<IModule*> ModuleManager::GetLoadedModules()
 	{
-		List<IModule*> returnList = List<IModule*>();
+		DynamicArray<IModule*> returnList = DynamicArray<IModule*>();
 
 		for (auto& item : moduleInfos)
 		{

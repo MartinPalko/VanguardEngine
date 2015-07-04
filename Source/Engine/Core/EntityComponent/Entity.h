@@ -12,19 +12,19 @@ namespace Vanguard
 		REFLECTED_SUBCLASS_DECLARATION(Entity,VanguardObject)
 
 	private:
-		List<Component*> components;
+		DynamicArray<Component*> components;
 
 		Entity* parent = nullptr;
-		List<Entity*> children;
+		DynamicArray<Entity*> children;
 
 	public:
-		inline size_t GetNumComponents() { return components.Size(); }
+		inline size_t GetNumComponents() { return components.Count(); }
 		inline Component* GetComponent(size_t aIndex) { return components[aIndex]; }
 
 		inline Entity* GetParent() { return parent; }
 		inline bool HasParent() { return parent != nullptr; }
 		
-		inline size_t GetNumChildren() { return children.Size(); }
+		inline size_t GetNumChildren() { return children.Count(); }
 		inline Entity* GetChild(size_t aIndex) { return children[aIndex]; }
 
 		Component* AddComponent(INativeClassInfo* aComponentType);

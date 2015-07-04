@@ -8,7 +8,7 @@ namespace Vanguard
 	Mutex JobManager::threadMutex;
 	Frame* JobManager::currentFrame;
 
-	List<JobThread*> JobManager::jobThreads = List<JobThread*>();
+	DynamicArray<JobThread*> JobManager::jobThreads = DynamicArray<JobThread*>();
 	std::queue<JobThread*> JobManager::idleThreads = std::queue<JobThread*>();
 
 	Mutex jobListMutex;
@@ -45,7 +45,7 @@ namespace Vanguard
 
 		Log::Message("Creating " + String::FromInt32(targetThreads) + " job threads", "JobSystem");
 
-		int32 threadsToCreate = targetThreads - jobThreads.Size();
+		int32 threadsToCreate = targetThreads - jobThreads.Count();
 
 		for (int i = 0; i < threadsToCreate; i++)
 		{
@@ -72,7 +72,7 @@ namespace Vanguard
 			std::this_thread::sleep_for(std::chrono::microseconds(1));
 
 		// And again until all threads have become idle.
-		while (idleThreads.size() != jobThreads.Size())
+		while (idleThreads.size() != jobThreads.Count())
 			std::this_thread::sleep_for(std::chrono::microseconds(1));
 
 		currentFrame->processing = false;
@@ -82,7 +82,7 @@ namespace Vanguard
 	{
 		std::thread::id thisThreadID = std::this_thread::get_id();
 
-		for (uint32 i = 0; i < jobThreads.Size(); i++)
+		for (uint32 i = 0; i < jobThreads.Count(); i++)
 		{
 			if (jobThreads[i]->stdthread.get_id() == thisThreadID)
 				return jobThreads[i];

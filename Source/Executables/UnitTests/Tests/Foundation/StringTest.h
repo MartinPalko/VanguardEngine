@@ -162,9 +162,9 @@ namespace Vanguard
 	{
 		String conjoinedString = "Thing1;Thing2;Thing3;Thing4";
 
-		List<String> splitString = conjoinedString.Split(';');
+		DynamicArray<String> splitString = conjoinedString.Split(';');
 
-		EXPECT_EQ(4, splitString.Size());
+		EXPECT_EQ(4, splitString.Count());
 
 		EXPECT_EQ("Thing1",splitString[0]);
 		EXPECT_EQ("Thing2", splitString[1]);

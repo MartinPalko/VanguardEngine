@@ -10,13 +10,13 @@ namespace Vanguard
 	class CORE_API INativeClassInfo
 	{
 	protected:
-		//static List<INativeClassInfo*> allClassInfos;
-		static List<INativeClassInfo*>& GetAllClassInfosList();
+		//static DynamicArray<INativeClassInfo*> allClassInfos;
+		static DynamicArray<INativeClassInfo*>& GetAllClassInfosList();
 
 		String className;
 		String baseClassName;
 		INativeClassInfo* baseClass = nullptr;
-		List<INativeClassInfo*> derivedClasses;
+		DynamicArray<INativeClassInfo*> derivedClasses;
 
 		INativeClassInfo(const String& aClassName, const String& aBaseClassName)
 		{
@@ -34,25 +34,25 @@ namespace Vanguard
 		String GetTypeName() const{ return className; };
 
 		INativeClassInfo* GetBaseClass() const { return baseClass; }
-		List<INativeClassInfo*> GetDerivedClasses() const { return derivedClasses; }
+		DynamicArray<INativeClassInfo*> GetDerivedClasses() const { return derivedClasses; }
 
-		static List<INativeClassInfo*> GetAllTypes();
+		static DynamicArray<INativeClassInfo*> GetAllTypes();
 		static INativeClassInfo* GetType(const String& aTypeName);
 
 		bool IsA(INativeClassInfo* otherClass) const;
 
 		static void UpdateHierarchyReferences()
 		{
-			List<INativeClassInfo*>& allClassInfos = GetAllClassInfosList();
+			DynamicArray<INativeClassInfo*>& allClassInfos = GetAllClassInfosList();
 
 			// First clear all references.
-			for (uint32 i = 0; i < allClassInfos.Size(); i++)
+			for (uint32 i = 0; i < allClassInfos.Count(); i++)
 			{
 				allClassInfos[i]->baseClass = nullptr;
 				allClassInfos[i]->derivedClasses.Clear();
 			}
 			// Now rebuild
-			for (uint32 i = 0; i < allClassInfos.Size(); i++)
+			for (uint32 i = 0; i < allClassInfos.Count(); i++)
 			{
 				allClassInfos[i]->baseClass = GetType(allClassInfos[i]->baseClassName);
 				if (allClassInfos[i]->baseClass)
@@ -69,9 +69,9 @@ namespace Vanguard
 		{
 			String ClassName = typeid(T).name();
 				
-			List<INativeClassInfo*>& allClassInfos = GetAllClassInfosList();
+			DynamicArray<INativeClassInfo*>& allClassInfos = GetAllClassInfosList();
 
-			for (uint32 i = 0; i < allClassInfos.Size(); i++)
+			for (uint32 i = 0; i < allClassInfos.Count(); i++)
 			{
 				if (allClassInfos[i]->GetTypeName() == ClassName)
 				{

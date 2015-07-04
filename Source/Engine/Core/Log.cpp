@@ -8,7 +8,7 @@ namespace Vanguard
 
 	bool Log::initialized = false;
 
-	List<LogEntry> Log::unflushedEntries;
+	DynamicArray<LogEntry> Log::unflushedEntries;
 	Mutex Log::logMutex;
 	FilePath Log::logFile;
 
@@ -18,15 +18,15 @@ namespace Vanguard
 			return;
 
 		// Clean up old log files.
-		List<FilePath> logFiles = FileSystem::Find(FileSystem::GetLogDirectory(),"*.log",false);
+		DynamicArray<FilePath> logFiles = FileSystem::Find(FileSystem::GetLogDirectory(),"*.log",false);
 		Message("Max Log Files: " + String::FromInt32(maxLogFiles));
 
-		while (logFiles.Size() >= maxLogFiles)
+		while (logFiles.Count() >= maxLogFiles)
 		{
 			size_t oldestFile = 0;
 			Time oldestCreationTime = FileSystem::GetTimeCreated(logFiles[oldestFile]);
 
-			for (size_t i = 1; i < logFiles.Size(); i++)
+			for (size_t i = 1; i < logFiles.Count(); i++)
 			{
 				Time currentCreationTime = FileSystem::GetTimeCreated(logFiles[oldestFile]);
 				if (currentCreationTime < oldestCreationTime)
@@ -62,7 +62,7 @@ namespace Vanguard
 		std::cout << newEnty.GetFormattedLogEntry() << "\n";
 		unflushedEntries.PushBack(newEnty);
 
-		if (aErrorLevel >= LogEntryErrorLevel::Error || unflushedEntries.Size() >= maxEntriesBetweenFlushes)
+		if (aErrorLevel >= LogEntryErrorLevel::Error || unflushedEntries.Count() >= maxEntriesBetweenFlushes)
 			Flush();
 
 		if (aErrorLevel == LogEntryErrorLevel::Exception)
@@ -81,7 +81,7 @@ namespace Vanguard
 			
 			String textToWrite = "";
 
-			for (size_t i = 0; i < unflushedEntries.Size(); i++)
+			for (size_t i = 0; i < unflushedEntries.Count(); i++)
 			{
 				textToWrite += unflushedEntries[i].GetFormattedLogEntry() + "\n";
 			}

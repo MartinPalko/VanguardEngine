@@ -197,12 +197,12 @@ namespace Vanguard
 			return fileText;
 		}
 
-		static List<String> ReadFileLinesAsText(const FilePath& aFilePath)
+		static DynamicArray<String> ReadFileLinesAsText(const FilePath& aFilePath)
 		{
 			if (!FileExists(aFilePath))
-				return List <String>();
+				return DynamicArray <String>();
 
-			List<String> fileLines = List <String>();
+			DynamicArray<String> fileLines = DynamicArray <String>();
 
 			juce::FileInputStream* inStream = aFilePath.file.createInputStream();
 			inStream->setPosition(0);
@@ -279,23 +279,23 @@ namespace Vanguard
 		}
 
 		// Searches directory for files, or other directories matching the wildcard criteria.
-		static List<FilePath> Find(const FilePath& aDirectoryToSearch, const String& aWildCardPattern = "*", bool aSearchRecursively = true, bool aFindFiles = true, bool aFindDirectories = false, bool aIgnoreHiddenFiles = false)
+		static DynamicArray<FilePath> Find(const FilePath& aDirectoryToSearch, const String& aWildCardPattern = "*", bool aSearchRecursively = true, bool aFindFiles = true, bool aFindDirectories = false, bool aIgnoreHiddenFiles = false)
 		{
 			if (!DirectoryExists(aDirectoryToSearch))
-				return List<FilePath>(); // Directory needs to exist, otherwise there's no sense.
+				return DynamicArray<FilePath>(); // Directory needs to exist, otherwise there's no sense.
 
 			juce::Array<juce::File> result;
 			int whatToLookFor = 0 + (aFindFiles ? 2 : 0) + (aFindDirectories ? 1 : 0) + (aIgnoreHiddenFiles ? 4 : 0);
 			aDirectoryToSearch.file.findChildFiles(result, whatToLookFor, aSearchRecursively, aWildCardPattern);
 
-			List<FilePath> returnList = List<FilePath>();
+			DynamicArray<FilePath> returnDynamicArray = DynamicArray<FilePath>();
 
 			for (int32 i = 0; i < result.size(); i++)
 			{
-				returnList.PushBack(result[i]);
+				returnDynamicArray.PushBack(result[i]);
 			}
 
-			return returnList;
+			return returnDynamicArray;
 		}
 
 		// Returns true if file path has any subdirectories
@@ -311,20 +311,20 @@ namespace Vanguard
 		}
 
 		// Reads the contents of the file as if it were plain text. Creates a new string at every line break.
-		static List<String> LoadFileAsStringArray(const FilePath& aFilePath)
+		static DynamicArray<String> LoadFileAsStringArray(const FilePath& aFilePath)
 		{
 			juce::StringArray juceDestLines;
 			aFilePath.file.readLines(juceDestLines);
 
-			List<String> returnList = List<String>();
-			returnList.Resize(juceDestLines.size());
+			DynamicArray<String> returnDynamicArray = DynamicArray<String>();
+			returnDynamicArray.Resize(juceDestLines.size());
 
 			for (int32 i = 0; i < juceDestLines.size(); i++)
 			{
-				returnList[i] = juceDestLines[i];
+				returnDynamicArray[i] = juceDestLines[i];
 			}
 
-			return returnList;
+			return returnDynamicArray;
 		}
 
 		// Checks the file byte-by-byte and returns true if both are identical. False if not identical, or couldn't be compared.

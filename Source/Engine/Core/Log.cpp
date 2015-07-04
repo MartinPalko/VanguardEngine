@@ -19,13 +19,10 @@ namespace Vanguard
 
 		// Clean up old log files.
 		DynamicArray<FilePath> logFiles = FileSystem::Find(FileSystem::GetLogDirectory(),"*.log",false);
-		Message("Max Log Files: " + String::FromInt32(maxLogFiles));
-
 		while (logFiles.Count() >= maxLogFiles)
 		{
 			size_t oldestFile = 0;
 			Time oldestCreationTime = FileSystem::GetTimeCreated(logFiles[oldestFile]);
-
 			for (size_t i = 1; i < logFiles.Count(); i++)
 			{
 				Time currentCreationTime = FileSystem::GetTimeCreated(logFiles[oldestFile]);
@@ -35,7 +32,6 @@ namespace Vanguard
 					oldestCreationTime = currentCreationTime;
 				}
 			}
-
 			FileSystem::Delete(logFiles[oldestFile]);
 			logFiles.RemoveAt(oldestFile);
 		}
@@ -47,7 +43,6 @@ namespace Vanguard
 
 		logFile = FileSystem::MakeUniqueFileName(FileSystem::GetLogDirectory().GetRelative(fileName + ".log"));
 		FileSystem::CreateFile(logFile);
-
 		Flush();
 
 		initialized = true;

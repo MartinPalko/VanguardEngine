@@ -70,7 +70,7 @@ namespace Vanguard
 
 		static bool initialized;
 
-		static List<LogEntry> unflushedEntries;
+		static DynamicArray<LogEntry> unflushedEntries;
 		static Mutex logMutex;
 		static FilePath logFile;
 

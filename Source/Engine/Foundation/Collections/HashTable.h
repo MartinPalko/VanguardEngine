@@ -23,10 +23,7 @@ namespace Vanguard
 		}
 
 		// Number of elements in this hashtable.
-		inline size_t Count()
-		{
-			return data.size();
-		}
+		inline size_t Count() const{ return data.size(); }
 
 		inline T& operator[](const uint64 aKey) { return data[aKey]; }
 		inline T& operator[](const StringID& aKey)  { return data[aKey.GetHash()]; }

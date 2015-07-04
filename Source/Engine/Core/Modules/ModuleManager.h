@@ -23,7 +23,7 @@ namespace Vanguard
 		void UnloadModule(const String& aModuleName);
 		void UnloadAllModules();
 
-		List<IModule*> GetLoadedModules();
+		DynamicArray<IModule*> GetLoadedModules();
 
 	private:
 		// List of all recognized modules.

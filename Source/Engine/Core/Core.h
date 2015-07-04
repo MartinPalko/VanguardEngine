@@ -37,7 +37,7 @@ namespace Vanguard
 		class ModuleManager* moduleManager;
 		class ManagedAssembly* managedCore;
 
-		List<World*> worlds = List<World*>();
+		DynamicArray<World*> worlds = DynamicArray<World*>();
 
 		CoreState state = CoreState::NotInitialized;
 

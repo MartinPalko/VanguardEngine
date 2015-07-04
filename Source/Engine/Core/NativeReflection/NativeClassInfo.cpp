@@ -3,23 +3,23 @@
 
 namespace Vanguard
 {
-	//List<INativeClassInfo*> INativeClassInfo::allClassInfos = List<INativeClassInfo*>();
-	List<INativeClassInfo*>& INativeClassInfo::GetAllClassInfosList()
+	//DynamicArray<INativeClassInfo*> INativeClassInfo::allClassInfos = DynamicArray<INativeClassInfo*>();
+	DynamicArray<INativeClassInfo*>& INativeClassInfo::GetAllClassInfosList()
 	{
-		static List<INativeClassInfo*> allClassInfos;
+		static DynamicArray<INativeClassInfo*> allClassInfos;
 		return allClassInfos;
 	}
 
-	List<INativeClassInfo*> INativeClassInfo::GetAllTypes()
+	DynamicArray<INativeClassInfo*> INativeClassInfo::GetAllTypes()
 	{
 		return GetAllClassInfosList();
 	}
 
 	INativeClassInfo* INativeClassInfo::GetType(const String& aTypeName)
 	{
-		List<INativeClassInfo*>& allClassInfos = GetAllClassInfosList();
+		DynamicArray<INativeClassInfo*>& allClassInfos = GetAllClassInfosList();
 
-		for (unsigned int i = 0; i < allClassInfos.Size(); i++)
+		for (unsigned int i = 0; i < allClassInfos.Count(); i++)
 		{
 			if (allClassInfos[i]->GetTypeName() == aTypeName)
 				return allClassInfos[i];

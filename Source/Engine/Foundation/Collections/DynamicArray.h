@@ -7,15 +7,15 @@
 namespace Vanguard
 {
 	template<class T>
-	class List : public ICollection<T>
+	class DynamicArray : public ICollection<T>
 	{
 	private:
 		std::vector<T> data;
 
 	public:
 		//Constructors
-		List() = default;
-		List(const List& rhs)
+		DynamicArray() = default;
+		DynamicArray(const DynamicArray& rhs)
 		{
 			data = rhs.data;
 		}
@@ -26,11 +26,8 @@ namespace Vanguard
 			data.push_back(aItem);
 		}
 
-		inline size_t Size() const
-		{
-			return data.size();
-		}
-
+        inline size_t Count() const{ return data.size(); }
+        
 		inline void Resize(uint32 aSize)
 		{
 			data.resize(aSize);
@@ -70,7 +67,7 @@ namespace Vanguard
 		}
 
 		//operators
-		inline List& operator=(const List& others)
+		inline DynamicArray& operator=(const DynamicArray& others)
 		{
 			if (this != &others)
 			{

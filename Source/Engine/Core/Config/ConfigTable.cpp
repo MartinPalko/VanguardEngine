@@ -52,9 +52,9 @@ namespace Vanguard
 
 	bool ConfigTable::LoadConfigFromDisk()
 	{
-		List<FilePath> ConfigFiles = FileSystem::Find(FileSystem::GetEngineConfigDirectory(), "*.cfg");
+		DynamicArray<FilePath> ConfigFiles = FileSystem::Find(FileSystem::GetEngineConfigDirectory(), "*.cfg");
 
-		for (uint32 f = 0; f < ConfigFiles.Size(); f++)
+		for (uint32 f = 0; f < ConfigFiles.Count(); f++)
 		{
 			FilePath configFile = ConfigFiles[f];
 			String fileName = configFile.GetFilenameWithoutExtension();
@@ -62,11 +62,11 @@ namespace Vanguard
 			if (!FileSystem::FileExists(configFile))
 				return false;
 
-			List<String> lines = FileSystem::ReadFileLinesAsText(configFile);
+			DynamicArray<String> lines = FileSystem::ReadFileLinesAsText(configFile);
 
 			String CurrentSection = "";
 
-			for (uint32 i = 0; i < lines.Size(); i++)
+			for (uint32 i = 0; i < lines.Count(); i++)
 			{
 				// Disregard full line comments
 				if (lines[i].BeginsWithAny(";#"))
@@ -84,8 +84,8 @@ namespace Vanguard
 					continue;
 				}
 
-				List<String> pair = lines[i].Split('=');
-				if (pair.Size() != 2) // Line is invalid, so skip
+				DynamicArray<String> pair = lines[i].Split('=');
+				if (pair.Count() != 2) // Line is invalid, so skip
 					continue;
 
 				configValues[fileName][CurrentSection][pair[0]] = pair[1];

@@ -129,7 +129,7 @@ namespace Vanguard
 
 	World* Core::GetWorld(const String& aWorldName)
 	{
-		for (size_t i = 0; i < worlds.Size(); i++)
+		for (size_t i = 0; i < worlds.Count(); i++)
 		{
 			if (worlds[i]->GetWorldName() == aWorldName)
 				return worlds[i];

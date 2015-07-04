@@ -18,25 +18,25 @@ namespace Vanguard
 		{
 			DEBUG_LOG("PHYSICS ON FRAME");
 
-			List<Job*> firstGroup = List <Job*>();
+			DynamicArray<Job*> firstGroup = DynamicArray <Job*>();
 			for (int i = 0; i < 15; i++)
 			{
 				firstGroup.PushBack(aFrame->AddJob([=]()-> void { UpdatePhysicsThing(aFrame); }));
 			}
 
-			for (size_t i = 0; i < firstGroup.Size(); i++)
+			for (size_t i = 0; i < firstGroup.Count(); i++)
 			{
 				aFrame->WaitForJob(firstGroup[i]);
 			}
 
 			DEBUG_LOG("NOW DOING SECOND BATCH");
-			List<Job*> secondGroup = List <Job*>();
+			DynamicArray<Job*> secondGroup = DynamicArray <Job*>();
 			for (size_t i = 0; i < 15; i++)
 			{
 				secondGroup.PushBack(aFrame->AddJob([=]()-> void { UpdatePhysicsThing(aFrame); }));
 			}
 
-			for (size_t i = 0; i < secondGroup.Size(); i++)
+			for (size_t i = 0; i < secondGroup.Count(); i++)
 			{
 				aFrame->WaitForJob(secondGroup[i]);
 			}

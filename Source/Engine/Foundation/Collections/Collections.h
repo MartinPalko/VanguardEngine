@@ -2,5 +2,6 @@
 
 #include "ICollection.h"
 
-#include "List.h"
+#include "DynamicArray.h"
 #include "Dictionary.h"
+#include "HashTable.h"

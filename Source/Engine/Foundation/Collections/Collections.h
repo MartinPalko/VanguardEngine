@@ -4,4 +4,4 @@
 
 #include "DynamicArray.h"
 #include "Dictionary.h"
-#include "HashTable.h"
+#include "Hashtable.h"

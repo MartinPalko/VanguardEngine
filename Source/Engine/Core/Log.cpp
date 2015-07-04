@@ -1,5 +1,6 @@
 #include "Log.h"
 #include "Platform.h"
+#include "Config.h"
 
 namespace Vanguard
 {

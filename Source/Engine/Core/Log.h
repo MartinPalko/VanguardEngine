@@ -1,8 +1,8 @@
 #pragma once
+
 #include "Core_Common.h"
 #include "VanguardString.h"
 #include "Mutex.h"
-#include "Config.h"
 
 namespace Vanguard
 {
@@ -62,6 +62,8 @@ namespace Vanguard
 		}
 	};
 
+	class Int32ConfigVar;
+
 	class CORE_API Log
 	{
 	private:
@@ -89,14 +91,25 @@ namespace Vanguard
 }
 
 #if VANGUARD_DEBUG
-#define DEBUG_LOG(message) Vanguard::Log::Message(message, "Debug")
-#define DEBUG_WARN(message) Vanguard::Log::Warning(message, "Debug")
-#define DEBUG_ERROR(message) Vanguard::Log::Error(message, "Debug")
-#define DEBUG_EXCEPTION(message) Vanguard::Log::Exception(message, "Debug")
+#define DEBUG_LOG(message) {Vanguard::Log::Message(message, "Debug");}
+#define DEBUG_WARN(message) {Vanguard::Log::Warning(message, "Debug");}
+#define DEBUG_ERROR(message) {Vanguard::Log::Error(message, "Debug");}
+#define DEBUG_EXCEPTION(message) {Vanguard::Log::Exception(message, "Debug");}
+
+#define DEBUG_LOG_IF(condition, message) if (condition) {Vanguard::Log::Message(message, "Debug");}
+#define DEBUG_WARN_IF(condition, message) if (condition) {Vanguard::Log::Warning(message, "Debug");}
+#define DEBUG_ERROR_IF(condition, message) if (condition) {Vanguard::Log::Error(message, "Debug");}
+#define DEBUG_EXCEPTION_IF(condition, message) if (condition) {Vanguard::Log::Exception(message, "Debug");}
 #else
 // Compile out to nothing in non-debug builds.
 #define DEBUG_LOG(message)
 #define DEBUG_WARN(message)
 #define DEBUG_ERROR(message)
 #define DEBUG_EXCEPTION(message)
+
+#define DEBUG_LOG_IF(condition, message)
+#define DEBUG_WARN_IF(condition, message)
+#define DEBUG_ERROR_IF(condition, message)
+#define DEBUG_EXCEPTION_IF(condition, message)
 #endif
+

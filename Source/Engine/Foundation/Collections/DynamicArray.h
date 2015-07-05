@@ -20,6 +20,15 @@ namespace Vanguard
 			data = rhs.data;
 		}
 
+        DynamicArray(DynamicArray&& rhs) :
+            data(std::move(rhs.data))
+        {
+        }
+        
+        ~DynamicArray()
+        {
+        }
+        
 		//Methods
 		inline void PushBack(T aItem)
 		{

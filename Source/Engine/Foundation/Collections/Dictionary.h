@@ -1,14 +1,14 @@
 #pragma once
 #include <map>
 
-#include "ICollection.h"
+#include "IDictionary.h"
 #include "DynamicArray.h"
 #include "IntegerDefs.h"
 
 namespace Vanguard
 {
 	template<typename K, typename V>
-	class Dictionary : public ICollection<V>
+	class Dictionary : public IDictionary<K,V>
 	{
 	private:
 		std::map<K, V> data;
@@ -30,9 +30,9 @@ namespace Vanguard
 
 		//destrcutor
 		~Dictionary() = default;
-
-		//methods 
-
+        
+        
+		//methods
 		inline void Set(const K& aKey, const V& aValue)
 		{
 			data[aKey] = aValue;
@@ -67,12 +67,18 @@ namespace Vanguard
 			data.clear();
 		}
 
-
-		inline size_t Count() const{
+		inline size_t Count() const
+        {
 			return data.size();
 		}
 
-		inline DynamicArray<K> Keys() const{
+        inline V& Item(const K& aKey)
+        {
+            return data[aKey];
+        }
+        
+		inline ICollection<K> Keys() const
+        {
 			DynamicArray<K> keys = DynamicArray<K>();
 			for (auto& item : data){
 				keys.PushBack(item.first);
@@ -80,7 +86,8 @@ namespace Vanguard
 			return keys;
 		}
 
-		inline DynamicArray<V> Values() const{
+		inline ICollection<V> Values() const
+        {
 			DynamicArray<V> values = DynamicArray<V>();
 			for (auto& item : data){
 				values.PushBack(item.second);
@@ -89,7 +96,8 @@ namespace Vanguard
 		}
 
 		// operators
-		inline Dictionary& operator=(const Dictionary& other){
+		inline Dictionary& operator=(const Dictionary& other)
+        {
 			if (this != &other){
 				data = other.data;
 			}

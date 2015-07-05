@@ -14,8 +14,25 @@ namespace Vanguard
 	private:
 		std::unordered_map < uint64, T > data;
 	public:
+        //Constructors
 		Hashtable(){}
+        
+        Hashtable(const Hashtable& rhs):
+            data(rhs.data)
+        {
+        }
+        
+        //Move semantics
+        Hashtable(Hashtable&& rhs):
+            data(std::move(rhs.data))
+        {
+        }
 
+        //Destructors
+        ~Hashtable()
+        {
+        }
+        
 		// If the hashtable contains an element with the given key.
 		inline bool Contains(const uint64 aKey)
 		{
@@ -27,5 +44,10 @@ namespace Vanguard
 
 		inline T& operator[](const uint64 aKey) { return data[aKey]; }
 		inline T& operator[](const StringID& aKey)  { return data[aKey.GetHash()]; }
+        inline Hashtable& operator=(const Hashtable& rhs)
+        {
+            data = rhs.data;
+            return *this;
+        }
 	};
 }

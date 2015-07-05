@@ -23,10 +23,9 @@ namespace Vanguard
 		}
         
         //Move semantics C++ 11
-		Dictionary(Dictionary&& rhs)
+        Dictionary(Dictionary&& rhs) :
+            data( std::move(rhs.data))
         {
-            data = rhs.data;
-            rhs.data = nullptr;
         }
 
 		//destrcutor
@@ -69,7 +68,7 @@ namespace Vanguard
 		}
 
 
-		inline uint32 Count() const{
+		inline size_t Count() const{
 			return data.size();
 		}
 
@@ -96,7 +95,7 @@ namespace Vanguard
 			}
 			return *this;
 		}
-
+        
 		inline V& operator[](const K& aKey)
 		{
 			return data[aKey];

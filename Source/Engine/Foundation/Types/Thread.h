@@ -10,8 +10,6 @@ namespace Vanguard
 
 		Thread()
 		{
-			//stdThread = std::thread()
 		}
-
 	};
 }

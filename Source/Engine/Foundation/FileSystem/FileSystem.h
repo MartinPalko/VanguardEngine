@@ -20,6 +20,11 @@ namespace Vanguard
 			return engineTempDirectory;
 		}
 
+		static void ClearEngineTempDirectory()
+		{
+			Delete(GetEngineTempDirectory());
+		}
+
 		static FilePath GetEngineBinDirectory()
 		{
 			FilePath engineExecutable = juce::File::getSpecialLocation(juce::File::hostApplicationPath);

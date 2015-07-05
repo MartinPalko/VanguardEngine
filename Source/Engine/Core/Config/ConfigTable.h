@@ -4,6 +4,7 @@
 #include "Core_Common.h"
 #include "VanguardString.h"
 #include "FileSystem.h"
+#include "ConfigFile.h"
 
 namespace Vanguard
 {
@@ -16,14 +17,13 @@ namespace Vanguard
 
 	private:
 		// Map goes <File,<Section,<Name,Value>>>
-		static std::map <String, std::map <String, std::map <String, String> > > configValues;
+		static Dictionary<String, ConfigFile> configFiles;
 
 	public:
 		static void OnConfigVarCreated(const IConfigVar& aNewVar, const String& aConfigDefault);
 		static String GetConfigValueText(const IConfigVar& aConfigVar);
 
 	public:
-		static bool SaveConfigToDisk();
 		static bool LoadConfigFromDisk();
 	};
 }

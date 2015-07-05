@@ -11,8 +11,11 @@
 
 namespace Vanguard
 {
+	#define TRUE_STRING "true"
+	#define FALSE_STRING "false"
+
 	class String
-	{
+	{		
 	private:
 		std::string data;
 
@@ -46,6 +49,9 @@ namespace Vanguard
 
 		inline void operator += (const String& aOther) { data = Append(aOther).data; }
 
+		// Gets the value that is return when no position is found (for functions that check position)
+		inline static size_t NPos() { return std::string::npos; }
+
 		// Access character by index
 		inline char operator[](size_t aIndex) const
 		{
@@ -58,8 +64,6 @@ namespace Vanguard
 		}
 
 		// To and from boolean
-		static const String TRUE_STRING;
-		static const String FALSE_STRING;
 		static String FromBoolean(const bool& aBool) { return aBool ? TRUE_STRING : FALSE_STRING; }
 		inline bool ToBoolean() const {	return this->ToLower() == TRUE_STRING; }
 
@@ -67,7 +71,10 @@ namespace Vanguard
 		static String FromInt32(int32 aInt32) { return ::std::to_string(aInt32); }
 		inline int32 ToInt32() const
 		{
-			return std::stoi(data);
+			if (data == "")
+				return 0;
+			else
+				return std::stoi(data);
 		}
 
 		//// To and from float

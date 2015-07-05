@@ -5,64 +5,37 @@
 #include "FileSystem.h"
 #include "FilePath.h"
 #include "Hashtable.h"
-#include "ConfigSection.h"
 
 namespace Vanguard
 {
+	struct ConfigSection
+	{
+		friend class ConfigFile;
+	private:
+		Dictionary<String, String> entries;
+	};
+
 	class ConfigFile
 	{
 	private:
-		FilePath filePath;
-		Dictionary<String,ConfigSection> sections;
+		enum class ConfigOperator
+		{
+			Set,
+			Add,
+			Remove
+		};
 
-		ConfigFile(FilePath aPath) : filePath(aPath) {}
+		Dictionary<String, ConfigSection> sections;
 
 	public:
+		ConfigFile() {}
 
-		static ConfigFile Load(FilePath aConfigFilePath)
-		{
-			ConfigFile newConfig(aConfigFilePath);
+		void SetValue(const String& aSection, const String& aKey, const String& aValue);
+		bool ContainsValue(const String& aSection, const String& aKey);
+		String GetValue(const String& aSection, const String& aKey);
 
+		void LoadAdditive(FilePath aConfigFilePath);
 
-			if (!FileSystem::FileExists(aConfigFilePath))
-			{
-				DEBUG_ERROR("Cannot load config file at path: " + aConfigFilePath.GetFullPathName());
-				return newConfig;
-			}
-
-
-			List<String> lines = FileSystem::ReadFileLinesAsText(aConfigFilePath);
-
-			String CurrentSection = "";
-
-			for (uint32 i = 0; i < lines.Size(); i++)
-			{
-				// Disregard full line comments
-				if (lines[i].BeginsWithAny(";#"))
-					continue;
-
-				// Remove inline comments
-				uint32 commentStartIndex = lines[i].FirstIndexOfAny(";#");
-				if (commentStartIndex != -1)
-					lines[i] = lines[i].RemoveAfter(commentStartIndex - 1);
-
-				// Section marker
-				if (lines[i].BeginsWith('['))
-				{
-					CurrentSection = lines[i].Trim("[]");
-					continue;
-				}
-
-				List<String> pair = lines[i].Split('=');
-				if (pair.Size() != 2) // Line is invalid, so skip
-				{
-					DEBUG_WARN("Could not parse line " + String::FromInt32(i) + " in " + aConfigFilePath.GetFullPathName());
-					continue;
-				}
-
-				newConfig.sections[CurrentSection].entries[pair[0]] = pair[1];
-			}
-		}
-		
+		static ConfigFile Load(FilePath aConfigFilePath);		
 	};
 }

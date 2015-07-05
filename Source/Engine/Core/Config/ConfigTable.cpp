@@ -3,94 +3,33 @@
 
 namespace Vanguard
 {
-	std::map <String, std::map <String, std::map <String, String> > > ConfigTable::configValues = std::map <String, std::map <String, std::map <String, String> > >();
+	//std::map <String, std::map <String, std::map <String, String> > > ConfigTable::configValues = std::map <String, std::map <String, std::map <String, String> > >();
+	Dictionary<String, ConfigFile> ConfigTable::configFiles;
 
 	void ConfigTable::OnConfigVarCreated(const IConfigVar& aNewVar, const String& aConfigDefault)
 	{
 		// Set to default if it doesn't exist yet.
-		if (configValues.find(aNewVar.file) == configValues.end() ||
-			configValues[aNewVar.file].find(aNewVar.section) == configValues[aNewVar.file].end() ||
-			configValues[aNewVar.file][aNewVar.section].find(aNewVar.name) == configValues[aNewVar.file][aNewVar.section].end())
+		if (!configFiles.Contains(aNewVar.file) || !configFiles[aNewVar.file].ContainsValue(aNewVar.section, aNewVar.name))
 		{
-			configValues[aNewVar.file][aNewVar.section][aNewVar.name] = aConfigDefault;
+			configFiles[aNewVar.file].SetValue(aNewVar.section, aNewVar.name,aConfigDefault);
 		}
 	}
 
 	String ConfigTable::GetConfigValueText(const IConfigVar& aConfigVar)
 	{
-		return configValues[aConfigVar.file][aConfigVar.section][aConfigVar.name];
-	}
-
-	bool ConfigTable::SaveConfigToDisk()
-	{
-		for (auto const& file : configValues)
-		{
-			String fileContent = String();
-
-			for (auto const& section : configValues[file.first])
-			{
-				fileContent += "\n";
-				fileContent += "[";
-				fileContent += section.first.Trim();
-				fileContent += "]";
-				fileContent += "\n";
-
-				for (auto const& name : configValues[file.first][section.first])
-				{
-					fileContent += name.first.Trim();
-					fileContent += "=";
-					fileContent += name.second.Trim();
-					fileContent += "\n";
-				}
-			}
-
-			FilePath configFilePath = FileSystem::GetEngineConfigDirectory().GetRelative(file.first + ".cfg");
-			FileSystem::WriteToFile(configFilePath, fileContent);
-		}
-		return true;
+		return configFiles[aConfigVar.file].GetValue(aConfigVar.section, aConfigVar.name);
 	}
 
 	bool ConfigTable::LoadConfigFromDisk()
 	{
-		DynamicArray<FilePath> ConfigFiles = FileSystem::Find(FileSystem::GetEngineConfigDirectory(), "*.cfg");
+		DynamicArray<FilePath> ConfigFilePaths = FileSystem::Find(FileSystem::GetEngineConfigDirectory(), "*.cfg");
 
-		for (uint32 f = 0; f < ConfigFiles.Count(); f++)
+		for (uint32 f = 0; f < ConfigFilePaths.Count(); f++)
 		{
-			FilePath configFile = ConfigFiles[f];
+			FilePath configFile = ConfigFilePaths[f];
 			String fileName = configFile.GetFilenameWithoutExtension();
-
-			if (!FileSystem::FileExists(configFile))
-				return false;
-
-			DynamicArray<String> lines = FileSystem::ReadFileLinesAsText(configFile);
-
-			String CurrentSection = "";
-
-			for (uint32 i = 0; i < lines.Count(); i++)
-			{
-				// Disregard full line comments
-				if (lines[i].BeginsWithAny(";#"))
-					continue;
-
-				// Remove inline comments
-				uint32 commentStartIndex = lines[i].FirstIndexOfAny(";#");
-				if (commentStartIndex != -1)
-					lines[i] = lines[i].RemoveAfter(commentStartIndex - 1);
-
-				// Section marker
-				if (lines[i].BeginsWith('['))
-				{
-					CurrentSection = lines[i].Trim("[]");
-					continue;
-				}
-
-				DynamicArray<String> pair = lines[i].Split('=');
-				if (pair.Count() != 2) // Line is invalid, so skip
-					continue;
-
-				configValues[fileName][CurrentSection][pair[0]] = pair[1];
-			}
-
+			
+			configFiles[fileName] = ConfigFile::Load(ConfigFilePaths[f]);
 		}
 		return true;
 	}

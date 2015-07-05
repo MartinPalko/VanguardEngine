@@ -32,6 +32,8 @@ namespace Vanguard
 	class CORE_API Core
 	{
 	private:
+		static BooleanConfigVar clearTempDirectoryOnShutdown;
+
 		static Core* instance;
 
 		class ModuleManager* moduleManager;

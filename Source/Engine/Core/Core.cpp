@@ -13,6 +13,8 @@
 
 namespace Vanguard
 {
+	BooleanConfigVar Core::clearTempDirectoryOnShutdown = BooleanConfigVar("Core", "Core", "ClearTempDirectoryOnShutdown", true);
+
 	Core* Core::instance = nullptr;
 
 	Core* Core::GetInstance() { return instance; }
@@ -26,9 +28,6 @@ namespace Vanguard
 
 		// Load config as early as possible, otherwise some classes might be stuck reading their default values!
 		ConfigTable::LoadConfigFromDisk();
-
-		// Save right away, to generate defaults if they don't exist. TODO: More elequently
-		ConfigTable::SaveConfigToDisk();
 
 		Log::Initialize();
 
@@ -94,8 +93,9 @@ namespace Vanguard
 
 			delete moduleManager;
 			delete managedCore;
-			ConfigTable::SaveConfigToDisk();
 
+			if (clearTempDirectoryOnShutdown)
+				FileSystem::ClearEngineTempDirectory();
 
 			// Want to flush the log as late as possible to make sure all entries get written to disk.
 			Log::Flush();

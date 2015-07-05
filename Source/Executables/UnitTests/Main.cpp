@@ -10,6 +10,7 @@
 #include "StringIDTest.h"
 #include "StringTest.h"
 #include "VectorTest.h"
+#include "ConfigFileTest.h"
 
 // Core
 #include "EntityComponentTest.h"

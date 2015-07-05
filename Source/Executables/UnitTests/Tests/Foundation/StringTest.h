@@ -235,11 +235,8 @@ namespace Vanguard
 		String trueString = String::FromBoolean(true);
 		String falseString = String::FromBoolean(false);
 
-		EXPECT_EQ(String::TRUE_STRING, trueString);
-		EXPECT_EQ(String::FALSE_STRING, falseString);
-
-		EXPECT_NE(String::TRUE_STRING, falseString);
-		EXPECT_NE(String::FALSE_STRING, trueString);
+		EXPECT_EQ(TRUE_STRING, trueString);
+		EXPECT_EQ(FALSE_STRING, falseString);
 
 
 		EXPECT_TRUE(String("true").ToBoolean());

@@ -77,23 +77,23 @@ namespace Vanguard
             return data[aKey];
         }
         
-		inline ICollection<K> Keys() const
-        {
-			DynamicArray<K> keys = DynamicArray<K>();
-			for (auto& item : data){
-				keys.PushBack(item.first);
-			}
-			return keys;
-		}
+		//inline ICollection<K> Keys() const
+  //      {
+		//	DynamicArray<K> keys = DynamicArray<K>();
+		//	for (auto& item : data){
+		//		keys.PushBack(item.first);
+		//	}
+		//	return keys;
+		//}
 
-		inline ICollection<V> Values() const
-        {
-			DynamicArray<V> values = DynamicArray<V>();
-			for (auto& item : data){
-				values.PushBack(item.second);
-			}
-			return values;
-		}
+		//inline ICollection<V> Values() const
+  //      {
+		//	DynamicArray<V> values = DynamicArray<V>();
+		//	for (auto& item : data){
+		//		values.PushBack(item.second);
+		//	}
+		//	return values;
+		//}
 
 		// operators
 		inline Dictionary& operator=(const Dictionary& other)

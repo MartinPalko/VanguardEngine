@@ -1,4 +1,4 @@
-cmakeExecutable=$(dirname $0)"/Intermediate/CMake/Linux/bin/cmake"
+cmakeExecutable=$(dirname $0)"/CMake/Linux/bin/cmake"
 sourceRoot=$(dirname $0)"/Source"
 
 projectfileDirectory=$(dirname $0)"/Intermediate/CodeBlocks/"

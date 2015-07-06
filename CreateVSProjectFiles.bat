@@ -1,7 +1,7 @@
 @echo off
 
 SET projectFileDirectory="Intermediate\VisualStudio\"
-SET cmakeExecutableRelativeProjectDir=..\CMake\Windows\bin\cmake.exe
+SET cmakeExecutableRelativeProjectDir=..\..\CMake\Windows\bin\cmake.exe
 SET sourceRootRelativeProjectDir="..\..\Source"
 
 

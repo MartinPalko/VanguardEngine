@@ -19,6 +19,14 @@ addons:
     - libxrandr-dev
     - libxinerama-dev
     - libxcursor-dev
+  coverity_scan:
+    project:
+      name: "MartinPalko/VanguardEngine"
+      description: "Build submitted via Travis CI"
+    notification_email: jeeprubi@hotmail.com
+    build_command_prepend: ./Intermediate/CMake/Linux/bin/cmake -G "Unix Makefiles" ./Source
+    build_command: make
+    branch_pattern: coverity_scan
 
 # Upgrade to g++ 4.8 (needed for c++11 features)
 before_install:
@@ -42,14 +50,4 @@ env:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
    #   via the "travis encrypt" command using the project repo's public key
    - secure: "dpDybS5n3UzZBygCKdHNd5Tr3/RPW4n2Y6JS2Cs1QFXYyEqZBEDHoVtCbyKVPROxw7YkfLTXLEa9wr0WcOfwpg76VtaVmy7pMS8MC8+FNsRI5zGPql23i4EM0CNgrBUA1gTuzP3ldYI9iIiG+h6KK1j623gS7JQ6UdL3117ZDgUFtiPEdHF4wfN7aa9Htz/82v8C8AMp7wotWfrmtWZiom+eeIovKt/PwnwcW8PbEPGsh2F48tXxP4HtPiBbfauPMC5xGnCOiimeISlPXVrpvFaFY9KGqfHQeVFOvxUmFiZgBlXGFhaFKFTggfAranfC8jEhO2m/YRVvkcl95Jl9LKPwNbP+VHZgVDOC/mowkcX1SU3ELsHefRl3lb30sWxYfUDfcoZvWKp7nCrunEQvdHm3G+I4GdRUiBzw+9UoIYGdW/Rrf9I1EYUXVuPljZyYphfvuVThlk0AOPNKCRwbz1Kn+VFRTe0+FVfCEkuho6UAB1Aq1W2L0t3H2Blj5wNI6FqxeSmmCwi2qb0fZn5zdRo7w8nrU42jn74vTeB9EDzda4Kk+ZSfo/uySvAxhdPyA4EEVzlXluxkNd2yBcoxx3pf90RI118bhyuK6zs5qLOX4DhMnvq8gmPogblpOofFf0OhiY2ELgUhkKTxrddL0soD9v1x73Q6Ypg4x2qkpAM="
-
-addons:
-  coverity_scan:
-    project:
-      name: "MartinPalko/VanguardEngine"
-      description: "Build submitted via Travis CI"
-    notification_email: jeeprubi@hotmail.com
-    build_command_prepend: ./Intermediate/CMake/Linux/bin/cmake -G "Unix Makefiles" ./Source
-    build_command: make
-    branch_pattern: coverity_scan
   

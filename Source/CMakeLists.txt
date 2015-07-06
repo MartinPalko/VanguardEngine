@@ -271,3 +271,23 @@ MESSAGE("Creating deferred projects:")
 FOREACH(project ${deferredAddProjects})
 	ADD_DEFFERED_PROJECTS_RECURSIVE(${project})
 ENDFOREACH()
+
+IF (MSVC)
+	#Find and add all csharp projects
+	FILE(GLOB_RECURSE CSharpProjects "${CMAKE_SOURCE_DIR}/Managed/*.csproj")
+
+	#Add them all to solution.
+	FOREACH(CSharpProject ${CSharpProjects})
+			GET_FILENAME_COMPONENT(ProjectName ${CSharpProject} NAME_WE)		
+			INCLUDE_EXTERNAL_MSPROJECT("${ProjectName}" "${CSharpProject}" PLATFORM "Any CPU")
+		
+			FILE (RELATIVE_PATH folder "${CMAKE_CURRENT_SOURCE_DIR}" "${CSharpProject}")
+			GET_FILENAME_COMPONENT(folder "${folder}" DIRECTORY)
+			GET_FILENAME_COMPONENT(folder "${folder}" DIRECTORY)
+		
+		
+			SET_TARGET_PROPERTIES("${ProjectName}" PROPERTIES FOLDER "${folder}")
+		
+			MESSAGE("Added CSharp Project: ${ProjectName}")
+	ENDFOREACH()
+ENDIF()

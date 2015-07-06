@@ -56,11 +56,11 @@ namespace Vanguard
 			return Contains(aKey);
 		}
 
-		inline bool ContainsValue(const V& aValue) const
-		{
-			Vanguard::DynamicArray<V> values = Values();
-			return values.Contains(aValue);
-		}
+		//inline bool ContainsValue(const V& aValue) const
+		//{
+		//	Vanguard::DynamicArray<V> values = Values();
+		//	return values.Contains(aValue);
+		//}
 
 		inline void Clear()
 		{

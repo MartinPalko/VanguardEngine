@@ -36,10 +36,12 @@ addons:
     build_command: make
     branch_pattern: coverity_scan
 
-# None
+# Create makefile
 before_script:
-# None (coverity handles it)
-script:
+- ./CMake/Linux/bin/cmake -G "Unix Makefiles" ./Source
+
+# Compile makefile
+script: make
 	
 # Set for coverity scan.
 env:

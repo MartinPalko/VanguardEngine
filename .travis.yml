@@ -38,11 +38,10 @@ addons:
 
 # Create makefile
 before_script:
-- ./CMake/Linux/bin/cmake -G "Unix Makefiles" ./Source
 
 # Compile makefile
-script: make
-	
+script:
+
 # Set for coverity scan.
 env:
   global:

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ThirdParty/ZLib/zlib-1.2.8/zlib.h"
+#include "Source/ThirdParty/ZLib/zlib-1.2.8/zlib.h"
 
 #include "IntegerDefs.h"
 

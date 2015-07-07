@@ -1,5 +1,5 @@
 cmakeExecutable=$(dirname $0)"/CMake/Linux/bin/cmake"
-sourceRoot=$(dirname $0)"/Source"
+sourceRoot=$(dirname $0)
 
 projectfileDirectory=$(dirname $0)"/Intermediate/MakeFile/"
 mkdir -p $projectfileDirectory

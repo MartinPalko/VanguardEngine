@@ -2,7 +2,7 @@
 
 SET projectFileDirectory="Intermediate\VisualStudio\"
 SET cmakeExecutableRelativeProjectDir=..\..\CMake\Windows\bin\cmake.exe
-SET sourceRootRelativeProjectDir="..\..\Source"
+SET sourceRootRelativeProjectDir="..\.."
 
 
 REM Change directory to where we want the project files put.

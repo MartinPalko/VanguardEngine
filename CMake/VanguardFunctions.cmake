@@ -9,7 +9,6 @@ MACRO(GET_DIRECTORIES return_list fileList)
     SET(${return_list} ${dir_list})
 ENDMACRO()
 
-
 # Decode a string saved as "Project=Dependency" to two seperate strings.
 MACRO (DECODE_DEPENDENCY_PAIR return_project return_dependency pair)
 	STRING(FIND ${pair} "=" seperatorPosition)
@@ -18,29 +17,64 @@ MACRO (DECODE_DEPENDENCY_PAIR return_project return_dependency pair)
 	STRING(SUBSTRING ${dependencyPair} ${seperatorPositionPlusOne} -1 ${return_dependency})
 ENDMACRO()
 
+MACRO(PUT_IN_FOLDER_RELATIVE_ROOT in_projectName in_projectLocation)
+	IF(TARGET "${in_projectName}") #Check to make sure target exists
+		# Put us in a IDE folder to match the disk folder relative to root cmake file.
+		file (RELATIVE_PATH relativeCurrentSourceDir "${EngineRoot}" "${in_projectLocation}")
+		
+		#Remove "source" from path, since it's implied.
+		STRING(REPLACE "Source" "" relativeCurrentSourceDir ${relativeCurrentSourceDir})
+		
+		SET_TARGET_PROPERTIES("${in_projectName}" PROPERTIES FOLDER "${relativeCurrentSourceDir}")
+	ELSE()
+		MESSAGE("Warning: Cannot place project \"${in_projectName}\" in folder; project does not exist.")
+	ENDIF()
+ENDMACRO()
+
+
 # Recursively find all "CMakeLists.txt" files. Only finds "top level" files, so recursion stops when it finds one.
-FUNCTION (FIND_TOPLEVEL_MAKELISTS return_list)
-	#FILE(GLOB_RECURSE subMakeLists *CMakeLists.txt)
-	FILE(GLOB subDirectories "${CMAKE_CURRENT_SOURCE_DIR}/*")
+FUNCTION (FIND_TOPLEVEL_MAKELISTS return_list_var searchDirectory)
+
+	SET(${return_list_var} "")	 
+	SET(return_list "")
+
+	# Find first level of subdirectories
+	FILE(GLOB subDirectories "${searchDirectory}/*")
 	FOREACH (directory ${subDirectories})
-		FIND_MAKELISTS_RECURSIVE(${return_list} ${directory})
+		FIND_MAKELISTS_RECURSIVE(return_list ${directory})
+		MESSAGE("Return List: ")
+		
+		FOREACH (list ${return_list})
+			MESSAGE(${list})
+		ENDFOREACH()
+		
 	ENDFOREACH()
 	
-	SET(${return_list} ${subMakeLists} PARENT_SCOPE)
+	SET(${return_list_var} ${return_list} PARENT_SCOPE)
+	
 ENDFUNCTION()
 
 # Recursively searches the specified folder for "CMakeLists.txt" files. Recursion stops when it finds one.
-FUNCTION (FIND_MAKELISTS_RECURSIVE return_lists directoryToSearch)
+FUNCTION (FIND_MAKELISTS_RECURSIVE return_list_var directoryToSearch)
+
+	SET(parent_returnlist "${${return_list_var}}")
+	SET(return_list "")
+	
 	FILE(GLOB makelistInDir "${directoryToSearch}/CMakeLists.txt")
-	IF("${makelistInDir}" STREQUAL "")		
+	
+	IF("${makelistInDir}" STREQUAL "")
 		FILE(GLOB subDirectories "${directoryToSearch}/*")
 		FOREACH (directory ${subDirectories})
-			FIND_MAKELISTS_RECURSIVE(${return_list} ${directory})
+			FIND_MAKELISTS_RECURSIVE(return_list ${directory})
 		ENDFOREACH()
 	ELSE()
-		LIST(APPEND ${return_list} "${makelistInDir}")
+		SET(return_list ${return_list} "${makelistInDir}")
 	ENDIF()
-	SET(${return_list} ${subMakeLists} PARENT_SCOPE)
+	
+	# Append newly found variables
+	LIST(APPEND parent_returnlist "${return_list}")
+	
+	SET(${return_list_var} ${parent_returnlist} PARENT_SCOPE)
 
 ENDFUNCTION()
 
@@ -48,17 +82,6 @@ ENDFUNCTION()
 MACRO (IMPLEMENT_PROJECT_AUTOFINDSOURCES projType projName projDependencies)
 	FILE (GLOB_RECURSE sourceFiles "*.h" "*.cpp")
 	IMPLEMENT_PROJECT("${projType}" "${projName}" "${projDependencies}" "${sourceFiles}")
-ENDMACRO()
-
-MACRO(PUT_IN_FOLDER_RELATIVE_ROOT in_projectName in_additionalSorting)
-	IF(TARGET "${in_projectName}") #Check to make sure target exists
-		# Put us in a IDE folder to match the disk folder relative to root cmake file.
-		GET_FILENAME_COMPONENT(prent_path "${CMAKE_CURRENT_SOURCE_DIR}" DIRECTORY)
-		file (RELATIVE_PATH relativeCurrentSourceDir "${CMAKE_SOURCE_DIR}" "${prent_path}")
-		SET_TARGET_PROPERTIES("${in_projectName}" PROPERTIES FOLDER "${relativeCurrentSourceDir}${in_additionalSorting}")
-	ELSE()
-		MESSAGE("Warning: Cannot place project \"${in_projectName}\" in folder; project does not exist.")
-	ENDIF()
 ENDMACRO()
 
 # Macro to easily implement a project. Automatically includes all code files, and writes dependencies to "recordedProjectDependencies" for linking later.
@@ -129,10 +152,7 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 			ENDIF()
 		ENDIF()
 		
-		# Put project in folder inside of solution
-		FILE (RELATIVE_PATH folder "${CMAKE_SOURCE_DIR}" "${projectPath}")
-		GET_FILENAME_COMPONENT(folder "${folder}" DIRECTORY)
-		SET_TARGET_PROPERTIES("${projectName}" PROPERTIES FOLDER "${folder}")
+		PUT_IN_FOLDER_RELATIVE_ROOT ("${projectName}" "${projectPath}/..")
 		
 		# Group source files in the same way that they are found in the folders
 		FOREACH (file ${projectSources})
@@ -203,3 +223,44 @@ ENDMACRO ()
 MACRO (IMPLEMENT_EXECUTABLE executableName dependencies)
 	IMPLEMENT_PROJECT_AUTOFINDSOURCES("EXECUTABLE" "${executableName}" "${dependencies}")	
 ENDMACRO ()
+
+MACRO (FIND_VANGUARD_PROJECTS_IN_FOLDER searchInFolder)
+	FILE(GLOB_RECURSE projectConfigFiles "${searchInFolder}/*project.cfg")
+	
+	FOREACH(projectConfigFile ${projectConfigFiles})
+		GET_FILENAME_COMPONENT(projectFolder "${projectConfigFile}" DIRECTORY)
+		GET_FILENAME_COMPONENT(projectName "${projectFolder}" NAME)
+		
+		CREATE_VANGUARD_PROJECT("${projectFolder}" "${projectName}")	
+	
+	ENDFOREACH()
+ENDMACRO()
+
+MACRO (CREATE_VANGUARD_PROJECT projectFolder projectName)
+
+	MESSAGE("Creating vanguard project: ${projectName}")
+	# Add this project to the list of projects.
+	SET(Vanguard_Projects ${Vanguard_Projects} projectName)
+	
+	FILE(GLOB_RECURSE CSharpProjects "${projectFolder}/Source/*.csproj")
+	FOREACH(CSharpProject ${CSharpProjects})
+		
+		GET_FILENAME_COMPONENT(CSharpProjectName ${CSharpProject} NAME_WE)
+		MESSAGE("Adding ${CSharpProjectName}")
+		INCLUDE_EXTERNAL_MSPROJECT("${CSharpProjectName}" "${CSharpProject}" PLATFORM "Any CPU")
+		
+		GET_FILENAME_COMPONENT(dir_path ${CSharpProject} DIRECTORY) # Get folder path
+		PUT_IN_FOLDER_RELATIVE_ROOT ("${CSharpProjectName}" "${dir_path}/..")
+	ENDFOREACH()
+	
+	FIND_TOPLEVEL_MAKELISTS(makeLists "${EngineRoot}/Projects/")
+	
+	GET_DIRECTORIES(makeListDirectories "${makeLists}")
+	
+	FOREACH(makeListDir ${makeListDirectories})
+		MESSAGE("Executing makelist at: ${makeListDir}")
+		add_subdirectory (${makeListDir} "projectFolder/Bin")
+		MESSAGE("")
+	ENDFOREACH()
+	
+ENDMACRO()

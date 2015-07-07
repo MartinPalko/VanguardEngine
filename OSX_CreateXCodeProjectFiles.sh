@@ -1,6 +1,6 @@
 projectfileDirectory=$(dirname $0)"/Intermediate/XCode/"
 cmakeExecutable=$(dirname $0)"/CMake/OSX/CMake.app/contents/bin/cmake"
-sourceRoot=$(dirname $0)"/Source"
+sourceRoot=$(dirname $0)
 
 mkdir -p $projectfileDirectory
 cd $projectfileDirectory

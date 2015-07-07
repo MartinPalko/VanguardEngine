@@ -1,19 +1,10 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.2)
 
-# Create variable for engine root folder
-GET_FILENAME_COMPONENT(EngineRoot "${CMAKE_SOURCE_DIR}" DIRECTORY) # Engine root is one up from source directory.
-
-INCLUDE("${EngineRoot}/CMake/VanguardFunctions.cmake")
-
-# Makelist script starts here
-PROJECT (Vanguard)
-
 # Disables the "ZERO_CHECK" target, and trying to regenerate on build. (We want to manually regenerate)
 SET(CMAKE_SUPPRESS_REGENERATION true)
 
 IF(UNIX AND NOT APPLE)
 	# Enable C++11
-	#ADD_DEFINITIONS(-std=c++11)
 	# -fPIC : Position independent code (needed for shared libs on UNIX based OS).
 	# -fexceptions -pthread : exeptions and threading.
 	set (CMAKE_CXX_FLAGS "-std=c++11 -fPIC -fexceptions -pthread")
@@ -40,10 +31,8 @@ foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 # Find all sub directories containting CMakeLists.txt files
-FIND_TOPLEVEL_MAKELISTS(subMakeLists)
+FIND_TOPLEVEL_MAKELISTS(subMakeLists "${EngineRoot}/Source")
 GET_DIRECTORIES(libDirectories "${subMakeLists}")
-
-MESSAGE("${libDirectories}")
 
  # Make sure we're not adding our own (root) directory
 LIST(REMOVE_ITEM libDirectories ${CMAKE_CURRENT_SOURCE_DIR})
@@ -57,6 +46,9 @@ FOREACH(file_path ${libDirectories})
 		MESSAGE("")
 ENDFOREACH()
 
+# Now create all vanguard projects found in the projects folder.
+FIND_VANGUARD_PROJECTS_IN_FOLDER("${EngineRoot}/Projects")
+
 # Create all the deferred projects
 MESSAGE("Creating deferred projects:")
 	
@@ -64,21 +56,19 @@ FOREACH(project ${deferredAddProjects})
 	ADD_DEFFERED_PROJECTS_RECURSIVE(${project})
 ENDFOREACH()
 
+#Find Csharp projects
 IF (MSVC)
 	#Find and add all csharp projects
-	FILE(GLOB_RECURSE CSharpProjects "${CMAKE_SOURCE_DIR}/Managed/*.csproj")
+	FILE(GLOB_RECURSE CSharpProjects "${EngineRoot}/Source/Managed/*.csproj")
 
 	#Add them all to solution.
 	FOREACH(CSharpProject ${CSharpProjects})
 			GET_FILENAME_COMPONENT(ProjectName ${CSharpProject} NAME_WE)		
 			INCLUDE_EXTERNAL_MSPROJECT("${ProjectName}" "${CSharpProject}" PLATFORM "Any CPU")
 		
-			FILE (RELATIVE_PATH folder "${CMAKE_CURRENT_SOURCE_DIR}" "${CSharpProject}")
-			GET_FILENAME_COMPONENT(folder "${folder}" DIRECTORY)
-			GET_FILENAME_COMPONENT(folder "${folder}" DIRECTORY)
+			GET_FILENAME_COMPONENT(projectFolder "${CSharpProject}" DIRECTORY)
 		
-		
-			SET_TARGET_PROPERTIES("${ProjectName}" PROPERTIES FOLDER "${folder}")
+			PUT_IN_FOLDER_RELATIVE_ROOT ("${ProjectName}" "${projectFolder}/..")
 		
 			MESSAGE("Added CSharp Project: ${ProjectName}")
 	ENDFOREACH()

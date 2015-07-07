@@ -38,7 +38,7 @@ addons:
 
 # Create makefile
 before_script:
-- ./CMake/Linux/bin/cmake -G "Unix Makefiles" ./Source
+- ./CMake/Linux/bin/cmake -G "Unix Makefiles" ./
 
 # Compile makefile
 script: make

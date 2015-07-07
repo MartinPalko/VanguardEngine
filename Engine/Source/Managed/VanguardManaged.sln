@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedCore", "ManagedCore\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedModule", "ManagedModule\ManagedModule.csproj", "{0FA12249-12D9-48FE-900B-EBD6991E790D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyProject_Managed", "..\..\Projects\EmptyProject\Source\Managed\EmptyProject_Managed.csproj", "{8BC92410-939C-4C19-B6B8-1A9ADFF54A3C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmptyProject_Managed", "..\..\..\Projects\EmptyProject\Source\Managed\EmptyProject_Managed.csproj", "{8BC92410-939C-4C19-B6B8-1A9ADFF54A3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

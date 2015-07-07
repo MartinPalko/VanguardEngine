@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Source/ThirdParty/ZLib/zlib-1.2.8/zlib.h"
+#include "Engine/Source/ThirdParty/ZLib/zlib-1.2.8/zlib.h"
 
+#include "VanguardString.h"
 #include "IntegerDefs.h"
 
 namespace Vanguard

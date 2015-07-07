@@ -259,7 +259,7 @@ MACRO (CREATE_VANGUARD_PROJECT projectFolder projectName)
 	
 	FOREACH(makeListDir ${makeListDirectories})
 		MESSAGE("Executing makelist at: ${makeListDir}")
-		add_subdirectory (${makeListDir} "projectFolder/Bin")
+		add_subdirectory (${makeListDir} "${EngineRoot}/Bin")
 		MESSAGE("")
 	ENDFOREACH()
 	

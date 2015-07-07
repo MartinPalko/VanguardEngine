@@ -31,7 +31,7 @@ foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 # Find all sub directories containting CMakeLists.txt files
-FIND_TOPLEVEL_MAKELISTS(subMakeLists "${EngineRoot}/Source")
+FIND_TOPLEVEL_MAKELISTS(subMakeLists "${CMAKE_CURRENT_SOURCE_DIR}")
 GET_DIRECTORIES(libDirectories "${subMakeLists}")
 
  # Make sure we're not adding our own (root) directory
@@ -59,7 +59,7 @@ ENDFOREACH()
 #Find Csharp projects
 IF (MSVC)
 	#Find and add all csharp projects
-	FILE(GLOB_RECURSE CSharpProjects "${EngineRoot}/Source/Managed/*.csproj")
+	FILE(GLOB_RECURSE CSharpProjects "${CMAKE_CURRENT_SOURCE_DIR}/Managed/*.csproj")
 
 	#Add them all to solution.
 	FOREACH(CSharpProject ${CSharpProjects})

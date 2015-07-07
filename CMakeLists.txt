@@ -8,4 +8,4 @@ SET (EngineRoot "${CMAKE_CURRENT_SOURCE_DIR}")
 
 INCLUDE ("${EngineRoot}/CMake/VanguardFunctions.cmake")
 
-ADD_SUBDIRECTORY ("${EngineRoot}/Source")
+ADD_SUBDIRECTORY ("${EngineRoot}/Engine/Source")

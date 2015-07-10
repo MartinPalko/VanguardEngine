@@ -1,7 +1,7 @@
 #pragma once
 
 #include "juce_core.h"
-#include "VanguardTypes.h"
+#include "VanguardString.h"
 
 namespace Vanguard
 {

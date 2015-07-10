@@ -24,6 +24,6 @@ namespace Vanguard
 		static String GetConfigValueText(const IConfigVar& aConfigVar);
 
 	public:
-		static bool LoadConfigFromDisk();
+		static void LoadConfigFromDisk();
 	};
 }

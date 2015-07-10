@@ -21,17 +21,31 @@ namespace Vanguard
 		return configFiles[aConfigVar.file].GetValue(aConfigVar.section, aConfigVar.name);
 	}
 
-	bool ConfigTable::LoadConfigFromDisk()
+	void ConfigTable::LoadConfigFromDisk()
 	{
-		DynamicArray<FilePath> ConfigFilePaths = FileSystem::Find(Directories::GetEngineConfigDirectory(), "*.cfg");
+		// Engine configs
+		DynamicArray<FilePath> engineConfigFilePaths = FileSystem::Find(Directories::GetEngineConfigDirectory(), "*.cfg");
 
-		for (uint32 f = 0; f < ConfigFilePaths.Count(); f++)
+		for (uint32 i = 0; i < engineConfigFilePaths.Count(); i++)
 		{
-			FilePath configFile = ConfigFilePaths[f];
+			FilePath configFile = engineConfigFilePaths[i];
 			String fileName = configFile.GetFilenameWithoutExtension();
 			
-			configFiles[fileName] = ConfigFile::Load(ConfigFilePaths[f]);
+			configFiles[fileName] = ConfigFile::Load(engineConfigFilePaths[i]);
 		}
-		return true;
+
+		// Project configs
+		DynamicArray<FilePath> projectConfigFilePaths = FileSystem::Find(Directories::GetProjectConfigDirectory(), "*.cfg");
+
+		for (uint32 i = 0; i < projectConfigFilePaths.Count(); i++)
+		{
+			FilePath configFile = projectConfigFilePaths[i];
+			String fileName = configFile.GetFilenameWithoutExtension();
+
+			if (configFiles.ContainsKey(fileName))
+				configFiles[fileName].LoadAdditive(projectConfigFilePaths[i]);
+			else
+				configFiles[fileName] = ConfigFile::Load(projectConfigFilePaths[i]);			
+		}
 	}
 }

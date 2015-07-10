@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Config.h"
-#include "Foundation.h"
 #include "Core_Common.h"
+
+#include "Config.h"
 #include "EntityComponentSystem.h"
 #include "NativeReflection.h"
 #include "Application.h"

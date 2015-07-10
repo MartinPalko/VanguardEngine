@@ -76,6 +76,8 @@ namespace Vanguard
 				throw Exception(String("Could not load module " + filePath.GetFullPathName()).GetCharPointer());
 			}
 
+			Log::Message("Loading native module " + moduleName, "Modules");
+
 			moduleInstance = InstantiationFunction();
 			moduleInstance->LoadModule();
 		}

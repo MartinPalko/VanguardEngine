@@ -19,7 +19,7 @@ namespace Vanguard
 		name = aProjectDirectory.GetFilenameWithoutExtension();
 		friendlyName = projectConfigFile.GetValue("Project", "FriendlyName");
 		description = projectConfigFile.GetValue("Project", "Description");
-		requiredModules = projectConfigFile.GetArrayValues("Project", "Dependencies");
+		requiredModules = projectConfigFile.GetArrayValues("Project", "RequiredModules");
 
 		DEBUG_LOG("Loaded project " + friendlyName + ": " + description);
 	}

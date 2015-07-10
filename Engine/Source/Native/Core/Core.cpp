@@ -36,6 +36,16 @@ namespace Vanguard
 		managedCore = new ManagedAssembly("ManagedCore");
 		moduleManager = new ModuleManager(managedCore);
 
+		// Load modules required by project.
+		DynamicArray<String> requiredModules = loadedProject->GetRequiredModules();
+		for (size_t i = 0; i < requiredModules.Count(); i++)
+		{
+			moduleManager->LoadModule(requiredModules[i]);
+		}
+		// Load the project's modules.
+		moduleManager->LoadModule(loadedProject->GetName() + "_Native");
+		moduleManager->LoadModule(loadedProject->GetName() + "_Managed");
+
 		Log::Message("Initialized Core", "Core");
 		state = CoreState::Initialized;
 	}
@@ -51,7 +61,9 @@ namespace Vanguard
 		// Main engine loop
 		while (state == CoreState::Running)
 		{
+			// At the moment, shut down right away since there's no proper way to exit the application.
 			ShutDown();
+
 			// TODO: Tick worlds
 
 			//Frame* frame = new Frame(0, 0.03f, gameWorld);
@@ -101,6 +113,8 @@ namespace Vanguard
 			Log::Flush();
 
 			delete loadedProject;
+
+			Log::Message("Core shut down successfully", "Core");
 
 			state = CoreState::ShutDown;
 		}

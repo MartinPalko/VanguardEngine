@@ -6,7 +6,7 @@ namespace EmptyProject
 {
 	class EmptyProject : public IModule
 	{
-		virtual String GetModuleName() { return "EmptyProject"; }
+		virtual String GetModuleName() { return "EmptyProject_Native"; }
 		virtual String GetModuleType() { return "Project"; }
 		
 		virtual void LoadModule()

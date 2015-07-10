@@ -36,7 +36,8 @@ namespace Vanguard
 
 	FilePath Directories::GetEngineDirectory()
 	{
-		return GetEngineBinDirectory().GetParentDirectory();
+		return GetVanguardRootDirectory().GetRelative("Engine");
+		//return GetEngineBinDirectory().GetParentDirectory();
 	}
 
 	FilePath Directories::GetEngineConfigDirectory()

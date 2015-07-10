@@ -25,6 +25,11 @@ namespace Vanguard
 			Delete(GetEngineTempDirectory());
 		}
 
+		static FilePath GetProjectsDirectory()
+		{
+			return GetEngineRootDirectory().GetRelative("Projects");
+		}
+
 		static FilePath GetEngineBinDirectory()
 		{
 			FilePath engineExecutable = juce::File::getSpecialLocation(juce::File::hostApplicationPath);

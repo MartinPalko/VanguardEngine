@@ -26,6 +26,12 @@ namespace Vanguard
 		}
 	}
 
+	DynamicArray<String> ConfigFile::GetArrayValues(const String& aSection, const String& aKey)
+	{
+		String value = GetValue(aSection, aKey);
+		return value.Split(',');
+	}
+
 	void ConfigFile::LoadAdditive(FilePath aConfigFilePath)
 	{
 		if (!FileSystem::FileExists(aConfigFilePath))

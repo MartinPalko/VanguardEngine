@@ -7,6 +7,7 @@
 #include "NativeReflection.h"
 #include "Application.h"
 #include "Log.h"
+#include "Project.h"
 
 #include "JobManager.h"
 #include "Job.h"
@@ -36,6 +37,7 @@ namespace Vanguard
 
 		static Core* instance;
 
+		class Project* loadedProject;
 		class ModuleManager* moduleManager;
 		class ManagedAssembly* managedCore;
 
@@ -53,6 +55,8 @@ namespace Vanguard
 		inline CoreState GetState(){ return state; }
 
 		void LoadModule(const String& aModuleName);
+
+		class Project* GetLoadedProject(){ return loadedProject; }
 
 		World* CreateWorld(const String& aWorldName);
 		World* GetWorld(const String& aWorldName);

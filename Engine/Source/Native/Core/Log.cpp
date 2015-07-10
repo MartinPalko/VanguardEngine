@@ -1,6 +1,7 @@
 #include "Log.h"
 #include "Platform.h"
 #include "Config.h"
+#include "Core.h"
 
 namespace Vanguard
 {
@@ -15,11 +16,13 @@ namespace Vanguard
 
 	void Log::Initialize()
 	{
-		if (initialized == true)
+		if (initialized)
 			return;
 
+		String logfilePrefix = Core::GetInstance()->GetLoadedProject()->GetName();
+
 		// Clean up old log files.
-		DynamicArray<FilePath> logFiles = FileSystem::Find(FileSystem::GetLogDirectory(),"*.log",false);
+		DynamicArray<FilePath> logFiles = FileSystem::Find(FileSystem::GetLogDirectory(), logfilePrefix + "*.log", false);
 		while (logFiles.Count() >= maxLogFiles)
 		{
 			size_t oldestFile = 0;
@@ -38,7 +41,7 @@ namespace Vanguard
 		}
 
 		// Create a new log file, named after the current time.
-		String fileName = Time::GetCurrentTime().ToString(true, true, false, false);
+		String fileName = logfilePrefix + "_" + Time::GetCurrentTime().ToString(true, true, false, false);
 		fileName = fileName.Replace(' ', '-');
 		fileName = fileName.Replace(':', '.');
 
@@ -69,6 +72,9 @@ namespace Vanguard
 
 	void Log::Flush()
 	{
+		if (!initialized)
+			return;
+
 		static bool flushingLog(false);
 
 		if (!flushingLog)

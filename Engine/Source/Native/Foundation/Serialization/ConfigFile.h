@@ -33,6 +33,7 @@ namespace Vanguard
 		void SetValue(const String& aSection, const String& aKey, const String& aValue);
 		bool ContainsValue(const String& aSection, const String& aKey);
 		String GetValue(const String& aSection, const String& aKey);
+		DynamicArray<String> GetArrayValues(const String& aSection, const String& aKey);
 
 		void LoadAdditive(FilePath aConfigFilePath);
 

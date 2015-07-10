@@ -7,9 +7,6 @@
 #include "IModule.h"
 #include "ManagedAssembly.h"
 #include "NativeReflection.h"
-#include "JobManager.h"
-#include "Job.h"
-#include "Frame.h"
 
 namespace Vanguard
 {
@@ -25,6 +22,8 @@ namespace Vanguard
 		instance = this;
 
 		Application::applicationArguments = ApplicationArguments(aArgC, aArgV);
+
+		loadedProject = new Project(FileSystem::GetProjectsDirectory().GetRelative(aProjectName));
 
 		// Load config as early as possible, otherwise some classes might be stuck reading their default values!
 		ConfigTable::LoadConfigFromDisk();
@@ -99,6 +98,8 @@ namespace Vanguard
 
 			// Want to flush the log as late as possible to make sure all entries get written to disk.
 			Log::Flush();
+
+			delete loadedProject;
 
 			state = CoreState::ShutDown;
 		}

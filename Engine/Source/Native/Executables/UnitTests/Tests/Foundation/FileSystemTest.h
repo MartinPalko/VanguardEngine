@@ -39,7 +39,7 @@ namespace Vanguard
 		printf("\n");
 
 		EXPECT_TRUE(FileSystem::DirectoryExists(engineRoot + "/Bin"));
-		EXPECT_EQ(configDir, engineRoot.GetRelative("Config"));
+		EXPECT_EQ(configDir, engineRoot.GetRelative("Engine/Config"));
 		EXPECT_TRUE(FileSystem::DirectoryExists(tempDir));
 	}
 

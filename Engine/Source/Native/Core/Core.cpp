@@ -19,7 +19,7 @@ namespace Vanguard
 
 	Core* Core::GetInstance() { return instance; }
 
-	void Core::Initialize(int aArgC, char** aArgV)
+	void Core::Initialize(int aArgC, char** aArgV, String aProjectName)
 	{
 		state = CoreState::Initializing;
 		instance = this;

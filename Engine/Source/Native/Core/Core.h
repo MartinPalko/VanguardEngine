@@ -46,7 +46,7 @@ namespace Vanguard
 	public:
 		static Core* GetInstance();
 
-		void Initialize(int aArgC, char** aArgV);
+		void Initialize(int aArgC, char** aArgV, String aProjectName = "");
 		void Run();
 		void ShutDown();
 

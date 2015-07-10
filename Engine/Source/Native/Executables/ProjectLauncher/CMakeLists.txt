@@ -1,0 +1,1 @@
+IMPLEMENT_EXECUTABLE(ProjectLauncher "Core")

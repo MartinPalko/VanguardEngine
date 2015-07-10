@@ -42,11 +42,6 @@ FUNCTION (FIND_TOPLEVEL_MAKELISTS return_list_var searchDirectory)
 	FILE(GLOB subDirectories "${searchDirectory}/*")
 	FOREACH (directory ${subDirectories})
 		FIND_MAKELISTS_RECURSIVE(return_list ${directory})
-		MESSAGE("Return List: ")
-		
-		FOREACH (list ${return_list})
-			MESSAGE(${list})
-		ENDFOREACH()
 		
 	ENDFOREACH()
 	
@@ -104,10 +99,15 @@ MACRO (IMPLEMENT_PROJECT projType projName projDependencies sourceFiles)
 	SET(deferredAddProjects ${deferredAddProjects} PARENT_SCOPE)
 	
 	#Create variables for project type, sources, and dependencies for use later.
+	SET("${projName}_Type" "${projType}")
+	SET("${projName}_Sources" "${absoluteSourceFiles}")
+	SET("${projName}_Dependencies" "${projDependencies}")
+	SET("${projName}_Path" "${CMAKE_CURRENT_SOURCE_DIR}")	
+	
 	SET("${projName}_Type" "${projType}" PARENT_SCOPE)
 	SET("${projName}_Sources" "${absoluteSourceFiles}" PARENT_SCOPE)
 	SET("${projName}_Dependencies" "${projDependencies}" PARENT_SCOPE)
-	SET("${projName}_Path" "${CMAKE_CURRENT_SOURCE_DIR}" PARENT_SCOPE)	
+	SET("${projName}_Path" "${CMAKE_CURRENT_SOURCE_DIR}" PARENT_SCOPE)
 ENDMACRO ()
 
 FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
@@ -123,16 +123,24 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 			ADD_DEFFERED_PROJECTS_RECURSIVE(${dependency})
 		ENDIF()
 	ENDFOREACH()
-
+	
 	#If target does not exist, it needs to be added, so do it.	
 	IF(NOT TARGET "${projectName}" AND projectType)
 		IF (${projectType} MATCHES "EXECUTABLE")
 			ADD_EXECUTABLE(${projectName} ${projectSources})
+			MESSAGE("Added executable target ${projectName}")
 			
 			# If not specified as a console project, set subsystem to windows (will not spawn console window)
 			IF(NOT "${${projectName}_IS_CONSOLE}" AND WIN32)
 				set_target_properties(${projectName} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
 			ENDIF()
+			
+			# See if we're a launcher for a project, if so, then insert a macro so we know which project we're launching.
+			FOREACH(launcher ${projectLaunchers})
+				IF(${projectName} MATCHES "${launcher}_Launcher")
+					ADD_DEFINITIONS("-DVANGUARD_PROJECT=\"${launcher}\"")
+				ENDIF()
+			ENDFOREACH()
 
 			IF (Modules)
 				#If executable, add all modules as dependencies, so they automatically build when debugging.
@@ -167,7 +175,7 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 		TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${includeDirs})
 	ENDIF()
 	
-	MESSAGE("Linking dependencies for ${projectName}")
+	MESSAGE("Linking dependencies for ${projectName} ")
 	
 	#Now link us to our dependencies
 	FOREACH(dependency ${projectDependencies})
@@ -263,4 +271,15 @@ MACRO (CREATE_VANGUARD_PROJECT projectFolder projectName)
 		MESSAGE("")
 	ENDFOREACH()
 	
+	VANGUARD_CREATE_PROJECT_LAUNCHER("${projectFolder}" "${projectName}")
+	
+ENDMACRO()
+
+MACRO (VANGUARD_CREATE_PROJECT_LAUNCHER projectFolder projectName)
+	SET(launcherFolder "${EngineRoot}/Engine/Source/Native/Executables/ProjectLauncher")
+	FILE (GLOB_RECURSE sourceFiles "${launcherFolder}/*.h" "${launcherFolder}/*.cpp")
+	MESSAGE("Source files: ${sourceFiles}")
+	IMPLEMENT_PROJECT("EXECUTABLE" "${projectName}_Launcher" "Core" "${sourceFiles}")
+	SET ("${projectName}_Launcher_Path" "${projectFolder}/${projectName}")
+	SET(projectLaunchers "${projectLaunchers}" ${projectName})
 ENDMACRO()

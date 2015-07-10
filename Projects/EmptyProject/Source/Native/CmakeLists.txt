@@ -1,1 +1,1 @@
-IMPLEMENT_MODULE(EmptyProject "Core")
+IMPLEMENT_MODULE(EmptyProject_Native "Core")

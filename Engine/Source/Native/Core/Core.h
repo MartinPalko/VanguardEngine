@@ -8,6 +8,7 @@
 #include "Application.h"
 #include "Log.h"
 #include "Project.h"
+#include "Directories.h"
 
 #include "JobManager.h"
 #include "Job.h"

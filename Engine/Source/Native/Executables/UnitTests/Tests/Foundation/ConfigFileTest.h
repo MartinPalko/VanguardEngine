@@ -22,7 +22,7 @@ namespace Vanguard
 
 	TEST_F(ConfigFileTest, Loading)
 	{
-		FilePath configFilePath = FileSystem::GetEngineTempDirectory().GetRelative("Temp.cfg");
+		FilePath configFilePath = FileSystem::GetSystemTempDirectory().GetRelative("Temp.cfg");
 
 		String configFileContents;
 		configFileContents += "[Section1]\n";
@@ -51,5 +51,6 @@ namespace Vanguard
 
 		EXPECT_FALSE(configFile.ContainsValue("Section2", "Value2"));
 
+		FileSystem::Delete(configFilePath);
 	}
 }

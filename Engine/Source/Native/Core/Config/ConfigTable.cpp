@@ -1,5 +1,6 @@
 #include "ConfigTable.h"
 #include "ConfigVar.h"
+#include "Directories.h"
 
 namespace Vanguard
 {
@@ -22,7 +23,7 @@ namespace Vanguard
 
 	bool ConfigTable::LoadConfigFromDisk()
 	{
-		DynamicArray<FilePath> ConfigFilePaths = FileSystem::Find(FileSystem::GetEngineConfigDirectory(), "*.cfg");
+		DynamicArray<FilePath> ConfigFilePaths = FileSystem::Find(Directories::GetEngineConfigDirectory(), "*.cfg");
 
 		for (uint32 f = 0; f < ConfigFilePaths.Count(); f++)
 		{

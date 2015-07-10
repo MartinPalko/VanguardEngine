@@ -22,7 +22,7 @@ namespace Vanguard
 		String logfilePrefix = Core::GetInstance()->GetLoadedProject()->GetName();
 
 		// Clean up old log files.
-		DynamicArray<FilePath> logFiles = FileSystem::Find(FileSystem::GetLogDirectory(), logfilePrefix + "*.log", false);
+		DynamicArray<FilePath> logFiles = FileSystem::Find(Directories::GetLogDirectory(), logfilePrefix + "*.log", false);
 		while (logFiles.Count() >= maxLogFiles)
 		{
 			size_t oldestFile = 0;
@@ -45,7 +45,7 @@ namespace Vanguard
 		fileName = fileName.Replace(' ', '-');
 		fileName = fileName.Replace(':', '.');
 
-		logFile = FileSystem::MakeUniqueFileName(FileSystem::GetLogDirectory().GetRelative(fileName + ".log"));
+		logFile = FileSystem::MakeUniqueFileName(Directories::GetLogDirectory().GetRelative(fileName + ".log"));
 		FileSystem::CreateFile(logFile);
 		Flush();
 

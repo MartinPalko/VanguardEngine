@@ -7,46 +7,9 @@ namespace Vanguard
 {
 	struct FileSystem
 	{
-		// Gets a directory inside of the users temp directory, useful for temporary files.
-		static FilePath GetEngineTempDirectory()
+		static FilePath GetSystemTempDirectory()
 		{
-			FilePath systemTempDirectory = juce::File::getSpecialLocation(juce::File::tempDirectory);
-			FilePath engineTempDirectory = systemTempDirectory.GetRelative("Vanguard");
-
-			// Create the directory if it doesn't already exist.
-			if (!DirectoryExists(engineTempDirectory))
-				CreateDirectory(engineTempDirectory);
-
-			return engineTempDirectory;
-		}
-
-		static void ClearEngineTempDirectory()
-		{
-			Delete(GetEngineTempDirectory());
-		}
-
-		static FilePath GetProjectsDirectory()
-		{
-			return GetEngineRootDirectory().GetRelative("Projects");
-		}
-
-		static FilePath GetEngineBinDirectory()
-		{
-			FilePath engineExecutable = juce::File::getSpecialLocation(juce::File::hostApplicationPath);
-			return engineExecutable.GetParentDirectory();
-		}
-
-		static FilePath GetEngineModuleDirectory()
-		{
-			return GetEngineBinDirectory();
-		}
-
-		static FilePath GetLogDirectory()
-		{
-			FilePath logDir = GetEngineRootDirectory().GetRelative("Logs");
-			if (!DirectoryExists(logDir))
-				CreateDirectory(logDir);
-			return logDir;
+			return juce::File::getSpecialLocation(juce::File::tempDirectory);
 		}
 
 		static FilePath GetSystemProgramsDirectory()
@@ -64,17 +27,9 @@ namespace Vanguard
 			return juce::File::getCurrentWorkingDirectory();
 		}
 
-		static FilePath GetEngineRootDirectory()
+		static FilePath GetHostApplicationPath()
 		{
-			return GetEngineBinDirectory().GetParentDirectory();
-		}
-
-		static FilePath GetEngineConfigDirectory()
-		{
-			FilePath configDir = GetEngineRootDirectory().GetRelative("Engine/Config");
-			if (!DirectoryExists(configDir))
-				CreateDirectory(configDir);
-			return configDir;
+			return juce::File::getSpecialLocation(juce::File::hostApplicationPath);
 		}
 
 		// If a file or directory already exists at this path, this will return a path that does not exist by adding a unique suffix to the file (eg _1 or _2, until a filepath is found that does not already exist.

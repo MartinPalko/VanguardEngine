@@ -8,6 +8,7 @@
 #include "ManagedAssembly.h"
 #include "NativeReflection.h"
 
+
 namespace Vanguard
 {
 	BooleanConfigVar Core::clearTempDirectoryOnShutdown = BooleanConfigVar("Core", "Core", "ClearTempDirectoryOnShutdown", true);
@@ -23,7 +24,7 @@ namespace Vanguard
 
 		Application::applicationArguments = ApplicationArguments(aArgC, aArgV);
 
-		loadedProject = new Project(FileSystem::GetProjectsDirectory().GetRelative(aProjectName));
+		loadedProject = new Project(Directories::GetVanguardProjectsDirectory().GetRelative(aProjectName));
 
 		// Load config as early as possible, otherwise some classes might be stuck reading their default values!
 		ConfigTable::LoadConfigFromDisk();
@@ -94,7 +95,7 @@ namespace Vanguard
 			delete managedCore;
 
 			if (clearTempDirectoryOnShutdown)
-				FileSystem::ClearEngineTempDirectory();
+				FileSystem::Delete(Directories::GetProjectTempDirectory());
 
 			// Want to flush the log as late as possible to make sure all entries get written to disk.
 			Log::Flush();

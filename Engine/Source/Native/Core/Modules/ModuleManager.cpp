@@ -8,6 +8,8 @@
 #include <mono/metadata/debug-helpers.h>
 #include <mono/metadata/mono-config.h>
 
+#include "Directories.h"
+
 namespace Vanguard
 {
 	ModuleManager::ModuleManager(ManagedAssembly* aManagedCoreAssembly)
@@ -27,7 +29,7 @@ namespace Vanguard
 	{
 		String pluginWildcard = "*" + String(Platform::DynamicLibExtension());
 
-		DynamicArray<FilePath> dynamicLibsInModuleDirectory = FileSystem::Find(FileSystem::GetEngineModuleDirectory(), pluginWildcard, false, true, false, true);
+		DynamicArray<FilePath> dynamicLibsInModuleDirectory = FileSystem::Find(Directories::GetEngineModuleDirectory(), pluginWildcard, false, true, false, true);
 
 		moduleInfos.clear();
 

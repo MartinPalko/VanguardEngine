@@ -71,7 +71,7 @@ namespace Vanguard
 
 		static FilePath GetEngineConfigDirectory()
 		{
-			FilePath configDir = GetEngineRootDirectory().GetRelative("Config");
+			FilePath configDir = GetEngineRootDirectory().GetRelative("Engine/Config");
 			if (!DirectoryExists(configDir))
 				CreateDirectory(configDir);
 			return configDir;

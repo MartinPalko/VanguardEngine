@@ -89,6 +89,10 @@ namespace Vanguard
 				key = key.TrimEnd('-');
 			}
 
+			// Make sure to trim whitespace AFTER we check for operators.
+			key = key.Trim();
+			value = value.Trim();
+
 			bool keyExists = sections[CurrentSection].entries.Contains(key);
 
 			if (operation == ConfigOperator::Add && keyExists) // Append value

@@ -1,1 +1,1 @@
-IMPLEMENT_EXECUTABLE(ProjectLauncher "Core")
+#IMPLEMENT_EXECUTABLE(ProjectLauncher "Core")

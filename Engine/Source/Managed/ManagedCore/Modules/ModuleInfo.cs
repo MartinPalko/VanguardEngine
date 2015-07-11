@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Vanguard.ManagedCore.Modules
+namespace Vanguard
 {
     class ModuleInfo
     {

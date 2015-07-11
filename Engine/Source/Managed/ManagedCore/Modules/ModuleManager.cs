@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.IO;
 
-namespace Vanguard.ManagedCore.Modules
+namespace Vanguard
 {
     class ModuleManager
     {

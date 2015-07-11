@@ -1,23 +1,22 @@
 ﻿using System;
-using Vanguard.ManagedCore.Modules;
 
-namespace Vanguard.ManagedModule
+namespace Vanguard
 {
     public class ManagedModule : IModule
     {
         public void Test()
         {
-            Console.WriteLine("Static Call");
+           //Log.Message("Static Calll", "Modules");
         }
 
         public void LoadModule()
         {
-            Console.WriteLine("Loaded Managed Module: " + GetModuleName());
+            Log.Message("Loaded Managed Module: " + GetModuleName(), "Modules");
         }
 
         public void UnloadModule()
         {
-            Console.WriteLine("Unloaded Managed Module: " + GetModuleName());
+            Log.Message("Unloaded Managed Module: " + GetModuleName(), "Modules");
         }
 
         public String GetModuleName()

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanguard.ManagedCore.Modules
+namespace Vanguard
 {
     public interface IModule
     {

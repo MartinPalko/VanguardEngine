@@ -1,7 +1,6 @@
 ﻿using System;
-using Vanguard.ManagedCore.Modules;
 
-namespace Vanguard.ManagedModule
+namespace Vanguard
 {
     public class ManagedModule : IModule
     {

@@ -3,6 +3,12 @@
 #include "Core_Common.h"
 #include "VanguardString.h"
 #include "Mutex.h"
+#include "ManagedString.h"
+
+#include <mono/jit/jit.h>
+#include <mono/metadata/assembly.h>
+#include <mono/metadata/debug-helpers.h>
+#include <mono/metadata/mono-config.h>
 
 namespace Vanguard
 {
@@ -66,6 +72,7 @@ namespace Vanguard
 
 	class CORE_API Log
 	{
+		friend class Core;
 	private:
 		static Int32ConfigVar maxLogFiles;
 		static Int32ConfigVar maxEntriesBetweenFlushes;
@@ -76,6 +83,14 @@ namespace Vanguard
 		static Mutex logMutex;
 		static FilePath logFile;
 
+		// Internal calls.
+		static void Message_(ManagedString* aMessage, ManagedString* aChannel) { Write(aMessage->ToNative(), LogEntryErrorLevel::Message, aChannel->ToNative()); }
+		static void Warning_(ManagedString* aMessage, ManagedString* aChannel) { Write(aMessage->ToNative(), LogEntryErrorLevel::Warning, aChannel->ToNative()); }
+		static void Error_(ManagedString* aMessage, ManagedString* aChannel) { Write(aMessage->ToNative(), LogEntryErrorLevel::Error, aChannel->ToNative()); }
+		static void Exception_(ManagedString* aMessage, ManagedString* aChannel) { Write(aMessage->ToNative(), LogEntryErrorLevel::Exception, aChannel->ToNative()); }
+
+		static void AddInternalCalls();
+
 	public:
 		static void Initialize();
 
@@ -85,6 +100,11 @@ namespace Vanguard
 		static inline void Warning(const String& aMessage, const String& aChannel = "") { Write(aMessage, LogEntryErrorLevel::Warning, aChannel); }
 		static inline void Error(const String& aMessage, const String& aChannel = "") { Write(aMessage, LogEntryErrorLevel::Error, aChannel); }
 		static inline void Exception(const String& aMessage, const String& aChannel = "") { Write(aMessage, LogEntryErrorLevel::Exception, aChannel); }
+
+		static void MessageCharP(MonoString* aMessage, MonoString* aChannel)
+		{
+			Write(mono_string_to_utf8(aMessage), LogEntryErrorLevel::Message, mono_string_to_utf8(aChannel));
+		}
 
 		static void Flush();
 	};

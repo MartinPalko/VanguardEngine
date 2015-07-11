@@ -5,7 +5,6 @@
 #include "ManagedClass.h"
 #include "ModuleManager.h"
 #include "IModule.h"
-#include "ManagedAssembly.h"
 #include "NativeReflection.h"
 
 
@@ -34,6 +33,9 @@ namespace Vanguard
 		JobManager::CreateThreads();
 
 		managedCore = new ManagedAssembly("ManagedCore");
+
+		Log::AddInternalCalls();// This can't be done in Log::Initialize() because the managed core isn't created at that point in time.
+
 		moduleManager = new ModuleManager(managedCore);
 
 		// Load modules required by project.

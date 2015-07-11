@@ -9,6 +9,7 @@
 #include "Log.h"
 #include "Project.h"
 #include "Directories.h"
+#include "ManagedAssembly.h"
 
 #include "JobManager.h"
 #include "Job.h"
@@ -54,6 +55,8 @@ namespace Vanguard
 		void ShutDown();
 
 		inline CoreState GetState(){ return state; }
+
+		inline ManagedAssembly* GetManaged() { return managedCore; }
 
 		void LoadModule(const String& aModuleName);
 

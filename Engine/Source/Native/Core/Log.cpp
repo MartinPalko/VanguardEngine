@@ -52,6 +52,15 @@ namespace Vanguard
 		initialized = true;
 	}
 
+	void Log::AddInternalCalls()
+	{
+		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Message", Log::Message_);
+		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Warning", Log::Warning_);
+		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Error", Log::Error_);
+		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Exception", Log::Exception_);
+	}
+
+
 	void Log::Write(const String& aMessage, const LogEntryErrorLevel& aErrorLevel, const String& aCategoty)
 	{
 		LogEntry newEnty(aMessage, aErrorLevel, aCategoty);

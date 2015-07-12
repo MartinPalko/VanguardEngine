@@ -3,7 +3,7 @@
 
 #include "IDictionary.h"
 #include "DynamicArray.h"
-#include "IntegerDefs.h"
+#include "Types/IntegerDefs.h"
 
 namespace Vanguard
 {

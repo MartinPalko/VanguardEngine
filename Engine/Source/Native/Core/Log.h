@@ -1,9 +1,7 @@
 #pragma once
 
 #include "Core_Common.h"
-#include "VanguardString.h"
-#include "Mutex.h"
-#include "ManagedString.h"
+#include "Mono/ManagedString.h"
 
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>

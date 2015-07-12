@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "StringID.h"
+#include "Types/StringID.h"
 
 namespace Vanguard
 {

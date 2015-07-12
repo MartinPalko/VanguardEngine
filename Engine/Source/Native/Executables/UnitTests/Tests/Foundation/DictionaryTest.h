@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "VanguardString.h"
+#include "Types/VanguardString.h"
 
 namespace Vanguard
 {

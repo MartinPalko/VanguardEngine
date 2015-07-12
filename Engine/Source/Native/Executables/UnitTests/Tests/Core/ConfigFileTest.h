@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
-#include "FilePath.h"
-#include "ConfigFile.h"
+#include "Types/FilePath.h"
+#include "Config/ConfigFile.h"
 
 namespace Vanguard
 {

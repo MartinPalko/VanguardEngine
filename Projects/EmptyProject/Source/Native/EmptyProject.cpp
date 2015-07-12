@@ -1,6 +1,6 @@
 #include "EmptyProject.h"
 
-#include "ModuleDeclaration.h"
+#include "Modules/ModuleDeclaration.h"
 
 namespace EmptyProject
 {

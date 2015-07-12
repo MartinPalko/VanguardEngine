@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "EntityComponentSystem.h"
+#include "EntityComponent/EntityComponentSystem.h"
 
 namespace Vanguard
 {

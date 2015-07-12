@@ -1,9 +1,8 @@
 #pragma once
 
-#include "Platform.h"
-#include "VanguardTypes.h"
-#include "Collections.h"
-#include "FileSystem.h"
-#include "MathFunctions.h"
+#include "Platforms/Platform.h"
+#include "Types/VanguardTypes.h"
+#include "Collections/Collections.h"
+#include "Utility/FileSystem.h"
+#include "Utility/MathFunctions.h"
 #include "SystemInfo.h"
-#include "Threading.h"

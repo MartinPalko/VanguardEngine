@@ -1,10 +1,10 @@
 #pragma once
 #include <unordered_map>
 
-#include "ICollection.h"
-#include "IntegerDefs.h"
-#include "VanguardString.h"
-#include "StringID.h"
+#include "Collections/ICollection.h"
+#include "Types/IntegerDefs.h"
+#include "Types/VanguardString.h"
+#include "Types/StringID.h"
 
 namespace Vanguard
 {

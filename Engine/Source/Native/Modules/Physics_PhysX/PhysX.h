@@ -1,6 +1,6 @@
 #include "Core.h"
-#include "IModule.h"
-#include "Frame.h"
+#include "Modules/IModule.h"
+#include "Jobs/Frame.h"
 
 namespace Vanguard
 {

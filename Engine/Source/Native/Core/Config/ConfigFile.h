@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Log.h"
-#include "VanguardString.h"
-#include "FileSystem.h"
-#include "FilePath.h"
-#include "Hashtable.h"
+#include "Core_Common.h"
+
+#include "Types/VanguardString.h"
+#include "Types/FilePath.h"
+#include "Collections/Dictionary.h"
 
 namespace Vanguard
 {
@@ -15,7 +15,7 @@ namespace Vanguard
 		Dictionary<String, String> entries;
 	};
 
-	class ConfigFile
+	class CORE_API ConfigFile
 	{
 	private:
 		enum class ConfigOperator

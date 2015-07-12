@@ -1,5 +1,5 @@
 #pragma once
-#include "MathFunctions.h"
+#include "Utility/MathFunctions.h"
 #include <math.h>
 
 namespace Vanguard

@@ -2,9 +2,7 @@
 #include <map>
 
 #include "Core_Common.h"
-#include "VanguardString.h"
-#include "FileSystem.h"
-#include "ConfigFile.h"
+#include "Config/ConfigFile.h"
 
 namespace Vanguard
 {

@@ -1,7 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "Foundation.h"
-#include "NativeReflection.h"
+#include "NativeReflection/NativeReflection.h"
 
 namespace Vanguard
 {

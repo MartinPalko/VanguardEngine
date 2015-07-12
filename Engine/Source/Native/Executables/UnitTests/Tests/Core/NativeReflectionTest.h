@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "NativeReflection.h"
+#include "NativeReflection/NativeReflection.h"
 #include "Log.h"
 
 namespace Vanguard

@@ -2,7 +2,7 @@
 #include <vector>
 
 #include "ICollection.h"
-#include "IntegerDefs.h"
+#include "Types/IntegerDefs.h"
 
 namespace Vanguard
 {

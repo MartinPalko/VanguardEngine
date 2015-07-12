@@ -1,6 +1,6 @@
 #include "PhysX.h"
 
-#include "ModuleDeclaration.h"
+#include "Modules/ModuleDeclaration.h"
 
 namespace Vanguard
 {

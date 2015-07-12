@@ -2,18 +2,18 @@
 
 #include "Core_Common.h"
 
-#include "Config.h"
-#include "EntityComponentSystem.h"
-#include "NativeReflection.h"
-#include "Application.h"
+#include "Config/Config.h"
+#include "EntityComponent/EntityComponentSystem.h"
+#include "NativeReflection/NativeReflection.h"
+#include "Application/Application.h"
 #include "Log.h"
 #include "Project.h"
 #include "Directories.h"
-#include "ManagedAssembly.h"
+#include "Mono/ManagedAssembly.h"
 
-#include "JobManager.h"
-#include "Job.h"
-#include "Frame.h"
+#include "Jobs/JobManager.h"
+#include "Jobs/Job.h"
+#include "Jobs/Frame.h"
 
 namespace Vanguard
 {

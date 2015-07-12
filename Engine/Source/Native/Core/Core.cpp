@@ -2,10 +2,10 @@
 #include <ostream>
 #include <thread>
 
-#include "ManagedClass.h"
-#include "ModuleManager.h"
-#include "IModule.h"
-#include "NativeReflection.h"
+#include "Mono/ManagedClass.h"
+#include "Modules/ModuleManager.h"
+#include "Modules/IModule.h"
+#include "NativeReflection/NativeReflection.h"
 
 
 namespace Vanguard

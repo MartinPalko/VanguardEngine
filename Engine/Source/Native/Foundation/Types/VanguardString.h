@@ -6,7 +6,7 @@
 
 #include "juce_core.h"
 
-#include "DynamicArray.h"
+#include "Collections/DynamicArray.h"
 #include "IntegerDefs.h"
 
 namespace Vanguard

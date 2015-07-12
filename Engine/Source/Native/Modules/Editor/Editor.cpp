@@ -1,6 +1,6 @@
 #include "Editor.h"
 
-#include "ModuleDeclaration.h"
+#include "Modules/ModuleDeclaration.h"
 
 namespace Vanguard_Editor
 {

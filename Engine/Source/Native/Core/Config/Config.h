@@ -3,10 +3,12 @@
 #include "ConfigTable.h"
 #include "ConfigVar.h"
 
-#include "Int32ConfigVar.h"
-#include "FloatConfigVar.h"
-#include "BooleanConfigVar.h"
-#include "StringConfigVar.h"
+#include "ConfigVars/Int32ConfigVar.h"
+#include "ConfigVars/FloatConfigVar.h"
+#include "ConfigVars/BooleanConfigVar.h"
+#include "ConfigVars/StringConfigVar.h"
+
+#include "Config/ConfigFile.h"
 
 // Macros for easy declaration of config variables.
 #define int32_Config(varName, section, configFile, defaultValue) const Vanguard::Int32ConfigVar varName = Vanguard::Int32ConfigVar(configFile,section,#varName,defaultValue);

@@ -1,6 +1,7 @@
 #pragma once
-#include "Platform.h"
+#include "Platforms/Platform.h"
 
+#include "Mutex.h"
 #include "FilePath.h"
 #include "IntegerDefs.h"
 #include "Quaternion.h"

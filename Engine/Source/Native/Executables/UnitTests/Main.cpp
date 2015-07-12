@@ -3,18 +3,18 @@
 // Comment out headers of unit tests you want to disable
 
 // Foundation
-#include "DictionaryTest.h"
-#include "FileSystemTest.h"
-#include "HashtableTest.h"
-#include "MathFunctionsTest.h"
-#include "StringIDTest.h"
-#include "StringTest.h"
-#include "VectorTest.h"
-#include "ConfigFileTest.h"
+#include "Tests/Foundation/DictionaryTest.h"
+#include "Tests/Foundation/FileSystemTest.h"
+#include "Tests/Foundation/HashtableTest.h"
+#include "Tests/Foundation/MathFunctionsTest.h"
+#include "Tests/Foundation/StringIDTest.h"
+#include "Tests/Foundation/StringTest.h"
+#include "Tests/Foundation/VectorTest.h"
 
 // Core
-#include "EntityComponentTest.h"
-#include "NativeReflectionTest.h"
+#include "Tests/Core/EntityComponentTest.h"
+#include "Tests/Core/NativeReflectionTest.h"
+#include "Tests/Core/ConfigFileTest.h"
 
 int main(int argc, char **argv)
 {

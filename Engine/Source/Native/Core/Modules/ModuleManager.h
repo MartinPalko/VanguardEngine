@@ -4,7 +4,7 @@
 #include "Core_Common.h"
 #include "IModule.h"
 
-#include "ManagedObject.h"
+#include "Mono/ManagedObject.h"
 
 namespace Vanguard
 {

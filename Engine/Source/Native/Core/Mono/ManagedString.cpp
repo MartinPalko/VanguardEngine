@@ -1,5 +1,5 @@
 #include "ManagedString.h"
-#include "VanguardString.h"
+#include "Types/VanguardString.h"
 
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>

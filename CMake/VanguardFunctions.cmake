@@ -171,8 +171,9 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 		ENDFOREACH()
 		
 		# Need to include directories of source files so headers can be found
-		GET_DIRECTORIES(includeDirs "${projectSources}")
-		TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${includeDirs})
+		#GET_DIRECTORIES(includeDirs "${projectSources}")
+		#TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${includeDirs})
+		TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${projectPath})
 	ENDIF()
 	
 	MESSAGE("Linking dependencies for ${projectName} ")

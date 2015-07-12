@@ -1,6 +1,6 @@
 #pragma once
 #include "Editor_Common.h"
-#include "IModule.h"
+#include "Modules/IModule.h"
 
 namespace Vanguard_Editor
 {

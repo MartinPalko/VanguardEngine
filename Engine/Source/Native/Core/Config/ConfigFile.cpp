@@ -1,4 +1,6 @@
 #include "ConfigFile.h"
+#include "Utility/FileSystem.h"
+#include "Log.h"
 
 namespace Vanguard
 {

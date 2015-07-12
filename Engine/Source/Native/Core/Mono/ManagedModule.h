@@ -4,7 +4,7 @@
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/debug-helpers.h>
 
-#include "IModule.h"
+#include "Modules/IModule.h"
 #include "ManagedObject.h"
 
 namespace Vanguard

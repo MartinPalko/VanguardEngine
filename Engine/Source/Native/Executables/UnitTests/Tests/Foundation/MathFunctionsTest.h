@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "MathFunctions.h"
+#include "Utility/MathFunctions.h"
 
 namespace Vanguard
 {

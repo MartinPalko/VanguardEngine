@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Foundation.h"
-#include "Config.h"
+#include "Config/Config.h"
 
 struct _MonoDomain;
 struct _MonoAssembly;
 struct _MonoImage;
-class _MonoString;
+struct _MonoString;
 
 namespace Vanguard
 {
@@ -28,9 +28,6 @@ namespace Vanguard
 		ManagedAssembly(const String& aMonoAssemblyName);
 		~ManagedAssembly();
 
-		void AddInternalCall(String aManagedFunction, const void* aNativeFunction)
-		{
-			mono_add_internal_call(aManagedFunction.GetCharPointer(), aNativeFunction);			
-		}
+		void AddInternalCall(String aManagedFunction, const void* aNativeFunction);
 	};
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "EmptyProject_Common.h"
-#include "IModule.h"
+#include "Modules/IModule.h"
 
 namespace EmptyProject
 {

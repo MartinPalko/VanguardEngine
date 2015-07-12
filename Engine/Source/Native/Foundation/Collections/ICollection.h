@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IntegerDefs.h"
+#include "Types/IntegerDefs.h"
 
 namespace Vanguard
 {

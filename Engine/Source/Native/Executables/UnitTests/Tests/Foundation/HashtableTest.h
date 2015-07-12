@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
-#include "VanguardString.h"
-#include "StringID.h"
-#include "Hashtable.h"
+#include "Types/VanguardString.h"
+#include "Types/StringID.h"
+#include "Collections/Hashtable.h"
 
 namespace Vanguard
 {

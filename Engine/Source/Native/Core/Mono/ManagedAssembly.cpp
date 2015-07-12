@@ -42,5 +42,10 @@ namespace Vanguard
 	{
 		mono_jit_cleanup(domain);
 	}
+
+	void ManagedAssembly::AddInternalCall(String aManagedFunction, const void* aNativeFunction)
+	{
+		mono_add_internal_call(aManagedFunction.GetCharPointer(), aNativeFunction);
+	}
 }
 

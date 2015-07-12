@@ -1,6 +1,6 @@
 #include "Log.h"
-#include "Platform.h"
-#include "Config.h"
+#include "Platforms/Platform.h"
+#include "Config/Config.h"
 #include "Core.h"
 
 namespace Vanguard

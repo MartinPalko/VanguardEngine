@@ -1,0 +1,5 @@
+$ cat .gitattributes
+Engine/Source/ThirdParty/* linguist-vendored
+CMake/Linux/* linguist-vendored
+CMake/OSX/* linguist-vendored
+CMake/Windows/* linguist-vendored

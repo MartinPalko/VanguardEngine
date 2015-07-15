@@ -96,18 +96,19 @@ MACRO (IMPLEMENT_PROJECT projType projName projDependencies sourceFiles)
 	
 	#Add it to list of projects to add at a later time.
 	LIST(APPEND deferredAddProjects ${projName})
-	SET(deferredAddProjects ${deferredAddProjects} PARENT_SCOPE)
+	#SET(deferredAddProjects ${deferredAddProjects} PARENT_SCOPE)
+	SET(deferredAddProjects ${deferredAddProjects} CACHE INTERNAL "deferredAddProjects")
 	
 	#Create variables for project type, sources, and dependencies for use later.
 	SET("${projName}_Type" "${projType}")
 	SET("${projName}_Sources" "${absoluteSourceFiles}")
 	SET("${projName}_Dependencies" "${projDependencies}")
-	SET("${projName}_Path" "${CMAKE_CURRENT_SOURCE_DIR}")	
+	SET("${projName}_Path" "${CMAKE_CURRENT_SOURCE_DIR}")
 	
-	SET("${projName}_Type" "${projType}" PARENT_SCOPE)
-	SET("${projName}_Sources" "${absoluteSourceFiles}" PARENT_SCOPE)
-	SET("${projName}_Dependencies" "${projDependencies}" PARENT_SCOPE)
-	SET("${projName}_Path" "${CMAKE_CURRENT_SOURCE_DIR}" PARENT_SCOPE)
+	SET("${projName}_Type" "${projType}" CACHE INTERNAL "${projName}_Type")
+	SET("${projName}_Sources" "${absoluteSourceFiles}" CACHE INTERNAL "${projName}_Sources")
+	SET("${projName}_Dependencies" "${projDependencies}" CACHE INTERNAL "${projName}_Dependencies")
+	SET("${projName}_Path" "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "${projName}_Path")
 ENDMACRO ()
 
 FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
@@ -191,19 +192,13 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 				IF(${defferedProj} MATCHES ${dependency})
 					SET(IsThirdparty "false")
 				ENDIF()
-			ENDFOREACH()			
-			
-			if (IsThirdparty)
-			MESSAGE("TRUE------------")
-			ELSE()
-			MESSAGE("FALSE------------")
-			ENDIF()
+			ENDFOREACH()
 			
 			if (${IsThirdparty})
 				GET_TARGET_PROPERTY(publicIncludeDirectories ${dependency} INCLUDE_DIRECTORIES)	
 				IF (publicIncludeDirectories)
 					TARGET_INCLUDE_DIRECTORIES(${projectName} PRIVATE ${publicIncludeDirectories})
-				ELSE()
+				ELSEIF(NOT ${dependency}_INCLUDES)
 					MESSAGE("Warning: ${dependency} has no includes")
 				ENDIF()		
 				
@@ -212,7 +207,7 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 				
 				IF (interfaceIncludeDirectories)
 					TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${interfaceIncludeDirectories})
-				ELSE()
+				ELSEIF(NOT ${dependency}_INCLUDES)
 					MESSAGE("Warning: ${dependency} has no interface includes")
 				ENDIF()		
 			endif()
@@ -221,10 +216,10 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 			#Thirdparty libs link privately.
 			if (NOT ${IsThirdparty})
 				TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${dependency})
-				MESSAGE("public target ${dependency}")
+				MESSAGE("  public dependency ${dependency}")
 			ELSE()
 				TARGET_LINK_LIBRARIES(${projectName} PRIVATE ${dependency})
-				MESSAGE("private target ${dependency}")
+				MESSAGE("  private dependency ${dependency}")
 			endif()
 			
 			TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${dependency})
@@ -268,7 +263,7 @@ MACRO (IMPLEMENT_EXECUTABLE executableName dependencies)
 	IMPLEMENT_PROJECT_AUTOFINDSOURCES("EXECUTABLE" "${executableName}" "${dependencies}")	
 ENDMACRO ()
 
-MACRO (FIND_VANGUARD_PROJECTS_IN_FOLDER searchInFolder)
+FUNCTION (FIND_VANGUARD_PROJECTS_IN_FOLDER searchInFolder)
 	FILE(GLOB_RECURSE projectConfigFiles "${searchInFolder}/*project.cfg")
 	
 	FOREACH(projectConfigFile ${projectConfigFiles})
@@ -278,7 +273,7 @@ MACRO (FIND_VANGUARD_PROJECTS_IN_FOLDER searchInFolder)
 		CREATE_VANGUARD_PROJECT("${projectFolder}" "${projectName}")	
 	
 	ENDFOREACH()
-ENDMACRO()
+ENDFUNCTION()
 
 MACRO (CREATE_VANGUARD_PROJECT projectFolder projectName)
 
@@ -287,15 +282,6 @@ MACRO (CREATE_VANGUARD_PROJECT projectFolder projectName)
 	SET(Vanguard_Projects ${Vanguard_Projects} projectName)
 	
 	FILE(GLOB_RECURSE CSharpProjects "${projectFolder}/Source/*.csproj")
-	FOREACH(CSharpProject ${CSharpProjects})
-		
-		GET_FILENAME_COMPONENT(CSharpProjectName ${CSharpProject} NAME_WE)
-		MESSAGE("Adding ${CSharpProjectName}")
-		INCLUDE_EXTERNAL_MSPROJECT("${CSharpProjectName}" "${CSharpProject}" PLATFORM "Any CPU")
-		
-		GET_FILENAME_COMPONENT(dir_path ${CSharpProject} DIRECTORY) # Get folder path
-		PUT_IN_FOLDER_RELATIVE_ROOT ("${CSharpProjectName}" "${dir_path}/..")
-	ENDFOREACH()
 	
 	FIND_TOPLEVEL_MAKELISTS(makeLists "${EngineRoot}/Projects/")
 	
@@ -314,8 +300,7 @@ ENDMACRO()
 MACRO (VANGUARD_CREATE_PROJECT_LAUNCHER projectFolder projectName)
 	SET(launcherFolder "${EngineRoot}/Engine/Source/Native/Executables/ProjectLauncher")
 	FILE (GLOB_RECURSE sourceFiles "${launcherFolder}/*.h" "${launcherFolder}/*.cpp")
-	MESSAGE("Source files: ${sourceFiles}")
 	IMPLEMENT_PROJECT("EXECUTABLE" "${projectName}_Launcher" "Core" "${sourceFiles}")
-	SET ("${projectName}_Launcher_Path" "${projectFolder}/${projectName}")
+	SET ("${projectName}_Launcher_Path" "${projectFolder}/${projectName}" CACHE INTERNAL "${projectName}_Launcher_Path")
 	SET(projectLaunchers "${projectLaunchers}" ${projectName})
 ENDMACRO()

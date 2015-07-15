@@ -34,7 +34,6 @@ ENDMACRO()
 
 # Recursively find all "CMakeLists.txt" files. Only finds "top level" files, so recursion stops when it finds one.
 FUNCTION (FIND_TOPLEVEL_MAKELISTS return_list_var searchDirectory)
-
 	SET(${return_list_var} "")	 
 	SET(return_list "")
 
@@ -45,9 +44,29 @@ FUNCTION (FIND_TOPLEVEL_MAKELISTS return_list_var searchDirectory)
 		
 	ENDFOREACH()
 	
-	SET(${return_list_var} ${return_list} PARENT_SCOPE)
-	
+	SET(${return_list_var} ${return_list} PARENT_SCOPE)	
 ENDFUNCTION()
+
+# Recursively find all "CMakeLists.txt" files. Only finds "top level" files, so recursion stops when it finds one.
+MACRO (ADD_TOPLEVEL_MAKELISTS searchDirectory)
+
+	# Find all sub directories containting CMakeLists.txt files
+	FIND_TOPLEVEL_MAKELISTS(subMakeLists "${searchDirectory}")
+	GET_DIRECTORIES(libDirectories "${subMakeLists}")
+
+	 # Make sure we're not adding our own (root) directory
+	LIST(REMOVE_ITEM libDirectories ${searchDirectory})
+
+	LINK_DIRECTORIES(${libDirectories})
+
+	# Run CmakeLists.txt scripts for each project.
+	FOREACH(file_path ${libDirectories})
+			MESSAGE("Executing makelist at: ${file_path}")
+			add_subdirectory (${file_path})
+			MESSAGE("")
+	ENDFOREACH()
+
+ENDMACRO()
 
 # Recursively searches the specified folder for "CMakeLists.txt" files. Recursion stops when it finds one.
 FUNCTION (FIND_MAKELISTS_RECURSIVE return_list_var directoryToSearch)

@@ -40,10 +40,10 @@ ENDIF()
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS "ON")
 
 # First do thirdparty
-ADD_SUBDIRECTORY ("${EngineRoot}/ThirdParty")
+ADD_TOPLEVEL_MAKELISTS("${EngineRoot}/ThirdParty")
 
 # Then engine
-ADD_SUBDIRECTORY ("${EngineRoot}/Engine/Source")
+ADD_TOPLEVEL_MAKELISTS("${EngineRoot}/Engine/Source")
 
 # Then projects
 FIND_VANGUARD_PROJECTS_IN_FOLDER("${EngineRoot}/Projects")

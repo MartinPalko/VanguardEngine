@@ -43,7 +43,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Engine\Source\Managed\ManagedCore\ManagedCore.csproj">
+    <ProjectReference Include="..\..\..\..\Engine\Source\ManagedCore\ManagedCore.csproj">
       <Project>{80F18900-C421-4B35-8336-629BEF9EE30A}</Project>
       <Name>ManagedCore</Name>
     </ProjectReference>

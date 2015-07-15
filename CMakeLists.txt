@@ -45,6 +45,9 @@ ADD_TOPLEVEL_MAKELISTS("${EngineRoot}/ThirdParty")
 # Then engine
 ADD_TOPLEVEL_MAKELISTS("${EngineRoot}/Engine/Source")
 
+# Then modules
+ADD_TOPLEVEL_MAKELISTS("${EngineRoot}/Modules")
+
 # Then projects
 FIND_VANGUARD_PROJECTS_IN_FOLDER("${EngineRoot}/Projects")
 

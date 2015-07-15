@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
+#include <cstring>
 #include <sstream>
 #include <algorithm>
 #include <cctype>
-#include <xfunctional>
 
 #include "Collections/DynamicArray.h"
 #include "IntegerDefs.h"
@@ -15,7 +15,7 @@ namespace Vanguard
 	#define FALSE_STRING "false"
 
 	class FOUNDATION_API String
-	{		
+	{
 	private:
 		std::string data;
 

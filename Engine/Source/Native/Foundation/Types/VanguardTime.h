@@ -35,11 +35,11 @@ namespace Vanguard
 
 		inline int64 InMilliseconds() const { return (int64)(InSeconds() * 1000); }
 
-		inline double InSeconds() const;
-		inline double InMinutes() const;
-		inline double InHours() const;
-		inline double InDays() const;
-		inline double InWeeks() const;
+		double InSeconds() const;
+		double InMinutes() const;
+		double InHours() const;
+		double InDays() const;
+		double InWeeks() const;
 
 		// Returns a readable textual description of the time.
 		// Eg. "1 min 4 secs", "1 hr 45 mins", "2 weeks 5 days", "140 ms"
@@ -83,7 +83,7 @@ namespace Vanguard
 		false, it will always work in GMT.
 		*/
 		Time(int32 aYear, int32 aMonth, int32 aDay, int32 aHours, int32 aMinutes, int32 aSeconds = 0, int32 aMilliseconds = 0, bool aUseLocalTime = true);
-		
+
 		Time(int64 aMiliseconds);
 		Time(const Time& aOther);
 		Time& operator = (const Time& aOther);
@@ -95,7 +95,7 @@ namespace Vanguard
 
 		// Returns the time as a number of milliseconds since Jan 1st 1970.
 		int64 ToMilliseconds() const;
-							
+
 		//Returns the year.
 		int32 GetYear() const;
 
@@ -141,10 +141,10 @@ namespace Vanguard
 		bool IsDaylightSavingTime() const;
 
 		// Returns a 3-character string to indicate the local timezone.
-		inline String GetTimeZone() const;
+		String GetTimeZone() const;
 
 		// Quick way of getting a string version of a date and time.
-		inline String ToString(bool aIncludeDate, bool aIncludeTime, bool aIncludeSeconds = true, bool aUse24HourClock = false) const;
+		String ToString(bool aIncludeDate, bool aIncludeTime, bool aIncludeSeconds = true, bool aUse24HourClock = false) const;
 
 		// Returns the name of a day of the week. Range is 0 to 11, day 0 is Sunday.
 		static String GetWeekdayName(int aDayNumber);
@@ -187,9 +187,9 @@ namespace Vanguard
 
 		inline Timespan operator- (const Time& aOther) { return Timespan::FromMilliseconds(ToMilliseconds() - aOther.ToMilliseconds()); }
 
-		//inline Time& operator+= (const Timespan& aDeltaTime) 
-		//{ 
-		//	this->data += aDeltaTime.data; 
+		//inline Time& operator+= (const Timespan& aDeltaTime)
+		//{
+		//	this->data += aDeltaTime.data;
 		//	return *this;
 		//}
 

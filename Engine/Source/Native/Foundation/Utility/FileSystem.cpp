@@ -1,4 +1,3 @@
-#pragma once
 #include "FileSystem.h"
 #include "juce_core.h"
 
@@ -154,7 +153,7 @@ namespace Vanguard
 			return "";
 
 		juce::FileInputStream* inStream = aFilePath.file->createInputStream();
-		String fileText = inStream->readEntireStreamAsString().getCharPointer();
+		String fileText = String(inStream->readEntireStreamAsString().getCharPointer());
 		delete inStream;
 		return fileText;
 	}

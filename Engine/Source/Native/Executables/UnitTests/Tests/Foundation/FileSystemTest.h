@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 
+#include "Types/FilePath.h"
 #include "Utility/FileSystem.h"
 
 namespace Vanguard

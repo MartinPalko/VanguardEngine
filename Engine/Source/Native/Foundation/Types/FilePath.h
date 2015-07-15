@@ -30,7 +30,7 @@ namespace Vanguard
 
 		~FilePath();
 
-		
+
 
 		// ----------- Operators -----------
 
@@ -38,7 +38,7 @@ namespace Vanguard
 
 		inline bool operator== (const FilePath& other) const { return other.GetFullPathName() == GetFullPathName(); }
 		inline bool operator!= (const FilePath& other) const { return other.GetFullPathName() != GetFullPathName(); }
-		
+
 		inline FilePath operator+ (const FilePath& other) const { return Append(other.GetFullPathName()); }
 		inline FilePath operator+ (const String& str) const { return Append(str); }
 		inline FilePath operator+ (const char* charPointer) const { return Append(charPointer); }
@@ -47,28 +47,28 @@ namespace Vanguard
 
 		// ----------- Methods -----------
 
-		// Gets the entire path name, including drive, filename, and extension if applicable.		
-		inline const String GetFullPathName() const;
+		// Gets the entire path name, including drive, filename, and extension if applicable.
+		const String GetFullPathName() const;
 
 		// Gets the filename including extension. If it's a directory, will get the name of the final folder.
-		inline String GetFilename() const;
+		String GetFilename() const;
 
 		// Returns filename, excluding the extension
-		inline String GetFilenameWithoutExtension() const;
+		String GetFilenameWithoutExtension() const;
 
 		// Gets the extension of the file, including the period.
-		inline String GetFileExtension() const;
+		String GetFileExtension() const;
 
 		// Check if the file has the given extension.
-		inline bool HasFileExtension(const String& aExtension) const;
+		bool HasFileExtension(const String& aExtension) const;
 
 		// Get the directory this filepath resides in.
-		inline FilePath GetParentDirectory() const;
-		
+		FilePath GetParentDirectory() const;
+
 		// Make a new filepath that is relative to this one based on the provided relative path
-		inline FilePath GetRelative(const String& aRelativePath) const;
+		FilePath GetRelative(const String& aRelativePath) const;
 
 		// Return a new FilePah with text appended directly to the full path name. Useful for adding file extensions.
-		inline FilePath Append(const String& aRelativePath) const;
+		FilePath Append(const String& aRelativePath) const;
 	};
 }

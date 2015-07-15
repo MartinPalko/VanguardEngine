@@ -1,9 +1,9 @@
 #pragma once
-#include "ConfigVar.h"
+#include "../ConfigVar.h"
 #include "Core_Common.h"
 
 namespace Vanguard
-{	
+{
 	class BooleanConfigVar : public ConfigVar<bool>
 	{
 	public:

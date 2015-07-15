@@ -10,7 +10,7 @@ namespace Vanguard
 	private:
 		uint64 Hash;
 
-		inline void HashString(const String& aString);
+		void HashString(const String& aString);
 	public:
 		inline bool operator == (const StringID& aOther) const { return Hash == aOther.Hash; }
 		inline bool operator != (const StringID& aOther) const { return Hash != aOther.Hash; }

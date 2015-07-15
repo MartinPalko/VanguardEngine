@@ -61,10 +61,10 @@ namespace Vanguard
 
 	void Log::AddInternalCalls()
 	{
-		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Message", Log::Message_);
-		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Warning", Log::Warning_);
-		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Error", Log::Error_);
-		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Exception", Log::Exception_);
+		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Message", (const void*)Log::Message_);
+		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Warning", (const void*)Log::Warning_);
+		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Error", (const void*)Log::Error_);
+		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Exception", (const void*)Log::Exception_);
 	}
 
 
@@ -96,7 +96,7 @@ namespace Vanguard
 		if (!flushingLog)
 		{
 			flushingLog = true;
-			
+
 			String textToWrite = "";
 
 			for (size_t i = 0; i < unflushedEntries.Count(); i++)

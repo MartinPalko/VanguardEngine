@@ -1,7 +1,11 @@
 #include "Log.h"
+#include <iostream>
+
 #include "Platforms/Platform.h"
 #include "Config/Config.h"
 #include "Core.h"
+#include "Mono/ManagedAssembly.h"
+
 
 namespace Vanguard
 {
@@ -45,7 +49,10 @@ namespace Vanguard
 		fileName = fileName.Replace(' ', '-');
 		fileName = fileName.Replace(':', '.');
 
-		logFile = FileSystem::MakeUniqueFileName(Directories::GetLogDirectory().GetRelative(fileName + ".log"));
+		logFile = Directories::GetLogDirectory();
+		logFile = logFile.GetRelative(fileName + ".log");
+		logFile = FileSystem::MakeUniqueFileName(logFile);
+
 		FileSystem::CreateFile(logFile);
 		Flush();
 

@@ -8,7 +8,7 @@
 
 namespace Vanguard
 {
-	struct ConfigSection
+	struct CORE_API ConfigSection
 	{
 		friend class ConfigFile;
 	private:
@@ -35,8 +35,8 @@ namespace Vanguard
 		String GetValue(const String& aSection, const String& aKey);
 		DynamicArray<String> GetArrayValues(const String& aSection, const String& aKey);
 
-		void LoadAdditive(FilePath aConfigFilePath);
+		void LoadAdditive(const FilePath& aConfigFilePath);
 
-		static ConfigFile Load(FilePath aConfigFilePath);		
+		static ConfigFile Load(const FilePath& aConfigFilePath);
 	};
 }

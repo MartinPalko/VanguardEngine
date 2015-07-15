@@ -1,22 +1,16 @@
 #pragma once
-
-#include "Engine/Source/ThirdParty/ZLib/zlib-1.2.8/zlib.h"
-
 #include "VanguardString.h"
 #include "IntegerDefs.h"
+#include "Foundation_Common.h"
 
 namespace Vanguard
 {
-	class StringID
+	class FOUNDATION_API StringID
 	{
 	private:
 		uint64 Hash;
 
-		inline void HashString(const String& aString)
-		{
-			Hash = 0;
-			Hash = crc32((uLong)Hash, (const Byte*)(aString.GetCharPointer()), (uLong)aString.GetLength());
-		}
+		inline void HashString(const String& aString);
 	public:
 		inline bool operator == (const StringID& aOther) const { return Hash == aOther.Hash; }
 		inline bool operator != (const StringID& aOther) const { return Hash != aOther.Hash; }

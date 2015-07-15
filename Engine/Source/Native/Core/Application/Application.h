@@ -5,7 +5,7 @@ namespace Vanguard
 {
 	class Core;
 
-	struct ApplicationArguments
+	struct CORE_API ApplicationArguments
 	{
 	public:
 		ApplicationArguments(int aArgC, char** aArgV)

@@ -21,7 +21,7 @@ namespace Vanguard
 		String moduleName;
 		String moduleType;
 		FilePath filePath;
-		juce::DynamicLibrary* dynamicLibReference;
+		DynamicLibrary* dynamicLibReference;
 		IModule* moduleInstance;
 
 	protected:

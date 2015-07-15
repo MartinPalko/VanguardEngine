@@ -2,9 +2,11 @@
 #include "Utility/MathFunctions.h"
 #include "Vector2.h"
 
+#include "Foundation_Common.h"
+
 namespace Vanguard
 {
-	class Rect
+	class FOUNDATION_API Rect
 	{
 	public:
 		Vector2 size;

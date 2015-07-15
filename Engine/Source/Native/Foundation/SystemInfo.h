@@ -1,15 +1,12 @@
 #pragma once
+#include "Foundation_Common.h"
 #include "Types/IntegerDefs.h"
-#include "juce_core.h"
 
 namespace Vanguard
 {
-	class SystemInfo
+	class FOUNDATION_API SystemInfo
 	{
 	public:
-		static uint32 GetNumberOfCores()
-		{
-			return juce::SystemStats::getNumCpus();
-		}
+		static uint32 GetNumberOfCores();
 	};
 }

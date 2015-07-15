@@ -4,6 +4,8 @@
 #include "ICollection.h"
 #include "Types/IntegerDefs.h"
 
+#include "Foundation_Common.h"
+
 namespace Vanguard
 {
 	template<class T>

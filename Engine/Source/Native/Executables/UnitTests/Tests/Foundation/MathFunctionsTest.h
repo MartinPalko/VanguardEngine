@@ -26,7 +26,7 @@ namespace Vanguard
 			int32 iRandMax = iRandMin + Math::IRandomRange(iRandMin, iRandMin + 1000);
 			EXPECT_GE(iRandMax, iRandMin);
 			int32 iRand = Math::IRandomRange(iRandMin, iRandMax);
-			std::cout << "Min : " << iRandMin << " Max: " << iRandMax << " Value: " << iRand << "\n";
+			//std::cout << "Min : " << iRandMin << " Max: " << iRandMax << " Value: " << iRand << "\n";
 			EXPECT_LE(iRand, iRandMax);
 			EXPECT_GE(iRand, iRandMin);
 		}
@@ -37,7 +37,7 @@ namespace Vanguard
 			float fRandMax = fRandMin + Math::FRandomRange(fRandMin, fRandMin + 1000.0f);
 			EXPECT_GE(fRandMax, fRandMin);
 			float fRand = Math::FRandomRange(fRandMin, fRandMax);
-			std::cout << "Min : " << fRandMin << " Max: " << fRandMax << " Value: " << fRand << "\n";
+			//std::cout << "Min : " << fRandMin << " Max: " << fRandMax << " Value: " << fRand << "\n";
 			EXPECT_LE(fRand, fRandMax);
 			EXPECT_GE(fRand, fRandMin);
 		}
@@ -45,7 +45,7 @@ namespace Vanguard
 		for (int i = 0; i < 10; i++)
 		{
 			float fRand = Math::FRandom();
-			std::cout << " Value: " << fRand << "\n";
+			//std::cout << " Value: " << fRand << "\n";
 			EXPECT_LE(fRand, 1);
 			EXPECT_GE(fRand, 0);
 		}

@@ -26,14 +26,10 @@ namespace Vanguard
 		std::string stdFromVanguard = vanguardFromLiteral;
 		std::string stdFromLiteral = "test";
 
-		juce::String juceFromVanguard = vanguardFromLiteral;
-		juce::String juceFromLiteral = "test";
-
 		const char* charPointerFromVanguard = vanguardFromLiteral.GetCharPointer();
 		const char* charPointerFromLiteral = "test";
 
 		String vanguardFromStd = stdFromLiteral;
-		String vanguardFromJuce = juceFromLiteral;
 		String vanguardFromCharPointer = charPointerFromLiteral;
 
 		// Verify all types have their values set properly, and can be compared interchangeably with vanguard string
@@ -46,11 +42,6 @@ namespace Vanguard
 		EXPECT_EQ(stdFromVanguard, vanguardFromLiteral); // Flip lhs with rhs
 		EXPECT_EQ(stdFromLiteral, vanguardFromLiteral);
 
-		EXPECT_EQ(vanguardFromLiteral, juceFromVanguard); // Vanguard string with juce string
-		EXPECT_EQ(vanguardFromLiteral, juceFromLiteral);
-		EXPECT_EQ(juceFromVanguard, vanguardFromLiteral); // Flip lhs with rhs
-		EXPECT_EQ(juceFromLiteral, vanguardFromLiteral);
-
 		EXPECT_EQ(vanguardFromLiteral, charPointerFromVanguard); // Vanguard string with const char*
 		EXPECT_EQ(vanguardFromLiteral, charPointerFromLiteral);
 		EXPECT_EQ(charPointerFromVanguard, vanguardFromLiteral); // Flip lhs with rhs
@@ -61,7 +52,6 @@ namespace Vanguard
 
 		// Verify we can go from other types back to vanguard as well.
 		EXPECT_EQ("test", vanguardFromStd);
-		EXPECT_EQ("test", vanguardFromJuce);
 		EXPECT_EQ("test", vanguardFromCharPointer);
 	}
 

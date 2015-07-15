@@ -1,10 +1,11 @@
 #pragma once
 #include "Utility/MathFunctions.h"
 #include <math.h>
+#include "Foundation_Common.h"
 
 namespace Vanguard
 {
-	struct Vector3
+	struct FOUNDATION_API Vector3
 	{
 	public:
 		float x;

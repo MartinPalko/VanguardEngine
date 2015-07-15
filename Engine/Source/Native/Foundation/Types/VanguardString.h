@@ -3,18 +3,18 @@
 #include <sstream>
 #include <algorithm>
 #include <cctype>
-
-#include "juce_core.h"
+#include <xfunctional>
 
 #include "Collections/DynamicArray.h"
 #include "IntegerDefs.h"
+#include "Foundation_Common.h"
 
 namespace Vanguard
 {
 	#define TRUE_STRING "true"
 	#define FALSE_STRING "false"
 
-	class String
+	class FOUNDATION_API String
 	{		
 	private:
 		std::string data;
@@ -41,11 +41,6 @@ namespace Vanguard
 
 		// Create from single char
 		String(const char& aChar) { data = aChar; }
-
-		// Create from and cast to juce string
-		String(const juce::String& aJuceString) { data = std::string(aJuceString.getCharPointer()); }
-		inline operator const juce::String() const { return juce::String(data.c_str()); }
-		inline operator const juce::StringRef() const { return data.c_str(); }
 
 		inline void operator += (const String& aOther) { data = Append(aOther).data; }
 
@@ -395,10 +390,6 @@ namespace Vanguard
 	// Comparison to char*
 	inline bool operator == (const String& lhs, const char* rhs) { return lhs == String(rhs); }
 	inline bool operator == (const char* lhs, const String& rhs) { return rhs == String(lhs); }
-
-	// Comparison to juce::String
-	inline bool operator == (const String& lhs, const juce::String& rhs) { return lhs == String(rhs); }
-	inline bool operator == (const juce::String& lhs, const String& rhs) { return rhs == String(lhs); }
 
 	// Implement osstream support
 	inline ::std::ostream& operator<<(::std::ostream& os, const String& aString) { return os << aString.GetCharPointer(); }

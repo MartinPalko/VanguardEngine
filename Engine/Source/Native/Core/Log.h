@@ -1,12 +1,10 @@
 #pragma once
 
 #include "Core_Common.h"
+#include "Foundation.h"
 #include "Mono/ManagedString.h"
 
-#include <mono/jit/jit.h>
-#include <mono/metadata/assembly.h>
-#include <mono/metadata/debug-helpers.h>
-#include <mono/metadata/mono-config.h>
+struct _MonoString;
 
 namespace Vanguard
 {
@@ -98,11 +96,6 @@ namespace Vanguard
 		static inline void Warning(const String& aMessage, const String& aChannel = "") { Write(aMessage, LogEntryErrorLevel::Warning, aChannel); }
 		static inline void Error(const String& aMessage, const String& aChannel = "") { Write(aMessage, LogEntryErrorLevel::Error, aChannel); }
 		static inline void Exception(const String& aMessage, const String& aChannel = "") { Write(aMessage, LogEntryErrorLevel::Exception, aChannel); }
-
-		static void MessageCharP(MonoString* aMessage, MonoString* aChannel)
-		{
-			Write(mono_string_to_utf8(aMessage), LogEntryErrorLevel::Message, mono_string_to_utf8(aChannel));
-		}
 
 		static void Flush();
 	};

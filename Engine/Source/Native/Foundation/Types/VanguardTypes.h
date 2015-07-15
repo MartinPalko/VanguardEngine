@@ -1,6 +1,7 @@
 #pragma once
 #include "Platforms/Platform.h"
 
+#include "DynamicLibrary.h"
 #include "Mutex.h"
 #include "FilePath.h"
 #include "IntegerDefs.h"

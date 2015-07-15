@@ -25,9 +25,9 @@ namespace Vanguard
 
 	ModuleInfo* ModuleInfo::LoadModuleAtPath(FilePath aModulePath)
 	{
-		juce::DynamicLibrary* tempLoadedLib = new juce::DynamicLibrary();
+		DynamicLibrary* tempLoadedLib = new DynamicLibrary();
 
-		if (!tempLoadedLib->open(aModulePath.GetFilename()))
+		if (!tempLoadedLib->Open(aModulePath))
 		{
 			// Could not load dynamic library
             DEBUG_ERROR("Could not load library " + aModulePath.GetFilename());
@@ -35,7 +35,7 @@ namespace Vanguard
 			return nullptr;
 		}
 
-		MODULE_INST_FUNCTION InstantiationFunction = (MODULE_INST_FUNCTION)tempLoadedLib->getFunction(InstantiateFunctionName);
+		MODULE_INST_FUNCTION InstantiationFunction = (MODULE_INST_FUNCTION)tempLoadedLib->GetFunction(InstantiateFunctionName.GetCharPointer());
 
 		if (InstantiationFunction == nullptr)
 		{
@@ -60,16 +60,16 @@ namespace Vanguard
 	{
 		if (!GetIsLoaded())
 		{
-			dynamicLibReference = new juce::DynamicLibrary();
+			dynamicLibReference = new DynamicLibrary();
 
-			if (!dynamicLibReference->open(filePath.GetFilename()))
+			if (!dynamicLibReference->Open(filePath))
 			{
 				// Could not load dynamic library
 				UnloadModule();
 				throw Exception(String("Could not load module " + filePath.GetFullPathName()).GetCharPointer());
 			}
 
-			MODULE_INST_FUNCTION InstantiationFunction = (MODULE_INST_FUNCTION)dynamicLibReference->getFunction(InstantiateFunctionName);
+			MODULE_INST_FUNCTION InstantiationFunction = (MODULE_INST_FUNCTION)dynamicLibReference->GetFunction(InstantiateFunctionName.GetCharPointer());
 
 			if (InstantiationFunction == nullptr)
 			{
@@ -94,7 +94,7 @@ namespace Vanguard
 
 		if (dynamicLibReference)
 		{
-			dynamicLibReference->close();
+			dynamicLibReference->Close();
 			delete dynamicLibReference;
 			dynamicLibReference = nullptr;
 		}

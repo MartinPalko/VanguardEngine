@@ -1,9 +1,10 @@
 #pragma once
 #include <mutex>
+#include "Foundation_Common.h"
 
 namespace Vanguard
 {
-	class Mutex
+	class FOUNDATION_API Mutex
 	{
 	private:
 		std::mutex stdMutex;

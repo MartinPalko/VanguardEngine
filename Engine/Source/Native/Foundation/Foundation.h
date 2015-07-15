@@ -6,3 +6,5 @@
 #include "Utility/FileSystem.h"
 #include "Utility/MathFunctions.h"
 #include "SystemInfo.h"
+
+#include "Foundation_Common.h"

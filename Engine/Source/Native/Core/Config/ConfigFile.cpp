@@ -34,7 +34,7 @@ namespace Vanguard
 		return value.Split(',');
 	}
 
-	void ConfigFile::LoadAdditive(FilePath aConfigFilePath)
+	void ConfigFile::LoadAdditive(const FilePath& aConfigFilePath)
 	{
 		if (!FileSystem::FileExists(aConfigFilePath))
 		{
@@ -133,7 +133,7 @@ namespace Vanguard
 		}
 	}
 
-	ConfigFile ConfigFile::Load(FilePath aConfigFilePath)
+	ConfigFile ConfigFile::Load(const FilePath& aConfigFilePath)
 	{
 		ConfigFile newConfig = ConfigFile();
 		newConfig.LoadAdditive(aConfigFilePath);

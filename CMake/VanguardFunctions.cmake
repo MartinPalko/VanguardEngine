@@ -170,10 +170,9 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 			SOURCE_GROUP("${fixed}" FILES ${file}) # Put in group
 		ENDFOREACH()
 		
-		# Need to include directories of source files so headers can be found
-		#GET_DIRECTORIES(includeDirs "${projectSources}")
-		#TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${includeDirs})
-		TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${projectPath})
+		# Project path is a public include directory.
+		TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${projectPath})		
+		
 	ENDIF()
 	
 	MESSAGE("Linking dependencies for ${projectName} ")
@@ -181,22 +180,58 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 	#Now link us to our dependencies
 	FOREACH(dependency ${projectDependencies})
 		IF (${dependency}_INCLUDES)
-			TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${${dependency}_INCLUDES})
+			TARGET_INCLUDE_DIRECTORIES(${projectName} PRIVATE ${${dependency}_INCLUDES})
 		ENDIF()
 		
 		if (TARGET ${dependency})
-			MESSAGE("target ${dependency}")
-		
-			GET_TARGET_PROPERTY(publicIncludeDirectories ${dependency} INCLUDE_DIRECTORIES)		
-			#Verify target has include directories first
-			IF (publicIncludeDirectories)
-				INCLUDE_DIRECTORIES(${publicIncludeDirectories})
+			# Atm, just assume all non-deffered projects are thirdparty. This might need to be changed.
+			SET(IsThirdparty "true")
+			
+			FOREACH(defferedProj deferredAddProjects)
+				IF(${defferedProj} MATCHES ${dependency})
+					SET(IsThirdparty "false")
+				ENDIF()
+			ENDFOREACH()			
+			
+			if (IsThirdparty)
+			MESSAGE("TRUE------------")
+			ELSE()
+			MESSAGE("FALSE------------")
 			ENDIF()
+			
+			if (${IsThirdparty})
+				GET_TARGET_PROPERTY(publicIncludeDirectories ${dependency} INCLUDE_DIRECTORIES)	
+				IF (publicIncludeDirectories)
+					TARGET_INCLUDE_DIRECTORIES(${projectName} PRIVATE ${publicIncludeDirectories})
+				ELSE()
+					MESSAGE("Warning: ${dependency} has no includes")
+				ENDIF()		
+				
+			ELSE()
+				GET_TARGET_PROPERTY(interfaceIncludeDirectories ${dependency} INTERFACE_INCLUDE_DIRECTORIES)	
+				
+				IF (interfaceIncludeDirectories)
+					TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${interfaceIncludeDirectories})
+				ELSE()
+					MESSAGE("Warning: ${dependency} has no interface includes")
+				ENDIF()		
+			endif()
+				
+			
+			#Thirdparty libs link privately.
+			if (NOT ${IsThirdparty})
+				TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${dependency})
+				MESSAGE("public target ${dependency}")
+			ELSE()
+				TARGET_LINK_LIBRARIES(${projectName} PRIVATE ${dependency})
+				MESSAGE("private target ${dependency}")
+			endif()
+			
 			TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${dependency})
 			
 		ELSEIF(${dependency})#Could be linking directly to lib file.
-			MESSAGE("${dependency}")
-			TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${${dependency}})
+			MESSAGE("lib ${dependency}")
+			TARGET_LINK_LIBRARIES(${projectName} PRIVATE ${${dependency}})
 		ELSE()
 			MESSAGE("ERROR: Dependency ${dependency} not found")
 		ENDIF()

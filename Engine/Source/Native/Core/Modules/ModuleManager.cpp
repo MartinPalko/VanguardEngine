@@ -1,7 +1,6 @@
 #include "ModuleManager.h"
 #include "Foundation.h"
 #include "ModuleInfo.h"
-#include "juce_core.h"
 
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>

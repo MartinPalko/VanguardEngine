@@ -4,6 +4,7 @@ sudo: true
 # Only GCC for coverity.
 compiler:
 - gcc
+- clang
 
 # No email notifications
 notifications:

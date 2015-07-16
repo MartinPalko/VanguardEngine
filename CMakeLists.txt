@@ -8,6 +8,9 @@ SET (EngineRoot "${CMAKE_CURRENT_SOURCE_DIR}")
 
 INCLUDE ("${EngineRoot}/CMake/VanguardFunctions.cmake")
 
+# Reset
+SET (deferredAddProjects "" CACHE INTERNAL "deferredAddProjects")
+SET (projectLaunchers "" CACHE INTERNAL projectLaunchers)
 
 # Output all runtime files to the bin folder on build.
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${EngineRoot}/Bin")

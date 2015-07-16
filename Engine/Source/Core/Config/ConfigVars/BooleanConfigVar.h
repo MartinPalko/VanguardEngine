@@ -7,10 +7,12 @@ namespace Vanguard
 	class BooleanConfigVar : public ConfigVar<bool>
 	{
 	public:
-		BooleanConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, const bool& aDefaultValue)
+		BooleanConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, bool aDefaultValue) 
+			: ConfigVar<bool>(aConfigFile, aConfigSection, aName, aDefaultValue)
 		{
-			Initialize(aConfigFile, aConfigSection, aName, aDefaultValue);
+			Register();
 		}
+
 	private:
 		virtual bool FromText(const String& aString) const
 		{

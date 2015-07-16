@@ -7,10 +7,12 @@ namespace Vanguard
 	class StringConfigVar : public ConfigVar<String>
 	{
 	public:
-		StringConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, const String& aDefaultValue)
+		StringConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, String aDefaultValue)
+			: ConfigVar<String>(aConfigFile, aConfigSection, aName, aDefaultValue) 
 		{
-			Initialize(aConfigFile, aConfigSection, aName, aDefaultValue);
+			Register();
 		}
+
 	private:
 		virtual String FromText(const String& aString) const
 		{

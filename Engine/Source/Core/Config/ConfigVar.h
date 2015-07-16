@@ -17,19 +17,25 @@ namespace Vanguard
 	template <class T> class ConfigVar : IConfigVar
 	{
 		T defaultValue;
+
 	protected:
 		virtual T FromText(const String& aString) const = 0;
 		virtual String ToText(const T& aTypeInstance) const = 0;
 
-		void Initialize(const String& aConfigFile, const String& aConfigSection, const String& aName, T aDefaultValue)
+		// This needs to be called by the implementing class' constructor, otherwise the call to ToText() will try to call the pure virtual function.
+		void Register()
+		{			
+			ConfigTable::OnConfigVarCreated(*this, ToText(defaultValue));
+		}
+
+	public:
+		ConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, T aDefaultValue)
 		{
 			file = aConfigFile;
 			section = aConfigSection;
 			name = aName;
 			defaultValue = aDefaultValue;
-			ConfigTable::OnConfigVarCreated(*this, ToText(aDefaultValue));
-		}
-	public:
+		}		
 
 		T GetDefault()
 		{

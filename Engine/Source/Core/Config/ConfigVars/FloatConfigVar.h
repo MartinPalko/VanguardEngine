@@ -7,10 +7,12 @@ namespace Vanguard
 	class FloatConfigVar : public ConfigVar<float>
 	{
 	public:
-		FloatConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, const float& aDefaultValue)
+		FloatConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, float aDefaultValue)
+			: ConfigVar<float>(aConfigFile, aConfigSection, aName, aDefaultValue)
 		{
-			Initialize(aConfigFile, aConfigSection, aName, aDefaultValue);
+			Register();
 		}
+
 	private:
 		virtual float FromText(const String& aString) const
 		{

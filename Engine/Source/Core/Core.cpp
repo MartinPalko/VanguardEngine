@@ -159,8 +159,8 @@ namespace Vanguard
 	{
 		if (worlds.Contains(aWorld))
 		{
-			delete aWorld;
 			worlds.Remove(aWorld);
+			delete aWorld;			
 		}
 	}
 }

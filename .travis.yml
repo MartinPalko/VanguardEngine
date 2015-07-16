@@ -33,7 +33,7 @@ addons:
       name: "MartinPalko/VanguardEngine"
       description: "Build submitted via Travis CI"
     notification_email: jeeprubi@hotmail.com
-    build_command_prepend: ./CMake/Linux/bin/cmake -G "Unix Makefiles" ./Source
+    build_command_prepend:
     build_command: make
     branch_pattern: coverity_scan
 

@@ -53,7 +53,7 @@ namespace Vanguard
 	{
 		if (moduleInfos.count(aModuleName) != 0)
 			moduleInfos[aModuleName]->LoadModule();
-		else
+		else if (managedModuleManager != nullptr)
 			managedModuleManager->CallMethod("LoadModule", aModuleName);
 	}
 
@@ -61,7 +61,7 @@ namespace Vanguard
 	{
 		if (moduleInfos.count(aModuleName) != 0)
 			moduleInfos[aModuleName]->UnloadModule();
-		else
+		else if (managedModuleManager != nullptr)
 			managedModuleManager->CallMethod("UnloadModule", aModuleName);
 	}
 

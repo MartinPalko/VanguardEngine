@@ -75,7 +75,7 @@ namespace Vanguard
 
 	void Log::Write(const String& aMessage, const LogEntryErrorLevel& aErrorLevel, const String& aCategoty)
 	{
-		static Mutex functionMutex = Mutex();
+		static Mutex functionMutex;
 		static LogEntry newEntry = LogEntry("",LogEntryErrorLevel::Message,"");
 
 		functionMutex.Lock();

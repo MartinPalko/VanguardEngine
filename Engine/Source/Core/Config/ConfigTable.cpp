@@ -1,14 +1,16 @@
 #include "ConfigTable.h"
 #include "ConfigVar.h"
 #include "Directories.h"
+#include "Log.h"
 
 namespace Vanguard
 {
-	//std::map <String, std::map <String, std::map <String, String> > > ConfigTable::configValues = std::map <String, std::map <String, std::map <String, String> > >();
 	Dictionary<String, ConfigFile> ConfigTable::configFiles;
 
 	void ConfigTable::OnConfigVarCreated(const IConfigVar& aNewVar, const String& aConfigDefault)
 	{
+		//DEBUG_LOG("Config var created: " + aNewVar.file + "/" + aNewVar.section + "/" + aNewVar.name);
+
 		// Set to default if it doesn't exist yet.
 		if (!configFiles.Contains(aNewVar.file) || !configFiles[aNewVar.file].ContainsValue(aNewVar.section, aNewVar.name))
 		{
@@ -31,7 +33,10 @@ namespace Vanguard
 			FilePath configFile = engineConfigFilePaths[i];
 			String fileName = configFile.GetFilenameWithoutExtension();
 			
-			configFiles[fileName] = ConfigFile::Load(engineConfigFilePaths[i]);
+			if (configFiles.ContainsKey(fileName))
+				configFiles[fileName].LoadAdditive(engineConfigFilePaths[i]);
+			else
+				configFiles[fileName] = ConfigFile::Load(engineConfigFilePaths[i]);
 		}
 
 		// Project configs

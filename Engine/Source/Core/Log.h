@@ -19,6 +19,7 @@ namespace Vanguard
 
 	struct CORE_API LogEntry
 	{
+		friend class Log;
 	private:
 		String message;
 		String channel;
@@ -75,8 +76,6 @@ namespace Vanguard
 
 		static bool initialized;
 
-		static DynamicArray<LogEntry> unflushedEntries;
-		static Mutex logMutex;
 		static FilePath logFile;
 
 		// Internal calls.

@@ -8,7 +8,7 @@ namespace Vanguard
 	{
 		DynamicArray<FilePath> configFiles = FileSystem::Find(aProjectDirectory, "*.cfg", false, true, false);
 
-		DEBUG_ERROR_IF(configFiles.Count() <= 1, "Could not find project config file in " + aProjectDirectory.GetFullPathName())
+		DEBUG_ERROR_IF(configFiles.Count() < 1, "Could not find project config file in " + aProjectDirectory.GetFullPathName())
 
 		ConfigFile projectConfigFile = ConfigFile();
 
@@ -22,6 +22,6 @@ namespace Vanguard
 		description = projectConfigFile.GetValue("Project", "Description");
 		requiredModules = projectConfigFile.GetArrayValues("Project", "RequiredModules");
 
-		DEBUG_LOG("Loaded project " + friendlyName + ": " + description);
+		Log::Message("Loaded project " + friendlyName + ": " + description,"Projects");
 	}
 }

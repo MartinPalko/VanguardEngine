@@ -14,12 +14,16 @@ namespace Vanguard
 	ModuleManager::ModuleManager(ManagedAssembly* aManagedCoreAssembly)
 	{
 		managedModuleManager = new ManagedObject("Vanguard", "ModuleManager", aManagedCoreAssembly);
+
 		UpdateModuleList();
 	}
 
 	ModuleManager::~ModuleManager()
 	{
 		UnloadAllModules();
+
+		if (managedModuleManager != nullptr)
+			delete managedModuleManager;
 	}
 
 	typedef IModule * (*MODULE_INST_FUNCTION)();

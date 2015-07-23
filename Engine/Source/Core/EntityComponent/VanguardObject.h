@@ -17,7 +17,7 @@ namespace Vanguard
 		REFLECTED_BASECLASS_DECLARATION(VanguardObject)
 		
 	private:
-		World* world;
+		World* world = nullptr;
 	protected:
 		VanguardObject(){}
 	public:

@@ -14,9 +14,14 @@ namespace Vanguard
 
 	bool Log::initialized = false;
 
-	DynamicArray<LogEntry> Log::unflushedEntries;
-	Mutex Log::logMutex;
 	FilePath Log::logFile;
+
+	// Retreive as a function-static variable so it will always be initialized, even when calling before main (from config var, or reflection system setup etc.)
+	DynamicArray<LogEntry>& GetUnflushedEntriesArray()
+	{
+		static DynamicArray<LogEntry> unflushedEntriesArray = DynamicArray<LogEntry>();
+		return unflushedEntriesArray;
+	}
 
 	void Log::Initialize()
 	{
@@ -70,20 +75,26 @@ namespace Vanguard
 
 	void Log::Write(const String& aMessage, const LogEntryErrorLevel& aErrorLevel, const String& aCategoty)
 	{
-		LogEntry newEnty(aMessage, aErrorLevel, aCategoty);
+		static Mutex functionMutex = Mutex();
+		static LogEntry newEntry = LogEntry("",LogEntryErrorLevel::Message,"");
 
-		logMutex.Lock();
+		functionMutex.Lock();
+		
+		newEntry = LogEntry(aMessage, aErrorLevel, aCategoty);
 
-		std::cout << newEnty.GetFormattedLogEntry() << "\n";
-		unflushedEntries.PushBack(newEnty);
+		GetUnflushedEntriesArray().PushBack(newEntry);
 
-		if (aErrorLevel >= LogEntryErrorLevel::Error || unflushedEntries.Count() >= maxEntriesBetweenFlushes)
+		std::cout << newEntry.GetFormattedLogEntry() << "\n";
+
+		if (initialized && (aErrorLevel >= LogEntryErrorLevel::Error || GetUnflushedEntriesArray().Count() >= maxEntriesBetweenFlushes))
+		{
 			Flush();
+		}
 
 		if (aErrorLevel == LogEntryErrorLevel::Exception)
-			throw Vanguard::Exception(newEnty.GetMessage().GetCharPointer());
+			throw Vanguard::Exception(newEntry.GetMessage().GetCharPointer());
 
-		logMutex.Unlock();
+		functionMutex.Unlock();
 	}
 
 	void Log::Flush()
@@ -99,11 +110,11 @@ namespace Vanguard
 
 			String textToWrite = "";
 
-			for (size_t i = 0; i < unflushedEntries.Count(); i++)
+			for (size_t i = 0; i < GetUnflushedEntriesArray().Count(); i++)
 			{
-				textToWrite += unflushedEntries[i].GetFormattedLogEntry() + "\n";
+				textToWrite += GetUnflushedEntriesArray()[i].GetFormattedLogEntry() + "\n";
 			}
-			unflushedEntries.Clear();
+			GetUnflushedEntriesArray().Clear();
 
 			if (!FileSystem::AppendToFile(logFile, textToWrite))
 				Exception("Error writing to log file");

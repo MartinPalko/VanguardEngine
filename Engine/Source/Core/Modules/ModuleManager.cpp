@@ -46,7 +46,9 @@ namespace Vanguard
 				DEBUG_LOG("Found native module " + moduleLib->moduleName + " of type " + moduleLib->moduleType);
 			}
 		}
-		managedModuleManager->CallMethod("UpdateModuleList");
+
+		if (managedModuleManager != nullptr)
+			managedModuleManager->CallMethod("UpdateModuleList");
 	}
 
 	void ModuleManager::LoadModule(const String& aModuleName)
@@ -71,7 +73,9 @@ namespace Vanguard
 		{
 			item.second->UnloadModule();
 		}
-		managedModuleManager->CallMethod("UnloadAllModules");
+
+		if (managedModuleManager != nullptr)
+			managedModuleManager->CallMethod("UnloadAllModules");
 	}
 
 	DynamicArray<IModule*> ModuleManager::GetLoadedModules()

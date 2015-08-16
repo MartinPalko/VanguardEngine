@@ -310,15 +310,15 @@ MACRO (CREATE_VANGUARD_PROJECT projectFolder projectName)
 	# Add this project to the list of projects.
 	SET(Vanguard_Projects ${Vanguard_Projects} projectName)
 	
-	FILE(GLOB_RECURSE CSharpProjects "${projectFolder}/Source/*.csproj")
+	FILE(GLOB_RECURSE CSharpProjects "${projectFolder}/*.csproj")
 	
-	FIND_TOPLEVEL_MAKELISTS(makeLists "${EngineRoot}/Projects/")
+	FIND_TOPLEVEL_MAKELISTS(makeLists "${projectFolder}")
 	
 	GET_DIRECTORIES(makeListDirectories "${makeLists}")
 	
 	FOREACH(makeListDir ${makeListDirectories})
 		MESSAGE("Executing makelist at: ${makeListDir}")
-		add_subdirectory (${makeListDir} "${EngineRoot}/Bin")
+		add_subdirectory (${makeListDir})
 		MESSAGE("")
 	ENDFOREACH()
 	

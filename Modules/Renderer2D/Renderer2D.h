@@ -8,9 +8,6 @@ namespace Vanguard
 {
 	class Renderer2D : public IModule
 	{
-		virtual String GetModuleName() { return "Renderer2D"; }
-		virtual String GetModuleType() { return "Renderer"; }
-
 		SpriteComponent* sprite;
 
 		virtual void LoadModule()

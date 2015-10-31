@@ -17,9 +17,9 @@ namespace Vanguard
 		void UnloadModule();
 
 	private:
-		ModuleInfo(const FilePath& aLibPath, const String& aName, const String& aType);
+		ModuleInfo::ModuleInfo(const FilePath& aLibPath, const String& aName, const String& aDependencies);
 		String moduleName;
-		String moduleType;
+		String dependencies;
 		FilePath filePath;
 		DynamicLibrary* dynamicLibReference;
 		IModule* moduleInstance;

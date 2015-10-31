@@ -2,14 +2,10 @@
 
 namespace Vanguard
 {
-	typedef IModule * (*MODULE_INST_FUNCTION)();
-	static const String InstantiateFunctionName = "InstantiateVanguardModule";
-
-	ModuleInfo::ModuleInfo(const FilePath& aLibPath, const String& aName, const String& aType)
+	ModuleInfo::ModuleInfo(const FilePath& aLibPath, const String& aName, const String& aDependencies)
 	{
 		moduleName = aName;
-		moduleType = aType;
-
+		dependencies = aDependencies;
 		filePath = aLibPath;
 
 		// Not loaded yet.
@@ -35,25 +31,26 @@ namespace Vanguard
 			return nullptr;
 		}
 
-		MODULE_INST_FUNCTION InstantiationFunction = (MODULE_INST_FUNCTION)tempLoadedLib->GetFunction(InstantiateFunctionName.GetCharPointer());
+		T_VANGUARD_MODULE_INST_FUNCTION InstantiationFunction = (T_VANGUARD_MODULE_INST_FUNCTION)tempLoadedLib->GetFunction(TO_STRING(VANGUARD_MODULE_INST_FUNCTION));
+		T_VANGUARD_MODULE_NAME_FUNCTION NameFunction = (T_VANGUARD_MODULE_NAME_FUNCTION)tempLoadedLib->GetFunction(TO_STRING(VANGUARD_MODULE_NAME_FUNCTION));
+		T_VANGUARD_MODULE_DEPENDENCY_FUNCTION DependenciesFunction = (T_VANGUARD_MODULE_DEPENDENCY_FUNCTION)tempLoadedLib->GetFunction(TO_STRING(VANGUARD_MODULE_DEPENDENCY_FUNCTION));
 
-		if (InstantiationFunction == nullptr)
+		if (InstantiationFunction == nullptr || NameFunction == nullptr || DependenciesFunction == nullptr)
 		{
-			// Could not find instantiation function (not a module library)
+			// Could not find a required function (not a module library)
 			delete tempLoadedLib;
 			return nullptr;
 		}
 
-		IModule* tempModuleInstance = InstantiationFunction();
+		//IModule* tempModuleInstance = InstantiationFunction();
 
-		String moduleName = tempModuleInstance->GetModuleName();
-		String moduleType = tempModuleInstance->GetModuleType();
+		String moduleName = NameFunction();
+		String moduleDependencies = DependenciesFunction();
 
-		// Got name and type, done with the temp stuff, so it can be unloaded.
-		delete tempModuleInstance;
+		// Got name and dependencies, done with the temp stuff, so it can be unloaded.
 		delete tempLoadedLib;
 
-		return new ModuleInfo(aModulePath, moduleName, moduleType);
+		return new ModuleInfo(aModulePath, moduleName, moduleDependencies);
 	}
 
 	void ModuleInfo::LoadModule()
@@ -69,7 +66,7 @@ namespace Vanguard
 				throw Exception(String("Could not load module " + filePath.GetFullPathName()).GetCharPointer());
 			}
 
-			MODULE_INST_FUNCTION InstantiationFunction = (MODULE_INST_FUNCTION)dynamicLibReference->GetFunction(InstantiateFunctionName.GetCharPointer());
+			T_VANGUARD_MODULE_INST_FUNCTION InstantiationFunction = (T_VANGUARD_MODULE_INST_FUNCTION)dynamicLibReference->GetFunction(TO_STRING(VANGUARD_MODULE_INST_FUNCTION));
 
 			if (InstantiationFunction == nullptr)
 			{

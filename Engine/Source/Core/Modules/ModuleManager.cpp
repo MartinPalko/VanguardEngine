@@ -38,12 +38,13 @@ namespace Vanguard
 
 		for (uint32 i = 0; i < dynamicLibsInModuleDirectory.Count(); i++)
 		{
-			ModuleInfo* moduleLib = ModuleInfo::LoadModuleAtPath(dynamicLibsInModuleDirectory[i]);
+			ModuleInfo* moduleInfo = ModuleInfo::LoadModuleAtPath(dynamicLibsInModuleDirectory[i]);
 
-			if (moduleLib != nullptr)
+			if (moduleInfo != nullptr)
 			{
-				moduleInfos[moduleLib->moduleName] = moduleLib;
-				DEBUG_LOG("Found native module " + moduleLib->moduleName + " of type " + moduleLib->moduleType);
+				moduleInfos[moduleInfo->moduleName] = moduleInfo;
+				DEBUG_LOG("Found native module " + moduleInfo->moduleName);
+				DEBUG_LOG("Dependencies: " + moduleInfo->dependencies);
 			}
 		}
 

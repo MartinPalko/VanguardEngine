@@ -180,6 +180,11 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 		ELSE()
 			ADD_LIBRARY(${projectName} ${projectType} ${projectSources})
 		ENDIF()
+
+		MESSAGE("${projectDependencies}")
+		
+		ADD_FLAGS(${projectName} "-DVANGUARD_LIB_NAME=\"${projectName}\"")
+		ADD_FLAGS(${projectName} "-DVANGUARD_LIB_DEPENDENCIES=${projectDependencies}")
 		
 		#On Unix, link libraries needed for dynamic links.
 		IF(UNIX AND NOT ${projectType} MATCHES "STATIC")

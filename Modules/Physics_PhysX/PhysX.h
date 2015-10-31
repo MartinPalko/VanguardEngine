@@ -6,9 +6,6 @@ namespace Vanguard
 {
 	class PhysXModule : public IModule
 	{
-		virtual String GetModuleName() { return "PhysX"; }
-		virtual String GetModuleType() { return "Physics"; }
-
 		virtual void UpdatePhysicsThing(Frame* aFrame)
 		{
 			DEBUG_LOG("Update physics thing");

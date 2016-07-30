@@ -39,6 +39,21 @@ IF (APPLE)
 	set (CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG")
 ENDIF()
 
+IF (MSVC)
+	# Test 32/64 bits
+	if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+		message(STATUS "Target is 64 bits")
+		if (WIN32)
+			set(WINXXBITS Win64)
+		endif(WIN32)
+	else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+		message(STATUS "Target is 32 bits")
+		if (WIN32)
+			set(WINXXBITS Win32)
+		endif(WIN32)
+	endif("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+ENDIF()
+
 # Enable folders in the solution
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS "ON")
 

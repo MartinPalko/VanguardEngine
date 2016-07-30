@@ -25,6 +25,8 @@ namespace Vanguard
 		Timespan& operator = (const Timespan& aOther);
 		~Timespan();
 
+		static Timespan GetElapsedSystemTime();
+
 		inline static Timespan FromMilliseconds(int aMilliseconds) { return Timespan(aMilliseconds * 0.001); }
 		inline static Timespan FromMilliseconds(int64 aMilliseconds) { return Timespan(aMilliseconds * 0.001); }
 		inline static Timespan FromSeconds(double aSeconds) { return Timespan(aSeconds); }
@@ -59,6 +61,7 @@ namespace Vanguard
 	};
 
 	// Represents a specific moment in time.
+	// Represents a specific moment in time. Only accurate down to the millisecond. For more accurate timing, see Timespan.
 	// Wrapper for juce::Time
 	struct FOUNDATION_API Time
 	{

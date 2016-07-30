@@ -24,6 +24,13 @@ namespace Vanguard
 		delete data;
 	}
 
+	Timespan Timespan::GetElapsedSystemTime()
+	{
+		double d = juce::Time::getMillisecondCounterHiRes();
+		double n = d / 1000.0;
+		return Timespan(n);
+	}
+
 	double Timespan::InSeconds() const { return data->inSeconds(); }
 
 	double Timespan::InMinutes() const { return data->inMinutes(); }

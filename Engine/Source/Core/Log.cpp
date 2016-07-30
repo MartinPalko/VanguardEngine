@@ -10,10 +10,12 @@ namespace Vanguard
 {
 	Int32ConfigVar Log::maxLogFiles = Int32ConfigVar("Core", "Log", "MaxLogFiles", 10);
 	Int32ConfigVar Log::maxEntriesBetweenFlushes = Int32ConfigVar("Core", "Log", "MaxEntriesBetweenFlushes", 5);
+	BooleanConfigVar Log::rollingLogFileEnabled = BooleanConfigVar("Core", "Log", "RollingLogfileEnabled", false);
 
 	bool Log::initialized = false;
 
 	FilePath Log::logFile;
+	FilePath Log::rollingLogFile;
 
 	// Retreive as a function-static variable so it will always be initialized, even when calling before main (from config var, or reflection system setup etc.)
 	DynamicArray<LogEntry>& GetUnflushedEntriesArray()
@@ -57,7 +59,13 @@ namespace Vanguard
 		logFile = logFile.GetRelative(fileName + ".log");
 		logFile = FileSystem::MakeUniqueFileName(logFile);
 
+		rollingLogFile = Directories::GetLogDirectory();
+		rollingLogFile = rollingLogFile.GetRelative("rollingLog.log");
 		FileSystem::CreateFile(logFile);
+
+		if (rollingLogFileEnabled && !FileSystem::FileExists(rollingLogFile))
+			FileSystem::CreateFile(rollingLogFile);
+
 		Flush();
 
 		initialized = true;
@@ -98,17 +106,19 @@ namespace Vanguard
 		{
 			flushingLog = true;
 
+			// Write to log file
 			String textToWrite = "";
-
 			for (size_t i = 0; i < GetUnflushedEntriesArray().Count(); i++)
 			{
 				textToWrite += GetUnflushedEntriesArray()[i].GetFormattedLogEntry() + "\n";
 			}
-			GetUnflushedEntriesArray().Clear();
-
 			if (!FileSystem::AppendToFile(logFile, textToWrite))
 				Exception("Error writing to log file");
 
+			if (rollingLogFileEnabled)
+				FileSystem::AppendToFile(rollingLogFile, textToWrite);
+
+			GetUnflushedEntriesArray().Clear();
 			flushingLog = false;
 		}
 	}

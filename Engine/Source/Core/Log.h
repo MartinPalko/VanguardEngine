@@ -63,6 +63,7 @@ namespace Vanguard
 	};
 
 	class Int32ConfigVar;
+	class BooleanConfigVar;
 
 	class CORE_API Log
 	{
@@ -70,10 +71,12 @@ namespace Vanguard
 	private:
 		static Int32ConfigVar maxLogFiles;
 		static Int32ConfigVar maxEntriesBetweenFlushes;
+		static BooleanConfigVar rollingLogFileEnabled;
 
 		static bool initialized;
 
 		static FilePath logFile;
+		static FilePath rollingLogFile;
 
 	public:
 		static void Initialize();

@@ -19,20 +19,20 @@ namespace Vanguard
 		Job* GetNextJob();
 
 	public:
-		int frameNumber;
-		float deltaTime;
-		World* world;
+		const int frameNumber;
+		const Timespan deltaTime;
+		const World* world;
 
 		std::queue<Job*> jobs[JobPriority::qty];
 
 		void WaitForJob(Job* aJob);
 
-		Frame(int aFrameNumber, float aDeltaTime, World* aWorld)
+		Frame(uint32 aFrameNumber, Timespan aDeltaTime, World* aWorld)
+			: frameNumber(aFrameNumber)
+			, deltaTime(aDeltaTime)
+			, world(aWorld)
 		{
 			processing = false;
-			frameNumber = aFrameNumber;
-			deltaTime = aDeltaTime;
-			world = aWorld;
 		}
 
 		Job* AddJob(std::function<void()> aEntryPoint, JobPriority::Type aPriority = JobPriority::Normal);

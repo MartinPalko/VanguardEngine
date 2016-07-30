@@ -45,8 +45,7 @@ namespace Vanguard
 			moduleManager->LoadModule(requiredModules[i]);
 		}
 		// Load the project's modules.
-		moduleManager->LoadModule(loadedProject->GetName() + "_Native");
-		moduleManager->LoadModule(loadedProject->GetName() + "_Managed");
+		moduleManager->LoadModule(loadedProject->GetName());
 
 		Log::Message("Initialized Core", "Core");
 		state = CoreState::Initialized;
@@ -63,24 +62,35 @@ namespace Vanguard
 		// Main engine loop
 		while (state == CoreState::Running)
 		{
-			// At the moment, shut down right away since there's no proper way to exit the application.
-			ShutDown();
+			// Tick worlds
+			for (int i = 0; i < worlds.Count(); i++)
+			{
+				World* world = worlds[i];
 
-			// TODO: Tick worlds
+				// Create a new frame for the world
+				Timespan currentTime = Timespan::GetElapsedSystemTime();
+				double current = currentTime.InSeconds();
+				if (world->lastTickStartTime.InSeconds() == 0.0)
+				{
+					world->lastTickStartTime = currentTime;
+					continue;
+				}
+				double last = world->lastTickStartTime.InSeconds();
+				double delta = current - last;
+				Timespan deltaTime = currentTime - world->lastTickStartTime;
 
-			//Frame* frame = new Frame(0, 0.03f, gameWorld);
+				Frame* frame = new Frame(world->nextFrameNumber, deltaTime, world);
+				world->lastTickStartTime = currentTime;
+				world->nextFrameNumber++;
 
-			//List<IModule*> loadedModules = moduleManager->GetLoadedModules();
+				// Update the world
+				frame->AddJob([world, frame]()-> void { world->Tick(frame); });
 
-			//for (int i = 0; i < loadedModules.Size(); i++)
-			//{
-			//	frame->AddJob([=]()-> void { loadedModules[i]->OnFrame(frame); });
-			//}
+				JobManager::ProcessFrame(frame);
+				delete frame;
+			}
 
-			//JobManager::ProcessFrame(frame);
-			//delete frame;
-
-			std::this_thread::sleep_for(std::chrono::microseconds(10));
+			std::this_thread::sleep_for(std::chrono::microseconds(1000));
 		}
 
 		if (state != CoreState::PendingShutdown)
@@ -135,13 +145,11 @@ namespace Vanguard
 		if (GetWorld(aWorldName) == nullptr)
 		{			
 			World* newWorld = new World(aWorldName);
-
+			worlds.PushBack(newWorld);
 			return newWorld;
 		}
 		else
 			throw Exception(String("World with name \"" + aWorldName + "\" already exists").GetCharPointer());
-
-		
 	}
 
 	World* Core::GetWorld(const String& aWorldName)

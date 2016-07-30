@@ -11,7 +11,7 @@ namespace Vanguard
 			DEBUG_LOG("Update physics thing");
 		}
 
-		virtual void OnFrame(Frame* aFrame) override
+		virtual void OnFrame(Frame* aFrame)
 		{
 			DEBUG_LOG("PHYSICS ON FRAME");
 

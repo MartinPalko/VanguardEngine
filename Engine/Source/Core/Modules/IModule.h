@@ -10,8 +10,6 @@ namespace Vanguard
 		virtual ~IModule(){}
 		virtual void LoadModule(){ }
 		virtual void UnloadModule(){ }
-
-		virtual void OnFrame(Frame* aFrame){};
 	};
 }
 

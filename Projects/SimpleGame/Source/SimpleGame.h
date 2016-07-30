@@ -1,28 +1,19 @@
 #pragma once
 #include "SimpleGame_Common.h"
-#include "Modules/IModule.h"
+#include "Modules\GameModule.h"
 
 #include "SpriteComponent.h"
 
 namespace SimpleGame
 {
-	class SimpleGame : public IModule
+	class SimpleGame : public GameModule
 	{
-		SpriteComponent* sprite;
-
-		virtual String GetModuleName() { return "SimpleGame_Native"; }
-		virtual String GetModuleType() { return "Project"; }
+	private:
+		//SpriteComponent* sprite;
 		
-		virtual void LoadModule()
-		{
-			DEBUG_LOG("Loaded Simple Game");
-			sprite = new SpriteComponent();
-		}
-
-		virtual void UnloadModule()
-		{
-			DEBUG_LOG("Unloaded Simple Game");
-			delete sprite;
-		}
+	protected:
+		virtual void SetupGame() override;
+		virtual void UpdateGame(Frame* aFrame) override;
+		virtual void CleanupGame() override;
 	};
 }

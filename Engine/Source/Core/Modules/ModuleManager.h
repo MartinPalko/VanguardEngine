@@ -4,8 +4,6 @@
 #include "Core_Common.h"
 #include "IModule.h"
 
-#include "Mono/ManagedObject.h"
-
 namespace Vanguard
 {
 	struct ModuleInfo;
@@ -14,7 +12,7 @@ namespace Vanguard
 	class CORE_API ModuleManager
 	{
 	public:
-		ModuleManager(ManagedAssembly* aManagedCoreAssembly);
+		ModuleManager();
 		~ModuleManager();
 
 		// Create or update the module list with all modules found in the bin folder.
@@ -28,7 +26,6 @@ namespace Vanguard
 	private:
 		// List of all recognized modules.
 		std::map<String, ModuleInfo*> moduleInfos;
-		ManagedObject* managedModuleManager;
 	};
 }
 	

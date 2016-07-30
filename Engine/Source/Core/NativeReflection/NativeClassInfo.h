@@ -65,7 +65,7 @@ namespace Vanguard
 	{
 
 	public:
-		static INativeClassInfo* Create(const String& aClassName, const String& aBaseClassName = "")
+		static INativeClassInfo* Create(const char* aClassName, const char* aBaseClassName = "")
 		{
 			String ClassName = typeid(T).name();
 				
@@ -78,7 +78,12 @@ namespace Vanguard
 					return allClassInfos[i];
 				}
 			}
-			NativeClassInfo<T>* newClassInfo = new NativeClassInfo<T>(aClassName, aBaseClassName);
+			NativeClassInfo<T>* newClassInfo;
+			{
+				String cname = aClassName;
+				String bname = aBaseClassName;
+				newClassInfo = new NativeClassInfo<T>(cname, bname);
+			}
 			allClassInfos.PushBack(newClassInfo);
 
 			// TODO: Do this initially, and then again whenever a dll is loaded or unloaded.

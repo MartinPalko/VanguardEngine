@@ -14,6 +14,10 @@ namespace Vanguard
 	public:
 		String();
 		String(const String& aString);
+		String(const char* aCharPointer);
+		String(const char& aChar);
+		void operator = (const String& aOther);
+		void operator += (const String& aOther);
 		~String();
 
 		// Comparison to other vanguard::string
@@ -24,14 +28,7 @@ namespace Vanguard
 		bool operator > (const String& aOther) const;
 		bool operator >= (const String& aOther) const;
 
-		// Create from and cast to const char*
-		String(const char* aCharPointer);
-		const char* GetCharPointer() const;
-
-		// Create from single char
-		String(const char& aChar);
-
-		void operator += (const String& aOther);
+		const char* GetCharPointer() const;				
 
 		// Gets the value that is return when no position is found (for functions that check position)
 		static size_t NPos();

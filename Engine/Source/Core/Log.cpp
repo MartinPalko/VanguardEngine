@@ -4,7 +4,6 @@
 #include "Platforms/Platform.h"
 #include "Config/Config.h"
 #include "Core.h"
-#include "Mono/ManagedAssembly.h"
 
 
 namespace Vanguard
@@ -63,15 +62,6 @@ namespace Vanguard
 
 		initialized = true;
 	}
-
-	void Log::AddInternalCalls()
-	{
-		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Message", (const void*)Log::Message_);
-		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Warning", (const void*)Log::Warning_);
-		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Error", (const void*)Log::Error_);
-		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Exception", (const void*)Log::Exception_);
-	}
-
 
 	void Log::Write(const String& aMessage, const LogEntryErrorLevel& aErrorLevel, const String& aCategoty)
 	{

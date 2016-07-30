@@ -3,6 +3,7 @@
 #define _VANGUARD_PLATFORM_IMPLEMENTATION
 
 #include "BasePlatform.h"
+#include <exception>
 
 namespace Vanguard
 {

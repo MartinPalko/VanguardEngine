@@ -84,7 +84,7 @@ namespace Vanguard
 
 		GetUnflushedEntriesArray().PushBack(newEntry);
 
-		std::cout << newEntry.GetFormattedLogEntry() << "\n";
+		std::cout << newEntry.GetFormattedLogEntry().GetCharPointer() << "\n";
 
 		if (initialized && (aErrorLevel >= LogEntryErrorLevel::Error || GetUnflushedEntriesArray().Count() >= maxEntriesBetweenFlushes))
 		{

@@ -29,7 +29,6 @@ namespace Vanguard
 	};
 
 	class ModuleManager;
-	class ManagedAssembly;
 
 	class CORE_API Core
 	{
@@ -40,7 +39,6 @@ namespace Vanguard
 
 		class Project* loadedProject;
 		class ModuleManager* moduleManager;
-		class ManagedAssembly* managedCore;
 
 		DynamicArray<World*> worlds = DynamicArray<World*>();
 

@@ -101,7 +101,6 @@ namespace Vanguard
 			Log::Message("Shutting down Core", "Core");
 
 			delete moduleManager;
-			delete managedCore;
 
 			if (clearTempDirectoryOnShutdown)
 				FileSystem::Delete(Directories::GetProjectTempDirectory());

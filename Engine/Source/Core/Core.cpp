@@ -10,6 +10,7 @@
 namespace Vanguard
 {
 	BooleanConfigVar Core::clearTempDirectoryOnShutdown = BooleanConfigVar("Core", "Core", "ClearTempDirectoryOnShutdown", true);
+	BooleanConfigVar Core::showConsoleOnStart = BooleanConfigVar("Core", "Core", "ShowConsoleOnStart", false);
 
 	Core* Core::instance = nullptr;
 
@@ -26,6 +27,10 @@ namespace Vanguard
 
 		// Load config as early as possible, otherwise some classes might be stuck reading their default values!
 		ConfigTable::LoadConfigFromDisk();
+		
+		// TODO: Fix, currently causes crash.
+		//if (showConsoleOnStart)
+		//	Vanguard::Application::ShowConsoleWindow();
 
 		Log::Initialize();
 

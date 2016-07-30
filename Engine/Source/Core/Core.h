@@ -34,6 +34,7 @@ namespace Vanguard
 	{
 	private:
 		static BooleanConfigVar clearTempDirectoryOnShutdown;
+		static BooleanConfigVar showConsoleOnStart;
 
 		static Core* instance;
 

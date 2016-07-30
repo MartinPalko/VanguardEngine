@@ -12,8 +12,12 @@
 
 namespace Vanguard
 {
-	String::String() { data = new std::string(); }
-	String::String(const String& aString) { data->assign(*aString.data); }
+	String::String() { data = new std::string(""); }
+	String::String(const String& aString) { data = new std::string(*aString.data); }
+	String::String(const char* aCharPointer) { data = new std::string(aCharPointer); }
+	String::String(const char& aChar) { data = new std::string(1, aChar); }
+	void String::operator = (const String& aOther) { data = new std::string(*aOther.data); }
+	void String::operator += (const String& aOther) { data->assign(*Append(aOther).data); }
 	String::~String() { delete data; }
 
 	bool String::operator == (const String& aOther) const { return *data == *aOther.data; }
@@ -23,12 +27,7 @@ namespace Vanguard
 	bool String::operator > (const String& aOther) const { return *data > *aOther.data; }
 	bool String::operator >= (const String& aOther) const { return *data >= *aOther.data; }
 
-	String::String(const char* aCharPointer) { data->assign(aCharPointer); }
 	const char* String::GetCharPointer() const { return data->c_str(); }
-
-	String::String(const char& aChar) { *data = aChar; }
-
-	void String::operator += (const String& aOther) { *data = *Append(aOther).data; }
 
 	size_t String::NPos()
 	{

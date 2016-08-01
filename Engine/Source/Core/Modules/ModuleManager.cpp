@@ -33,22 +33,85 @@ namespace Vanguard
 			if (moduleInfo != nullptr)
 			{
 				moduleInfos[moduleInfo->moduleName] = moduleInfo;
-				DEBUG_LOG("Found native module " + moduleInfo->moduleName);
-				DEBUG_LOG("Dependencies: " + moduleInfo->dependencies);
 			}
 		}
 	}
 
-	void ModuleManager::LoadModule(const String& aModuleName)
+	ModuleManager::eModuleLoadResult ModuleManager::LoadModule(const String& aModuleName)
 	{
-		if (moduleInfos.count(aModuleName) != 0)
-			moduleInfos[aModuleName]->LoadModule();
+		return LoadModule(aModuleName, true);
+	}
+
+	ModuleManager::eModuleLoadResult ModuleManager::LoadModule(const String& aModuleName, bool aExplicit)
+	{
+		if (!moduleInfos.count(aModuleName))
+		{
+			return eModuleLoadResult::NotFound;
+		}
+
+		ModuleInfo* moduleInfo = moduleInfos.at(aModuleName);
+
+		moduleInfo->loadedExplicitly = moduleInfo->loadedExplicitly || aExplicit;
+
+		if (moduleInfo->GetIsLoaded())
+		{			
+			return eModuleLoadResult::AlreadyLoaded;
+		}
+
+		// Load dependencies.
+		for (int i = 0; i < moduleInfo->dependencies.Count(); i++)
+		{
+			if (!moduleInfos.count(moduleInfo->dependencies[i]))
+			{
+				// Currently, regular dynamic and static libraries are listed as dependencies alongside modules,
+				// so there's no need for alarm if a dependency is not registered as a module.
+				continue;
+			}			
+			ModuleInfo* dependentModule = moduleInfos.at(moduleInfo->dependencies[i]);
+
+			const eModuleLoadResult dependentLoadResult = LoadModule(dependentModule->moduleName, false);
+			if (dependentLoadResult != eModuleLoadResult::Error)
+			{
+				dependentModule->inUseBy.PushBack(aModuleName);
+			}
+			else
+			{
+				// Loading a dependent module failed.
+				UnloadModule(aModuleName);
+				return eModuleLoadResult::Error;
+			}
+		}
+
+		Log::Message("Loading module: " + aModuleName, "Modules");
+		return moduleInfo->LoadModule() ? eModuleLoadResult::Success : eModuleLoadResult::Error;
 	}
 
 	void ModuleManager::UnloadModule(const String& aModuleName)
 	{
-		if (moduleInfos.count(aModuleName) != 0)
-			moduleInfos[aModuleName]->UnloadModule();
+		if (!moduleInfos.count(aModuleName))
+		{
+			return;
+		}
+
+		ModuleInfo* moduleInfo = moduleInfos.at(aModuleName);
+
+		moduleInfo->UnloadModule();
+		moduleInfo->loadedExplicitly = false;
+
+		// Unload dependencies.
+		for (std::pair<String, ModuleInfo*> dependentModuleInfo : moduleInfos)
+		{
+			ModuleInfo* dependentModule = dependentModuleInfo.second;
+			if (dependentModule->inUseBy.Contains(moduleInfo->moduleName))
+			{
+				dependentModule->inUseBy.Remove(moduleInfo->moduleName);
+
+				if (dependentModule->inUseBy.Count() <= 0 && !dependentModule->loadedExplicitly)
+				{
+					UnloadModule(dependentModule->moduleName);
+				}
+			}
+		}
 	}
 
 	void ModuleManager::UnloadAllModules()

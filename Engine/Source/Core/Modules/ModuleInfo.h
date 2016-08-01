@@ -13,16 +13,18 @@ namespace Vanguard
 	public:
 		~ModuleInfo();
 		bool GetIsLoaded(){ return moduleInstance != nullptr; }
-		void LoadModule();
+		bool LoadModule();
 		void UnloadModule();
 
 	private:
-		ModuleInfo::ModuleInfo(const FilePath& aLibPath, const String& aName, const String& aDependencies);
+		ModuleInfo::ModuleInfo(const FilePath& aLibPath, const String& aName, DynamicArray<String> aDependencies);
 		String moduleName;
-		String dependencies;
+		DynamicArray<String> dependencies;
 		FilePath filePath;
 		DynamicLibrary* dynamicLibReference;
 		IModule* moduleInstance;
+		bool loadedExplicitly;
+		DynamicArray<String> inUseBy;
 
 	protected:
 		// Tries to load a module library at a given path, returns nullptr if it can't be loaded.

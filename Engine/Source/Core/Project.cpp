@@ -20,7 +20,6 @@ namespace Vanguard
 		name = aProjectDirectory.GetFilenameWithoutExtension();
 		friendlyName = projectConfigFile.GetValue("Project", "FriendlyName");
 		description = projectConfigFile.GetValue("Project", "Description");
-		requiredModules = projectConfigFile.GetArrayValues("Project", "RequiredModules");
 
 		Log::Message("Loaded project " + friendlyName + ": " + description,"Projects");
 	}

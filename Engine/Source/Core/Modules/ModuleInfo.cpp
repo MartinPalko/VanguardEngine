@@ -1,8 +1,11 @@
 #include "ModuleInfo.h"
 
+#include "Log.h"
+#include "ModuleManager.h"
+
 namespace Vanguard
 {
-	ModuleInfo::ModuleInfo(const FilePath& aLibPath, const String& aName, const String& aDependencies)
+	ModuleInfo::ModuleInfo(const FilePath& aLibPath, const String& aName, DynamicArray<String> aDependencies)
 	{
 		moduleName = aName;
 		dependencies = aDependencies;
@@ -11,6 +14,8 @@ namespace Vanguard
 		// Not loaded yet.
 		dynamicLibReference = nullptr;
 		moduleInstance = nullptr;
+
+		loadedExplicitly = false;
 	}
 
 	ModuleInfo::~ModuleInfo()
@@ -42,42 +47,42 @@ namespace Vanguard
 			return nullptr;
 		}
 
-		//IModule* tempModuleInstance = InstantiationFunction();
-
 		String moduleName = NameFunction();
 		String moduleDependencies = DependenciesFunction();
 
 		// Got name and dependencies, done with the temp stuff, so it can be unloaded.
 		delete tempLoadedLib;
 
-		return new ModuleInfo(aModulePath, moduleName, moduleDependencies);
+		return new ModuleInfo(aModulePath, moduleName, moduleDependencies.Split(';'));
 	}
 
-	void ModuleInfo::LoadModule()
+	bool ModuleInfo::LoadModule()
 	{
-		if (!GetIsLoaded())
+		if (GetIsLoaded())
 		{
-			dynamicLibReference = new DynamicLibrary();
-
-			if (!dynamicLibReference->Open(filePath))
-			{
-				// Could not load dynamic library
-				UnloadModule();
-				throw Exception(String("Could not load module " + filePath.GetFullPathName()).GetCharPointer());
-			}
-
-			T_VANGUARD_MODULE_INST_FUNCTION InstantiationFunction = (T_VANGUARD_MODULE_INST_FUNCTION)dynamicLibReference->GetFunction(TO_STRING(VANGUARD_MODULE_INST_FUNCTION));
-
-			if (InstantiationFunction == nullptr)
-			{
-				throw Exception(String("Could not load module " + filePath.GetFullPathName()).GetCharPointer());
-			}
-
-			Log::Message("Loading native module " + moduleName, "Modules");
-
-			moduleInstance = InstantiationFunction();
-			moduleInstance->LoadModule();
+			return true;
 		}
+		
+		dynamicLibReference = new DynamicLibrary();
+
+		if (!dynamicLibReference->Open(filePath))
+		{
+			UnloadModule();
+			Log::Error("Could not load module " + filePath.GetFullPathName() + "\", library cannot be opened.", "Modules");
+			return false;
+		}
+
+		T_VANGUARD_MODULE_INST_FUNCTION InstantiationFunction = (T_VANGUARD_MODULE_INST_FUNCTION)dynamicLibReference->GetFunction(TO_STRING(VANGUARD_MODULE_INST_FUNCTION));
+
+		if (InstantiationFunction == nullptr)
+		{
+			UnloadModule();
+			Log::Error("Could not load module \"" + filePath.GetFullPathName() + "\", library does not contain function: " + TO_STRING(VANGUARD_MODULE_INST_FUNCTION), "Modules");
+			return false;
+		}
+
+		moduleInstance = InstantiationFunction();
+		moduleInstance->LoadModule();
 	}
 
 	void ModuleInfo::UnloadModule()

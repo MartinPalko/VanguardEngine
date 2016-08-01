@@ -16,13 +16,11 @@ namespace Vanguard
 		String name;
 		String friendlyName;
 		String description;
-		DynamicArray<String> requiredModules;
 
 	public:
 		
 		inline String GetName(){ return name; }
 		inline String GetFriendlyName(){ return friendlyName; }
 		inline String GetDescription(){ return description; }
-		inline DynamicArray<String> GetRequiredModules() { return requiredModules; }
 	};
 }

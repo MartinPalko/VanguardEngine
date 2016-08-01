@@ -38,13 +38,7 @@ namespace Vanguard
 
 		moduleManager = new ModuleManager();
 
-		// Load modules required by project.
-		DynamicArray<String> requiredModules = loadedProject->GetRequiredModules();
-		for (size_t i = 0; i < requiredModules.Count(); i++)
-		{
-			moduleManager->LoadModule(requiredModules[i]);
-		}
-		// Load the project's modules.
+		// Load the project's module.
 		moduleManager->LoadModule(loadedProject->GetName());
 
 		Log::Message("Initialized Core", "Core");

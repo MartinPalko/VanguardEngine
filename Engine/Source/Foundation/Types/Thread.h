@@ -1,17 +1,37 @@
 #pragma once
-#include "juce_core.h"
-#include <thread>
 #include "Foundation_Common.h"
+#include "VanguardString.h"
+
+namespace std {
+	class thread;
+}
 
 namespace Vanguard
 {
 	class FOUNDATION_API Thread
 	{
-	public:
-		std::thread stdThread;
+	private:
+		String name;
+	protected:
+		std::thread* stdThread;
 
-		Thread()
+	public:
+		template<class F, class... Args>
+		explicit Thread(F&& f, Args&&... args)
 		{
+			stdThread = new std::thread(std::forward<F>(f), std::forward<Args>(args)...);
+			SetName("Vanguard Thread " + GetID());
 		}
+
+		~Thread()
+		{
+			delete stdThread;
+		}
+
+		static String CurrentThreadID();
+
+		void SetName(const String& aThreadName);
+		String GetName();
+		String GetID();
 	};
 }

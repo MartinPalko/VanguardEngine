@@ -1,4 +1,4 @@
-#include "JobThread.h"
+#include "JobWorker.h"
 #include "JobManager.h"
 #include "Job.h"
 
@@ -6,7 +6,7 @@
 
 namespace Vanguard
 {
-	void JobThread::ThreadLoop()
+	void JobWorker::ThreadLoop()
 	{
 		int i = 0;
 
@@ -14,7 +14,7 @@ namespace Vanguard
 		{
 			if (currentJob == nullptr)
 			{
-				std::this_thread::sleep_for(std::chrono::microseconds(1));
+				std::this_thread::sleep_for(std::chrono::microseconds(100));
 				//std::this_thread::yield();
 			}
 			else
@@ -28,7 +28,7 @@ namespace Vanguard
 		}
 	}
 
-	void JobThread::StartJob(Job* aJob)
+	void JobWorker::StartJob(Job* aJob)
 	{
 		currentJob = aJob;
 	}

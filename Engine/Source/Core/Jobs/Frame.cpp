@@ -1,6 +1,6 @@
 #include "Frame.h"
 #include "JobManager.h"
-#include "JobThread.h"
+#include "JobWorker.h"
 
 
 namespace Vanguard
@@ -10,7 +10,7 @@ namespace Vanguard
 		// If any threads are idle, throw this job on one of them right away.
 		JobManager::threadMutex.Lock();
 		Job* newJob = new Job(aEntryPoint);
-		JobThread* idleThread = JobManager::GetIdleThread();
+		JobWorker* idleThread = JobManager::GetIdleThread();
 		if (idleThread == nullptr)
 		{
 			jobListMutex.Lock();

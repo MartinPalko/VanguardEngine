@@ -1,4 +1,5 @@
 #pragma once
+#include "Platforms/Platform.h"
 
 #define STRINGIFY(x) #x
 #define TO_STRING(x) STRINGIFY(x)

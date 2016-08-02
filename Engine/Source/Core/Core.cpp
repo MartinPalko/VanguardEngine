@@ -61,30 +61,41 @@ namespace Vanguard
 			{
 				World* world = worlds[i];
 
-				// Create a new frame for the world
 				Timespan currentTime = Timespan::GetElapsedSystemTime();
-				double current = currentTime.InSeconds();
-				if (world->lastTickStartTime.InSeconds() == 0.0)
+				Timespan deltaTime;
+				if (world->lastTickStartTime.InSeconds() != 0.0)
 				{
-					world->lastTickStartTime = currentTime;
-					continue;
+					deltaTime = currentTime - world->lastTickStartTime;
 				}
-				double last = world->lastTickStartTime.InSeconds();
-				double delta = current - last;
-				Timespan deltaTime = currentTime - world->lastTickStartTime;
+				else
+				{
+					deltaTime = world->minimumTickDelta;
+					world->lastTickStartTime = currentTime - deltaTime;
+				}
 
-				Frame* frame = new Frame(world->nextFrameNumber, deltaTime, world);
-				world->lastTickStartTime = currentTime;
-				world->nextFrameNumber++;
+				double ct = currentTime.InSeconds();
+				double dt = deltaTime.InSeconds();
 
-				// Update the world
-				frame->AddJob([world, frame]()-> void { world->Tick(frame); });
+				if (deltaTime >= world->minimumTickDelta)
+				{
+					// Create a new frame for the world
+					Frame* frame = new Frame(world->nextFrameNumber, deltaTime, world);
+					world->lastTickStartTime = currentTime;
+					world->nextFrameNumber++;
 
-				JobManager::ProcessFrame(frame);
-				delete frame;
+					// Update the world
+					frame->AddJob([world, frame]()-> void { world->Tick(frame); });
+
+					JobManager::ProcessFrame(frame);
+					delete frame;
+				}
+
+				if (world->nextFrameNumber > 15)
+				{
+					this->ShutDown();
+				}
 			}
-
-			std::this_thread::sleep_for(std::chrono::microseconds(1000));
+			//std::this_thread::sleep_for(std::chrono::microseconds(1));
 		}
 
 		if (state != CoreState::PendingShutdown)

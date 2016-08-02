@@ -19,12 +19,14 @@ namespace Vanguard
 		DynamicArray<Entity*> entities;
 		uint32 nextFrameNumber;
 		Timespan lastTickStartTime;
+		Timespan minimumTickDelta;
 		DynamicArray<TickFunction> registeredTicks; //TODO: Use a linkedlist for the registeredTicks	
 
 		World(String aWorldName)
 			: worldName(aWorldName)
 			, nextFrameNumber(0)
 			, lastTickStartTime(0.0)
+			, minimumTickDelta(1.0 / 60.0) // 60 FPS
 		{
 		}
 		~World(){}

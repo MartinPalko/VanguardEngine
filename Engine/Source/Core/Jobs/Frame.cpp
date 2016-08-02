@@ -9,20 +9,22 @@ namespace Vanguard
 	{
 		// If any threads are idle, throw this job on one of them right away.
 		JobManager::threadMutex.Lock();
-		Job* newJob = new Job(aEntryPoint);
+		Job* newJob = new Job([aEntryPoint, this, aPriority]() {aEntryPoint(); this->unfinishedJobs[(uint8)aPriority]--; });
 		JobWorker* idleThread = JobManager::GetIdleThread();
 		if (idleThread == nullptr)
 		{
 			jobListMutex.Lock();
 			jobs[(uint8)aPriority].push(newJob);
+			queuedJobs[(uint8)aPriority]++;			
 			jobListMutex.Unlock();
 		}
 		else
 		{
 			idleThread->StartJob(newJob);
 		}
+		unfinishedJobs[(uint8)aPriority]++;
 		JobManager::threadMutex.Unlock();
-		return newJob;		
+		return newJob;
 	}
 
 	Job* Frame::GetNextJob()
@@ -30,10 +32,11 @@ namespace Vanguard
 		jobListMutex.Lock();
 		for (int i = (uint8)JobPriority::qty - 1; i >= 0; i--)
 		{
-			if (jobs[i].size() > 0)
+			if (queuedJobs[i] > 0)
 			{
 				Job* nextJob = jobs[i].front();
 				jobs[i].pop();
+				queuedJobs[i]--;
 				jobListMutex.Unlock();
 				return nextJob;
 			}

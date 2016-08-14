@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include "World.h"
 
+#include "Entity\Transform.h"
+
 namespace Vanguard
 {
 
@@ -22,10 +24,11 @@ namespace Vanguard
 	{
 		Entity* testEntity = new Entity();
 
-		Component* newTransform = testEntity->AddComponent(INativeClassInfo::GetType("Transform"));
+		//Component* newTransform = testEntity->AddComponent("Transform");
+		Component* newTransform = testEntity->AddComponent<Transform>();
 		EXPECT_NE(newTransform, nullptr);
 
-		Component* newInvalidType = testEntity->AddComponent(INativeClassInfo::GetType("Entity"));
+		Component* newInvalidType = testEntity->AddComponent("Entity");
 		EXPECT_EQ(newInvalidType, nullptr);
 
 		delete testEntity;

@@ -3,7 +3,7 @@
 
 namespace Vanguard
 {
-	REFLECTED_SUBCLASS_DEFINITION(Entity,VanguardObject)
+	REFLECTED_SUBCLASS_DEFINITION(Entity, VanguardObject)
 
 	Component* Entity::AddComponent(INativeClassInfo* aComponentType)
 	{

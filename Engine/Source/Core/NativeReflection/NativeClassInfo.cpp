@@ -3,7 +3,7 @@
 
 namespace Vanguard
 {
-	//DynamicArray<INativeClassInfo*> INativeClassInfo::allClassInfos = DynamicArray<INativeClassInfo*>();
+	// TODO: Use a hashtable instead of an array!
 	DynamicArray<INativeClassInfo*>& INativeClassInfo::GetAllClassInfosList()
 	{
 		static DynamicArray<INativeClassInfo*> allClassInfos;

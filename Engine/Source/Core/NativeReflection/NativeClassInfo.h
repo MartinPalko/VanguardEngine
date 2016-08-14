@@ -2,6 +2,7 @@
 #include "Foundation.h"
 #include "Core_Common.h"
 #include "Log.h"
+#include <typeinfo>
 
 namespace Vanguard
 {
@@ -15,13 +16,15 @@ namespace Vanguard
 
 		String className;
 		String baseClassName;
+		size_t runtimeHash; // This hash is ONLY useful for runtime comparisons. It may differ from build to build, or from compiler to compiler.
 		INativeClassInfo* baseClass = nullptr;
 		DynamicArray<INativeClassInfo*> derivedClasses;
 
-		INativeClassInfo(const String& aClassName, const String& aBaseClassName)
+		INativeClassInfo(const String& aClassName, const String& aBaseClassName, size_t aRuntimeHash)
 		{
 			className = aClassName;
 			baseClassName = aBaseClassName;
+			runtimeHash = aRuntimeHash;
 		}
 
 		template<class T> static T* CreateInstance()
@@ -38,6 +41,17 @@ namespace Vanguard
 
 		static DynamicArray<INativeClassInfo*> GetAllTypes();
 		static INativeClassInfo* GetType(const String& aTypeName);
+		template<class T>static INativeClassInfo* GetType()
+		{
+			size_t h = typeid(T).hash_code();
+			DynamicArray<INativeClassInfo*>& allClassInfos = GetAllClassInfosList();
+			for (uint32 i = 0; i < allClassInfos.Count(); i++)
+			{
+				if (allClassInfos[i]->runtimeHash == h)
+					return allClassInfos[i];
+			}
+			return nullptr;
+		}
 
 		bool IsA(INativeClassInfo* otherClass) const;
 
@@ -82,7 +96,8 @@ namespace Vanguard
 			{
 				String cname = aClassName;
 				String bname = aBaseClassName;
-				newClassInfo = new NativeClassInfo<T>(cname, bname);
+				size_t hash = typeid(T).hash_code();
+				newClassInfo = new NativeClassInfo<T>(cname, bname, hash);
 			}
 			allClassInfos.PushBack(newClassInfo);
 
@@ -92,7 +107,7 @@ namespace Vanguard
 			return newClassInfo;
 		}
 
-		NativeClassInfo(const String& aClassName, const String& aBaseClassName) : INativeClassInfo(aClassName, aBaseClassName){ }
+		NativeClassInfo(const String& aClassName, const String& aBaseClassName, size_t aRuntimeHash) : INativeClassInfo(aClassName, aBaseClassName, aRuntimeHash){ }
 
 		virtual void* CreateInstance() const override
 		{

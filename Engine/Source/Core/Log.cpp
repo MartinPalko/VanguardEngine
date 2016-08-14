@@ -114,7 +114,8 @@ namespace Vanguard
 			}
 
 			AsyncIO::AppendToFile(logFile, textToWrite);
-			AsyncIO::AppendToFile(rollingLogFile, textToWrite);
+			if (rollingLogFileEnabled)
+				AsyncIO::AppendToFile(rollingLogFile, textToWrite);
 
 			GetUnflushedEntriesArray().Clear();
 			flushingLog = false;

@@ -3,28 +3,39 @@
 
 namespace Vanguard
 {
-	// TODO: Use a hashtable instead of an array!
-	DynamicArray<INativeClassInfo*>& INativeClassInfo::GetAllClassInfosList()
+	std::unordered_map<size_t, INativeClassInfo*>& INativeClassInfo::GetClassinfoNameMap()
 	{
-		static DynamicArray<INativeClassInfo*> allClassInfos;
+		static std::unordered_map<size_t, INativeClassInfo*> allClassInfos;
+		return allClassInfos;
+	}
+
+	std::unordered_map<size_t, INativeClassInfo*>& INativeClassInfo::GetClassinfoHashMap()
+	{
+		static std::unordered_map<size_t, INativeClassInfo*> allClassInfos;
 		return allClassInfos;
 	}
 
 	DynamicArray<INativeClassInfo*> INativeClassInfo::GetAllTypes()
 	{
-		return GetAllClassInfosList();
+		DynamicArray<INativeClassInfo*> returnArray(GetClassinfoNameMap().size());
+		for (auto pair : GetClassinfoNameMap())
+		{
+			returnArray.PushBack(pair.second);
+		}
+		return returnArray;
 	}
 
 	INativeClassInfo* INativeClassInfo::GetType(const String& aTypeName)
 	{
-		DynamicArray<INativeClassInfo*>& allClassInfos = GetAllClassInfosList();
-
-		for (unsigned int i = 0; i < allClassInfos.Count(); i++)
+		size_t nameHash = StringID(aTypeName).GetHash();
+		if (GetClassinfoNameMap().count(nameHash))
 		{
-			if (allClassInfos[i]->GetTypeName() == aTypeName)
-				return allClassInfos[i];
+			return GetClassinfoNameMap()[nameHash];
 		}
-		return nullptr;
+		else
+		{
+			return nullptr;
+		}
 	}
 
 	bool INativeClassInfo::IsA(INativeClassInfo* otherClass) const

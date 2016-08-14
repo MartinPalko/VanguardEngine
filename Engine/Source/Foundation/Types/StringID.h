@@ -8,7 +8,7 @@ namespace Vanguard
 	class FOUNDATION_API StringID
 	{
 	private:
-		uint64 Hash;
+		size_t Hash;
 
 		void HashString(const String& aString);
 	public:

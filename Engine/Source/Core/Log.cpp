@@ -4,17 +4,18 @@
 #include "Platforms/Platform.h"
 #include "Config/Config.h"
 #include "Core.h"
-#include "Mono/ManagedAssembly.h"
 
 
 namespace Vanguard
 {
 	Int32ConfigVar Log::maxLogFiles = Int32ConfigVar("Core", "Log", "MaxLogFiles", 10);
 	Int32ConfigVar Log::maxEntriesBetweenFlushes = Int32ConfigVar("Core", "Log", "MaxEntriesBetweenFlushes", 5);
+	BooleanConfigVar Log::rollingLogFileEnabled = BooleanConfigVar("Core", "Log", "RollingLogfileEnabled", false);
 
 	bool Log::initialized = false;
 
 	FilePath Log::logFile;
+	FilePath Log::rollingLogFile;
 
 	// Retreive as a function-static variable so it will always be initialized, even when calling before main (from config var, or reflection system setup etc.)
 	DynamicArray<LogEntry>& GetUnflushedEntriesArray()
@@ -58,20 +59,17 @@ namespace Vanguard
 		logFile = logFile.GetRelative(fileName + ".log");
 		logFile = FileSystem::MakeUniqueFileName(logFile);
 
+		rollingLogFile = Directories::GetLogDirectory();
+		rollingLogFile = rollingLogFile.GetRelative("rollingLog.log");
 		FileSystem::CreateFile(logFile);
+
+		if (rollingLogFileEnabled && !FileSystem::FileExists(rollingLogFile))
+			FileSystem::CreateFile(rollingLogFile);
+
 		Flush();
 
 		initialized = true;
 	}
-
-	void Log::AddInternalCalls()
-	{
-		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Message", (const void*)Log::Message_);
-		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Warning", (const void*)Log::Warning_);
-		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Error", (const void*)Log::Error_);
-		Core::GetInstance()->GetManaged()->AddInternalCall("Vanguard.Log::Exception", (const void*)Log::Exception_);
-	}
-
 
 	void Log::Write(const String& aMessage, const LogEntryErrorLevel& aErrorLevel, const String& aCategoty)
 	{
@@ -84,7 +82,7 @@ namespace Vanguard
 
 		GetUnflushedEntriesArray().PushBack(newEntry);
 
-		std::cout << newEntry.GetFormattedLogEntry() << "\n";
+		std::cout << newEntry.GetFormattedLogEntry().GetCharPointer() << "\n";
 
 		if (initialized && (aErrorLevel >= LogEntryErrorLevel::Error || GetUnflushedEntriesArray().Count() >= maxEntriesBetweenFlushes))
 		{
@@ -108,17 +106,18 @@ namespace Vanguard
 		{
 			flushingLog = true;
 
+			// Write to log file
 			String textToWrite = "";
-
 			for (size_t i = 0; i < GetUnflushedEntriesArray().Count(); i++)
 			{
 				textToWrite += GetUnflushedEntriesArray()[i].GetFormattedLogEntry() + "\n";
 			}
+
+			AsyncIO::AppendToFile(logFile, textToWrite);
+			if (rollingLogFileEnabled)
+				AsyncIO::AppendToFile(rollingLogFile, textToWrite);
+
 			GetUnflushedEntriesArray().Clear();
-
-			if (!FileSystem::AppendToFile(logFile, textToWrite))
-				Exception("Error writing to log file");
-
 			flushingLog = false;
 		}
 	}

@@ -8,7 +8,7 @@ namespace Vanguard
 	class FOUNDATION_API StringID
 	{
 	private:
-		uint64 Hash;
+		size_t Hash;
 
 		void HashString(const String& aString);
 	public:
@@ -32,7 +32,7 @@ namespace Vanguard
             HashString(aCharPointer);
 		}
 
-		inline uint64 GetHash() const
+		inline size_t GetHash() const
 		{
 			return Hash;
 		}

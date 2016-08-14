@@ -1,10 +1,4 @@
 #pragma once
-#include <string>
-#include <cstring>
-#include <functional>
-#include <sstream>
-#include <algorithm>
-#include <cctype>
 
 #include "Collections/DynamicArray.h"
 #include "IntegerDefs.h"
@@ -12,376 +6,170 @@
 
 namespace Vanguard
 {
-	#define TRUE_STRING "true"
-	#define FALSE_STRING "false"
-
 	class FOUNDATION_API String
 	{
 	private:
-		std::string data;
+		std::string* data;
 
 	public:
-		String() {}
-		String(const String& aString) { data.assign(aString.data); }
+		String();
+		String(const String& aString);
+		String(const char* aCharPointer);
+		String(const char& aChar);
+		void operator = (const String& aOther);
+		void operator += (const String& aOther);
+		~String();
 
 		// Comparison to other vanguard::string
-		inline bool operator == (const String& aOther) const { return data == aOther.data; }
-		inline bool operator != (const String& aOther) const { return data != aOther.data; }
-		inline bool operator < (const String& aOther) const { return data < aOther.data; }
-		inline bool operator <= (const String& aOther) const { return data <= aOther.data; }
-		inline bool operator > (const String& aOther) const { return data > aOther.data; }
-		inline bool operator >= (const String& aOther) const { return data >= aOther.data; }
+		bool operator == (const String& aOther) const;
+		bool operator != (const String& aOther) const;
+		bool operator < (const String& aOther) const;
+		bool operator <= (const String& aOther) const;
+		bool operator > (const String& aOther) const;
+		bool operator >= (const String& aOther) const;
 
-		// Create from and cast to std string
-		String(const std::string& aSTDString){ data = aSTDString; }
-		inline operator const std::string& () const { return data; }
-
-		// Create from and cast to const char*
-		String(const char* aCharPointer){ data.assign(aCharPointer); }
-		inline const char* GetCharPointer() const { return data.c_str(); }
-
-		// Create from single char
-		String(const char& aChar) { data = aChar; }
-
-		inline void operator += (const String& aOther) { data = Append(aOther).data; }
+		const char* GetCharPointer() const;				
 
 		// Gets the value that is return when no position is found (for functions that check position)
-		inline static size_t NPos() { return std::string::npos; }
+		static size_t NPos();
 
 		// Access character by index
-		inline char operator[](size_t aIndex) const
-		{
-#if VANGUARD_DEBUG
-			// Guard aginst out of range
-			if (aIndex < 0 || aIndex >= GetLength())
-				throw std::invalid_argument("String index out of range");
-#endif
-			return data[aIndex];
-		}
-
+		char operator[](size_t aIndex) const;
 		// To and from boolean
-		static String FromBoolean(const bool& aBool) { return aBool ? TRUE_STRING : FALSE_STRING; }
-		inline bool ToBoolean() const {	return this->ToLower() == TRUE_STRING; }
+		static String FromBoolean(const bool& aBool);
+		bool ToBoolean() const;
 
 		// To and from int32
-		static String FromInt32(int32 aInt32) { return ::std::to_string(aInt32); }
-		inline int32 ToInt32() const
-		{
-			if (data == "")
-				return 0;
-			else
-				return std::stoi(data);
-		}
+		static String FromInt32(int32 aInt32);
+		int32 ToInt32() const;
 
 		//// To and from float
-		static String FromFloat(float aFloat){ return String(::std::to_string(aFloat)).TrimEnd("0").TrimEnd("."); }
-		inline float ToFloat() const { return std::stof(data); }
+		static String FromFloat(float aFloat);
+		float ToFloat() const;
 
 		// Returns the number of characters in this string
-		inline size_t GetLength() const
-		{
-			return data.length();
-		}
+		size_t GetLength() const;
 
-		inline bool IsEmpty() const
-		{
-			return Trim().GetLength() == 0;
-		}
+		bool IsEmpty() const;
 
 		// Returns a string with the specified string appended to the end of it.
-		inline String Append(const String& aString) const
-		{
-			std::string newString = data;
-			newString.append(aString.data);
-			return newString;
-		}
+		String Append(const String& aString) const;
 
 		// Split the string into a list of strings by the specified character.
-		inline DynamicArray<String> Split(const char& aSplitBy) const
-		{
-			DynamicArray<String> splitList = DynamicArray<String>();
-
-			std::stringstream strStream(data);
-			std::string segment;
-
-			while (std::getline(strStream, segment, aSplitBy))
-			{
-				splitList.PushBack(segment);
-			}
-
-			return splitList;
-		}
+		DynamicArray<String> Split(const char& aSplitBy) const;
 
 		// Joins an array of strings into a single string, with the specified seperator between each element.
-		static String Join(const DynamicArray<String>& aStringList, const char& aSeperatorCharacter)
-		{
-			if (aStringList.Count() <= 0)
-				return String();
-
-			String newString = aStringList[0];
-
-			for (uint32 i = 1; i < aStringList.Count(); i++)
-			{
-				newString += ";";
-				newString += aStringList[i];
-			}
-			return newString;
-		}
+		static String Join(const DynamicArray<String>& aStringList, const char& aSeperatorCharacter);
 
 		// Returns true if the string contains at least one instance of the specified substring
-		inline bool Contains(const String& aString) const
-		{
-			return !(data.find(aString.GetCharPointer()) == std::string::npos);
-		}
+		bool Contains(const String& aString) const;
 
 		// Returns true if the string contains at least one instance of the specified character
-		inline bool Contains(const char& aCharacter) const
-		{
-			return !(data.find(aCharacter) == std::string::npos);
-		}
+		bool Contains(const char& aCharacter) const;
 
 		// Returns true if the string contains at least one instance of any of the specified characters
-		inline bool ContainsAny(const String& aCharacters) const
-		{
-			for (size_t i = 0; i < aCharacters.GetLength(); i++)
-			{
-				if (!(data.find(aCharacters[i]) == std::string::npos))
-					return true;
-			}
-			return false;
-		}
+		bool ContainsAny(const String& aCharacters) const;
 
 		// Returns true if the first character of the string is the specified character
-		inline bool BeginsWith(const char& aCharacter) const
-		{
-			return FirstIndexOf(aCharacter) == 0;
-		}
+		bool BeginsWith(const char& aCharacter) const;
 
 		// Returns true if the first character of the string is any of the specified characters
-		inline bool BeginsWithAny(const String& aCharacters) const
-		{
-			return FirstIndexOfAny(aCharacters) == 0;
-		}
+		bool BeginsWithAny(const String& aCharacters) const;
 
 		// Returrns true if the last character of the string is the specified character
-		inline bool EndsWith(const char& aCharacter) const
-		{
-			return LastIndexOf(aCharacter) == GetLength() - 1;
-		}
+		bool EndsWith(const char& aCharacter) const;
 
 		// Returns true if the first character of the string is any of the specified characters
-		inline bool EndsWithAny(const String& aCharacters) const
-		{
-			return LastIndexOfAny(aCharacters) == GetLength() - 1;
-		}
+		bool EndsWithAny(const String& aCharacters) const;
 
 		// Returns the index of the first of the specified character
-		inline size_t FirstIndexOf(const char& aCharacter) const
-		{
-			return data.find_first_of(aCharacter);
-		}
+		size_t FirstIndexOf(const char& aCharacter) const;
 
 		// Returns the index of the first of any of the specified characters
-		inline size_t FirstIndexOfAny(const String& aCharacters) const
-		{
-			return data.find_first_of(aCharacters.GetCharPointer());
-		}
+		size_t FirstIndexOfAny(const String& aCharacters) const;
 
 		// Returns the index of the last of the specified character
-		inline size_t LastIndexOf(const char& aCharacter) const
-		{
-			return data.find_last_of(aCharacter);
-		}
+		size_t LastIndexOf(const char& aCharacter) const;
 
 		// Returns the index of the last of any of the specified characters
-		inline size_t LastIndexOfAny(const String& aCharacters) const
-		{
-			return data.find_last_of(aCharacters.GetCharPointer());
-		}
+		size_t LastIndexOfAny(const String& aCharacters) const;
 
 		// Returns the index of the first character not to match the specified character
-		inline size_t FirstIndexNotOf(const char& aCharacter) const
-		{
-			return data.find_first_not_of(aCharacter);
-		}
+		size_t FirstIndexNotOf(const char& aCharacter) const;
 
 		// Returns the index of the first character not to match the and of the specified characters
-		inline size_t FirstIndexNotOfAny(const String& aCharacters) const
-		{
-			return data.find_first_not_of(aCharacters.GetCharPointer());
-		}
+		size_t FirstIndexNotOfAny(const String& aCharacters) const;
 
 		// Returns the index of the last character not to match the specified character
-		inline size_t LastIndexNotOf(const char& aCharacter) const
-		{
-			return data.find_last_not_of(aCharacter);
-		}
+		size_t LastIndexNotOf(const char& aCharacter) const;
 
 		// Returns the index of the last character not to match the and of the specified characters
-		inline size_t LastIndexNotOfAny(const String& aCharacters) const
-		{
-			return data.find_last_not_of(aCharacters.GetCharPointer());
-		}
+		size_t LastIndexNotOfAny(const String& aCharacters) const;
 
 		// Returns a string with all instances of a specified character withplaced with another.
-		inline String Replace(const char& aChar, const char& aWithChar) const
-		{
-			std::string newString = data;
-			std::replace(newString.begin(), newString.end(), aChar, aWithChar);
-			return newString;
-		}
+		String Replace(const char& aChar, const char& aWithChar) const;
 
 		// Returns a string with all instances of a specified string withplaced with another.
 		// If possible, use the overloaded version that takes a character, as it's much faster.
-		inline String Replace(const String& aString, const String& aWithString) const
-		{
-			size_t start_pos = 0;
-			std::string newString = data;
-			while ((start_pos = newString.find(aString.GetCharPointer(), start_pos)) != std::string::npos)
-			{
-				newString.replace(start_pos, aString.GetLength(), aWithString.GetCharPointer());
-				start_pos += aWithString.GetLength(); // Handles case where 'aWithString' is a substring of 'aString'
-			}
-			return newString;
-		}
+		String Replace(const String& aString, const String& aWithString) const;
 
 		// Returns a string with the given string insterted starting at the given index.
-		inline String Insert(const int32& aAtIndex, const String& aStringToInsert) const
-		{
-			std::string newString = data;
-			newString.insert(aAtIndex, aStringToInsert.GetCharPointer());
-			return newString;
-		}
+		String Insert(const int32& aAtIndex, const String& aStringToInsert) const;
 
 		// Returns a string with the given string insterted starting at the given index.
-		inline String Remove(const int32& aAtIndex, const int32& aCharactersToRemove) const
-		{
-			std::string newString = data;
-			newString.erase(aAtIndex,aCharactersToRemove);
-			return newString;
-		}
+		String Remove(const int32& aAtIndex, const int32& aCharactersToRemove) const;
 
 		// Returns a string with all instances of the specified character removed.
-		inline String Remove(const char& aChar) const
-		{
-			std::string newString = data;
-			newString.erase(std::remove(newString.begin(), newString.end(), aChar), newString.end());
-			return newString;
-		}
+		String Remove(const char& aChar) const;
 
 		// Returns a string with all instances of the specified string removed.
-		inline String Remove(const String& aString) const
-		{
-			return Replace(aString, "");
-		}
+		String Remove(const String& aString) const;
 
 		// Returns a string with all characters between the two indexes removed.
-		inline String RemoveBetween(const size_t& aFirstIndex, const size_t& aSecondIndex) const
-		{
-			std::string newString = data;
-			if (aFirstIndex < aSecondIndex)
-				newString.erase(aFirstIndex, aSecondIndex - aFirstIndex);
-			else if (aSecondIndex < aFirstIndex)
-				newString.erase(aSecondIndex, aFirstIndex - aSecondIndex);
-			return newString;
-		}
+		String RemoveBetween(const size_t& aFirstIndex, const size_t& aSecondIndex) const;
 
 		// Returns a string with all characters after the specified index removed.
-		inline String RemoveAfter(const size_t& aIndex)
-		{
-			return RemoveBetween(aIndex + 1, GetLength());
-		}
+		String RemoveAfter(const size_t& aIndex);
 
 		// Returns a string with all characters before the specified index removed.
-		inline String RemoveBefore(const size_t& aIndex)
-		{
-			return RemoveBetween(0, aIndex + 1);
-		}
+		String RemoveBefore(const size_t& aIndex);
 
 		// Returns a string that has all instances of all characters specified removed from the string.
-		inline String RemoveCharacters(const char* aCharacters) const
-		{
-			std::string newString = data;
-			for (unsigned int i = 0; i < strlen(aCharacters); ++i)
-				newString.erase(std::remove(newString.begin(), newString.end(), aCharacters[i]), newString.end());
-			return newString;
-		}
+		String RemoveCharacters(const char* aCharacters) const;
 
 		// Returns a string with leading whitespace removed.
-		inline String TrimStart() const
-		{
-			std::string newString = data;
-			newString.erase(newString.begin(), std::find_if(newString.begin(), newString.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
-			return newString;
-		}
+		String TrimStart() const;
 
 		// Returns a string with trailing whitespace removed.
-		inline String TrimEnd() const
-		{
-			std::string newString = data;
-			newString.erase(std::find_if(newString.rbegin(), newString.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), newString.end());
-			return newString;
-		}
+		String TrimEnd() const;
 
 		// Returns a string with all leading and trailing whitespace removed.
-		inline String Trim() const
-		{
-			return TrimStart().TrimEnd();
-		}
+		String Trim() const;
 
 		// Trims any of the specified characters from the start of the string
-		inline String TrimStart(const char* aChars) const
-		{
-			std::string newString = data;
-			size_t newStart = newString.find_first_not_of(aChars);
-			newString.erase(0, newStart);
-			return newString;
-		}
+		String TrimStart(const char* aChars) const;
 
 		// Trims any of the specified character from the start of the string
-		inline String TrimStart(const char& aChar) const { return TrimStart(&aChar); }
+		String TrimStart(const char& aChar) const;
 
 		// Trims any of the specified characters off the end of the string
-		inline String TrimEnd(const char* aChars) const
-		{
-			std::string newString = data;
-			size_t newLength = newString.find_last_not_of(aChars) + 1;
-			newString.resize(newLength);
-			return newString;
-		}
+		String TrimEnd(const char* aChars) const;
 
 		// Trims any of the specified character off the end of the string
-		inline String TrimEnd(const char& aChar) const { return TrimEnd(&aChar); }
+		String TrimEnd(const char& aChar) const;
 
 		// Trims any of the specified characters from the start and end of the string
-		inline String Trim(const char* aChars) const
-		{
-			return TrimStart(aChars).TrimEnd(aChars);
-		}
+		String Trim(const char* aChars) const;
 
 		// Trims any of the specified character from the start and end of the string
-		inline String Trim(const char& aChar) const { return Trim(&aChar); }
+		String Trim(const char& aChar) const;
 
 		// Return a lowercase version of this string
-		inline String ToLower() const
-		{
-			std::string newString = data;
-			transform(newString.begin(), newString.end(), newString.begin(), ::tolower);
-			return newString;
-		}
+		String ToLower() const;
 
 		// Return an uppercase version of this string
-		inline String ToUpper() const
-		{
-			std::string stdstring = data;
-			transform(stdstring.begin(), stdstring.end(), stdstring.begin(), ::toupper);
-			return stdstring;
-		}
+		String ToUpper() const;
 	};
-
-	// Comparison to std::string
-	inline bool operator == (const String& lhs, const std::string& rhs) { return lhs == (String)rhs; }
-	inline bool operator == (const std::string& lhs, const String& rhs) { return rhs == (String)lhs; }
 
 	// Addition
 	inline String operator+ (const String& lhs, const String& rhs) { return lhs.Append(rhs); }
@@ -391,8 +179,4 @@ namespace Vanguard
 	// Comparison to char*
 	inline bool operator == (const String& lhs, const char* rhs) { return lhs == String(rhs); }
 	inline bool operator == (const char* lhs, const String& rhs) { return rhs == String(lhs); }
-
-	// Implement osstream support
-	inline ::std::ostream& operator<<(::std::ostream& os, const String& aString) { return os << aString.GetCharPointer(); }
-
 }

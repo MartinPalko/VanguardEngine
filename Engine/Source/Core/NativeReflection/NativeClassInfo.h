@@ -2,6 +2,7 @@
 #include "Foundation.h"
 #include "Core_Common.h"
 #include "Log.h"
+#include <typeinfo>
 
 namespace Vanguard
 {
@@ -10,18 +11,20 @@ namespace Vanguard
 	class CORE_API INativeClassInfo
 	{
 	protected:
-		//static DynamicArray<INativeClassInfo*> allClassInfos;
-		static DynamicArray<INativeClassInfo*>& GetAllClassInfosList();
+		static std::unordered_map<size_t, INativeClassInfo* >& GetClassinfoNameMap();
+		static std::unordered_map<size_t, INativeClassInfo* >& GetClassinfoHashMap();
 
 		String className;
 		String baseClassName;
+		size_t runtimeHash; // This hash is ONLY useful for runtime comparisons. It may differ from build to build, or from compiler to compiler.
 		INativeClassInfo* baseClass = nullptr;
 		DynamicArray<INativeClassInfo*> derivedClasses;
 
-		INativeClassInfo(const String& aClassName, const String& aBaseClassName)
+		INativeClassInfo(const String& aClassName, const String& aBaseClassName, size_t aRuntimeHash)
 		{
 			className = aClassName;
 			baseClassName = aBaseClassName;
+			runtimeHash = aRuntimeHash;
 		}
 
 		template<class T> static T* CreateInstance()
@@ -37,26 +40,28 @@ namespace Vanguard
 		DynamicArray<INativeClassInfo*> GetDerivedClasses() const { return derivedClasses; }
 
 		static DynamicArray<INativeClassInfo*> GetAllTypes();
-		static INativeClassInfo* GetType(const String& aTypeName);
+		static INativeClassInfo* GetType(const StringID& aTypeName);
+		template<class T>static INativeClassInfo* GetType()
+		{
+			return GetClassinfoHashMap()[typeid(T).hash_code()];
+		}
 
 		bool IsA(INativeClassInfo* otherClass) const;
 
 		static void UpdateHierarchyReferences()
 		{
-			DynamicArray<INativeClassInfo*>& allClassInfos = GetAllClassInfosList();
-
 			// First clear all references.
-			for (uint32 i = 0; i < allClassInfos.Count(); i++)
+			for (auto pair : GetClassinfoHashMap())
 			{
-				allClassInfos[i]->baseClass = nullptr;
-				allClassInfos[i]->derivedClasses.Clear();
+				pair.second->baseClass = nullptr;
+				pair.second->derivedClasses.Clear();
 			}
 			// Now rebuild
-			for (uint32 i = 0; i < allClassInfos.Count(); i++)
+			for (auto pair : GetClassinfoHashMap())
 			{
-				allClassInfos[i]->baseClass = GetType(allClassInfos[i]->baseClassName);
-				if (allClassInfos[i]->baseClass)
-					allClassInfos[i]->baseClass->derivedClasses.PushBack(allClassInfos[i]);
+				pair.second->baseClass = GetType(pair.second->baseClassName);
+				if (pair.second->baseClass)
+					pair.second->baseClass->derivedClasses.PushBack(pair.second);
 			}
 		}
 	};
@@ -65,29 +70,29 @@ namespace Vanguard
 	{
 
 	public:
-		static INativeClassInfo* Create(const String& aClassName, const String& aBaseClassName = "")
+		static INativeClassInfo* Create(const char* aClassName, const char* aBaseClassName = "")
 		{
-			String ClassName = typeid(T).name();
-				
-			DynamicArray<INativeClassInfo*>& allClassInfos = GetAllClassInfosList();
+			const size_t hash = typeid(T).hash_code();
 
-			for (uint32 i = 0; i < allClassInfos.Count(); i++)
+			std::unordered_map<size_t, INativeClassInfo*>& nameMap = GetClassinfoNameMap();
+			std::unordered_map<size_t, INativeClassInfo*>& hashMap = GetClassinfoHashMap();
+			
+			if (hashMap.count(hash))
 			{
-				if (allClassInfos[i]->GetTypeName() == ClassName)
-				{
-					return allClassInfos[i];
-				}
+				return hashMap[hash];
 			}
-			NativeClassInfo<T>* newClassInfo = new NativeClassInfo<T>(aClassName, aBaseClassName);
-			allClassInfos.PushBack(newClassInfo);
 
-			// TODO: Do this initially, and then again whenever a dll is loaded or unloaded.
+			NativeClassInfo<T>* newClassInfo = new NativeClassInfo<T>(aClassName, aBaseClassName, hash);
+			nameMap[StringID(aClassName).GetHash()] = newClassInfo;
+			hashMap[hash] = newClassInfo;
+
+			// TODO: Do this initially, and then again whenever a dll is loaded or unloaded, instead of every time a class is registered.
 			UpdateHierarchyReferences();
 
 			return newClassInfo;
 		}
 
-		NativeClassInfo(const String& aClassName, const String& aBaseClassName) : INativeClassInfo(aClassName, aBaseClassName){ }
+		NativeClassInfo(const String& aClassName, const String& aBaseClassName, size_t aRuntimeHash) : INativeClassInfo(aClassName, aBaseClassName, aRuntimeHash){ }
 
 		virtual void* CreateInstance() const override
 		{

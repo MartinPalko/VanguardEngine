@@ -1,5 +1,5 @@
 #include "JobManager.h"
-#include "JobThread.h"
+#include "JobWorker.h"
 #include "Job.h"
 #include "Frame.h"
 
@@ -8,23 +8,23 @@ namespace Vanguard
 	Mutex JobManager::threadMutex;
 	Frame* JobManager::currentFrame;
 
-	DynamicArray<JobThread*> JobManager::jobThreads = DynamicArray<JobThread*>();
-	std::queue<JobThread*> JobManager::idleThreads = std::queue<JobThread*>();
+	DynamicArray<JobWorker*> JobManager::workers = DynamicArray<JobWorker*>();
+	std::queue<JobWorker*> JobManager::idleThreads = std::queue<JobWorker*>();
 
 	Mutex jobListMutex;
 
-	JobThread* JobManager::GetIdleThread()
+	JobWorker* JobManager::GetIdleThread()
 	{
 		if (idleThreads.size() > 0)
 		{
-			JobThread* idleThread = idleThreads.front();
+			JobWorker* idleThread = idleThreads.front();
 			idleThreads.pop();
 			return idleThread;
 		}
 		return nullptr;
 	}
 
-	void JobManager::ThreadFinishedJob(JobThread* aThread, Job* aJob)
+	void JobManager::ThreadFinishedJob(JobWorker* aThread, Job* aJob)
 	{
 		delete aJob;
 		
@@ -45,18 +45,35 @@ namespace Vanguard
 
 		Log::Message("Creating " + String::FromInt32(targetThreads) + " job threads", "JobSystem");
 
-		int32 threadsToCreate = targetThreads - jobThreads.Count();
+		int32 threadsToCreate = targetThreads - workers.Count();
 
 		for (int i = 0; i < threadsToCreate; i++)
 		{
-			JobThread* newJobThread = new JobThread();
-			jobThreads.PushBack(newJobThread);
-			idleThreads.push(newJobThread);
+			JobWorker* newJobWorker = new JobWorker(i);
+			workers.PushBack(newJobWorker);
+			idleThreads.push(newJobWorker);
 		}
 	}
 
+	void JobManager::JoinThreads()
+	{
+		for (int i = 0; i < workers.Count(); i++)
+		{
+			workers[i]->Join();
+			delete workers[i];
+		}
+		workers.Clear();
+	}
+
 	void JobManager::ProcessFrame(Frame* aFrame)
-	{		
+	{
+		if (!workers.Count())
+		{
+			CreateThreads();
+		}
+
+		DEBUG_LOG("Processing Frame " + String::FromInt32(aFrame->frameNumber))
+
 		currentFrame = aFrame;
 		currentFrame->processing = true;
 
@@ -72,20 +89,20 @@ namespace Vanguard
 			std::this_thread::sleep_for(std::chrono::microseconds(1));
 
 		// And again until all threads have become idle.
-		while (idleThreads.size() != jobThreads.Count())
+		while (idleThreads.size() != workers.Count())
 			std::this_thread::sleep_for(std::chrono::microseconds(1));
 
 		currentFrame->processing = false;
 	}
 
-	JobThread* JobManager::GetJobThread()
+	JobWorker* JobManager::GetWorker()
 	{
-		std::thread::id thisThreadID = std::this_thread::get_id();
+		const String currentThreadID = Thread::CurrentThreadID();
 
-		for (uint32 i = 0; i < jobThreads.Count(); i++)
+		for (uint32 i = 0; i < workers.Count(); i++)
 		{
-			if (jobThreads[i]->stdthread.get_id() == thisThreadID)
-				return jobThreads[i];
+			if (workers[i]->GetID() == currentThreadID)
+				return workers[i];
 		}
 		return nullptr;
 	}

@@ -39,6 +39,21 @@ IF (APPLE)
 	set (CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG")
 ENDIF()
 
+IF (MSVC)
+	# Test 32/64 bits
+	if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+		message(STATUS "Target is 64 bits")
+		if (WIN32)
+			set(WINXXBITS Win64)
+		endif(WIN32)
+	else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+		message(STATUS "Target is 32 bits")
+		if (WIN32)
+			set(WINXXBITS Win32)
+		endif(WIN32)
+	endif("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+ENDIF()
+
 # Enable folders in the solution
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS "ON")
 
@@ -61,21 +76,3 @@ MESSAGE("Creating deferred projects:")
 FOREACH(project ${deferredAddProjects})
 	ADD_DEFFERED_PROJECTS_RECURSIVE(${project})
 ENDFOREACH()
-
-#IF visual studio, find Csharp projects and add them to the solution.
-IF (MSVC)
-	#Find and add all csharp projects
-	FILE(GLOB_RECURSE CSharpProjects "${CMAKE_CURRENT_SOURCE_DIR}/*.csproj")
-
-	#Add them all to solution.
-	FOREACH(CSharpProject ${CSharpProjects})
-			GET_FILENAME_COMPONENT(ProjectName ${CSharpProject} NAME_WE)		
-			INCLUDE_EXTERNAL_MSPROJECT("${ProjectName}" "${CSharpProject}" PLATFORM "Any CPU")
-		
-			GET_FILENAME_COMPONENT(projectFolder "${CSharpProject}" DIRECTORY)
-		
-			PUT_IN_FOLDER_RELATIVE_ROOT ("${ProjectName}" "${projectFolder}/..")
-		
-			MESSAGE("Added CSharp Project: ${ProjectName} from ${CSharpProject}")
-	ENDFOREACH()
-ENDIF()

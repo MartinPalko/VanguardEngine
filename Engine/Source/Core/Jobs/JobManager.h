@@ -7,12 +7,12 @@
 namespace Vanguard
 {
 	class Job;
-	class JobThread;
+	class JobWorker;
 	class Frame;
 
 	class JobManager
 	{
-		friend JobThread;
+		friend JobWorker;
 		friend Frame;
 
 	private:
@@ -20,18 +20,19 @@ namespace Vanguard
 
 		static Mutex threadMutex;
 
-		static DynamicArray<JobThread*> jobThreads;
-		static std::queue<JobThread*> idleThreads;
+		static DynamicArray<JobWorker*> workers;
+		static std::queue<JobWorker*> idleThreads;
 
-		static JobThread* GetIdleThread();
+		static JobWorker* GetIdleThread();
 
-		static void ThreadFinishedJob(JobThread* aThread, Job* aJob);
+		static void ThreadFinishedJob(JobWorker* aThread, Job* aJob);
 
 	public:
 		static void CreateThreads();
+		static void JoinThreads();
 
 		static void ProcessFrame(Frame* aFrame);
 
-		static JobThread* GetJobThread();
+		static JobWorker* GetWorker();
 	};
 }

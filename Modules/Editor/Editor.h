@@ -6,9 +6,6 @@ namespace Vanguard_Editor
 {
 	class Editor : public IModule
 	{
-		virtual String GetModuleName() { return "EditorUI"; }
-		virtual String GetModuleType() { return "Editor"; }
-
 		World* editorWorld;
 		
 		virtual void LoadModule()

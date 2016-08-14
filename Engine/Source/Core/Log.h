@@ -2,9 +2,6 @@
 
 #include "Core_Common.h"
 #include "Foundation.h"
-#include "Mono/ManagedString.h"
-
-struct _MonoString;
 
 namespace Vanguard
 {
@@ -66,6 +63,7 @@ namespace Vanguard
 	};
 
 	class Int32ConfigVar;
+	class BooleanConfigVar;
 
 	class CORE_API Log
 	{
@@ -73,18 +71,12 @@ namespace Vanguard
 	private:
 		static Int32ConfigVar maxLogFiles;
 		static Int32ConfigVar maxEntriesBetweenFlushes;
+		static BooleanConfigVar rollingLogFileEnabled;
 
 		static bool initialized;
 
 		static FilePath logFile;
-
-		// Internal calls.
-		static void Message_(ManagedString* aMessage, ManagedString* aChannel) { Write(aMessage->ToNative(), LogEntryErrorLevel::Message, aChannel->ToNative()); }
-		static void Warning_(ManagedString* aMessage, ManagedString* aChannel) { Write(aMessage->ToNative(), LogEntryErrorLevel::Warning, aChannel->ToNative()); }
-		static void Error_(ManagedString* aMessage, ManagedString* aChannel) { Write(aMessage->ToNative(), LogEntryErrorLevel::Error, aChannel->ToNative()); }
-		static void Exception_(ManagedString* aMessage, ManagedString* aChannel) { Write(aMessage->ToNative(), LogEntryErrorLevel::Exception, aChannel->ToNative()); }
-
-		static void AddInternalCalls();
+		static FilePath rollingLogFile;
 
 	public:
 		static void Initialize();

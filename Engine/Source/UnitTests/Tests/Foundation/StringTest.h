@@ -23,24 +23,13 @@ namespace Vanguard
 		String vanguardFromLiteral = "test";
 		String vanguardFromLiteral2 = "test";
 
-		std::string stdFromVanguard = vanguardFromLiteral;
-		std::string stdFromLiteral = "test";
-
 		const char* charPointerFromVanguard = vanguardFromLiteral.GetCharPointer();
 		const char* charPointerFromLiteral = "test";
-
-		String vanguardFromStd = stdFromLiteral;
-		String vanguardFromCharPointer = charPointerFromLiteral;
 
 		// Verify all types have their values set properly, and can be compared interchangeably with vanguard string
 
 		EXPECT_EQ(vanguardFromLiteral, vanguardFromLiteral2); // Vanguard String to Vanguard string
 		EXPECT_EQ(vanguardFromLiteral, vanguardFromLiteral); // Vanguard string to itself
-
-		EXPECT_EQ(vanguardFromLiteral, stdFromVanguard); // Vanguard string with std string
-		EXPECT_EQ(vanguardFromLiteral, stdFromLiteral);
-		EXPECT_EQ(stdFromVanguard, vanguardFromLiteral); // Flip lhs with rhs
-		EXPECT_EQ(stdFromLiteral, vanguardFromLiteral);
 
 		EXPECT_EQ(vanguardFromLiteral, charPointerFromVanguard); // Vanguard string with const char*
 		EXPECT_EQ(vanguardFromLiteral, charPointerFromLiteral);
@@ -49,10 +38,6 @@ namespace Vanguard
 
 		EXPECT_EQ(vanguardFromLiteral, "test"); // Vanguard string with string literal
 		EXPECT_EQ("test", vanguardFromLiteral); // Flip lhs with rhs
-
-		// Verify we can go from other types back to vanguard as well.
-		EXPECT_EQ("test", vanguardFromStd);
-		EXPECT_EQ("test", vanguardFromCharPointer);
 	}
 
 	TEST_F(StringTest, MiscQuery)
@@ -225,9 +210,8 @@ namespace Vanguard
 		String trueString = String::FromBoolean(true);
 		String falseString = String::FromBoolean(false);
 
-		EXPECT_EQ(TRUE_STRING, trueString);
-		EXPECT_EQ(FALSE_STRING, falseString);
-
+		EXPECT_EQ("true", trueString);
+		EXPECT_EQ("false", falseString);
 
 		EXPECT_TRUE(String("true").ToBoolean());
 		EXPECT_TRUE(String("TRUE").ToBoolean());

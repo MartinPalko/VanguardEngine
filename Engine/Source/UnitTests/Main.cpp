@@ -10,6 +10,7 @@
 #include "Tests/Foundation/StringIDTest.h"
 #include "Tests/Foundation/StringTest.h"
 #include "Tests/Foundation/VectorTest.h"
+#include "Tests/Foundation/MatrixTest.h"
 
 // Core
 #include "Tests/Core/EntityComponentTest.h"

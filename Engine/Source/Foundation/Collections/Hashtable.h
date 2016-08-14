@@ -12,7 +12,7 @@ namespace Vanguard
 	class Hashtable : public ICollection <T>
 	{
 	private:
-		std::unordered_map < uint64, T > data;
+		std::unordered_map < size_t, T > data;
 	public:
         //Constructors
 		Hashtable(){}

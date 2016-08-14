@@ -180,6 +180,11 @@ FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
 		ELSE()
 			ADD_LIBRARY(${projectName} ${projectType} ${projectSources})
 		ENDIF()
+
+		MESSAGE("${projectDependencies}")
+		
+		ADD_FLAGS(${projectName} "-DVANGUARD_LIB_NAME=\"${projectName}\"")
+		ADD_FLAGS(${projectName} "-DVANGUARD_LIB_DEPENDENCIES=${projectDependencies}")
 		
 		#On Unix, link libraries needed for dynamic links.
 		IF(UNIX AND NOT ${projectType} MATCHES "STATIC")
@@ -310,15 +315,15 @@ MACRO (CREATE_VANGUARD_PROJECT projectFolder projectName)
 	# Add this project to the list of projects.
 	SET(Vanguard_Projects ${Vanguard_Projects} projectName)
 	
-	FILE(GLOB_RECURSE CSharpProjects "${projectFolder}/Source/*.csproj")
+	FILE(GLOB_RECURSE CSharpProjects "${projectFolder}/*.csproj")
 	
-	FIND_TOPLEVEL_MAKELISTS(makeLists "${EngineRoot}/Projects/")
+	FIND_TOPLEVEL_MAKELISTS(makeLists "${projectFolder}")
 	
 	GET_DIRECTORIES(makeListDirectories "${makeLists}")
 	
 	FOREACH(makeListDir ${makeListDirectories})
 		MESSAGE("Executing makelist at: ${makeListDir}")
-		add_subdirectory (${makeListDir} "${EngineRoot}/Bin")
+		add_subdirectory (${makeListDir})
 		MESSAGE("")
 	ENDFOREACH()
 	

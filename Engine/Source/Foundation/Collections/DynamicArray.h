@@ -17,6 +17,7 @@ namespace Vanguard
 	public:
 		//Constructors
 		DynamicArray() = default;
+		DynamicArray(size_t aReserveSize) { data.reserve(aReserveSize); }
 		DynamicArray(const DynamicArray& rhs)
 		{
 			data = rhs.data;

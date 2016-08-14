@@ -3,17 +3,21 @@
 #include "Core_Common.h"
 
 #include "Config/Config.h"
-#include "EntityComponent/EntityComponentSystem.h"
+#include "World.h"
 #include "NativeReflection/NativeReflection.h"
 #include "Application/Application.h"
+#include "AsyncIO.h"
 #include "Log.h"
 #include "Project.h"
 #include "Directories.h"
-#include "Mono/ManagedAssembly.h"
 
 #include "Jobs/JobManager.h"
 #include "Jobs/Job.h"
 #include "Jobs/Frame.h"
+
+#include "Renderer/Camera.h"
+#include "Renderer/IRenderer.h"
+#include "Renderer/RenderView.h"
 
 namespace Vanguard
 {
@@ -30,24 +34,26 @@ namespace Vanguard
 	};
 
 	class ModuleManager;
-	class ManagedAssembly;
 
 	class CORE_API Core
 	{
 	private:
 		static BooleanConfigVar clearTempDirectoryOnShutdown;
+		static BooleanConfigVar showConsoleOnStart;
 
 		static Core* instance;
 
 		class Project* loadedProject;
 		class ModuleManager* moduleManager;
-		class ManagedAssembly* managedCore;
-
 		DynamicArray<World*> worlds = DynamicArray<World*>();
+		class DynamicArray<IRenderer*> renderers;
+		IRenderer* primaryRenderer;
 
 		CoreState state = CoreState::NotInitialized;
 
 	public:
+		Core();
+
 		static Core* GetInstance();
 
 		void Initialize(int aArgC, char** aArgV, String aProjectName = "");
@@ -56,8 +62,6 @@ namespace Vanguard
 
 		inline CoreState GetState(){ return state; }
 
-		inline ManagedAssembly* GetManaged() { return managedCore; }
-
 		void LoadModule(const String& aModuleName);
 
 		class Project* GetLoadedProject(){ return loadedProject; }
@@ -65,6 +69,10 @@ namespace Vanguard
 		World* CreateWorld(const String& aWorldName);
 		World* GetWorld(const String& aWorldName);
 		void DestroyWorld(World* aWorld);
+
+		void RegisterRenderer(IRenderer* aRenderer);
+		void UnregisterRenderer(IRenderer* aRenderer);
+		IRenderer* GetPrimaryRenderer();
 	};
 
 

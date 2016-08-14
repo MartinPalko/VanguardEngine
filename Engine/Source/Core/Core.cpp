@@ -2,8 +2,7 @@
 #include <ostream>
 #include <thread>
 
-#include "Modules/ModuleManager.h"
-#include "Modules/IModule.h"
+#include "ModuleManager.h"
 #include "NativeReflection/NativeReflection.h"
 
 

@@ -1,4 +1,3 @@
-#include "Modules/ModuleDeclaration.h"
 #include "SpriteComponent.h"
 namespace Vanguard
 {

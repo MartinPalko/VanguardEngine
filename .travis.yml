@@ -44,4 +44,4 @@ before_script:
 
 # Compile makefile
 script:
-- if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then (cd Intermediate && make); fi
+- if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make -C Intermediate; fi

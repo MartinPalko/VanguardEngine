@@ -1,6 +1,6 @@
 #pragma once
 #include "Foundation.h"
-#include "Entity.h"
+#include "Entity/Entity.h"
 
 namespace Vanguard
 {

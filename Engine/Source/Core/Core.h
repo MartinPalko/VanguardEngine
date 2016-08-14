@@ -3,7 +3,7 @@
 #include "Core_Common.h"
 
 #include "Config/Config.h"
-#include "EntityComponent/EntityComponentSystem.h"
+#include "Entity/EntityComponentSystem.h"
 #include "NativeReflection/NativeReflection.h"
 #include "Application/Application.h"
 #include "AsyncIO.h"

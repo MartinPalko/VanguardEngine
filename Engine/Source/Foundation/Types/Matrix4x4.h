@@ -31,15 +31,25 @@ namespace Vanguard
 			elements[3][3] = w3;
 			
 		}
-		Matrix4x4(float aElements[16]) : elements{ *aElements } {}
-		Matrix4x4(float aElements[4][4]) : elements{ **aElements } {}
 
 		float elements[4][4];
 
-		inline Vector4 GetRow(uint8 aRow) { return Vector4(elements[aRow][0], elements[aRow][1], elements[aRow][2], elements[aRow][3]);	}
+		Matrix4x4(float aElements[16]) { memcpy(&elements[0][0], &aElements[0], sizeof(elements)); }
+		Matrix4x4(float aElements[4][4]) { memcpy(&elements[0][0], &aElements[0][0], sizeof(elements)); }
+
+		inline bool operator ==(const Matrix4x4& other) const
+		{
+			for (uint8 x = 0; x < 4; x++) 
+				for (uint8 y = 0; y < 4; y++) 
+					if (elements[x][y] != other.elements[x][y]) 
+						return false;
+			return true;
+		}
+
+		inline Vector4 GetRow(uint8 aRow) const { return Vector4(elements[aRow][0], elements[aRow][1], elements[aRow][2], elements[aRow][3]);	}
 		inline void SetRow(uint8 aRow, Vector4 aValue) { elements[aRow][0] = aValue.x; elements[aRow][1] = aValue.y; elements[aRow][2] = aValue.z; elements[aRow][3] = aValue.w; }
 
-		inline Vector4 GetColumn(uint8 aCol) { return Vector4(elements[0][aCol], elements[1][aCol], elements[2][aCol], elements[3][aCol]); }		
+		inline Vector4 GetColumn(uint8 aCol) const { return Vector4(elements[0][aCol], elements[1][aCol], elements[2][aCol], elements[3][aCol]); }		
 		inline void SetColumn(uint8 aCol, Vector4 aValue) { elements[0][aCol] = aValue.x; elements[1][aCol] = aValue.y; elements[2][aCol] = aValue.z; elements[3][aCol] = aValue.w; }
 
 		// Static functions

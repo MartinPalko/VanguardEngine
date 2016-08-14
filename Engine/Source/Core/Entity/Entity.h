@@ -9,7 +9,7 @@ namespace Vanguard
 
 	class CORE_API Entity : public VanguardObject
 	{
-		REFLECTED_SUBCLASS_DECLARATION(Entity,VanguardObject)
+		REFLECTED_SUBCLASS_DECLARATION(Entity, VanguardObject)
 
 	private:
 		DynamicArray<Component*> components;
@@ -28,5 +28,7 @@ namespace Vanguard
 		inline Entity* GetChild(size_t aIndex) { return children[aIndex]; }
 
 		Component* AddComponent(INativeClassInfo* aComponentType);
+		inline Component* AddComponent(const StringID& aComponentType) { return AddComponent(INativeClassInfo::GetType(aComponentType)); }		
+		template<class T> T* AddComponent() { return (T*)AddComponent(INativeClassInfo::GetType<T>()); }
 	};
 }

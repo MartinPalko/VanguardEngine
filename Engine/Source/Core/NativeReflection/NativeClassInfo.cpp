@@ -25,9 +25,9 @@ namespace Vanguard
 		return returnArray;
 	}
 
-	INativeClassInfo* INativeClassInfo::GetType(const String& aTypeName)
+	INativeClassInfo* INativeClassInfo::GetType(const StringID& aTypeName)
 	{
-		size_t nameHash = StringID(aTypeName).GetHash();
+		const size_t nameHash = aTypeName.GetHash();
 		if (GetClassinfoNameMap().count(nameHash))
 		{
 			return GetClassinfoNameMap()[nameHash];

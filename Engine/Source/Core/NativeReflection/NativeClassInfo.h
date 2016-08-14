@@ -40,7 +40,7 @@ namespace Vanguard
 		DynamicArray<INativeClassInfo*> GetDerivedClasses() const { return derivedClasses; }
 
 		static DynamicArray<INativeClassInfo*> GetAllTypes();
-		static INativeClassInfo* GetType(const String& aTypeName);
+		static INativeClassInfo* GetType(const StringID& aTypeName);
 		template<class T>static INativeClassInfo* GetType()
 		{
 			return GetClassinfoHashMap()[typeid(T).hash_code()];

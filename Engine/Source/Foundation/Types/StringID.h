@@ -32,7 +32,7 @@ namespace Vanguard
             HashString(aCharPointer);
 		}
 
-		inline uint64 GetHash() const
+		inline size_t GetHash() const
 		{
 			return Hash;
 		}

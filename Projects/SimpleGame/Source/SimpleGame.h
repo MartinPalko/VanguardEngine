@@ -1,15 +1,17 @@
 #pragma once
 #include "SimpleGame_Common.h"
-#include "Modules\GameModule.h"
+#include "Modules/GameModule.h"
 
 #include "SpriteComponent.h"
+
+#include "Renderer/RenderView.h"
 
 namespace SimpleGame
 {
 	class SimpleGame : public GameModule
 	{
 	private:
-		//SpriteComponent* sprite;
+		RenderView* playerView;
 		
 	protected:
 		virtual void SetupGame() override;

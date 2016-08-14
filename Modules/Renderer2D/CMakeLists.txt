@@ -1,2 +1,1 @@
-#IMPLEMENT_MODULE(Renderer2D "Core;SDL2")
-IMPLEMENT_MODULE(Renderer2D "Core")
+IMPLEMENT_MODULE(Renderer2D "Core;VanguardSDL;SDL2")

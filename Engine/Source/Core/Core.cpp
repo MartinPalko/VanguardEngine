@@ -13,6 +13,16 @@ namespace Vanguard
 
 	Core* Core::instance = nullptr;
 
+	Core::Core()
+		: loadedProject(nullptr)
+		, moduleManager(nullptr)
+		, worlds()
+		, renderers()
+		, primaryRenderer(nullptr)
+	{
+		
+	}
+
 	Core* Core::GetInstance() { return instance; }
 
 	void Core::Initialize(int aArgC, char** aArgV, String aProjectName)
@@ -87,9 +97,12 @@ namespace Vanguard
 
 					JobManager::ProcessFrame(frame);
 					delete frame;
+
+					// Render the new frame.
+					GetPrimaryRenderer()->RenderViews();
 				}
 
-				if (world->nextFrameNumber > 15)
+				if (world->nextFrameNumber > 10)
 				{
 					this->ShutDown();
 				}
@@ -178,5 +191,44 @@ namespace Vanguard
 			worlds.Remove(aWorld);
 			delete aWorld;			
 		}
+	}
+
+	void Core::RegisterRenderer(IRenderer * aRenderer)
+	{
+		if (renderers.Contains(aRenderer))
+		{
+			Log::Warning("A renderer already registered!", "Core");
+			return;
+		}
+
+		renderers.PushBack(aRenderer);
+
+		if (!primaryRenderer)
+		{
+			primaryRenderer = aRenderer;
+		}
+
+		Log::Message("Registered renderer: " + aRenderer->RendererName(), "Core");
+	}
+
+	void Core::UnregisterRenderer(IRenderer * aRenderer)
+	{
+		if (aRenderer == primaryRenderer)
+		{
+			primaryRenderer = nullptr;
+		}
+
+		renderers.Remove(aRenderer);
+
+		if (!primaryRenderer && renderers.Count())
+		{
+			primaryRenderer = renderers[0];
+		}
+		Log::Message("Unregistered renderer: " + aRenderer->RendererName(), "Core");
+	}
+
+	IRenderer * Core::GetPrimaryRenderer()
+	{
+		return primaryRenderer;
 	}
 }

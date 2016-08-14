@@ -7,6 +7,14 @@ namespace SimpleGame
 
 	void SimpleGame::SetupGame()
 	{
+		Core* core = Core::GetInstance();
+
+		World* gameWorld = core->CreateWorld("SimpleGame");
+
+		Camera* playerCamera = gameWorld->SpawnEntity<Camera>();
+
+		IRenderer* primaryRenderer = core->GetPrimaryRenderer();
+		playerView = primaryRenderer->CreateRenderView(playerCamera, 1280, 720);
 	}
 
 	void SimpleGame::UpdateGame(Vanguard::Frame* aFrame)

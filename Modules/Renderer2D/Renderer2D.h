@@ -1,26 +1,23 @@
 #include "Renderer2D_Common.h"
 #include "Modules/IModule.h"
+#include "Renderer/IRenderer.h"
 
 #include "SpriteComponent.h"
-
+#include "RenderView2D.h"
 
 namespace Vanguard
 {
-	class Renderer2D : public IModule
+	class Renderer2D : public IModule, public IRenderer
 	{
-		SpriteComponent* sprite;
+		DynamicArray<RenderView2D*> renderViews;
 
-		virtual void LoadModule()
-		{
-			DEBUG_LOG("Loaded Renderer2D");
-			sprite = new SpriteComponent();
-		}
+		// IModule Implementation
+		virtual void LoadModule() override;
+		virtual void UnloadModule() override;
 
-		virtual void UnloadModule()
-		{
-			DEBUG_LOG("Unloaded Renderer2D");
-			delete sprite;
-		}
-
+		// IRenderer Implementation
+		virtual String RendererName() override;
+		virtual RenderView* CreateRenderView(Camera* aCamera, int aResolutionX, int aResolutionY) override;
+		virtual void RenderViews() override;		
 	};
 }

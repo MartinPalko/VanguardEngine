@@ -1,3 +1,4 @@
+#pragma once
 #include "VanguardSDL_Common.h"
 #include "Modules/IModule.h"
 #include "SDL.h"

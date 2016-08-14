@@ -15,6 +15,10 @@
 #include "Jobs/Job.h"
 #include "Jobs/Frame.h"
 
+#include "Renderer/Camera.h"
+#include "Renderer/IRenderer.h"
+#include "Renderer/RenderView.h"
+
 namespace Vanguard
 {
 	enum class CoreState : uint8
@@ -41,12 +45,15 @@ namespace Vanguard
 
 		class Project* loadedProject;
 		class ModuleManager* moduleManager;
-
 		DynamicArray<World*> worlds = DynamicArray<World*>();
+		class DynamicArray<IRenderer*> renderers;
+		IRenderer* primaryRenderer;
 
 		CoreState state = CoreState::NotInitialized;
 
 	public:
+		Core();
+
 		static Core* GetInstance();
 
 		void Initialize(int aArgC, char** aArgV, String aProjectName = "");
@@ -62,6 +69,10 @@ namespace Vanguard
 		World* CreateWorld(const String& aWorldName);
 		World* GetWorld(const String& aWorldName);
 		void DestroyWorld(World* aWorld);
+
+		void RegisterRenderer(IRenderer* aRenderer);
+		void UnregisterRenderer(IRenderer* aRenderer);
+		IRenderer* GetPrimaryRenderer();
 	};
 
 

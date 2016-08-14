@@ -112,11 +112,9 @@ namespace Vanguard
 			{
 				textToWrite += GetUnflushedEntriesArray()[i].GetFormattedLogEntry() + "\n";
 			}
-			if (!FileSystem::AppendToFile(logFile, textToWrite))
-				Exception("Error writing to log file");
 
-			if (rollingLogFileEnabled)
-				FileSystem::AppendToFile(rollingLogFile, textToWrite);
+			AsyncIO::AppendToFile(logFile, textToWrite);
+			AsyncIO::AppendToFile(rollingLogFile, textToWrite);
 
 			GetUnflushedEntriesArray().Clear();
 			flushingLog = false;

@@ -6,11 +6,9 @@
 
 namespace Vanguard
 {
-	void JobWorker::ThreadLoop()
+	void JobWorker::Run()
 	{
-		int i = 0;
-
-		while (running)
+		while (!wantsJoin)
 		{
 			if (currentJob == nullptr)
 			{
@@ -31,5 +29,9 @@ namespace Vanguard
 	void JobWorker::StartJob(Job* aJob)
 	{
 		currentJob = aJob;
+		if (!IsRunning())
+		{
+			Start();
+		}
 	}
 }

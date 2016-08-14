@@ -6,6 +6,7 @@
 #include "EntityComponent/EntityComponentSystem.h"
 #include "NativeReflection/NativeReflection.h"
 #include "Application/Application.h"
+#include "AsyncIO.h"
 #include "Log.h"
 #include "Project.h"
 #include "Directories.h"

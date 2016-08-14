@@ -86,7 +86,7 @@ namespace Vanguard
 
 		for (uint32 i = 0; i < workers.Count(); i++)
 		{
-			if (workers[i]->thread.GetID() == currentThreadID)
+			if (workers[i]->GetID() == currentThreadID)
 				return workers[i];
 		}
 		return nullptr;

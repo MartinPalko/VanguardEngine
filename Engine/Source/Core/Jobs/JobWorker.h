@@ -8,26 +8,23 @@ namespace Vanguard
 	class Job;
 	class Frame;
 
-	class JobWorker
+	class JobWorker : public Thread
 	{
 		friend JobManager;
 
 	private:		
 		Job* currentJob;		
-		bool running;
+		bool workerRunning;
 		uint16 index;
-		Thread thread;
 
-		void ThreadLoop();
+		virtual void Run() override;
 
 	public:
-		explicit JobWorker(int aIndex)
-			: currentJob (nullptr)
-			, running (true)
+		explicit JobWorker(int aIndex) : Thread("Vanguard Worker " + String::FromInt32(aIndex))
+			, currentJob (nullptr)
+			, workerRunning(true)
 			, index (aIndex)
-			, thread(&JobWorker::ThreadLoop, this)
-		{			
-			thread.SetName("Vanguard Worker " + String::FromInt32(aIndex));
+		{
 		}
 
 		bool IsIdle() { return currentJob == nullptr; }

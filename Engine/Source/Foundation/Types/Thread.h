@@ -2,9 +2,9 @@
 #include "Foundation_Common.h"
 #include "VanguardString.h"
 
-namespace std {
-	class thread;
-}
+#include <future>
+
+namespace std { class thread; }
 
 namespace Vanguard
 {
@@ -12,26 +12,27 @@ namespace Vanguard
 	{
 	private:
 		String name;
-	protected:
 		std::thread* stdThread;
+		bool running;		
+		
+		void ThreadEntry();
+
+	protected:
+		bool wantsJoin;
+		virtual void Run() = 0;
 
 	public:
-		template<class F, class... Args>
-		explicit Thread(F&& f, Args&&... args)
-		{
-			stdThread = new std::thread(std::forward<F>(f), std::forward<Args>(args)...);
-			SetName("Vanguard Thread " + GetID());
-		}
-
-		~Thread()
-		{
-			delete stdThread;
-		}
+		explicit Thread(const String& aName);
+		~Thread();
 
 		static String CurrentThreadID();
+
+		void Start();		
 
 		void SetName(const String& aThreadName);
 		String GetName();
 		String GetID();
+		void Join();
+		bool IsRunning();
 	};
 }

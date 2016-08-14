@@ -121,6 +121,7 @@ namespace Vanguard
 			Log::Message("Shutting down Core", "Core");
 
 			delete moduleManager;
+			moduleManager = nullptr;
 
 			if (clearTempDirectoryOnShutdown)
 				FileSystem::Delete(Directories::GetProjectTempDirectory());
@@ -129,6 +130,9 @@ namespace Vanguard
 			Log::Flush();
 
 			delete loadedProject;
+			loadedProject = nullptr;
+
+			AsyncIO::JoinIOThread();
 
 			Log::Message("Core shut down successfully", "Core");
 

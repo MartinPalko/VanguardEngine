@@ -119,23 +119,24 @@ namespace Vanguard
 
 			Log::Message("Shutting down Core", "Core");
 
+			JobManager::JoinThreads();
+
 			delete moduleManager;
 			moduleManager = nullptr;
 
 			if (clearTempDirectoryOnShutdown)
 				FileSystem::Delete(Directories::GetProjectTempDirectory());
 
-			// Want to flush the log as late as possible to make sure all entries get written to disk.
-			Log::Flush();
-
 			delete loadedProject;
 			loadedProject = nullptr;
 
-			AsyncIO::JoinIOThread();
-
 			Log::Message("Core shut down successfully", "Core");
-
 			state = CoreState::ShutDown;
+						
+			// Want to flush the log as late as possible to make sure all entries get written to disk.
+			Log::Message("Flushing log and joining IO Thread", "Core");
+			Log::Flush();
+			AsyncIO::JoinIOThread();			
 		}
 		else if (state == CoreState::Running || state == CoreState::PendingShutdown)
 		{

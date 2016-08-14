@@ -29,6 +29,7 @@ namespace Vanguard
 
 	public:
 		static void CreateThreads();
+		static void JoinThreads();
 
 		static void ProcessFrame(Frame* aFrame);
 

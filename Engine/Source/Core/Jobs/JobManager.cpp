@@ -55,8 +55,23 @@ namespace Vanguard
 		}
 	}
 
+	void JobManager::JoinThreads()
+	{
+		for (int i = 0; i < workers.Count(); i++)
+		{
+			workers[i]->Join();
+			delete workers[i];
+		}
+		workers.Clear();
+	}
+
 	void JobManager::ProcessFrame(Frame* aFrame)
 	{
+		if (!workers.Count())
+		{
+			CreateThreads();
+		}
+
 		DEBUG_LOG("Processing Frame " + String::FromInt32(aFrame->frameNumber))
 
 		currentFrame = aFrame;

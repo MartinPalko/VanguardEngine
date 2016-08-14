@@ -1,0 +1,5 @@
+Timestep:
+http://gafferongames.com/game-physics/fix-your-timestep/
+
+The Bible:
+http://www.gameenginebook.com/

@@ -1,7 +1,7 @@
 #pragma once
 #include "IModule.h"
 
-#include "Types\VanguardTime.h"
+#include "Types/VanguardTime.h"
 
 namespace Vanguard
 {

@@ -18,7 +18,7 @@ namespace Vanguard
 		void UnloadModule();
 
 	private:
-		ModuleInfo::ModuleInfo(const FilePath& aLibPath, const String& aName, DynamicArray<String> aDependencies);
+		ModuleInfo(const FilePath& aLibPath, const String& aName, DynamicArray<String> aDependencies);
 		String moduleName;
 		DynamicArray<String> dependencies;
 		FilePath filePath;
@@ -37,7 +37,7 @@ namespace Vanguard
 	public:
 		enum class eModuleLoadResult : uint8
 		{
-			Error = 0,		
+			Error = 0,
 			NotFound,
 			Success,
 			AlreadyLoaded
@@ -63,4 +63,3 @@ namespace Vanguard
 		eModuleLoadResult LoadModule(const String& aModuleName, bool aExplicit);
 	};
 }
-	

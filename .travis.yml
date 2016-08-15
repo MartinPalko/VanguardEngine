@@ -27,13 +27,6 @@ env:
 
 # Install mono
 addons:
-  apt:
-    packages:
-    - mono-complete
-    - libfreetype6
-    - libxrandr-dev
-    - libxinerama-dev
-    - libxcursor-dev
   coverity_scan:
     project:
       name: "MartinPalko/VanguardEngine"
@@ -45,7 +38,10 @@ addons:
 
 # Create makefile
 before_script:
-- ./CMake/Linux/bin/cmake -G "Unix Makefiles" ./
+- mkdir ${TRAVIS_BUILD_DIR}/Intermediate
+- cd ${TRAVIS_BUILD_DIR}/Intermediate
+- ../CMake/Linux/bin/cmake -G "Unix Makefiles" ../
 
 # Compile makefile
-script: if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make ; fi
+script:
+- if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make -C ${TRAVIS_BUILD_DIR}/Intermediate; fi

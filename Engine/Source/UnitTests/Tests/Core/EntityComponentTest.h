@@ -1,11 +1,10 @@
 #include "gtest/gtest.h"
 #include "World.h"
 
-#include "Entity\Transform.h"
+#include "Entity/Transform.h"
 
 namespace Vanguard
 {
-
 	class EntityComponentTest : public ::testing::Test
 	{
 	protected:

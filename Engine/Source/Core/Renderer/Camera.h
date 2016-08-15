@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Entity\Entity.h"
-#include "Entity\Transform.h"
+#include "Entity/Entity.h"
+#include "Entity/Transform.h"
 
 namespace Vanguard
 {

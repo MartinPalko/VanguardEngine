@@ -38,10 +38,10 @@ addons:
 
 # Create makefile
 before_script:
-- mkdir Intermediate
-- cd Intermediate
+- mkdir ${TRAVIS_BUILD_DIR}/Intermediate
+- cd ${TRAVIS_BUILD_DIR}/Intermediate
 - ../CMake/Linux/bin/cmake -G "Unix Makefiles" ../
 
 # Compile makefile
 script:
-- if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make -C Intermediate; fi
+- if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make -C ${TRAVIS_BUILD_DIR}/Intermediate; fi

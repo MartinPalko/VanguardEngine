@@ -6,6 +6,7 @@
 namespace Vanguard
 {
 	class Component;
+	class World;
 
 	class CORE_API Entity : public VanguardObject
 	{
@@ -27,8 +28,8 @@ namespace Vanguard
 		inline size_t GetNumChildren() { return children.Count(); }
 		inline Entity* GetChild(size_t aIndex) { return children[aIndex]; }
 
-		Component* AddComponent(INativeClassInfo* aComponentType);
-		inline Component* AddComponent(const StringID& aComponentType) { return AddComponent(INativeClassInfo::GetType(aComponentType)); }		
-		template<class T> T* AddComponent() { return (T*)AddComponent(INativeClassInfo::GetType<T>()); }
+		Component* AddComponent(NativeClassInfo* aComponentType);
+		inline Component* AddComponent(const StringID& aComponentType) { return AddComponent(NativeClassInfo::GetType(aComponentType)); }		
+		template<class T> T* AddComponent() { return (T*)AddComponent(NativeClassInfo::GetType<T>()); }
 	};
 }

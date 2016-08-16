@@ -11,8 +11,11 @@ namespace Vanguard
 
 		REFLECTED_SUBCLASS_DECLARATION(Component,VanguardObject)
 
-	public:
-
+	private:
 		Entity* entity;
+
+	public:
+		Entity* GetEntity() { return entity; }
+		
 	};
 }

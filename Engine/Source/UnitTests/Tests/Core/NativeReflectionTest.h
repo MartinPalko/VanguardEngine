@@ -18,7 +18,7 @@ namespace Vanguard
 
 		}
 
-		String GetClassHierarchyString(INativeClassInfo* Class, int currentDepth, bool lastChild = false, String logmessage = "")
+		String GetClassHierarchyString(NativeClassInfo* Class, int currentDepth, bool lastChild = false, String logmessage = "")
 		{
 			for (int i = 0; i < currentDepth; i++)
 			{
@@ -41,7 +41,7 @@ namespace Vanguard
 
 			logmessage += Class->GetTypeName() + "\n";
 
-			DynamicArray<INativeClassInfo*> children = Class->GetDerivedClasses();
+			DynamicArray<NativeClassInfo*> children = Class->GetDerivedClasses();
 			for (size_t i = 0; i < children.Count(); i++)
 				logmessage = GetClassHierarchyString(children[i], currentDepth + 1, i == children.Count() - 1, logmessage);
 
@@ -52,7 +52,7 @@ namespace Vanguard
 	TEST_F(NativeReflectionTest, LogClassTree)
 	{
 
-		DynamicArray<INativeClassInfo*> allTypes = INativeClassInfo::GetAllTypes();
+		DynamicArray<NativeClassInfo*> allTypes = NativeClassInfo::GetAllTypes();
 
 		DEBUG_LOG(String::FromInt32(allTypes.Count()) + " types found:");
 		for (uint32 i = 0; i < allTypes.Count(); i++)

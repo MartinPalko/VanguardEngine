@@ -18,9 +18,8 @@ namespace Vanguard
 		
 	private:
 		World* world = nullptr;
-	protected:
-		VanguardObject(){}
 	public:
+		VanguardObject(){}
 		World* GetWorld() { return world; }
 	};
 }

@@ -1,13 +1,14 @@
 #include "Entity.h"
 #include "Component.h"
+#include "World.h"
 
 namespace Vanguard
 {
 	REFLECTED_SUBCLASS_DEFINITION(Entity, VanguardObject)
 
-	Component* Entity::AddComponent(INativeClassInfo* aComponentType)
+	Component* Entity::AddComponent(NativeClassInfo* aComponentType)
 	{
-		INativeClassInfo* componentType = INativeClassInfo::GetType("Component");
+		static NativeClassInfo* componentType = NativeClassInfo::GetType("Component");
 
 		bool isa = aComponentType->IsA(componentType);
 
@@ -20,7 +21,11 @@ namespace Vanguard
 		Component* newComponent = (Component*)aComponentType->CreateInstance();
 
 		newComponent->entity = this;
-		newComponent->world = GetWorld();
+		if (GetWorld())
+		{
+			newComponent->world = GetWorld();
+			GetWorld()->objects.PushBack(newComponent);
+		}
 		return newComponent;
 	}
 }

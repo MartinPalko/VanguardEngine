@@ -1,6 +1,7 @@
 #pragma once
 #include "Platforms/Platform.h"
 
+#include "Color.h"
 #include "DynamicLibrary.h"
 #include "Mutex.h"
 #include "FilePath.h"
@@ -13,3 +14,4 @@
 #include "VanguardTime.h"
 #include "Vector2.h"
 #include "Vector3.h"
+#include "Vector4.h"

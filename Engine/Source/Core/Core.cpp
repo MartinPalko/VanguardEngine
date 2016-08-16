@@ -3,7 +3,7 @@
 #include <thread>
 
 #include "ModuleManager.h"
-#include "NativeReflection/NativeReflection.h"
+#include "Type.h"
 
 
 namespace Vanguard

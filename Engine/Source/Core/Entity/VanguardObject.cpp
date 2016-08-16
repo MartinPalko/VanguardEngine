@@ -2,5 +2,5 @@
 
 namespace Vanguard
 {
-	REFLECTED_BASECLASS_DEFINITION(VanguardObject)
+	BASETYPE_DEFINITION(VanguardObject)
 }

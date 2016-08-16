@@ -2,5 +2,5 @@
 
 namespace Vanguard
 {
-	REFLECTED_SUBCLASS_DEFINITION(PhysXRigidBody,Component)
+	TYPE_DEFINITION(PhysXRigidBody,Component)
 }

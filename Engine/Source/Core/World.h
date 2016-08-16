@@ -68,7 +68,7 @@ namespace Vanguard
 		template <class T>		
 		T* SpawnEntity()
 		{
-			NativeClassInfo* requestedClass = NativeClassInfo::GetType<T>();
+			Type* requestedClass = Type::GetType<T>();
 			if (requestedClass == nullptr)
 			{
 				Log::Warning("Entity spawning failed, requested class could not be found", "World");
@@ -80,7 +80,7 @@ namespace Vanguard
 
 		Entity* SpawnEntity(const String& aEntityType)
 		{
-			NativeClassInfo* requestedClass = NativeClassInfo::GetType(aEntityType);
+			Type* requestedClass = Type::GetType(aEntityType);
 			if (requestedClass == nullptr)
 			{
 				Log::Warning("Entity spawning failed, requested class " + aEntityType + " could not be found", "World");
@@ -90,9 +90,9 @@ namespace Vanguard
 			return SpawnEntity(requestedClass);			
 		}
 		
-		Entity* SpawnEntity(NativeClassInfo* aRequestedClass)
+		Entity* SpawnEntity(Type* aRequestedClass)
 		{
-			static NativeClassInfo* entityClass = NativeClassInfo::GetType<Entity>();
+			static Type* entityClass = Type::GetType<Entity>();
 
 			if (!aRequestedClass->IsA(entityClass))
 			{
@@ -124,7 +124,7 @@ namespace Vanguard
 			{
 				VanguardObject* o = objects[i];
 
-				if (o->GetClassInfo()->IsA(NativeClassInfo::GetType<T>()))
+				if (o->GetClassInfo()->IsA(Type::GetType<T>()))
 				{
 					found.PushBack((T*)o);
 				}

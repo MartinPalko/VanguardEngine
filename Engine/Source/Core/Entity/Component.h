@@ -9,7 +9,7 @@ namespace Vanguard
 	{
 		friend class Entity;
 
-		REFLECTED_SUBCLASS_DECLARATION(Component,VanguardObject)
+		TYPE_DECLARATION(Component,VanguardObject)
 
 	private:
 		Entity* entity;

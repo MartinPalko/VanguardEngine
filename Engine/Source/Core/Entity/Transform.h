@@ -1,13 +1,13 @@
 #pragma once
 #include "Component.h"
 #include "Foundation.h"
-#include "NativeReflection/NativeReflection.h"
+#include "Type.h"
 
 namespace Vanguard
 {
 	class CORE_API Transform : public Component
 	{
-		REFLECTED_SUBCLASS_DECLARATION(Transform, Component)
+		TYPE_DECLARATION(Transform, Component)
 
 	public:
 		Transform() : position(0,0,0) { }

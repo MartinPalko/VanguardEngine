@@ -2,7 +2,7 @@
 
 namespace Vanguard
 {
-	REFLECTED_SUBCLASS_DEFINITION(Camera, Entity);
+	TYPE_DEFINITION(Camera, Entity);
 	
 	Camera::Camera() : Entity()
 	{

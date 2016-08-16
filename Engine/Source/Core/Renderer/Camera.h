@@ -7,7 +7,7 @@ namespace Vanguard
 {
 	class CORE_API Camera : public Entity
 	{
-		REFLECTED_SUBCLASS_DECLARATION(Camera, Entity);
+		TYPE_DECLARATION(Camera, Entity);
 
 	public:
 		Camera();

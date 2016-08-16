@@ -4,11 +4,11 @@
 
 namespace Vanguard
 {
-	REFLECTED_SUBCLASS_DEFINITION(Entity, VanguardObject)
+	TYPE_DEFINITION(Entity, VanguardObject)
 
-	Component* Entity::AddComponent(NativeClassInfo* aComponentType)
+	Component* Entity::AddComponent(Type* aComponentType)
 	{
-		static NativeClassInfo* componentType = NativeClassInfo::GetType("Component");
+		static Type* componentType = Type::GetType("Component");
 
 		bool isa = aComponentType->IsA(componentType);
 

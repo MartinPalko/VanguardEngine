@@ -4,6 +4,6 @@ namespace Vanguard
 {
 	class PhysXRigidBody : public Component
 	{
-		REFLECTED_SUBCLASS_DECLARATION(PhysXRigidBody,Component)
+		TYPE_DECLARATION(PhysXRigidBody,Component)
 	};
 }

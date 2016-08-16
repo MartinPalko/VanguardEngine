@@ -4,7 +4,7 @@
 
 #include "Config/Config.h"
 #include "World.h"
-#include "NativeReflection/NativeReflection.h"
+#include "Type.h"
 #include "Application/Application.h"
 #include "AsyncIO.h"
 #include "Log.h"

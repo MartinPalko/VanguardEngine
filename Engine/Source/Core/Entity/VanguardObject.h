@@ -1,6 +1,6 @@
 #pragma once
 #include "Foundation.h"
-#include "NativeReflection/NativeReflection.h"
+#include "Type.h"
 
 namespace Vanguard
 {
@@ -14,7 +14,7 @@ namespace Vanguard
 		friend Entity;
 		friend Component;
 
-		REFLECTED_BASECLASS_DECLARATION(VanguardObject)
+		BASETYPE_DECLARATION(VanguardObject)
 		
 	private:
 		World* world = nullptr;

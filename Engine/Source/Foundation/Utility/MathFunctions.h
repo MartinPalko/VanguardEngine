@@ -25,11 +25,8 @@ namespace Vanguard
             return returnValue;
 		}
 
-		inline float FSquared(float aBase){ return aBase * aBase; }
-		inline int32 ISquared(int32 aBase){ return aBase * aBase; }
-
-		inline float FCubed(float aBase){ return aBase * aBase * aBase; }
-		inline int32 ICubed(int32 aBase){ return aBase * aBase * aBase; }
+		template<class T> T Squared(T aBase){ return aBase * aBase; }
+		template<class T> T Cubed(T aBase) { return aBase * aBase * aBase; }
 
 		inline float FSin(float aFloat) { return ::sinf(aFloat); }
 		inline float FCos(float aFloat) { return ::cosf(aFloat); }
@@ -38,11 +35,9 @@ namespace Vanguard
 		inline float FAbs(float aFloat) { return ::fabsf(aFloat); }
 		inline int32 IAbs(int32 aInt32) { return ::abs(aInt32); }
 
-		inline float FMax(float aFloat1, float aFloat2) { return aFloat1 >= aFloat2 ? aFloat1 : aFloat2; }
-		inline int32 IMax(int32 aInt1, int32 aInt2) { return aInt1 >= aInt2 ? aInt1 : aInt2; }
 
-		inline float FMin(float aFloat1, float aFloat2) { return aFloat1 <= aFloat2 ? aFloat1 : aFloat2; }
-		inline int32 IMin(int32 aInt1, int32 aInt2) { return aInt1 <= aInt2 ? aInt1 : aInt2; }
+		template<class T> const T& Max(const T& a, const T& b) { return (a < b) ? b : a; }
+		template<class T> const T& Min(const T& a, const T& b) { return (a < b) ? a : b; }
 
 
 		// Generates a random float between 0 and 1

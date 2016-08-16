@@ -54,13 +54,13 @@ namespace Vanguard
 		// Component-wise maximum
 		inline static Vector2 Max(const Vector2& aVector1, const Vector2& aVector2)
 		{
-			return Vector2(Math::FMax(aVector1.x, aVector2.x), Math::FMax(aVector1.y, aVector2.y));
+			return Vector2(Math::Max(aVector1.x, aVector2.x), Math::Max(aVector1.y, aVector2.y));
 		}
 
 		// Component-wise minimum
 		inline static Vector2 Min(const Vector2& aVector1, const Vector2& aVector2)
 		{
-			return Vector2(Math::FMin(aVector1.x, aVector2.x), Math::FMin(aVector1.y, aVector2.y));
+			return Vector2(Math::Min(aVector1.x, aVector2.x), Math::Min(aVector1.y, aVector2.y));
 		}
 
 		// Member Functions
@@ -81,9 +81,9 @@ namespace Vanguard
 		inline Vector2 Abs() const { return Vector2(Math::FAbs(x), Math::FAbs(y)); }
 
 		// The value of the largest component (x, or y)
-		inline float MaxValue() const { return Math::FMax(x, y); }
+		inline float MaxValue() const { return Math::Max(x, y); }
 
 		// The value of the smallest component (x, or y)
-		inline float MinValue() const { return Math::FMin(x, y); }
+		inline float MinValue() const { return Math::Min(x, y); }
 	};
 }

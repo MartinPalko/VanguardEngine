@@ -53,22 +53,22 @@ namespace Vanguard
 
 	TEST_F(MathFunctionsTest, Pow)
 	{
-		EXPECT_EQ(1.42129948513f, Math::FPow(5.8, 0.2));
+		EXPECT_EQ(1.42129948513f, Math::FPow(5.8f, 0.2f));
 		EXPECT_EQ(128, Math::FPow(2, 7));
-		EXPECT_EQ(0.0078125f, Math::FPow(2, -7));
+		EXPECT_EQ(0.0078125f, Math::FPow(2.0f, -7.0f));
 
 		EXPECT_EQ(1, Math::IPow(5.8, 0.2));
 		EXPECT_EQ(128, Math::IPow(2, 7));
 		EXPECT_EQ(0, Math::IPow(2, -7));
 
-		EXPECT_EQ(25, Math::ISquared(5));
-		EXPECT_EQ(125, Math::ICubed(5));
+		EXPECT_EQ(25, Math::Squared(5));
+		EXPECT_EQ(125, Math::Cubed(5));
 
-		EXPECT_EQ(9, Math::ISquared(3));
-		EXPECT_EQ(27, Math::ICubed(3));
+		EXPECT_EQ(9, Math::Squared(3));
+		EXPECT_EQ(27, Math::Cubed(3));
 
-		EXPECT_EQ(25.6036f, Math::FSquared(5.06f));
-		EXPECT_EQ(129.554216f, Math::FCubed(5.06f));
+		EXPECT_EQ(25.6036f, Math::Squared(5.06f));
+		EXPECT_EQ(129.554216f, Math::Cubed(5.06f));
 	}
 
 	TEST_F(MathFunctionsTest, Trigonometry)
@@ -87,30 +87,30 @@ namespace Vanguard
 
 	TEST_F(MathFunctionsTest, MaxMinAbs)
 	{
-		EXPECT_EQ(10.4654f, Math::FMax(-5.546f, 10.4654f));
-		EXPECT_EQ(11.4163f, Math::FMax(10.9642f, 11.4163f));
-		EXPECT_EQ(-75.5648f, Math::FMax(-125.8784f, -75.5648f));
+		EXPECT_EQ(10.4654f, Math::Max(-5.546f, 10.4654f));
+		EXPECT_EQ(11.4163f, Math::Max(10.9642f, 11.4163f));
+		EXPECT_EQ(-75.5648f, Math::Max(-125.8784f, -75.5648f));
 
-		EXPECT_EQ(10, Math::IMax(10, -5));
-		EXPECT_EQ(11, Math::IMax(10, 11));
-		EXPECT_EQ(-75, Math::IMax(-125,-75));
+		EXPECT_EQ(10, Math::Max(10, -5));
+		EXPECT_EQ(11, Math::Max(10, 11));
+		EXPECT_EQ(-75, Math::Max(-125,-75));
 
 
-		EXPECT_EQ(-5.546f, Math::FMin(-5.546f, 10.4654f));
-		EXPECT_EQ(10.9642f, Math::FMin(10.9642f, 11.4163f));
-		EXPECT_EQ(-125.8784f, Math::FMin(-125.8784f, -75.5648f));
+		EXPECT_EQ(-5.546f, Math::Min(-5.546f, 10.4654f));
+		EXPECT_EQ(10.9642f, Math::Min(10.9642f, 11.4163f));
+		EXPECT_EQ(-125.8784f, Math::Min(-125.8784f, -75.5648f));
 
-		EXPECT_EQ(-5, Math::IMin(-5, 10));
-		EXPECT_EQ(10, Math::IMin(10, 11));
-		EXPECT_EQ(-125, Math::IMin(-125, -75));
+		EXPECT_EQ(-5, Math::Min(-5, 10));
+		EXPECT_EQ(10, Math::Min(10, 11));
+		EXPECT_EQ(-125, Math::Min(-125, -75));
 
 
 		EXPECT_EQ(5.3f, Math::FAbs(-5.3f));
 		EXPECT_EQ(0.0f, Math::FAbs(-0.0f));
 		EXPECT_EQ(125.215f, Math::FAbs(125.215f));
 
-		EXPECT_EQ(5, Math::IAbs(-5));
-		EXPECT_EQ(0, Math::IAbs(-0));
-		EXPECT_EQ(125, Math::IAbs(125));
+		EXPECT_EQ(5, Math::FAbs(-5));
+		EXPECT_EQ(0, Math::FAbs(-0));
+		EXPECT_EQ(125, Math::FAbs(125));
 	}
 }

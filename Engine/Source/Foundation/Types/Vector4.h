@@ -52,13 +52,13 @@ namespace Vanguard
 		// Component-wise maximum
 		inline static Vector4 Max(const Vector4& aVector1, const Vector4& aVector2)
 		{
-			return Vector4(Math::FMax(aVector1.x, aVector2.x), Math::FMax(aVector1.y, aVector2.y), Math::FMax(aVector1.z, aVector2.z), Math::FMax(aVector1.w, aVector2.w));
+			return Vector4(Math::Max(aVector1.x, aVector2.x), Math::Max(aVector1.y, aVector2.y), Math::Max(aVector1.z, aVector2.z), Math::Max(aVector1.w, aVector2.w));
 		}
 
 		// Component-wise minimum
 		inline static Vector4 Min(const Vector4& aVector1, const Vector4& aVector2)
 		{
-			return Vector4(Math::FMin(aVector1.x, aVector2.x), Math::FMin(aVector1.y, aVector2.y), Math::FMin(aVector1.z, aVector2.z), Math::FMin(aVector1.w, aVector2.w));
+			return Vector4(Math::Min(aVector1.x, aVector2.x), Math::Min(aVector1.y, aVector2.y), Math::Min(aVector1.z, aVector2.z), Math::Min(aVector1.w, aVector2.w));
 		}
 
 		// Member Functions
@@ -79,10 +79,10 @@ namespace Vanguard
 		inline Vector4 Abs() const { return Vector4(Math::FAbs(x), Math::FAbs(y), Math::FAbs(z), Math::FAbs(w)); }
 
 		// The value of the largest component (x, y, z, or w)
-		inline float MaxValue() const { return Math::FMax(Math::FMax(Math::FMax(x,y),z),w); }
+		inline float MaxValue() const { return Math::Max(Math::Max(Math::Max(x,y),z),w); }
 
 		// The value of the smallest component (x, y, z, or w)
-		inline float MinValue() const { return Math::FMin(Math::FMin(Math::FMin(x, y), z),w); }
+		inline float MinValue() const { return Math::Min(Math::Min(Math::Min(x, y), z),w); }
 
 	};
 }

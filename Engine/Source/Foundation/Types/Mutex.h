@@ -1,24 +1,19 @@
 #pragma once
-#include <mutex>
 #include "Foundation_Common.h"
+
+namespace std { class mutex; }
 
 namespace Vanguard
 {
 	class FOUNDATION_API Mutex
 	{
 	private:
-		std::mutex stdMutex;
+		class std::mutex* stdMutex;
 	public:
-		Mutex() :stdMutex() {}
+		Mutex();
+		~Mutex();
 
-		void Lock()
-		{
-			stdMutex.lock();
-		}
-
-		void Unlock()
-		{
-			stdMutex.unlock();
-		}
+		void Lock();
+		void Unlock();
 	};
 }

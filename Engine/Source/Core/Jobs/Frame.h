@@ -16,7 +16,11 @@ namespace Vanguard
 	private:
 		bool processing;
 		Mutex jobListMutex;
+		DynamicArray<std::function<void()>* > jobAddedCallbacks;
+
 		Job* GetNextJob();
+		size_t GetRemainingJobs();
+		void NotifyJobAdded();
 
 	public:
 		const int frameNumber;
@@ -39,6 +43,14 @@ namespace Vanguard
 			processing = false;
 		}
 
+		~Frame()
+		{
+			for (int i = 0; i < jobAddedCallbacks.Count(); i++)
+			{
+				delete jobAddedCallbacks[i];
+			}
+		}
+
 		Job* AddJob(std::function<void()> aEntryPoint, JobPriority::Type aPriority = JobPriority::Normal);
 		
 
@@ -50,6 +62,16 @@ namespace Vanguard
 					return false;
 			}
 			return true;
+		}
+
+		void RegisterJobAddedCallback(std::function<void()>* aCallbackFunction)
+		{
+			jobAddedCallbacks.PushBack(aCallbackFunction);
+		}
+
+		void UnregisterJobAddedCallback(std::function<void()>* aCallbackFunction)
+		{
+			jobAddedCallbacks.Remove(aCallbackFunction);
 		}
 	};
 }

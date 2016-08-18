@@ -12,7 +12,8 @@ namespace Vanguard
 	{
 		friend JobManager;
 
-	private:		
+	private:
+		class JobManager* jobManager;
 		Job* currentJob;		
 		bool workerRunning;
 		uint16 index;
@@ -20,7 +21,8 @@ namespace Vanguard
 		virtual void Run() override;
 
 	public:
-		explicit JobWorker(int aIndex) : Thread("Vanguard Worker " + String::FromInt32(aIndex))
+		explicit JobWorker(int aIndex, JobManager* aJobManager) : Thread("Vanguard Worker " + String::FromInt32(aIndex))
+			, jobManager(aJobManager)
 			, currentJob (nullptr)
 			, workerRunning(true)
 			, index (aIndex)

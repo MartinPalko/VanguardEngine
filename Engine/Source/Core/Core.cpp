@@ -14,7 +14,8 @@ namespace Vanguard
 	Core* Core::instance = nullptr;
 
 	Core::Core()
-		: loadedProject(nullptr)
+		: jobManager(nullptr)
+		, loadedProject(nullptr)
 		, moduleManager(nullptr)
 		, worlds()
 		, renderers()
@@ -43,7 +44,7 @@ namespace Vanguard
 
 		Log::Initialize();
 
-		JobManager::CreateThreads();
+		jobManager = new JobManager();
 
 		moduleManager = new ModuleManager();
 
@@ -61,6 +62,12 @@ namespace Vanguard
 
 		Log::Message("Core Running", "Core");
 		state = CoreState::Running;
+
+		if (!worlds.Count())
+		{
+			Log::Error("No worlds have been registered!", "Core");
+			ShutDown();
+		}
 
 		// Main engine loop
 		while (state == CoreState::Running)
@@ -95,7 +102,7 @@ namespace Vanguard
 					// Update the world
 					frame->AddJob([world, frame]()-> void { world->Tick(frame); });
 
-					JobManager::ProcessFrame(frame);
+					jobManager->ProcessFrame(frame);
 					delete frame;
 
 					// Render the new frame.
@@ -132,7 +139,9 @@ namespace Vanguard
 
 			Log::Message("Shutting down Core", "Core");
 
-			JobManager::JoinThreads();
+			jobManager->JoinThreads();
+			delete jobManager;
+			jobManager = nullptr;
 
 			delete moduleManager;
 			moduleManager = nullptr;
@@ -230,5 +239,9 @@ namespace Vanguard
 	IRenderer * Core::GetPrimaryRenderer()
 	{
 		return primaryRenderer;
+	}
+	JobManager * Core::GetJobManager()
+	{
+		return nullptr;
 	}
 }

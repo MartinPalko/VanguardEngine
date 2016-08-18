@@ -21,7 +21,7 @@ namespace Vanguard
 
 				Job* finishedJob = currentJob;
 				currentJob = nullptr;
-				JobManager::ThreadFinishedJob(this, finishedJob);
+				jobManager->WorkerFinishedJob(this, finishedJob);
 			}
 		}
 	}

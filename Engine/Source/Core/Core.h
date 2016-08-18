@@ -43,6 +43,8 @@ namespace Vanguard
 
 		static Core* instance;
 
+		JobManager* jobManager;
+
 		class Project* loadedProject;
 		class ModuleManager* moduleManager;
 		DynamicArray<World*> worlds = DynamicArray<World*>();
@@ -55,6 +57,7 @@ namespace Vanguard
 		Core();
 
 		static Core* GetInstance();
+		JobManager* GetJobManager();
 
 		void Initialize(int aArgC, char** aArgV, String aProjectName = "");
 		void Run();

@@ -16,23 +16,29 @@ namespace Vanguard
 		friend Frame;
 
 	private:
-		static Frame* currentFrame;
 
-		static Mutex threadMutex;
+		Frame* currentFrame;
 
-		static DynamicArray<JobWorker*> workers;
-		static std::queue<JobWorker*> idleThreads;
+		Mutex threadMutex;
 
-		static JobWorker* GetIdleThread();
+		DynamicArray<JobWorker*> workers;
+		std::queue<JobWorker*> idleWorkers;
+		Mutex idleWorkersMutex;
 
-		static void ThreadFinishedJob(JobWorker* aThread, Job* aJob);
+		Mutex jobListMutex;
+
+		JobWorker* GetIdleWorker();
+		uint8 GetIdleWorkers();
+		JobWorker* GetWorker();
+
+		void WorkerFinishedJob(JobWorker* aThread, Job* aJob);
+		void KickoffJobs();
 
 	public:
-		static void CreateThreads();
-		static void JoinThreads();
+		JobManager();
+		~JobManager();
 
-		static void ProcessFrame(Frame* aFrame);
-
-		static JobWorker* GetWorker();
+		void JoinThreads();
+		void ProcessFrame(Frame* aFrame);
 	};
 }

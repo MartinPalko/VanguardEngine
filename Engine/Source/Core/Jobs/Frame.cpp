@@ -1,48 +1,48 @@
 #include "Frame.h"
 #include "JobManager.h"
 #include "JobWorker.h"
+#include "Core.h"
 
 
 namespace Vanguard
 {
 	Job* Frame::AddJob(std::function<void()> aEntryPoint, JobPriority::Type aPriority)
 	{
-		// If any threads are idle, throw this job on one of them right away.
-		JobManager::threadMutex.Lock();
-		Job* newJob = new Job([aEntryPoint, this, aPriority]() {aEntryPoint(); this->unfinishedJobs[(uint8)aPriority]--; });
-		JobWorker* idleThread = JobManager::GetIdleThread();
-		if (idleThread == nullptr)
-		{
-			jobListMutex.Lock();
-			jobs[(uint8)aPriority].push(newJob);
-			queuedJobs[(uint8)aPriority]++;			
-			jobListMutex.Unlock();
-		}
-		else
-		{
-			idleThread->StartJob(newJob);
-		}
+		jobListMutex.Lock();
 		unfinishedJobs[(uint8)aPriority]++;
-		JobManager::threadMutex.Unlock();
+		Job* newJob = new Job([aEntryPoint, this, aPriority]() {aEntryPoint(); this->unfinishedJobs[(uint8)aPriority]--; });
+		jobs[(uint8)aPriority].push(newJob);
+		queuedJobs[(uint8)aPriority]++;
+		jobListMutex.Unlock();
+		
+		NotifyJobAdded();
+
 		return newJob;
 	}
 
 	Job* Frame::GetNextJob()
 	{
 		jobListMutex.Lock();
+		Job* nextJob = nullptr;
 		for (int i = (uint8)JobPriority::qty - 1; i >= 0; i--)
 		{
 			if (queuedJobs[i] > 0)
 			{
-				Job* nextJob = jobs[i].front();
+				nextJob = jobs[i].front();
 				jobs[i].pop();
 				queuedJobs[i]--;
-				jobListMutex.Unlock();
-				return nextJob;
 			}
 		}
 		jobListMutex.Unlock();
-		return nullptr;
+		return nextJob;
+	}
+
+	void Frame::NotifyJobAdded()
+	{
+		for (int i = 0; i < jobAddedCallbacks.Count(); i++)
+		{
+			(*jobAddedCallbacks[i])();
+		}
 	}
 
 	void Frame::WaitForJob(Job* aJob)

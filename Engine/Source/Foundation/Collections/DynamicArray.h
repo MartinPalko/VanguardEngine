@@ -88,7 +88,7 @@ namespace Vanguard
 			return *this;
 		}
 
-		inline T operator[] (const int index) const
+		inline T operator[] (const size_t index) const
 		{
 			return data[index];
 		}

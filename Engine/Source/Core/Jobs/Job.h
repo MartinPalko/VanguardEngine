@@ -24,12 +24,10 @@ namespace Vanguard
 
 		void Execute()
 		{
-			DEBUG_LOG("Executing Job");
 			running = true;
 			entryPoint();
 			running = false;
 			finished = true;
-			DEBUG_LOG("Job Executed");
 		}
 	};
 }

@@ -68,7 +68,7 @@ namespace Vanguard
 		if (!dynamicLibReference->Open(filePath))
 		{
 			UnloadModule();
-			Log::Error("Could not load module " + filePath.GetFullPathName() + "\", library cannot be opened.", "Modules");
+			Log::Error("Could not load module \"" + filePath.GetFullPathName() + "\", library cannot be opened.", "Modules");
 			return false;
 		}
 
@@ -83,6 +83,7 @@ namespace Vanguard
 
 		moduleInstance = InstantiationFunction();
 		moduleInstance->LoadModule();
+		return true;
 	}
 
 	void ModuleInfo::UnloadModule()
@@ -142,6 +143,10 @@ namespace Vanguard
 	{
 		if (!moduleInfos.count(aModuleName))
 		{
+			if (aExplicit)
+			{
+				Log::Error("Loading module " + aModuleName + " failed; could not find module", "Modules");
+			}
 			return eModuleLoadResult::NotFound;
 		}
 
@@ -172,7 +177,7 @@ namespace Vanguard
 			}
 			else
 			{
-				// Loading a dependent module failed.
+				Log::Error("Loading module dependencies for " + aModuleName + " failed", "Modules");
 				UnloadModule(aModuleName);
 				return eModuleLoadResult::Error;
 			}

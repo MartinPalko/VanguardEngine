@@ -49,7 +49,11 @@ namespace Vanguard
 		moduleManager = new ModuleManager();
 
 		// Load the project's module.
-		moduleManager->LoadModule(loadedProject->GetName());
+		ModuleManager::eModuleLoadResult projectLoadResult = moduleManager->LoadModule(loadedProject->GetName());
+		if (projectLoadResult != ModuleManager::eModuleLoadResult::Success)
+		{
+			Log::Error("Project " + loadedProject->GetName() + " failed to load!", "Core");
+		}
 
 		Log::Message("Initialized Core", "Core");
 		state = CoreState::Initialized;

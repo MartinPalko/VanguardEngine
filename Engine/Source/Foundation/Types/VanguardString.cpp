@@ -60,6 +60,11 @@ namespace Vanguard
 		return ::std::to_string(aInt32).c_str();
 	}
 
+	String String::FromSize(size_t aSize)
+	{
+		return ::std::to_string(aSize).c_str();
+	}
+
 	int32 String::ToInt32() const
 	{
 		if (*data == "")

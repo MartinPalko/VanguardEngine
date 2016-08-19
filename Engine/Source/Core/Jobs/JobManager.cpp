@@ -18,10 +18,10 @@ namespace Vanguard
 		return idleThread;
 	}
 
-	uint8 JobManager::GetIdleWorkers()
+	size_t JobManager::GetIdleWorkers()
 	{
 		idleWorkersMutex.Lock();
-		const uint8 retval = idleWorkers.size();
+		const size_t retval = idleWorkers.size();
 		idleWorkersMutex.Unlock();
 		return retval;
 	}
@@ -84,13 +84,13 @@ namespace Vanguard
 
 	JobManager::JobManager()
 	{
-		int32 targetThreads = SystemInfo::GetNumberOfCores();
+		size_t targetThreads = SystemInfo::GetNumberOfCores();
 
 		if (targetThreads > 1)
 		{
-			Log::Message("Creating " + String::FromInt32(targetThreads) + " job threads", "JobSystem");
+			Log::Message("Creating " + String::FromSize(targetThreads) + " job threads", "JobSystem");
 
-			int32 threadsToCreate = targetThreads - workers.Count();
+			size_t threadsToCreate = targetThreads - workers.Count();
 
 			for (int i = 0; i < threadsToCreate; i++)
 			{

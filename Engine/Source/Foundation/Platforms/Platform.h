@@ -35,3 +35,6 @@ namespace Vanguard
 #define API_EXPORT
 #define API_IMPORT
 #endif
+
+// Disable warning about lack of DLL interfaces
+#pragma warning (disable : 4251)

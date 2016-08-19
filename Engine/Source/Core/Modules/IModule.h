@@ -4,7 +4,7 @@
 
 namespace Vanguard
 {
-	class IModule
+	class CORE_API IModule
 	{
 	public:
 		virtual ~IModule(){}

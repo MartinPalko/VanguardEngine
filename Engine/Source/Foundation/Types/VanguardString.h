@@ -43,7 +43,10 @@ namespace Vanguard
 		static String FromInt32(int32 aInt32);
 		int32 ToInt32() const;
 
-		//// To and from float
+		// From size
+		static String FromSize(size_t aSize);
+
+		// To and from float
 		static String FromFloat(float aFloat);
 		float ToFloat() const;
 

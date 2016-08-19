@@ -52,7 +52,7 @@ namespace Vanguard
 
 		inline void Remove(T aItem)
 		{
-			for (int i = data.size() - 1; i >= 0; i--)
+			for (size_t i = data.size() - 1; i >= 0; i--)
 			{
 				if (data[i] == aItem)
 				{

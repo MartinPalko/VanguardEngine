@@ -28,7 +28,7 @@ namespace Vanguard
 		Mutex jobListMutex;
 
 		JobWorker* GetIdleWorker();
-		uint8 GetIdleWorkers();
+		size_t GetIdleWorkers();
 		JobWorker* GetWorker();
 
 		void WorkerFinishedJob(JobWorker* aThread, Job* aJob);

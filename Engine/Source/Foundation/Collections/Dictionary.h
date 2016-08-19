@@ -82,7 +82,7 @@ namespace Vanguard
 			return data[aKey];
 		}
 
-		inline ICollection<K> Keys() const
+		inline DynamicArray<K> Keys() const
 		{
 			DynamicArray<K> keys = DynamicArray<K>(Count());
 			for (auto& item : data)
@@ -92,7 +92,7 @@ namespace Vanguard
 			return keys;
 		}
 
-		inline ICollection<V> Values() const
+		inline DynamicArray<V> Values() const
 		{
 			DynamicArray<V> values = DynamicArray<V>(Count());
 			for (auto& item : data)

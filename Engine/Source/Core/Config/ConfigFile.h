@@ -8,7 +8,7 @@
 
 namespace Vanguard
 {
-	struct CORE_API ConfigSection
+	struct ConfigSection
 	{
 		friend class ConfigFile;
 	private:
@@ -25,10 +25,11 @@ namespace Vanguard
 			Remove
 		};
 
-		Dictionary<String, ConfigSection> sections;
+		Dictionary<String, ConfigSection>* sectionsPtr;
 
 	public:
-		ConfigFile() {}
+		ConfigFile();
+		~ConfigFile();
 
 		void SetValue(const String& aSection, const String& aKey, const String& aValue);
 		bool ContainsValue(const String& aSection, const String& aKey);

@@ -5,7 +5,7 @@
 
 namespace Vanguard
 {
-	class IConfigVar
+	class CORE_API ConfigVar
 	{
 		friend class ConfigTable;
 	protected:
@@ -14,7 +14,7 @@ namespace Vanguard
 		String name;
 	};
 
-	template <class T> class ConfigVar : IConfigVar
+	template <class T> class CORE_API ConfigVar_T : public ConfigVar
 	{
 		T defaultValue;
 
@@ -29,7 +29,7 @@ namespace Vanguard
 		}
 
 	public:
-		ConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, T aDefaultValue)
+		ConfigVar_T(const String& aConfigFile, const String& aConfigSection, const String& aName, T aDefaultValue)
 		{
 			file = aConfigFile;
 			section = aConfigSection;

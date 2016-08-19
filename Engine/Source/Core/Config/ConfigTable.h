@@ -6,20 +6,16 @@
 
 namespace Vanguard
 {
-	class IConfigVar;
-	template <class T> class ConfigVar;
+	class ConfigVar;
+	template <class T> class ConfigVar_T;
 
 	class CORE_API ConfigTable
 	{
-		friend class ConfigVar<class T>;
-
-	private:
-		// Map goes <File,<Section,<Name,Value>>>
-		static Dictionary<String, ConfigFile> configFiles;
+		friend class ConfigVar_T<class T>;
 
 	public:
-		static void OnConfigVarCreated(const IConfigVar& aNewVar, const String& aConfigDefault);
-		static String GetConfigValueText(const IConfigVar& aConfigVar);
+		static void OnConfigVarCreated(const ConfigVar& aNewVar, const String& aConfigDefault);
+		static String GetConfigValueText(const ConfigVar& aConfigVar);
 
 	public:
 		static void LoadConfigFromDisk();

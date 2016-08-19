@@ -4,11 +4,11 @@
 
 namespace Vanguard
 {
-	class FloatConfigVar : public ConfigVar<float>
+	class CORE_API FloatConfigVar : public ConfigVar_T<float>
 	{
 	public:
 		FloatConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, float aDefaultValue)
-			: ConfigVar<float>(aConfigFile, aConfigSection, aName, aDefaultValue)
+			: ConfigVar_T<float>(aConfigFile, aConfigSection, aName, aDefaultValue)
 		{
 			Register();
 		}

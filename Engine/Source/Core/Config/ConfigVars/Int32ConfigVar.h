@@ -4,11 +4,11 @@
 
 namespace Vanguard
 {
-	class Int32ConfigVar : public ConfigVar<int32>
+	class CORE_API Int32ConfigVar : public ConfigVar_T<int32>
 	{
 	public:
 		Int32ConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, int32 aDefaultValue)
-			: ConfigVar<int32>(aConfigFile, aConfigSection, aName, aDefaultValue)
+			: ConfigVar_T<int32>(aConfigFile, aConfigSection, aName, aDefaultValue)
 		{
 			Register();
 		}

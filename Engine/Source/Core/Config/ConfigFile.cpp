@@ -2,8 +2,19 @@
 #include "Utility/FileSystem.h"
 #include "Log.h"
 
+#define sections (*sectionsPtr)
+
 namespace Vanguard
 {
+	ConfigFile::ConfigFile()
+	{
+		sectionsPtr = new Dictionary<String, ConfigSection>();
+	}
+
+	ConfigFile::~ConfigFile()
+	{
+		delete sectionsPtr;
+	}
 
 	void ConfigFile::SetValue(const String& aSection, const String& aKey, const String& aValue)
 	{

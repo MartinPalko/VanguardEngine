@@ -5,9 +5,9 @@
 
 namespace Vanguard
 {
-	Dictionary<String, ConfigFile> ConfigTable::configFiles;
+	static Dictionary<String, ConfigFile> configFiles;
 
-	void ConfigTable::OnConfigVarCreated(const IConfigVar& aNewVar, const String& aConfigDefault)
+	void ConfigTable::OnConfigVarCreated(const ConfigVar& aNewVar, const String& aConfigDefault)
 	{
 		//DEBUG_LOG("Config var created: " + aNewVar.file + "/" + aNewVar.section + "/" + aNewVar.name);
 
@@ -18,7 +18,7 @@ namespace Vanguard
 		}
 	}
 
-	String ConfigTable::GetConfigValueText(const IConfigVar& aConfigVar)
+	String ConfigTable::GetConfigValueText(const ConfigVar& aConfigVar)
 	{
 		return configFiles[aConfigVar.file].GetValue(aConfigVar.section, aConfigVar.name);
 	}

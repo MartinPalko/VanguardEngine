@@ -57,11 +57,15 @@ namespace Vanguard
 			return Contains(aKey);
 		}
 
-		//inline bool ContainsValue(const V& aValue) const
-		//{
-		//	Vanguard::DynamicArray<V> values = Values();
-		//	return values.Contains(aValue);
-		//}
+		inline bool ContainsValue(const V& aValue) const
+		{
+			for (auto pair : data)
+			{
+				if (pair.second == aValue)
+					return true;
+			}
+			return false;
+		}
 
 		inline void Clear()
 		{
@@ -69,32 +73,34 @@ namespace Vanguard
 		}
 
 		inline size_t Count() const
-        {
+		{
 			return data.size();
 		}
 
-        inline V& Item(const K& aKey)
-        {
-            return data[aKey];
-        }
-        
-		//inline ICollection<K> Keys() const
-  //      {
-		//	DynamicArray<K> keys = DynamicArray<K>();
-		//	for (auto& item : data){
-		//		keys.PushBack(item.first);
-		//	}
-		//	return keys;
-		//}
+		inline V& Item(const K& aKey)
+		{
+			return data[aKey];
+		}
 
-		//inline ICollection<V> Values() const
-  //      {
-		//	DynamicArray<V> values = DynamicArray<V>();
-		//	for (auto& item : data){
-		//		values.PushBack(item.second);
-		//	}
-		//	return values;
-		//}
+		inline ICollection<K> Keys() const
+		{
+			DynamicArray<K> keys = DynamicArray<K>(Count());
+			for (auto& item : data)
+			{
+				keys.PushBack(item.first);
+			}
+			return keys;
+		}
+
+		inline ICollection<V> Values() const
+		{
+			DynamicArray<V> values = DynamicArray<V>(Count());
+			for (auto& item : data)
+			{
+				values.PushBack(item.second);
+			}
+			return values;
+		}
 
 		// operators
 		inline Dictionary& operator=(const Dictionary& other)

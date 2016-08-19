@@ -4,11 +4,11 @@
 
 namespace Vanguard
 {
-	class BooleanConfigVar : public ConfigVar<bool>
+	class CORE_API BooleanConfigVar : public ConfigVar_T<bool>
 	{
 	public:
 		BooleanConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, bool aDefaultValue) 
-			: ConfigVar<bool>(aConfigFile, aConfigSection, aName, aDefaultValue)
+			: ConfigVar_T<bool>(aConfigFile, aConfigSection, aName, aDefaultValue)
 		{
 			Register();
 		}

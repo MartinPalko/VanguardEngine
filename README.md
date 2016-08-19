@@ -6,21 +6,31 @@
 # VanguardEngine
 A small (for now) game engine, created for fun and learning.
 
-Please Note: Vanguard is currently in the early stages, and is not yet a remotely functioning engine. I'm still working out and experimenting with a lot of the core systems!
+Please Note: Vanguard is still in the early stages! Lots of stuff is still not done, but it's getting there!
 
-## How to Compile
+## Compiling
+
+### General
+
+- CMake is used for project file generation, a few shell scripts and batch files are included, if you want to generate projects for something else, use them as an example.
+- Binaries are output to the Bin folder in the root Vanguard directory.
 
 ### Windows
 
-Prerequisites:
-- Visual Studio (Tested on 2013)
+Requirements:
+- Visual Studio (Tested on 2015)
 
-Run "CreateProjectFiles.bat", found in the root directory. This will have CMake create a solution in the Intermediate/VisualStudio directory. Open "Vanguard.sln" and it should all compile. Binaries will be output to the Bin folder in the root Vanguard directory.
+Run "Windows_CreateVSProjectFiles.bat", found in the root directory. This will have CMake create a solution in the Intermediate/VisualStudio directory, as well as a shotrcut in the root. Just open "Vanguard.sln" and it should all compile. All dependencies are included in the "ThirdParty" submodule.
 
 ### Linux
 
-Currently WIP.
+Currently work in progress!
+
+I've included two shell scripts for generating project files on Linux; "Linux_CreateMakefile.sh", and "Linux_CreateCodeBlocksProjectFiles.sh". They do just as they say, and output to the intermediate foler.
+
+Currently only tested with gcc.
 
 ### OS X
 
-Currently WIP.
+Currently work in progress!
+I don't have a mac, so I'm not actively able to test on OS X. If you want to help, drop me a line!

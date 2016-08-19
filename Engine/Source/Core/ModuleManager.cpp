@@ -47,8 +47,8 @@ namespace Vanguard
 			return nullptr;
 		}
 
-		String moduleName = NameFunction();
-		String moduleDependencies = DependenciesFunction();
+		const String moduleName(NameFunction());
+		const String moduleDependencies(DependenciesFunction());
 
 		// Got name and dependencies, done with the temp stuff, so it can be unloaded.
 		delete tempLoadedLib;

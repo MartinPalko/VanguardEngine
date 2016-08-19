@@ -25,13 +25,13 @@ namespace Vanguard
 // Macro to implement module's extern functions.
 #define VANGUARD_DECLARE_MODULE(ModuleClass)\
 	extern "C"{API_EXPORT Vanguard::IModule* VANGUARD_MODULE_INST_FUNCTION(){ return new ModuleClass; }}\
-	extern "C"{API_EXPORT Vanguard::String VANGUARD_MODULE_NAME_FUNCTION(){ return TO_STRING(VANGUARD_LIB_NAME); }}\
-	extern "C"{API_EXPORT Vanguard::String VANGUARD_MODULE_DEPENDENCY_FUNCTION() { return TO_STRING(VANGUARD_LIB_DEPENDENCIES); }}
+	extern "C"{API_EXPORT const char* VANGUARD_MODULE_NAME_FUNCTION(){ return TO_STRING(VANGUARD_LIB_NAME); }}\
+	extern "C"{API_EXPORT const char* VANGUARD_MODULE_DEPENDENCY_FUNCTION() { return TO_STRING(VANGUARD_LIB_DEPENDENCIES); }}
 
 namespace Vanguard
 {
 	// Typedefs for extern functions, used when finding them in the library at runtime.
 	typedef IModule * (*T_VANGUARD_MODULE_INST_FUNCTION)();
-	typedef String(*T_VANGUARD_MODULE_NAME_FUNCTION)();
-	typedef String(*T_VANGUARD_MODULE_DEPENDENCY_FUNCTION)();
+	typedef const char*(*T_VANGUARD_MODULE_NAME_FUNCTION)();
+	typedef const char*(*T_VANGUARD_MODULE_DEPENDENCY_FUNCTION)();
 }

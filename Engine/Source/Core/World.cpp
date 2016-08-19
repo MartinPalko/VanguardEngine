@@ -4,6 +4,27 @@
 
 namespace Vanguard
 {
+	World::World(String aWorldName)
+		: worldName(aWorldName)
+		, entities()
+		, objects()
+		, nextFrameNumber(0)
+		, lastTickStartTime(0.0)
+		, minimumTickDelta(1.0 / 60.0) // 60 FPS
+		, registeredTicks()
+	{
+	}
+
+	World::~World()
+	{
+		for (int i = 0; i < objects.Count(); i++)
+		{
+			// We own these objects, so clean them up.
+			objects[i]->world = nullptr;
+			delete objects[i];
+		}
+	}
+
 	void World::Tick(Frame* aFrame)
 	{
 		DynamicArray<Job*> jobs;

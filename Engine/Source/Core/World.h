@@ -25,17 +25,8 @@ namespace Vanguard
 		Timespan minimumTickDelta;
 		DynamicArray<TickFunction> registeredTicks; //TODO: Use a linkedlist for the registeredTicks	
 
-		World(String aWorldName)
-			: worldName(aWorldName)
-			, entities()
-			, objects()
-			, nextFrameNumber(0)
-			, lastTickStartTime(0.0)
-			, minimumTickDelta(1.0 / 60.0) // 60 FPS
-			, registeredTicks()
-		{
-		}
-		~World(){}
+		World(String aWorldName);
+		~World();
 
 	protected:
 		virtual void Tick(Frame* aFrame);

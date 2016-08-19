@@ -20,6 +20,7 @@ namespace Vanguard
 		World* world = nullptr;
 	public:
 		VanguardObject(){}
+		virtual ~VanguardObject() {}
 		World* GetWorld() { return world; }
 	};
 }

@@ -15,4 +15,5 @@ start /w /b %cmakeExecutableRelativeProjectDir% -G "Visual Studio 14 2015 Win64"
 REM start /w /b %cmakeExecutableRelativeProjectDir% -G "Visual Studio 14 2015" %sourceRootRelativeProjectDir%
 
 REM Pause so we have time to read output.
+powershell "$s=(New-Object -COM WScript.Shell).CreateShortcut('%~dp0\Vanguard.sln.lnk');$s.TargetPath='%cd%\Vanguard.sln';$s.Save()"
 pause > NUL

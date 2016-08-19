@@ -59,7 +59,7 @@ ENDIF()
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS "ON")
 
 # First do thirdparty
-ADD_TOPLEVEL_MAKELISTS("${EngineRoot}/ThirdParty")
+add_subdirectory ("${EngineRoot}/ThirdParty")
 
 # Then engine
 ADD_TOPLEVEL_MAKELISTS("${EngineRoot}/Engine/Source")

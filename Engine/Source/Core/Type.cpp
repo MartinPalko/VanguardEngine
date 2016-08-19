@@ -17,7 +17,6 @@ namespace Vanguard
 
 	Type::Type(IClassFactory * aClassFactory, const String & aClassName, const String & aBaseClassName, size_t aRuntimeHash)
 	{
-		derivedClasses = new DynamicArray<Type*>();
 		classFactory = aClassFactory;
 		className = aClassName;
 		baseClassName = aBaseClassName;
@@ -26,7 +25,11 @@ namespace Vanguard
 
 	Type::~Type()
 	{
-		delete derivedClasses;
+		// Remove us from the type system.
+		std::unordered_map<size_t, Type*>& nameMap = GetClassinfoNameMap();
+		std::unordered_map<size_t, Type*>& hashMap = GetClassinfoHashMap();
+		nameMap.erase(StringID(this->className).GetHash());
+		hashMap.erase(this->runtimeHash);
 	}
 
 	Type* Type::Register(IClassFactory * aClassFactory, size_t aRuntimeHash, const char * aClassName, const char * aBaseClassName)
@@ -35,16 +38,15 @@ namespace Vanguard
 		
 		std::unordered_map<size_t, Type*>& nameMap = GetClassinfoNameMap();
 		std::unordered_map<size_t, Type*>& hashMap = GetClassinfoHashMap();
+		const size_t nameHash = StringID(aClassName).GetHash();
 
-		if (hashMap.count(aRuntimeHash))
+		if (hashMap.count(aRuntimeHash) || nameMap.count(nameHash))
 		{
-			// TODO: Throw an error when this happens (after unregistering is integrated)
-			delete hashMap[aRuntimeHash];
-			//return hashMap[aRuntimeHash];
+			Log::Exception("Trying to register type " + String(aClassName) + " when type already exists!", "Type");
 		}
 
 		Type* newClassInfo = new Type(aClassFactory, aClassName, aBaseClassName, aRuntimeHash);
-		nameMap[StringID(aClassName).GetHash()] = newClassInfo;
+		nameMap[nameHash] = newClassInfo;
 		hashMap[aRuntimeHash] = newClassInfo;
 
 		// TODO: Do this initially, and then again whenever a dll is loaded or unloaded, instead of every time a class is registered.
@@ -55,7 +57,7 @@ namespace Vanguard
 
 	DynamicArray<Type*> Type::GetDerivedClasses() const
 	{
-		return (*derivedClasses);
+		return derivedClasses;
 	}
 
 	DynamicArray<Type*> Type::GetAllTypes()
@@ -101,14 +103,14 @@ namespace Vanguard
 		for (auto pair : GetClassinfoHashMap())
 		{
 			pair.second->baseClass = nullptr;
-			pair.second->derivedClasses->Clear();
+			pair.second->derivedClasses.Clear();
 		}
 		// Now rebuild
 		for (auto pair : GetClassinfoHashMap())
 		{
 			pair.second->baseClass = GetType(pair.second->baseClassName);
 			if (pair.second->baseClass)
-				pair.second->baseClass->derivedClasses->PushBack(pair.second);
+				pair.second->baseClass->derivedClasses.PushBack(pair.second);
 		}
 	}
 }

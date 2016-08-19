@@ -23,12 +23,12 @@ namespace Vanguard
 		String baseClassName;
 		size_t runtimeHash; // This hash is ONLY useful for runtime comparisons. It may differ from build to build, or from compiler to compiler.
 		Type* baseClass = nullptr;
-		DynamicArray<Type*>* derivedClasses;
+		DynamicArray<Type*> derivedClasses;
 
 		Type(IClassFactory* aClassFactory, const String& aClassName, const String& aBaseClassName, size_t aRuntimeHash);
+	public:
 		~Type();
 
-	public:
 		static Type* Register(IClassFactory* aClassFactory, size_t aRuntimeHash, const char* aClassName, const char* aBaseClassName = "");
 
 		void* CreateInstance() const{ return classFactory->CreateInstance(); }
@@ -62,9 +62,9 @@ namespace Vanguard
 friend class Type;\
 protected:\
 	static IClassFactory* ClassIdentifier##_ClassFactory;\
-	static Type* ClassIdentifier##_ClassInfo;\
+	static std::shared_ptr<Type> ClassIdentifier##_ClassInfo;\
 public:\
-	virtual Type* GetClassInfo() const { return ClassIdentifier##_ClassInfo; }
+	virtual Type* GetClassInfo() const { return &*ClassIdentifier##_ClassInfo; }
 
 #define TYPE_DECLARATION(ClassIdentifier, BaseIdentifier)\
 	BASETYPE_DECLARATION(ClassIdentifier)
@@ -75,8 +75,8 @@ IClassFactory* ClassIdentifier::ClassIdentifier##_ClassFactory = new ClassIdenti
 
 #define BASETYPE_DEFINITION(ClassIdentifier)\
 	DEFINE_TYPE_FACTORY(ClassIdentifier)\
-	Type* ClassIdentifier::ClassIdentifier##_ClassInfo = Type::Register(ClassIdentifier::ClassIdentifier##_ClassFactory, typeid(ClassIdentifier).hash_code(), #ClassIdentifier);
+	std::shared_ptr<Type> ClassIdentifier::ClassIdentifier##_ClassInfo (Type::Register(ClassIdentifier::ClassIdentifier##_ClassFactory, typeid(ClassIdentifier).hash_code(), #ClassIdentifier));
 
 #define TYPE_DEFINITION(ClassIdentifier, BaseIdentifier)\
 	DEFINE_TYPE_FACTORY(ClassIdentifier)\
-	Type* ClassIdentifier::ClassIdentifier##_ClassInfo = Type::Register(ClassIdentifier::ClassIdentifier##_ClassFactory, typeid(ClassIdentifier).hash_code(), #ClassIdentifier, #BaseIdentifier);
+	std::shared_ptr<Type> ClassIdentifier::ClassIdentifier##_ClassInfo (Type::Register(ClassIdentifier::ClassIdentifier##_ClassFactory, typeid(ClassIdentifier).hash_code(), #ClassIdentifier, #BaseIdentifier));

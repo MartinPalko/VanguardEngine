@@ -23,7 +23,7 @@ namespace Vanguard
 
 	public:
 		explicit Thread(const String& aName);
-		~Thread();
+		virtual ~Thread();
 
 		static String CurrentThreadID();
 

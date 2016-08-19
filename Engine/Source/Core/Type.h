@@ -15,8 +15,8 @@ namespace Vanguard
 	class CORE_API Type
 	{
 	protected:
-		static std::unordered_map<size_t, Type* >* GetClassinfoNameMap();
-		static std::unordered_map<size_t, Type* >* GetClassinfoHashMap();
+		static std::unordered_map<size_t, Type* >& GetClassinfoHashMap();
+		static std::unordered_map<size_t, Type* >& GetClassinfoNameMap();
 
 		IClassFactory* classFactory;
 		String className;
@@ -44,12 +44,12 @@ namespace Vanguard
 		{
 			const size_t typeHash = typeid(T).hash_code();
 #if VANGUARD_DEBUG
-			if (!GetClassinfoHashMap()->count(typeHash))
+			if (!GetClassinfoHashMap().count(typeHash))
 			{
 				Log::Exception("Trying to get class info for unregistered type: " + String(typeid(T).raw_name()));
 			}
 #endif
-			return (*GetClassinfoHashMap())[typeHash];
+			return GetClassinfoHashMap()[typeHash];
 		}
 
 		bool IsA(Type* otherClass) const;

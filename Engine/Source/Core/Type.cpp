@@ -3,16 +3,16 @@
 
 namespace Vanguard
 {
-	std::unordered_map<size_t, Type*>* Type::GetClassinfoNameMap()
+	std::unordered_map<size_t, Type*>& Type::GetClassinfoNameMap()
 	{
 		static std::unordered_map<size_t, Type*> allClassInfos;
-		return &allClassInfos;
+		return allClassInfos;
 	}
 
-	std::unordered_map<size_t, Type*>* Type::GetClassinfoHashMap()
+	std::unordered_map<size_t, Type*>& Type::GetClassinfoHashMap()
 	{
 		static std::unordered_map<size_t, Type*> allClassInfos;
-		return &allClassInfos;
+		return allClassInfos;
 	}
 
 	Type::Type(IClassFactory * aClassFactory, const String & aClassName, const String & aBaseClassName, size_t aRuntimeHash)
@@ -33,19 +33,19 @@ namespace Vanguard
 	{
 		// TODO: Create Unregister, and make sure it's called when DLL is unloaded.
 		
-		std::unordered_map<size_t, Type*>* nameMap = GetClassinfoNameMap();
-		std::unordered_map<size_t, Type*>* hashMap = GetClassinfoHashMap();
+		std::unordered_map<size_t, Type*>& nameMap = GetClassinfoNameMap();
+		std::unordered_map<size_t, Type*>& hashMap = GetClassinfoHashMap();
 
-		if (hashMap->count(aRuntimeHash))
+		if (hashMap.count(aRuntimeHash))
 		{
 			// TODO: Throw an error when this happens (after unregistering is integrated)
-			delete (&hashMap)[aRuntimeHash];
+			delete hashMap[aRuntimeHash];
 			//return hashMap[aRuntimeHash];
 		}
 
 		Type* newClassInfo = new Type(aClassFactory, aClassName, aBaseClassName, aRuntimeHash);
-		(*nameMap)[StringID(aClassName).GetHash()] = newClassInfo;
-		(*hashMap)[aRuntimeHash] = newClassInfo;
+		nameMap[StringID(aClassName).GetHash()] = newClassInfo;
+		hashMap[aRuntimeHash] = newClassInfo;
 
 		// TODO: Do this initially, and then again whenever a dll is loaded or unloaded, instead of every time a class is registered.
 		UpdateHierarchyReferences();
@@ -60,8 +60,8 @@ namespace Vanguard
 
 	DynamicArray<Type*> Type::GetAllTypes()
 	{
-		DynamicArray<Type*> returnArray(GetClassinfoNameMap()->size());
-		for (auto pair : *GetClassinfoNameMap())
+		DynamicArray<Type*> returnArray(GetClassinfoNameMap().size());
+		for (auto pair : GetClassinfoNameMap())
 		{
 			returnArray.PushBack(pair.second);
 		}
@@ -71,9 +71,9 @@ namespace Vanguard
 	Type* Type::GetType(const StringID& aTypeName)
 	{
 		const size_t nameHash = aTypeName.GetHash();
-		if (GetClassinfoNameMap()->count(nameHash))
+		if (GetClassinfoNameMap().count(nameHash))
 		{
-			return (*GetClassinfoNameMap())[nameHash];
+			return GetClassinfoNameMap()[nameHash];
 		}
 		else
 		{
@@ -98,13 +98,13 @@ namespace Vanguard
 	void Type::UpdateHierarchyReferences()
 	{
 		// First clear all references.
-		for (auto pair : *GetClassinfoHashMap())
+		for (auto pair : GetClassinfoHashMap())
 		{
 			pair.second->baseClass = nullptr;
 			pair.second->derivedClasses->Clear();
 		}
 		// Now rebuild
-		for (auto pair : *GetClassinfoHashMap())
+		for (auto pair : GetClassinfoHashMap())
 		{
 			pair.second->baseClass = GetType(pair.second->baseClassName);
 			if (pair.second->baseClass)

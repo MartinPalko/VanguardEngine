@@ -17,5 +17,14 @@ namespace Vanguard
 
 		Quaternion() : Quaternion(0, 0, 0, 0) {}
 
+		void Normalize();
+		Quaternion GetNormalized() const;
+		inline bool IsNormalized()
+		{
+			const float acceptableError = 0.001f;
+			const float sum = x*x + y*y + z*z - 1;
+			return (sum > -acceptableError && sum < acceptableError);
+		}
+
 	};
 }

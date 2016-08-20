@@ -11,6 +11,7 @@
 #include "Tests/Foundation/StringTest.h"
 #include "Tests/Foundation/VectorTest.h"
 #include "Tests/Foundation/MatrixTest.h"
+#include "Tests/Foundation/QuaternionTest.h"
 
 // Core
 #include "Tests/Core/EntityComponentTest.h"

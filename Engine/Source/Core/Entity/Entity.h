@@ -21,6 +21,10 @@ namespace Vanguard
 	public:
 		inline size_t GetNumComponents() { return components.Count(); }
 		inline Component* GetComponent(size_t aIndex) { return components[aIndex]; }
+		
+		Component* GetComponent(Type* aComponentType);
+		inline Component* GetComponent(const StringID& aComponentType) { return GetComponent(Type::GetType(aComponentType)); }
+		template <class T> T* GetComponent() { return (T*)GetComponent(Type::GetType<T>()); }
 
 		inline Entity* GetParent() { return parent; }
 		inline bool HasParent() { return parent != nullptr; }

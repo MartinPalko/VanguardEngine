@@ -2,6 +2,9 @@
 
 #include "VanguardSDL.h"
 #include "RenderView2D.h"
+#include "Entity/Transform.h"
+
+#define SPLIT_COLOR(VanguardColor) VanguardColor.r, VanguardColor.g, VanguardColor.b, VanguardColor.a
 
 namespace Vanguard
 {
@@ -48,12 +51,41 @@ namespace Vanguard
 		{
 			RenderView2D* view = renderViews[i];
 
-			World* world = view->viewCamera->GetWorld();
+			Camera* camera = view->viewCamera;
+			World* world = camera->GetWorld();
+
+			int screenX;
+			int screenY;
+			SDL_GetWindowSize(view->sdlWindow, &screenX, &screenY);
+			Vector2 screenSize(screenX, screenY);
+
+			SDL_SetRenderDrawColor(view->sdlRenderer, SPLIT_COLOR(view->clearColor));
+			SDL_RenderClear(view->sdlRenderer);
 
 			DynamicArray<SpriteComponent*> sprites = world->GetInstances<SpriteComponent>();
-			DEBUG_LOG("Would be rendering " + String::FromInt32(sprites.Count()) + " sprites");
+			for (size_t i = 0; i < sprites.Count(); i++)
+			{
+				SpriteComponent* sprite = sprites[i];
+				Vector2 spriteDimensions = sprite->GetDimensions();
 
-			SDL_RenderClear(view->sdlRenderer);
+				Transform* transform = sprite->GetEntity()->GetComponent<Transform>();
+				Vector2 spritePosition = Vector2(transform->position.x, transform->position.y);
+
+				// Scale to screen space
+				spriteDimensions *= screenSize;
+				spritePosition *= screenSize;
+
+				SDL_Rect spriteRect;				
+				spriteRect.w = spriteDimensions.x;
+				spriteRect.h = spriteDimensions.y;
+				spriteRect.x = spritePosition.x;
+				spriteRect.y = spritePosition.y;
+
+				SDL_SetRenderDrawColor(view->sdlRenderer, SPLIT_COLOR(sprite->GetColor()));
+
+				SDL_RenderFillRect(view->sdlRenderer, &spriteRect);
+				//SDL_RenderDrawRect(view->sdlRenderer, &spriteRect);
+			}
 			SDL_RenderPresent(view->sdlRenderer);
 		}
 	}

@@ -12,6 +12,7 @@ namespace SimpleGame
 	{
 	private:
 		RenderView* playerView;
+		Entity* paddle;
 		
 	protected:
 		virtual void SetupGame() override;

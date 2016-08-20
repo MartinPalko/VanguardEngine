@@ -40,7 +40,7 @@ addons:
 before_script:
 - mkdir Intermediate
 - cd Intermediate
-- cp-r ../ThirdParty/CMake/Linux/ ./CMake
+- cp -r ../ThirdParty/CMake/Linux/ ./CMake
 - ./CMake/bin/cmake -G "Unix Makefiles" ../
 
 # Compile makefile

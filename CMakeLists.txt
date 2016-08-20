@@ -6,7 +6,7 @@ PROJECT (Vanguard)
 # Create variable for engine root folder
 SET (EngineRoot "${CMAKE_CURRENT_SOURCE_DIR}")
 
-INCLUDE ("${EngineRoot}/CMake/VanguardFunctions.cmake")
+INCLUDE ("${EngineRoot}/VanguardFunctions.cmake")
 
 # Reset
 SET (deferredAddProjects "" CACHE INTERNAL "deferredAddProjects")

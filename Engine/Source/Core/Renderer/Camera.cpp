@@ -21,8 +21,7 @@ namespace Vanguard
 		}
 		else
 		{
-			// TODO: Orthographic matrix.
-			return Matrix4x4::GetIdentity();
+			return Matrix4x4::CreateTranslation(Vector3(0.0f, 0.0f, zNear)) * Matrix4x4::CreateScale(Vector3(1.0f / fov, 1.0f / fov, zFar - zNear));
 		}
 		
 	}

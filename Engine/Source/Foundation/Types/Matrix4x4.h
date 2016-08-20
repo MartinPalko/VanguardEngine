@@ -1,8 +1,7 @@
 #pragma once
+#include <cstring>
 #include "Foundation_Common.h"
 #include "Vector4.h"
-
-#include <cstring>
 
 namespace Vanguard
 {

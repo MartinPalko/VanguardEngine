@@ -1,6 +1,6 @@
 #pragma once
-#include "Mutex.h"
 #include <mutex>
+#include "Mutex.h"
 
 namespace Vanguard
 {

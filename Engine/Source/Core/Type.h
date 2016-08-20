@@ -1,8 +1,8 @@
 #pragma once
+#include <typeinfo>
 #include "Foundation.h"
 #include "Core_Common.h"
 #include "Log.h"
-#include <typeinfo>
 
 namespace Vanguard
 {
@@ -58,25 +58,38 @@ namespace Vanguard
 	};
 }
 
+//#define BASETYPE_DECLARATION(ClassIdentifier) \
+//friend class Type;\
+//protected:\
+//	static IClassFactory* ClassIdentifier##_ClassFactory;\
+//	static std::shared_ptr<Type> ClassIdentifier##_ClassInfo;\
+//public:\
+//	virtual Type* GetClassInfo() const { return &*ClassIdentifier##_ClassInfo; }
+//
+//#define TYPE_DECLARATION(ClassIdentifier, BaseIdentifier)\
+//	BASETYPE_DECLARATION(ClassIdentifier)
+//
+//#define DEFINE_TYPE_FACTORY(ClassIdentifier)\
+//class ClassIdentifier##_Factory : public IClassFactory { public: virtual void* CreateInstance() override { return new ClassIdentifier(); } };\
+//IClassFactory* ClassIdentifier::ClassIdentifier##_ClassFactory = new ClassIdentifier##_Factory();\
+//
+//#define BASETYPE_DEFINITION(ClassIdentifier)\
+//	DEFINE_TYPE_FACTORY(ClassIdentifier)\
+//	std::shared_ptr<Type> ClassIdentifier::ClassIdentifier##_ClassInfo (Type::Register(ClassIdentifier::ClassIdentifier##_ClassFactory, typeid(ClassIdentifier).hash_code(), #ClassIdentifier));
+//
+//#define TYPE_DEFINITION(ClassIdentifier, BaseIdentifier)\
+//	DEFINE_TYPE_FACTORY(ClassIdentifier)\
+//	std::shared_ptr<Type> ClassIdentifier::ClassIdentifier##_ClassInfo (Type::Register(ClassIdentifier::ClassIdentifier##_ClassFactory, typeid(ClassIdentifier).hash_code(), #ClassIdentifier, #BaseIdentifier));
+
+
+
 #define BASETYPE_DECLARATION(ClassIdentifier) \
-friend class Type;\
-protected:\
-	static IClassFactory* ClassIdentifier##_ClassFactory;\
-	static std::shared_ptr<Type> ClassIdentifier##_ClassInfo;\
 public:\
-	virtual Type* GetClassInfo() const { return &*ClassIdentifier##_ClassInfo; }
+	virtual Type* GetClassInfo() const { return nullptr; }
 
 #define TYPE_DECLARATION(ClassIdentifier, BaseIdentifier)\
 	BASETYPE_DECLARATION(ClassIdentifier)
 
-#define DEFINE_TYPE_FACTORY(ClassIdentifier)\
-class ClassIdentifier##_Factory : public IClassFactory { public: virtual void* CreateInstance() override { return new ClassIdentifier(); } };\
-IClassFactory* ClassIdentifier::ClassIdentifier##_ClassFactory = new ClassIdentifier##_Factory();\
+#define BASETYPE_DEFINITION(ClassIdentifier)
 
-#define BASETYPE_DEFINITION(ClassIdentifier)\
-	DEFINE_TYPE_FACTORY(ClassIdentifier)\
-	std::shared_ptr<Type> ClassIdentifier::ClassIdentifier##_ClassInfo (Type::Register(ClassIdentifier::ClassIdentifier##_ClassFactory, typeid(ClassIdentifier).hash_code(), #ClassIdentifier));
-
-#define TYPE_DEFINITION(ClassIdentifier, BaseIdentifier)\
-	DEFINE_TYPE_FACTORY(ClassIdentifier)\
-	std::shared_ptr<Type> ClassIdentifier::ClassIdentifier##_ClassInfo (Type::Register(ClassIdentifier::ClassIdentifier##_ClassFactory, typeid(ClassIdentifier).hash_code(), #ClassIdentifier, #BaseIdentifier));
+#define TYPE_DEFINITION(ClassIdentifier, BaseIdentifier)

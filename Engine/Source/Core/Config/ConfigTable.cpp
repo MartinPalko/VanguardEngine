@@ -5,22 +5,26 @@
 
 namespace Vanguard
 {
-	static Dictionary<String, ConfigFile> configFiles;
+	Dictionary<String, ConfigFile>& ConfigFiles()
+	{
+		static Dictionary<String, ConfigFile> configFiles;
+		return configFiles;
+	}
 
 	void ConfigTable::OnConfigVarCreated(const ConfigVar& aNewVar, const String& aConfigDefault)
 	{
 		//DEBUG_LOG("Config var created: " + aNewVar.file + "/" + aNewVar.section + "/" + aNewVar.name);
 
 		// Set to default if it doesn't exist yet.
-		if (!configFiles.Contains(aNewVar.file) || !configFiles[aNewVar.file].ContainsValue(aNewVar.section, aNewVar.name))
+		if (!ConfigFiles().Contains(aNewVar.file) || !ConfigFiles()[aNewVar.file].ContainsValue(aNewVar.section, aNewVar.name))
 		{
-			configFiles[aNewVar.file].SetValue(aNewVar.section, aNewVar.name,aConfigDefault);
+			ConfigFiles()[aNewVar.file].SetValue(aNewVar.section, aNewVar.name,aConfigDefault);
 		}
 	}
 
 	String ConfigTable::GetConfigValueText(const ConfigVar& aConfigVar)
 	{
-		return configFiles[aConfigVar.file].GetValue(aConfigVar.section, aConfigVar.name);
+		return ConfigFiles()[aConfigVar.file].GetValue(aConfigVar.section, aConfigVar.name);
 	}
 
 	void ConfigTable::LoadConfigFromDisk()
@@ -33,10 +37,10 @@ namespace Vanguard
 			FilePath configFile = engineConfigFilePaths[i];
 			String fileName = configFile.GetFilenameWithoutExtension();
 			
-			if (configFiles.ContainsKey(fileName))
-				configFiles[fileName].LoadAdditive(engineConfigFilePaths[i]);
+			if (ConfigFiles().ContainsKey(fileName))
+				ConfigFiles()[fileName].LoadAdditive(engineConfigFilePaths[i]);
 			else
-				configFiles[fileName] = ConfigFile::Load(engineConfigFilePaths[i]);
+				ConfigFiles()[fileName] = ConfigFile::Load(engineConfigFilePaths[i]);
 		}
 
 		// Project configs
@@ -47,10 +51,10 @@ namespace Vanguard
 			FilePath configFile = projectConfigFilePaths[i];
 			String fileName = configFile.GetFilenameWithoutExtension();
 
-			if (configFiles.ContainsKey(fileName))
-				configFiles[fileName].LoadAdditive(projectConfigFilePaths[i]);
+			if (ConfigFiles().ContainsKey(fileName))
+				ConfigFiles()[fileName].LoadAdditive(projectConfigFilePaths[i]);
 			else
-				configFiles[fileName] = ConfigFile::Load(projectConfigFilePaths[i]);			
+				ConfigFiles()[fileName] = ConfigFile::Load(projectConfigFilePaths[i]);
 		}
 	}
 }

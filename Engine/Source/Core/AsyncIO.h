@@ -1,9 +1,9 @@
 #pragma once
-#include "Core_Common.h"
-#include "Foundation.h"
-
 #include <queue>
 #include <functional>
+
+#include "Core_Common.h"
+#include "Foundation.h"
 
 namespace Vanguard
 {

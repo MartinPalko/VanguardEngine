@@ -93,7 +93,7 @@ namespace Vanguard
 		~Time();
 
 		// Returns a Time object that is set to the current system time.
-		static Time GetCurrentTime();
+		static Time CurrentTime();
 
 		// Returns the time as a number of milliseconds since Jan 1st 1970.
 		int64 ToMilliseconds() const;

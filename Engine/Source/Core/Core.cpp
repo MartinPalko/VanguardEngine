@@ -1,6 +1,7 @@
-#include "Core.h"
 #include <ostream>
 #include <thread>
+
+#include "Core.h"
 
 #include "ModuleManager.h"
 #include "Type.h"

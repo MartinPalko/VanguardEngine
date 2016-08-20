@@ -1,8 +1,8 @@
 #pragma once
+#include <future>
+
 #include "Foundation_Common.h"
 #include "VanguardString.h"
-
-#include <future>
 
 namespace std { class thread; }
 

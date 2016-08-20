@@ -1,5 +1,5 @@
-#include "VanguardTime.h"
 #include "juce_core.h"
+#include "VanguardTime.h"
 
 namespace Vanguard
 {
@@ -73,7 +73,7 @@ namespace Vanguard
 	}
 
 	// Returns a Time object that is set to the current system time.
-	Time Time::GetCurrentTime() { return juce::Time::getCurrentTime().toMilliseconds(); }
+	Time Time::CurrentTime() { return juce::Time::getCurrentTime().toMilliseconds(); }
 
 	// Returns the time as a number of milliseconds since Jan 1st 1970.
 	int64 Time::ToMilliseconds() const { return data->toMilliseconds(); }

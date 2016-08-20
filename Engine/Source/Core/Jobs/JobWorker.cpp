@@ -1,8 +1,8 @@
+#include <condition_variable>
+
 #include "JobWorker.h"
 #include "JobManager.h"
 #include "Job.h"
-
-#include <condition_variable>
 
 namespace Vanguard
 {

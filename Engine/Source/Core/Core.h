@@ -47,7 +47,7 @@ namespace Vanguard
 
 		class Project* loadedProject;
 		class ModuleManager* moduleManager;
-		DynamicArray<World*> worlds = DynamicArray<World*>();
+		DynamicArray<World*> worlds;
 		class DynamicArray<IRenderer*> renderers;
 		IRenderer* primaryRenderer;
 

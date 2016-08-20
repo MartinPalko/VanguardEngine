@@ -1,9 +1,10 @@
-#include "Thread.h"
-
-#include "Platforms/Platform.h"
 #include <thread>
 #include <sstream>
 #include <future>
+
+#include "Thread.h"
+
+#include "Platforms/Platform.h"
 
 #ifdef VANGUARD_WINDOWS
 #include <Windows.h>

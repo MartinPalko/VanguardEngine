@@ -1,8 +1,9 @@
 #pragma once
-#include "Foundation.h"
-#include "JobEnums.h"
 #include <queue>
 #include <mutex>
+
+#include "Foundation.h"
+#include "JobEnums.h"
 
 namespace Vanguard
 {

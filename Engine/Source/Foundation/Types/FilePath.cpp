@@ -1,5 +1,5 @@
-#include "FilePath.h"
 #include "juce_core.h"
+#include "FilePath.h"
 #include "VanguardString.h"
 
 namespace Vanguard

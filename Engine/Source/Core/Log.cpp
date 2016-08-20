@@ -1,5 +1,6 @@
-#include "Log.h"
 #include <iostream>
+
+#include "Log.h"
 
 #include "Platforms/Platform.h"
 #include "Config/Config.h"
@@ -51,7 +52,7 @@ namespace Vanguard
 		}
 
 		// Create a new log file, named after the current time.
-		String fileName = logfilePrefix + "_" + Time::GetCurrentTime().ToString(true, true, false, false);
+		String fileName = logfilePrefix + "_" + Time::CurrentTime().ToString(true, true, false, false);
 		fileName = fileName.Replace(' ', '-');
 		fileName = fileName.Replace(':', '.');
 

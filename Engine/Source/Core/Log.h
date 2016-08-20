@@ -29,7 +29,7 @@ namespace Vanguard
 			: message(aMessage),
 			channel(aChannel),
 			errorLevel(aErrorLevel),
-			timestamp(Time::GetCurrentTime()){}
+			timestamp(Time::CurrentTime()){}
 
 		String GetMessage() { return message; }
 		String GetCategory() { return channel; }

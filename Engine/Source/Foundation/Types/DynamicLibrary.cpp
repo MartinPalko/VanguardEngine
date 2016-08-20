@@ -1,5 +1,5 @@
-#include "DynamicLibrary.h"
 #include "juce_core.h"
+#include "DynamicLibrary.h"
 
 namespace Vanguard
 {

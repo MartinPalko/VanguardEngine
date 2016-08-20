@@ -1,5 +1,5 @@
-#include "SystemInfo.h"
 #include "juce_core.h"
+#include "SystemInfo.h"
 
 namespace Vanguard
 {

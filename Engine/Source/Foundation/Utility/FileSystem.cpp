@@ -1,5 +1,5 @@
-#include "FileSystem.h"
 #include "juce_core.h"
+#include "FileSystem.h"
 
 namespace Vanguard
 {

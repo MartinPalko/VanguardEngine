@@ -1,12 +1,11 @@
-#include "Application.h"
-#include "Core.h"
-
+#include <Windows.h>
 #include <stdio.h>
 #include <io.h>
 #include <fcntl.h>
-#include <Windows.h>
-
 #include <thread>
+
+#include "Application.h"
+#include "Core.h"
 
 namespace Vanguard
 {

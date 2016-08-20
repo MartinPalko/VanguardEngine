@@ -1,6 +1,6 @@
 #pragma once
-#include "Utility/MathFunctions.h"
 #include <math.h>
+#include "Utility/MathFunctions.h"
 #include "Foundation_Common.h"
 
 namespace Vanguard

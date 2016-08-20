@@ -12,6 +12,8 @@ namespace Vanguard
 		String file;
 		String section;
 		String name;
+		ConfigVar() {}
+		virtual ~ConfigVar() {}
 	};
 
 	template <class T> class CORE_API ConfigVar_T : public ConfigVar
@@ -35,7 +37,8 @@ namespace Vanguard
 			section = aConfigSection;
 			name = aName;
 			defaultValue = aDefaultValue;
-		}		
+		}
+		virtual ~ConfigVar_T() {}
 
 		T GetDefault()
 		{

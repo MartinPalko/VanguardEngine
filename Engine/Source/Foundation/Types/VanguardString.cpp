@@ -1,11 +1,11 @@
-#include "VanguardString.h"
-
 #include <string>
 #include <cstring>
 #include <functional>
 #include <sstream>
 #include <algorithm>
 #include <cctype>
+
+#include "VanguardString.h"
 
 #define TRUE_STRING "true"
 #define FALSE_STRING "false"

@@ -44,6 +44,11 @@ namespace Vanguard
 		inline Vector2 operator*(const Vector2& aV) const { return Vector2(x * aV.x, y * aV.y); }
 		inline Vector2 operator/(const Vector2& aV) const { return Vector2(x / aV.x, y / aV.y); }
 
+		inline void operator+=(const Vector2& aV) { x += aV.x; y += aV.y; }
+		inline void operator-=(const Vector2& aV) { x -= aV.x; y -= aV.y; }
+		inline void operator*=(const Vector2& aV) { x *= aV.x; y *= aV.y; }
+		inline void operator/=(const Vector2& aV) { x /= aV.x; y /= aV.y; }
+
 		inline Vector2 operator+(const float& aF) const	{ return Vector2(x + aF, y + aF); }
 		inline Vector2 operator-(const float& aF) const	{ return Vector2(x - aF, y - aF); }
 		inline Vector2 operator*(const float& aF) const { return Vector2(x * aF, y * aF); }

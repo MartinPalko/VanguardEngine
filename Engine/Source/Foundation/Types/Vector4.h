@@ -42,6 +42,11 @@ namespace Vanguard
 		inline Vector4 operator*(const Vector4& aV) const { return Vector4(x * aV.x, y * aV.y, z * aV.z, w * aV.w); }
 		inline Vector4 operator/(const Vector4& aV) const { return Vector4(x / aV.x, y / aV.y, z / aV.z, w / aV.w); }
 
+		inline void operator+=(const Vector4& aV) { x += aV.x; y += aV.y; z += aV.z; w += aV.w; }
+		inline void operator-=(const Vector4& aV) { x -= aV.x; y -= aV.y; z -= aV.z; w -= aV.w; }
+		inline void operator*=(const Vector4& aV) { x *= aV.x; y *= aV.y; z *= aV.z; w *= aV.w; }
+		inline void operator/=(const Vector4& aV) { x /= aV.x; y /= aV.y; z /= aV.z; w /= aV.w; }
+
 		inline Vector4 operator+(const float& aF) const	{ return Vector4(x + aF, y + aF, z + aF, w + aF); }
 		inline Vector4 operator-(const float& aF) const	{ return Vector4(x - aF, y - aF, z - aF, w - aF); }
 		inline Vector4 operator*(const float& aF) const { return Vector4(x * aF, y * aF, z * aF, w * aF); }

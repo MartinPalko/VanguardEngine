@@ -2,6 +2,7 @@
 
 #include "Entity/Entity.h"
 #include "Entity/Transform.h"
+#include "Types/Matrix4x4.h"
 
 namespace Vanguard
 {
@@ -15,10 +16,14 @@ namespace Vanguard
 	protected:
 		float fov;
 		bool orthographic;
+		float zNear;
+		float zFar;
 		Transform* transform;
 
 	public:
 		Transform* GetTransform() { return transform; }
+
+		Matrix4x4 GetMatrix();
 
 	};
 }

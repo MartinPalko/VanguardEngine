@@ -15,6 +15,9 @@ namespace SimpleGame
 
 		IRenderer* primaryRenderer = core->GetPrimaryRenderer();
 		playerView = primaryRenderer->CreateRenderView(playerCamera, 1280, 720);
+
+		Entity* spriteEntity = gameWorld->SpawnEntity<Entity>();
+		spriteEntity->AddComponent<SpriteComponent>();
 	}
 
 	void SimpleGame::UpdateGame(Vanguard::Frame* aFrame)

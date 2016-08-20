@@ -48,6 +48,11 @@ namespace Vanguard
 		{
 			RenderView2D* view = renderViews[i];
 
+			World* world = view->viewCamera->GetWorld();
+
+			DynamicArray<SpriteComponent*> sprites = world->GetInstances<SpriteComponent>();
+			DEBUG_LOG("Would be rendering " + String::FromInt32(sprites.Count()) + " sprites");
+
 			SDL_RenderClear(view->sdlRenderer);
 			SDL_RenderPresent(view->sdlRenderer);
 		}

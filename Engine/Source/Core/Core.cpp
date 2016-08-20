@@ -115,7 +115,7 @@ namespace Vanguard
 					GetPrimaryRenderer()->RenderViews();
 				}
 
-				if (world->nextFrameNumber > 10)
+				if (world->nextFrameNumber > 100)
 				{
 					this->ShutDown();
 				}

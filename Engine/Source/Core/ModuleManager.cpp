@@ -111,6 +111,7 @@ namespace Vanguard
 	ModuleManager::~ModuleManager()
 	{
 		UnloadAllModules();
+		ClearModuleList();
 	}
 
 	typedef IModule * (*MODULE_INST_FUNCTION)();
@@ -121,7 +122,7 @@ namespace Vanguard
 
 		DynamicArray<FilePath> dynamicLibsInModuleDirectory = FileSystem::Find(Directories::GetEngineModuleDirectory(), pluginWildcard, false, true, false, true);
 
-		moduleInfos.clear();
+		ClearModuleList();
 
 		for (uint32 i = 0; i < dynamicLibsInModuleDirectory.Count(); i++)
 		{
@@ -132,6 +133,15 @@ namespace Vanguard
 				moduleInfos[moduleInfo->moduleName] = moduleInfo;
 			}
 		}
+	}
+
+	void ModuleManager::ClearModuleList()
+	{
+		for (auto pair : moduleInfos)
+		{
+			delete(pair.second);
+		}
+		moduleInfos.clear();
 	}
 
 	ModuleManager::eModuleLoadResult ModuleManager::LoadModule(const String& aModuleName)

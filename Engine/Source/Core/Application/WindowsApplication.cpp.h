@@ -9,6 +9,18 @@
 
 namespace Vanguard
 {
+	void Application::ProcessNativeEvents()
+	{
+		for (size_t w = 0; w < nativeWindows.Count(); w++)
+		{
+			NativeMessage msg;
+			WindowHandle handle = nativeWindows[w];
+			while (PeekMessage(&msg, handle, 0, 0, PM_REMOVE))
+			{
+			}
+		}
+	}
+
 	BOOL WINAPI ConsoleEventHandler(_In_ DWORD dwCtrlType)
 	{
 		// See https://msdn.microsoft.com/en-us/library/windows/desktop/ms683242(v=vs.85).aspx for info

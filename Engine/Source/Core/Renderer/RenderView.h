@@ -1,4 +1,5 @@
 #pragma once
+#include "Foundation.h"
 
 namespace Vanguard
 {
@@ -7,6 +8,7 @@ namespace Vanguard
 	class RenderView
 	{
 	public:
+
 		Camera* viewCamera;
 		int resolutionX;
 		int resolutionY;
@@ -17,5 +19,8 @@ namespace Vanguard
 			resolutionX = aResolutionX;
 			resolutionY = aResolutionY;
 		}
+		virtual ~RenderView() {}
+
+		virtual WindowHandle GetWindowHandle() = 0;
 	};
 }

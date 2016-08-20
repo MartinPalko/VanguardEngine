@@ -2,6 +2,7 @@
 #ifndef _VANGUARD_PLATFORM_IMPLEMENTATION
 #define _VANGUARD_PLATFORM_IMPLEMENTATION
 
+#include <Windows.h>
 #include <exception>
 
 #include "BasePlatform.h"
@@ -23,6 +24,9 @@ namespace Vanguard
 		static inline const char* DynamicLibExtension(){ return ".dll"; }
 
 		typedef std::exception Exception;
+
+		typedef HWND WindowHandle;
+		typedef MSG NativeMessage;
 	};
 	typedef WindowsPlatform Platform;
 }

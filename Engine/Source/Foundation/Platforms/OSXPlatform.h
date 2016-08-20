@@ -26,6 +26,10 @@ namespace Vanguard
 		static inline const char* DynamicLibExtension(){ return ".dylib"; }
 
         typedef std::runtime_error Exception;
+
+		// TODO
+		typedef void* WindowHandle;
+		typedef void* NativeMessage;
 	};
 	typedef OSXPlatform Platform;
 }

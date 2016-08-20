@@ -27,6 +27,10 @@ namespace Vanguard
 		static inline const char* DynamicLibExtension(){ return ".so"; }
 
 		typedef std::runtime_error Exception;
+
+		// TODO
+		typedef void* WindowHandle;
+		typedef void* NativeMessage;
 	};
 	typedef LinuxPlatform Platform;
 

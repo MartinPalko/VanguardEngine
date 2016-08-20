@@ -11,8 +11,11 @@ namespace Vanguard
 		SDL_Window* sdlWindow;
 		SDL_Renderer* sdlRenderer;
 		Color clearColor;
+		WindowHandle windowHandle;
 
 		RenderView2D(Camera* aViewCamera, int aResolutionX, int aResolutionY);
 		~RenderView2D();
+
+		virtual WindowHandle GetWindowHandle() override;
 	};
 }

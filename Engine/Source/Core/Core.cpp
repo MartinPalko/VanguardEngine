@@ -33,7 +33,7 @@ namespace Vanguard
 		state = CoreState::Initializing;
 		instance = this;
 
-		Application::applicationArguments = ApplicationArguments(aArgC, aArgV);
+		Application::SetApplicationArguments(aArgC, aArgV);
 
 		loadedProject = new Project(Directories::GetVanguardProjectsDirectory().GetRelative(aProjectName));
 
@@ -78,6 +78,8 @@ namespace Vanguard
 		// Main engine loop
 		while (state == CoreState::Running)
 		{
+			Application::ProcessNativeEvents();
+
 			// Tick worlds
 			for (int i = 0; i < worlds.Count(); i++)
 			{
@@ -113,11 +115,6 @@ namespace Vanguard
 
 					// Render the new frame.
 					GetPrimaryRenderer()->RenderViews();
-				}
-
-				if (world->nextFrameNumber > 100)
-				{
-					this->ShutDown();
 				}
 			}
 			//std::this_thread::sleep_for(std::chrono::microseconds(1));

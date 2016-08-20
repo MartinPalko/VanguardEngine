@@ -17,6 +17,17 @@ namespace Vanguard
 			WindowHandle handle = nativeWindows[w];
 			while (PeekMessage(&msg, handle, 0, 0, PM_REMOVE))
 			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+
+				NativeEvent nativeEvent;
+				nativeEvent.message = msg;
+				nativeEvent.windowHandle = handle;
+
+				for (size_t h = 0; h < nativeEventHandlers.Count(); h++)
+				{
+					nativeEventHandlers[h]->HandleNativeEvent(nativeEvent);
+				}
 			}
 		}
 	}

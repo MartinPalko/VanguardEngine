@@ -1,1 +1,1 @@
-IMPLEMENT_MODULE(SimpleGame "Core;Renderer2D")
+IMPLEMENT_MODULE(SimpleGame "Core;Renderer2D;gainput")

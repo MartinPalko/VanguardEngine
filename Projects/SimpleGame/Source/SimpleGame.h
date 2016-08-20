@@ -6,17 +6,31 @@
 
 #include "Renderer/RenderView.h"
 
+namespace gainput
+{
+	class InputManager;
+	class InputMap;
+}
+
 namespace SimpleGame
 {
-	class SimpleGame : public GameModule
+	class SimpleGame : public GameModule, public INativeEventHandler
 	{
 	private:
 		RenderView* playerView;
 		Entity* paddle;
+
+		gainput::InputManager* inputManager;
+		gainput::InputMap* inputMap;
 		
+		// Implement GameModule
 	protected:
 		virtual void SetupGame() override;
 		virtual void UpdateGame(Frame* aFrame) override;
 		virtual void CleanupGame() override;
+
+		// Implement INativeEventHandler
+	public:
+		virtual void HandleNativeEvent(NativeEvent aEvent) override;
 	};
 }

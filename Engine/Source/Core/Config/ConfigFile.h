@@ -25,7 +25,7 @@ namespace Vanguard
 			Remove
 		};
 
-		Dictionary<String, ConfigSection>* sectionsPtr;
+		Dictionary<String, ConfigSection> sections;
 
 	public:
 		ConfigFile();

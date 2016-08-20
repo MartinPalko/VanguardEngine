@@ -16,10 +16,10 @@ namespace Vanguard
 		{
 		}
 
-		Vector2 GetDimensions() { return dimensions; }
+		inline Vector2 GetDimensions() const { return dimensions; }
 		void SetDimensions(Vector2 aDimensions) { dimensions = aDimensions; }
 		
-		Color GetColor() { return color; }
+		inline Color GetColor() const { return color; }
 		void SetColor(Color aColor) { color = aColor; }
 
 	};

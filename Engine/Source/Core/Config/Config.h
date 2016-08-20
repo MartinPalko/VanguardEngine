@@ -15,8 +15,3 @@
 #define float_Config(varName, section, configFile, defaultValue) const Vanguard::FloatConfigVar varName = Vanguard::FloatConfigVar(configFile,section,#varName,defaultValue);
 #define bool_Config(varName, section, configFile, defaultValue) const Vanguard::BooleanConfigVar varName = Vanguard::BooleanConfigVar(configFile,section,#varName,defaultValue);
 #define String_Config(varName, section ,configFile, defaultValue) const Vanguard::StringConfigVar varName = Vanguard::StringConfigVar(configFile,section,#varName,defaultValue);
-
-#define int32_Config(...)
-#define float_Config(...)
-#define bool_Config(...)
-#define String_Config(...)

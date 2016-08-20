@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Interfaces/ICore.h"
 #include "Core_Common.h"
 
 #include "Config/Config.h"
@@ -35,7 +36,7 @@ namespace Vanguard
 
 	class ModuleManager;
 
-	class CORE_API Core
+	class CORE_API Core : public ICore
 	{
 	private:
 		static BooleanConfigVar clearTempDirectoryOnShutdown;
@@ -55,17 +56,18 @@ namespace Vanguard
 
 	public:
 		Core();
+		virtual ~Core() {};
 
 		static Core* GetInstance();
 		JobManager* GetJobManager();
 
-		void Initialize(int aArgC, char** aArgV, String aProjectName = "");
-		void Run();
-		void ShutDown();
+		// Implementation of ICore
+		virtual void Initialize(int aArgC, char** aArgV, const char* aProjectName = "") override;
+		virtual void Run() override;
+		virtual void ShutDown() override;
+		virtual void LoadModule(const char* aModuleName) override;
 
 		inline CoreState GetState(){ return state; }
-
-		void LoadModule(const String& aModuleName);
 
 		class Project* GetLoadedProject(){ return loadedProject; }
 
@@ -77,6 +79,4 @@ namespace Vanguard
 		void UnregisterRenderer(IRenderer* aRenderer);
 		IRenderer* GetPrimaryRenderer();
 	};
-
-
 }

@@ -1,15 +1,14 @@
 #pragma once
-#include "Core.h"
-#include "Jobs/Frame.h"
+#include "Platforms/Platform.h"
 
 namespace Vanguard
 {
-	class CORE_API IModule
+	class IModule
 	{
 	public:
-		virtual ~IModule(){}
-		virtual void LoadModule(){ }
-		virtual void UnloadModule(){ }
+		virtual ~IModule() {}
+		virtual void LoadModule() = 0;
+		virtual void UnloadModule() = 0;
 	};
 }
 
@@ -24,14 +23,14 @@ namespace Vanguard
 
 // Macro to implement module's extern functions.
 #define VANGUARD_DECLARE_MODULE(ModuleClass)\
-	extern "C"{API_EXPORT Vanguard::IModule* VANGUARD_MODULE_INST_FUNCTION(){ return new ModuleClass; }}\
+	extern "C"{API_EXPORT Vanguard::IModule* VANGUARD_MODULE_INST_FUNCTION(){ return new ModuleClass(); }}\
 	extern "C"{API_EXPORT const char* VANGUARD_MODULE_NAME_FUNCTION(){ return TO_STRING(VANGUARD_LIB_NAME); }}\
 	extern "C"{API_EXPORT const char* VANGUARD_MODULE_DEPENDENCY_FUNCTION() { return TO_STRING(VANGUARD_LIB_DEPENDENCIES); }}
 
 namespace Vanguard
 {
 	// Typedefs for extern functions, used when finding them in the library at runtime.
-	typedef IModule * (*T_VANGUARD_MODULE_INST_FUNCTION)();
-	typedef const char*(*T_VANGUARD_MODULE_NAME_FUNCTION)();
-	typedef const char*(*T_VANGUARD_MODULE_DEPENDENCY_FUNCTION)();
+	typedef IModule* (*T_VANGUARD_MODULE_INST_FUNCTION)();
+	typedef const char* (*T_VANGUARD_MODULE_NAME_FUNCTION)();
+	typedef const char* (*T_VANGUARD_MODULE_DEPENDENCY_FUNCTION)();
 }

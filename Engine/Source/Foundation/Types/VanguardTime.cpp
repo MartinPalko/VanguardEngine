@@ -15,7 +15,7 @@ namespace Vanguard
 
 	Timespan& Timespan::operator = (const Timespan& aOther)
 	{
-		data = new juce::RelativeTime(aOther.InSeconds());
+		*data = juce::RelativeTime(aOther.InSeconds());
 		return *this;
 	}
 

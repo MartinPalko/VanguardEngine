@@ -18,6 +18,16 @@ namespace Vanguard
 		return data->open(aFilePath.GetFullPathName().GetCharPointer());
 	}
 
+	bool DynamicLibrary::Open(const String& aFilePath)
+	{
+		if (!aFilePath.Contains('.'))
+		{
+			aFilePath.Append(String(".") + Platform::DynamicLibExtension());
+		}
+
+		return data->open(aFilePath.GetCharPointer());
+	}
+
 	void DynamicLibrary::Close()
 	{
 		data->close();

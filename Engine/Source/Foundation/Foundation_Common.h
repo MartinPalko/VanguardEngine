@@ -1,9 +1,9 @@
 #pragma once
 #include "Platforms/Platform.h"
 
-// Enable memory leak detection on windows debug builds
 #if VANGUARD_DEBUG
-#define MEMORY_LEAK_DEBUG_ENABLED 1
+// Uncomment to enable memory leak detection on debug builds
+//#define MEMORY_LEAK_DEBUG_ENABLED 1
 #endif
 
 #if VANGUARD_WINDOWS && MEMORY_LEAK_DEBUG_ENABLED
@@ -15,7 +15,6 @@
 // Override new operator
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #define new DEBUG_NEW
-
 #endif
 
 #define STRINGIFY(x) #x

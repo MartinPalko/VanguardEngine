@@ -1,5 +1,5 @@
 #include "Renderer2D_Common.h"
-#include "Modules/IModule.h"
+#include "Interfaces/IModule.h"
 #include "Renderer/IRenderer.h"
 
 #include "SpriteComponent.h"

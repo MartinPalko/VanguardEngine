@@ -1,4 +1,4 @@
-#include "Modules/IModule.h"
+#include "Interfaces/IModule.h"
 #include "VanguardSDL.h"
 
 #include "Foundation.h"

@@ -1,8 +1,9 @@
 #pragma once
-
 #include "Foundation.h"
 #include "Core_Common.h"
-#include "Modules/IModule.h"
+#include "Interfaces/IModule.h"
+#include "Log.h"
+
 namespace Vanguard
 {
 	class IModule;
@@ -53,6 +54,7 @@ namespace Vanguard
 
 		// Create or update the module list with all modules found in the bin folder.
 		void UpdateModuleList();
+		void ClearModuleList();
 		eModuleLoadResult LoadModule(const String& aModuleName);
 		void UnloadModule(const String& aModuleName);
 		void UnloadAllModules();

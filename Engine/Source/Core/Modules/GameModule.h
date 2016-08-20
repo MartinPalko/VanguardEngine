@@ -1,7 +1,8 @@
 #pragma once
-#include "IModule.h"
-
+#include "Interfaces/IModule.h"
 #include "Types/VanguardTime.h"
+#include "Core_Common.h"
+#include "World.h"
 
 namespace Vanguard
 {

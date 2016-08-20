@@ -24,6 +24,7 @@ namespace Vanguard
 		~DynamicLibrary();
 
 		bool Open(const FilePath& aFilePath);
+		bool Open(const String& aFileName);
 		void Close();
 		void* GetFunction(const String& aFunctionName);
 

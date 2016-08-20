@@ -1,6 +1,6 @@
 #pragma once
 #include "VanguardSDL_Common.h"
-#include "Modules/IModule.h"
+#include "Interfaces/IModule.h"
 #include "SDL.h"
 
 namespace Vanguard

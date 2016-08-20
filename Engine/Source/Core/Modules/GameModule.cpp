@@ -1,4 +1,5 @@
 #include "GameModule.h"
+#include "Core.h"
 
 namespace Vanguard
 {

@@ -6,6 +6,7 @@
 #include "ModuleManager.h"
 #include "Type.h"
 
+VANGUARD_DECLARE_CORE_IMP(Vanguard::Core)
 
 namespace Vanguard
 {
@@ -27,7 +28,7 @@ namespace Vanguard
 
 	Core* Core::GetInstance() { return instance; }
 
-	void Core::Initialize(int aArgC, char** aArgV, String aProjectName)
+	void Core::Initialize(int aArgC, char** aArgV, const char* aProjectName)
 	{
 		state = CoreState::Initializing;
 		instance = this;
@@ -82,7 +83,7 @@ namespace Vanguard
 			{
 				World* world = worlds[i];
 
-				Timespan currentTime = Timespan::GetElapsedSystemTime();
+				Timespan currentTime(Timespan::GetElapsedSystemTime());
 				Timespan deltaTime;
 				if (world->lastTickStartTime.InSeconds() != 0.0)
 				{
@@ -159,7 +160,7 @@ namespace Vanguard
 
 			Log::Message("Core shut down successfully", "Core");
 			state = CoreState::ShutDown;
-						
+
 			// Want to flush the log as late as possible to make sure all entries get written to disk.
 			Log::Message("Flushing log and joining IO Thread", "Core");
 			Log::Flush();
@@ -171,7 +172,7 @@ namespace Vanguard
 		}
 	}
 
-	void Core::LoadModule(const String& aModuleName)
+	void Core::LoadModule(const char* aModuleName)
 	{
 		moduleManager->LoadModule(aModuleName);
 	}

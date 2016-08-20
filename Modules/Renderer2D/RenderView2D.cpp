@@ -6,6 +6,7 @@ namespace Vanguard
 {
 	RenderView2D::RenderView2D(Camera* aViewCamera, int aResolutionX, int aResolutionY) 
 		: RenderView(aViewCamera, aResolutionX, aResolutionY)
+		, clearColor(0x33, 0x33, 0x33, 0x00)
 	{
 		sdlWindow = SDL_CreateWindow("Vanguard Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, aResolutionX, aResolutionY, SDL_WINDOW_SHOWN);
 		if (!sdlWindow)
@@ -18,8 +19,6 @@ namespace Vanguard
 		{
 			Log::Exception("Couldn't create SDL renderer!", "Renderer2d");
 		}
-
-		SDL_SetRenderDrawColor(sdlRenderer, 0x33, 0x33, 0x33, 0x00);
 	}
 
 	RenderView2D::~RenderView2D()

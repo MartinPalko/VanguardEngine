@@ -10,6 +10,7 @@ namespace Vanguard
 	public:
 		SDL_Window* sdlWindow;
 		SDL_Renderer* sdlRenderer;
+		Color clearColor;
 
 		RenderView2D(Camera* aViewCamera, int aResolutionX, int aResolutionY);
 		~RenderView2D();

@@ -23,7 +23,7 @@ namespace Vanguard
 	public:
 		Transform* GetTransform() { return transform; }
 
-		Matrix4x4 GetMatrix();
+		Matrix4x4 GetProjectionMatrix();
 
 	};
 }

@@ -25,7 +25,6 @@ namespace Vanguard
 		running = true;
 		Run();
 		running = false;
-		stdThread = nullptr;
 	}
 
 	Thread::Thread(const String& aString)
@@ -38,7 +37,7 @@ namespace Vanguard
 
 	Thread::~Thread()
 	{
-		delete stdThread;
+		Join();
 	}
 
 	String Thread::CurrentThreadID()
@@ -106,6 +105,8 @@ namespace Vanguard
 		{
 			wantsJoin = true;
 			stdThread->join();
+			delete stdThread;
+			stdThread = nullptr;
 		}
 	}
 

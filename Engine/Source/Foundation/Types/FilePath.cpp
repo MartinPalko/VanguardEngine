@@ -23,7 +23,7 @@ namespace Vanguard
 
 	FilePath& FilePath::operator = (const FilePath& aOther)
 	{
-		file = new juce::File(aOther.file->getFullPathName().getCharPointer());
+		*file = juce::File(aOther.file->getFullPathName().getCharPointer());
 		return *this;
 	}
 

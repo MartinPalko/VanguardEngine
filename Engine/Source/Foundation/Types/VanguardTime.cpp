@@ -63,7 +63,7 @@ namespace Vanguard
 
 	Time& Time::operator = (const Time& aOther)
 	{
-		data = new juce::Time(aOther.ToMilliseconds());
+		*data = juce::Time(aOther.ToMilliseconds());
 		return *this;
 	}
 

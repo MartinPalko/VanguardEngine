@@ -25,31 +25,34 @@ namespace BrickBreaker
 
 	void BrickBreaker::SetupGame()
 	{
-		int displayX = 1280;
-		int displayY = 720;
-
 		gameWindow = Application::CreateNativeWindow();
 
 		Application::RegisterNativeEventHandler(this);
 
+		// Create a world and a renderview.
 		Core* core = Core::GetInstance();
-
 		World* gameWorld = core->CreateWorld("BrickBreaker");
-
 		Camera* playerCamera = gameWorld->SpawnEntity<Camera>();
-
 		IRenderer* primaryRenderer = core->GetPrimaryRenderer();
-		playerView = primaryRenderer->CreateRenderView(gameWindow, playerCamera);
+		playerView = core->GetPrimaryRenderer()->CreateRenderView(gameWindow, playerCamera);
 
-		paddle = gameWorld->SpawnEntity<Entity>();
-		
-		Transform* transformComponent = paddle->AddComponent<Transform>();
-		transformComponent->position = Vector3(0, 0, 0);
+		// Spawn the paddle
+		paddle = gameWorld->SpawnEntity<Paddle>();
 
-		SpriteComponent* spriteComponent = paddle->AddComponent<SpriteComponent>();
-		spriteComponent->SetDimensions(Vector2(0.1f, 0.1f));
-		spriteComponent->SetColor(Color(255, 120, 120, 255));
-		
+		// Spawn the ball
+
+		// Spawn the bricks
+		int bricksX = 10;
+		int bricksY = 10;
+		for (int x = 0; x < bricksX; x++)
+		{
+			for (int y = 0; y < bricksY; y++)
+			{
+				Brick* newBrick = gameWorld->SpawnEntity<Brick>();
+				newBrick->GetTransform()->position = Vector3(x, y, 0);
+			}
+		}
+
 		// Setup Gainput
 		inputManager = new gainput::InputManager(false);
 		gainput::DeviceId keyboardId = inputManager->CreateDevice<gainput::InputDeviceKeyboard>();
@@ -78,18 +81,13 @@ namespace BrickBreaker
 			Core::GetInstance()->ShutDown();
 		}
 
-		float movement = 0;
+		float input = 0;
 		if (inputMap->GetBool(eGameButton::Left))
-		{
-			movement -= aFrame->deltaTime.InSeconds() * 0.1f;
-		}
-
+			input -= 1;
 		if (inputMap->GetBool(eGameButton::Right))
-		{
-			movement += aFrame->deltaTime.InSeconds() * 0.1f;
-		}
-		Transform* transform = paddle->GetComponent<Transform>();
-		transform->position.x += movement;
+			input += 1;
+
+		paddle->SetInput(input);
 	}
 
 	void BrickBreaker::CleanupGame()

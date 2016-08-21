@@ -1,10 +1,11 @@
 #pragma once
 #include "BrickBreaker_Common.h"
 #include "Modules/GameModule.h"
-
-#include "SpriteComponent.h"
-
 #include "Renderer/RenderView.h"
+
+#include "Paddle.h"
+#include "Brick.h"
+#include "Ball.h"
 
 namespace gainput
 {
@@ -19,7 +20,7 @@ namespace BrickBreaker
 	private:
 		WindowHandle gameWindow;
 		RenderView* playerView;
-		Entity* paddle;
+		Paddle* paddle;
 
 		gainput::InputManager* inputManager;
 		gainput::InputMap* inputMap;

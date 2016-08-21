@@ -14,12 +14,16 @@ namespace Vanguard
 
 		// Constructors
 
-		Color(const uint8& aX, const uint8& aY, const uint8& aZ, const uint8& aW)
+		Color(const uint8& aR, const uint8& aG, const uint8& aB, const uint8& aA)
 		{
-			r = aX;
-			g = aY;
-			b = aZ;
-			a = aW;
+			r = aR;
+			g = aG;
+			b = aB;
+			a = aA;
+		}
+
+		Color(const uint8& aR, const uint8& aG, const uint8& aB) : Color (aR, aG, aB, 255)
+		{
 		}
 
 		Color(const Color& aOther)

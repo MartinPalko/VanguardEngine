@@ -1,10 +1,19 @@
 #include "Entity.h"
 #include "Component.h"
 #include "World.h"
+#include "Transform.h"
 
 namespace Vanguard
 {
 	TYPE_DEFINITION(Entity, VanguardObject)
+
+	Entity::Entity() : VanguardObject()
+	{
+	}
+
+	Entity::~Entity()
+	{
+	}
 
 	Component* Entity::GetComponent(Type* aComponentType)
 	{

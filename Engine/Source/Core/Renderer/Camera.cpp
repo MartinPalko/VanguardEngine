@@ -2,15 +2,14 @@
 
 namespace Vanguard
 {
-	TYPE_DEFINITION(Camera, Entity);
+	TYPE_DEFINITION(Camera, Actor);
 	
-	Camera::Camera() : Entity()
+	Camera::Camera() : Actor()
 		, fov (60)
 		, orthographic(false)
 		, zNear(0.1)
 		, zFar(1000)
 	{
-		transform = AddComponent<Transform>();
 	}
 
 	Matrix4x4 Camera::GetProjectionMatrix()

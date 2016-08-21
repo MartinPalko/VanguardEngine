@@ -7,6 +7,7 @@ namespace Vanguard
 {
 	class Component;
 	class World;
+	class Transform;
 
 	class CORE_API Entity : public VanguardObject
 	{
@@ -19,6 +20,9 @@ namespace Vanguard
 		DynamicArray<Entity*> children;
 
 	public:
+		Entity();
+		~Entity();
+
 		inline size_t GetNumComponents() { return components.Count(); }
 		inline Component* GetComponent(size_t aIndex) { return components[aIndex]; }
 		

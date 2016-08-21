@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Entity/Entity.h"
+#include "Entity/Actor.h"
 #include "Entity/Transform.h"
 #include "Types/Matrix4x4.h"
 
 namespace Vanguard
 {
-	class CORE_API Camera : public Entity
+	class CORE_API Camera : public Actor
 	{
-		TYPE_DECLARATION(Camera, Entity);
+		TYPE_DECLARATION(Camera, Actor);
 
 	public:
 		Camera();
@@ -18,10 +18,8 @@ namespace Vanguard
 		bool orthographic;
 		float zNear;
 		float zFar;
-		Transform* transform;
 
 	public:
-		Transform* GetTransform() { return transform; }
 
 		Matrix4x4 GetProjectionMatrix();
 

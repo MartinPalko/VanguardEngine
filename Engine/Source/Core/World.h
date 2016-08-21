@@ -11,7 +11,7 @@ namespace Vanguard
 {
 	typedef std::function<void(Frame*)> TickFunction;
 
-	class World
+	class CORE_API World
 	{
 		friend class Core;
 		friend class Entity;
@@ -35,26 +35,8 @@ namespace Vanguard
 
 		String GetWorldName(){ return worldName; }
 
-		void RegisterTick(TickFunction aTickFunction)
-		{
-			registeredTicks.PushBack(aTickFunction);
-		}
-
-		template<typename T, typename... U>
-		size_t getAddress(std::function<T(U...)> f)
-		{
-			typedef T(fnType)(U...);
-			fnType ** fnPointer = f.template target<fnType*>();
-			return (size_t)*fnPointer;
-		}
-
-		void UnregisterTick(TickFunction aTickFunction)
-		{	
-			//TODO: Use a custom delegate class that supports equality comparison, so we can use .Remove()
-			for (size_t i = 0; i < registeredTicks.Count(); i++)
-				if (getAddress(aTickFunction) == getAddress(registeredTicks[i]))
-					registeredTicks.RemoveAt(i);
-		}
+		void RegisterTick(TickFunction aTickFunction);
+		void UnregisterTick(TickFunction aTickFunction);
 
 		template <class T>		
 		T* SpawnEntity()
@@ -69,44 +51,8 @@ namespace Vanguard
 			return static_cast<T*>(SpawnEntity(requestedClass));
 		}
 
-		Entity* SpawnEntity(const String& aEntityType)
-		{
-			Type* requestedClass = Type::GetType(aEntityType);
-			if (requestedClass == nullptr)
-			{
-				Log::Warning("Entity spawning failed, requested class " + aEntityType + " could not be found", "World");
-				return nullptr;
-			}
-
-			return SpawnEntity(requestedClass);			
-		}
-		
-		Entity* SpawnEntity(Type* aRequestedClass)
-		{
-			static Type* entityClass = Type::GetType<Entity>();
-
-			if (!aRequestedClass->IsA(entityClass))
-			{
-				Log::Warning("Entity spawning failed, " + aRequestedClass->GetTypeName() + " is not a " + entityClass->GetTypeName(), "World");
-				return nullptr;
-			}
-
-			Entity* newEntity = static_cast<Entity*>(aRequestedClass->CreateInstance());
-
-			newEntity->world = this;
-			objects.PushBack(newEntity);
-			entities.PushBack(newEntity);
-
-			for (int i = 0; i < newEntity->GetNumComponents(); i++)
-			{
-				Component* component = newEntity->GetComponent(i);
-				component->world = this;
-				objects.PushBack(component);
-			}
-
-			return newEntity;
-		}
-
+		Entity* SpawnEntity(const String& aEntityType);		
+		Entity* SpawnEntity(Type* aRequestedClass);
 		template <class T> DynamicArray<T*> GetInstances()
 		{
 			// TODO: Store all types in this world in a hashtable for quick retreival.

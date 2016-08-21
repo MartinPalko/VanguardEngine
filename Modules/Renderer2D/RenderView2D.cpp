@@ -6,7 +6,6 @@ namespace Vanguard
 {
 	RenderView2D::RenderView2D(WindowHandle aWindowHandle, Camera* aCamera)
 		: RenderView(aWindowHandle, aCamera)
-		, clearColor(0x33, 0x33, 0x33, 0x00)
 	{
 		sdlWindow = SDL_CreateWindowFrom(aWindowHandle);
 

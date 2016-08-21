@@ -12,8 +12,10 @@ namespace Vanguard
 
 	public:
 		Camera* viewCamera;
+		Color clearColor;
 
 		RenderView(WindowHandle aWindowHandle, Camera* aViewCamera)
+			: clearColor(0, 0, 0)
 		{
 			windowHandle = aWindowHandle;
 			viewCamera = aViewCamera;

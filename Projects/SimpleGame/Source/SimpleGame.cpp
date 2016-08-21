@@ -13,7 +13,9 @@ namespace eGameButton
 {
 	enum eType
 	{
-		Exit
+		Exit = 0,
+		Left,
+		Right
 	};
 }
 
@@ -54,11 +56,18 @@ namespace SimpleGame
 		
 		inputMap = new gainput::InputMap(*inputManager);
 		inputMap->MapBool(eGameButton::Exit, keyboardId, gainput::KeyEscape);
+		inputMap->MapBool(eGameButton::Left, keyboardId, gainput::KeyLeft);
+		inputMap->MapBool(eGameButton::Left, keyboardId, gainput::KeyA);
+		inputMap->MapBool(eGameButton::Right, keyboardId, gainput::KeyRight);
+		inputMap->MapBool(eGameButton::Right, keyboardId, gainput::KeyD);
 	}
 
 	void SimpleGame::UpdateGame(Vanguard::Frame* aFrame)
 	{
 		// Update Gainput
+		int displayX, displayY;
+		Application::GetWindowSize(gameWindow, displayX, displayY);
+		inputManager->SetDisplaySize(displayX, displayY);
 		inputManager->Update(aFrame->deltaTime.InMilliseconds());
 
 		DEBUG_LOG("UPDATE GAME");
@@ -69,7 +78,16 @@ namespace SimpleGame
 			Core::GetInstance()->ShutDown();
 		}
 
-		float movement = aFrame->deltaTime.InSeconds() * 0.01f;
+		float movement = 0;
+		if (inputMap->GetBool(eGameButton::Left))
+		{
+			movement -= aFrame->deltaTime.InSeconds() * 0.1f;
+		}
+
+		if (inputMap->GetBool(eGameButton::Right))
+		{
+			movement += aFrame->deltaTime.InSeconds() * 0.1f;
+		}
 		Transform* transform = paddle->GetComponent<Transform>();
 		transform->position.x += movement;
 	}

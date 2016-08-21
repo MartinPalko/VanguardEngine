@@ -35,7 +35,10 @@ namespace Vanguard
 		inline float FAbs(float aFloat) { return ::fabsf(aFloat); }
 		inline int32 IAbs(int32 aInt32) { return ::abs(aInt32); }
 
+		inline float FSign(float aFloat) { return aFloat > 0 ? 1.0f : -1.0f; }
+		inline int32 ISign(int32 aFloat) { return aFloat > 0 ? 1 : -1; }
 
+		template<class T> const T& Clamp(const T& a, const T& lower, const T& upper) { return min(max(a, lower), upper); }
 		template<class T> const T& Max(const T& a, const T& b) { return (a < b) ? b : a; }
 		template<class T> const T& Min(const T& a, const T& b) { return (a < b) ? a : b; }
 

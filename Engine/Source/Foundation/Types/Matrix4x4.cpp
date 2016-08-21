@@ -181,6 +181,24 @@ namespace Vanguard
 
 		return invOut;
 	}
+
+	Vector4 Matrix4x4::Transform(const Vector4& aVector) const
+	{
+		return Vector4(GetRow(0).Dot(aVector), GetRow(1).Dot(aVector), GetRow(2).Dot(aVector), GetRow(3).Dot(aVector));
+	}
+
+	Vector3 Matrix4x4::TransformDirection(const Vector3& aPoint) const
+	{
+		const Vector4 result = Transform(Vector4(aPoint.x, aPoint.y, aPoint.z, 0));
+		return Vector3(result.x, result.y, result.z);
+	}
+
+	Vector3 Matrix4x4::TransformPoint(const Vector3& aPoint) const
+	{
+		const Vector4 result = Transform(Vector4(aPoint.x, aPoint.y, aPoint.z, 1));
+		return Vector3(result.x, result.y, result.z);
+	}
+
 	Matrix4x4 Matrix4x4::CreatePerspective(float aFov, float aAspect, float aZNear, float aZFar, bool aLeftHanded)
 	{
 		Matrix4x4 result = GetIdentity();

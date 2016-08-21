@@ -29,7 +29,7 @@ namespace Vanguard
 			return true;
 		}
 
-		Matrix4x4 operator * (const Matrix4x4& aOther) const;
+		Matrix4x4 operator* (const Matrix4x4& aOther) const;
 
 		Matrix4x4 GetInverse();
 
@@ -38,6 +38,10 @@ namespace Vanguard
 
 		inline Vector4 GetColumn(uint8 aCol) const { return Vector4(elements[0][aCol], elements[1][aCol], elements[2][aCol], elements[3][aCol]); }
 		inline void SetColumn(uint8 aCol, Vector4 aValue) { elements[0][aCol] = aValue.x; elements[1][aCol] = aValue.y; elements[2][aCol] = aValue.z; elements[3][aCol] = aValue.w; }
+
+		Vector4 Transform(const Vector4& aPoint) const;
+		Vector3 TransformDirection(const Vector3& aPoint) const;
+		Vector3 TransformPoint(const Vector3& aPoint) const;
 
 		// Static functions
 		static Matrix4x4 CreatePerspective(float aFov, float aAspect, float aZNear, float aZFar, bool aLeftHanded = false);

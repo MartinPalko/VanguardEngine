@@ -20,7 +20,9 @@ namespace Vanguard
 		}
 		else
 		{
-			return Matrix4x4::CreateTranslation(Vector3(0.0f, 0.0f, zNear)) * Matrix4x4::CreateScale(Vector3(1.0f / fov, 1.0f / fov, zFar - zNear));
+			const Matrix4x4 translation = Matrix4x4::CreateTranslation(Vector3(0.0f, 0.0f, zNear));
+			const Matrix4x4 scale = Matrix4x4::CreateScale(Vector3(1.0f / (fov / 2.0f), 1.0f / (fov / 2.0f), 1 / (zFar - zNear)));
+			return translation * scale;
 		}
 		
 	}

@@ -36,6 +36,7 @@ namespace Vanguard
 		static BooleanConfigVar fullscreen;
 		static Int32ConfigVar resolutionX;
 		static Int32ConfigVar resolutionY;
+		static BooleanConfigVar resizable;
 
 		struct WindowCreationParameters
 		{
@@ -43,12 +44,14 @@ namespace Vanguard
 			String title;
 			size_t sizeX;
 			size_t sizeY;
+			bool resizable;
 
 			WindowCreationParameters()
 				: fullscreen(false)
 				, title("Vanguard")
 				, sizeX(1280)
 				, sizeY(760)
+				, resizable(false)
 			{}
 		};
 

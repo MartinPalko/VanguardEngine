@@ -128,10 +128,20 @@ namespace Vanguard
 			return nullptr;
 		}
 
+		long windowFlags = 0;
+		if (aWindowParameters.resizable)
+		{
+			windowFlags = WS_OVERLAPPEDWINDOW;
+		}
+		else
+		{
+			windowFlags = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU;
+		}
+
 		HWND hWnd = CreateWindow(
 			szWindowClass,
 			aWindowParameters.title.GetCharPointer(),
-			WS_OVERLAPPEDWINDOW,
+			windowFlags,
 			CW_USEDEFAULT, CW_USEDEFAULT,
 			aWindowParameters.sizeX, 
 			aWindowParameters.sizeY,

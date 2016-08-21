@@ -6,7 +6,7 @@ namespace Vanguard
 	BooleanConfigVar Application::fullscreen = BooleanConfigVar("Core", "Application", "Fullscreen", false);
 	Int32ConfigVar Application::resolutionX = Int32ConfigVar("Core", "Application", "ResolutionX", 0);
 	Int32ConfigVar Application::resolutionY = Int32ConfigVar("Core", "Application", "ResolutionY", 0);
-
+	BooleanConfigVar Application::resizable = BooleanConfigVar("Core", "Application", "Resizable", false);
 
 	ApplicationArguments applicationArguments = ApplicationArguments(0,nullptr);
 	DynamicArray<INativeEventHandler*> nativeEventHandlers;
@@ -46,6 +46,7 @@ namespace Vanguard
 			params.sizeX = resolutionX;
 		if (resolutionY)
 			params.sizeY = resolutionY;
+		params.resizable = resizable;
 		return CreateNativeWindow(params);
 	}
 }

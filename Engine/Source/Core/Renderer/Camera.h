@@ -21,6 +21,15 @@ namespace Vanguard
 
 	public:
 
+		float GetFov() { return fov; }
+		void SetFov(float aFov) { fov = aFov; }
+		bool GetOrthographic() { return orthographic; }
+		void SetOrthographic(bool aOrthographic) { orthographic = aOrthographic; }
+		float GetZNear() { return zNear; }
+		void SetZNear(float aZNear) { zNear = aZNear; }
+		float GetZFar() { return zFar; }
+		void SetZFar(float aZFar) { zFar = aZFar; }
+
 		Matrix4x4 GetProjectionMatrix();
 
 	};

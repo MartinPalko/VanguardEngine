@@ -13,8 +13,8 @@ SET (deferredAddProjects "" CACHE INTERNAL "deferredAddProjects")
 SET (projectLaunchers "" CACHE INTERNAL projectLaunchers)
 
 # Undefine install, we don't want install targets.
-MACRO (install targets...)
-ENDMACRO()
+#MACRO (install targets...)
+#ENDMACRO()
 
 # Output all runtime files to the bin folder on build.
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${EngineRoot}/Bin")

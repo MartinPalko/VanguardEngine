@@ -8,13 +8,16 @@ namespace Vanguard
 	Paddle::Paddle() : Actor()
 		, input(0)
 		, velocity(0)
-		, drag(4)
-		, mass(1)
-		, movementForce(15)
+		, drag(4.0f)
+		, mass(1.0f)
+		, movementForce(800.0f)
+		, bounciness(0.4f)
+		, movementRange(100.0f)
+		, paddleWidth(20.0f)
 	{
 		SpriteComponent* spriteComponent = AddComponent<SpriteComponent>();
-		spriteComponent->SetDimensions(Vector2(0.1f, 0.1f));
-		spriteComponent->SetColor(Color(255, 120, 120, 255));
+		spriteComponent->SetDimensions(Vector2(paddleWidth, 2.0f));
+		spriteComponent->SetColor(Color(150, 150, 150));
 
 		EnableTick();
 	}
@@ -31,18 +34,21 @@ namespace Vanguard
 		velocity *= Math::Clamp(1.0f - (drag * (float)aFrame->deltaTime.InSeconds()), 0.0f, 1.0f);
 
 		// Move by velocity
-		GetComponent<Transform>()->position.x += velocity * aFrame->deltaTime.InSeconds();
+		GetTransform()->position.x += velocity * aFrame->deltaTime.InSeconds();
+
+		const float maxX = (movementRange - paddleWidth) / 2;
+		const float minX = -maxX;
 
 		// Detect collision with sides
-		if (GetTransform()->position.x > 1 && velocity > 0)
+		if (GetTransform()->position.x > maxX && velocity > 0)
 		{
-			GetTransform()->position.x = 1;
-			velocity *= -0.6;
+			GetTransform()->position.x = maxX;
+			velocity *= -bounciness;
 		}
-		else if (GetTransform()->position.x < 0 && velocity < 0)
+		else if (GetTransform()->position.x < minX && velocity < 0)
 		{
-			GetTransform()->position.x = 0;
-			velocity *= -0.6;
+			GetTransform()->position.x = minX;
+			velocity *= -bounciness;
 		}
 	}
 }

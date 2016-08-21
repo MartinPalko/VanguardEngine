@@ -6,9 +6,7 @@ namespace Vanguard
 	{
 		TYPE_DECLARATION(Brick, Actor)
 	public:
-		Brick() : Actor()
-		{
-		}
+		Brick();
 
 	};
 }

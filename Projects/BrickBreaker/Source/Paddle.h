@@ -12,14 +12,14 @@ namespace Vanguard
 		float drag;
 		float mass;
 		float movementForce;
-
+		float bounciness;
+		float movementRange;
+		float paddleWidth;
 
 	public:
 		Paddle();
 
 		virtual void Tick(Frame* aFrame) override;
-
 		void SetInput(float aInput) { input = aInput; }
-
 	};
 }

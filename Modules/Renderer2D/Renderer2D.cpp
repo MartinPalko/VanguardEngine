@@ -13,7 +13,6 @@ namespace Vanguard
 	void Renderer2D::LoadModule()
 	{
 		VanguardSDL::RegisterModuleUse(VanguardSDL::Video);
-
 		Core::GetInstance()->RegisterRenderer(this);
 	}
 
@@ -54,7 +53,9 @@ namespace Vanguard
 			int screenX;
 			int screenY;
 			SDL_GetWindowSize(view->sdlWindow, &screenX, &screenY);
+			const float aspectRatio = (float)screenX / (float)screenY;
 			Vector2 screenSize(screenX, screenY);
+			Vector2 aspectAdjustment = aspectRatio > 1 ? Vector2(1 / aspectRatio, 1) : Vector2(1, aspectRatio);
 
 			SDL_SetRenderDrawColor(view->sdlRenderer, SPLIT_COLOR(view->clearColor));
 			SDL_RenderClear(view->sdlRenderer);
@@ -63,20 +64,35 @@ namespace Vanguard
 			for (size_t i = 0; i < sprites.Count(); i++)
 			{
 				SpriteComponent* sprite = sprites[i];
+				Transform* spriteTransform = sprite->GetEntity()->GetComponent<Transform>();
+
 				Vector2 spriteDimensions = sprite->GetDimensions();
 
-				Transform* transform = sprite->GetEntity()->GetComponent<Transform>();
-				Vector2 spritePosition = Vector2(transform->position.x, transform->position.y);
+				// World to camera
+				const Matrix4x4 worldToCamera = Matrix4x4::CreateTranslation(camera->GetTransform()->position);
+				Vector3 cameraSpace = worldToCamera.TransformPoint(spriteTransform->position);
+				float scaleRelativeCamera = 1.0f / camera->GetFov();
 
-				// Scale to screen space
-				spriteDimensions *= screenSize;
-				spritePosition *= screenSize;
+				// Projection
+				const Matrix4x4 projectionMatrix = camera->GetProjectionMatrix();
+				Vector3 clipSpace = projectionMatrix.TransformPoint(cameraSpace);
+
+				// Correct for aspect ratio
+				clipSpace *= Vector3(aspectAdjustment.x, aspectAdjustment.y, 1);
+
+				// NDC space
+				Vector3 ndcSpace = (clipSpace + 1.0f) / 2.0f;
+				ndcSpace.y = 1 - ndcSpace.y;
+
+				// Screenspace
+				Vector3 screenspace = ndcSpace * Vector3(screenX, screenY, 1);
+				Vector2 finalSize = spriteDimensions * scaleRelativeCamera * screenSize * aspectAdjustment;
 
 				SDL_Rect spriteRect;				
-				spriteRect.w = spriteDimensions.x;
-				spriteRect.h = spriteDimensions.y;
-				spriteRect.x = spritePosition.x;
-				spriteRect.y = spritePosition.y;
+				spriteRect.w = finalSize.x;
+				spriteRect.h = finalSize.y;
+				spriteRect.x = screenspace.x - spriteRect.w / 2;
+				spriteRect.y = screenspace.y - spriteRect.h / 2;
 
 				SDL_SetRenderDrawColor(view->sdlRenderer, SPLIT_COLOR(sprite->GetColor()));
 

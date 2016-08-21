@@ -44,9 +44,6 @@ namespace Vanguard
 
 	void Renderer2D::RenderViews()
 	{
-		// TEMP: For now, just pump SDL events before rendering views.
-		SDL_PumpEvents();
-
 		for (int i = 0; i < renderViews.Count(); i++)
 		{
 			RenderView2D* view = renderViews[i];

@@ -26,6 +26,8 @@ namespace SimpleGame
 		int displayX = 1280;
 		int displayY = 720;
 
+		gameWindow = Application::CreateNativeWindow();
+
 		Application::RegisterNativeEventHandler(this);
 
 		Core* core = Core::GetInstance();
@@ -35,7 +37,7 @@ namespace SimpleGame
 		Camera* playerCamera = gameWorld->SpawnEntity<Camera>();
 
 		IRenderer* primaryRenderer = core->GetPrimaryRenderer();
-		playerView = primaryRenderer->CreateRenderView(playerCamera, displayX, displayY);
+		playerView = primaryRenderer->CreateRenderView(gameWindow, playerCamera);
 
 		paddle = gameWorld->SpawnEntity<Entity>();
 		

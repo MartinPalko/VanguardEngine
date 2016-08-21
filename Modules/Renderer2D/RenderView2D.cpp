@@ -4,12 +4,13 @@
 
 namespace Vanguard
 {
-	RenderView2D::RenderView2D(Camera* aViewCamera, int aResolutionX, int aResolutionY)
-		: RenderView(aViewCamera, aResolutionX, aResolutionY)
+	RenderView2D::RenderView2D(WindowHandle aWindowHandle, Camera* aCamera)
+		: RenderView(aWindowHandle, aCamera)
 		, clearColor(0x33, 0x33, 0x33, 0x00)
 		, windowHandle(nullptr)
 	{
-		sdlWindow = SDL_CreateWindow("Vanguard Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, aResolutionX, aResolutionY, SDL_WINDOW_SHOWN);
+		sdlWindow = SDL_CreateWindowFrom(aWindowHandle);
+
 		if (!sdlWindow)
 		{
 			Log::Exception("Couldn't Create SDL Window!", "Renderer2d");
@@ -26,11 +27,6 @@ namespace Vanguard
 #endif
 		}
 
-		if (windowHandle)
-		{
-			Application::RegisterNativeWindow(windowHandle);
-		}
-
 		sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 		if (!sdlRenderer)
 		{
@@ -40,8 +36,6 @@ namespace Vanguard
 
 	RenderView2D::~RenderView2D()
 	{
-		Application::UnregisterNativeWindow(GetWindowHandle());
-
 		SDL_DestroyRenderer(sdlRenderer);
 		SDL_DestroyWindow(sdlWindow);
 	}

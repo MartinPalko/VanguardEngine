@@ -2,7 +2,7 @@
 
 namespace Vanguard
 {
-	void Application::ProcessEvents()
+	void Application::ProcessNativeEvents()
 	{
 		// TODO:
 	}
@@ -13,6 +13,11 @@ namespace Vanguard
 	}
 
 	void Application::HideConsoleWindow()
+	{
+		// TODO:
+	}
+
+	WindowHandle Application::CreateNativeWindow(const WindowCreationParameters& aWindowParameters)
 	{
 		// TODO:
 	}

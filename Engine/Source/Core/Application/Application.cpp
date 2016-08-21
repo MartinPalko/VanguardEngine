@@ -1,7 +1,13 @@
 #include "Application.h"
+#include "Core.h"
 
 namespace Vanguard
 {
+	BooleanConfigVar Application::fullscreen = BooleanConfigVar("Core", "Application", "Fullscreen", false);
+	Int32ConfigVar Application::resolutionX = Int32ConfigVar("Core", "Application", "ResolutionX", 0);
+	Int32ConfigVar Application::resolutionY = Int32ConfigVar("Core", "Application", "ResolutionY", 0);
+
+
 	ApplicationArguments applicationArguments = ApplicationArguments(0,nullptr);
 	DynamicArray<INativeEventHandler*> nativeEventHandlers;
 	DynamicArray<WindowHandle> nativeWindows;
@@ -31,9 +37,16 @@ namespace Vanguard
 		nativeWindows.PushBack(aWindowHandle);
 	}
 
-	void Application::UnregisterNativeWindow(WindowHandle aHandler)
+	WindowHandle Application::CreateNativeWindow()
 	{
-		nativeWindows.Remove(aHandler);
+		WindowCreationParameters params;
+		params.fullscreen = fullscreen;
+		params.title = Core::GetInstance()->GetLoadedProject()->GetFriendlyName();
+		if (resolutionX)
+			params.sizeX = resolutionX;
+		if (resolutionY)
+			params.sizeY = resolutionY;
+		return CreateNativeWindow(params);
 	}
 }
 

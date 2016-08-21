@@ -7,7 +7,7 @@ namespace Vanguard
 	{
 	public:
 		virtual String RendererName() = 0;
-		virtual RenderView* CreateRenderView(Camera* aCamera, int aResolutionX, int aResolutionY) = 0;
+		virtual RenderView* CreateRenderView(WindowHandle aWindowHandle, Camera* aCamera) = 0;
 		virtual void RenderViews() = 0;
 
 	};

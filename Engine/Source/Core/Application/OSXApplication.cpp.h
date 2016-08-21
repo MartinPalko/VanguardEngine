@@ -2,7 +2,7 @@
 
 namespace Vanguard
 {
-	void Application::ProcessEvents()
+	void Application::ProcessNativeEvents()
 	{
 		// TODO:
 	}
@@ -16,3 +16,9 @@ namespace Vanguard
 	{
 		// TODO:
 	}
+
+	WindowHandle Application::CreateNativeWindow(const WindowCreationParameters& aWindowParameters)
+	{
+		// TODO:
+	}
+}

@@ -34,8 +34,7 @@ namespace Vanguard
 
 	BOOL WINAPI ConsoleEventHandler(_In_ DWORD dwCtrlType)
 	{
-		// See https://msdn.microsoft.com/en-us/library/windows/desktop/ms683242(v=vs.85).aspx for info
-
+		// For info, see: https://msdn.microsoft.com/en-us/library/windows/desktop/ms683242(v=vs.85).aspx
 		if (dwCtrlType == CTRL_CLOSE_EVENT)
 		{
 			Core* core = Core::GetInstance();
@@ -85,5 +84,72 @@ namespace Vanguard
 	void Application::HideConsoleWindow()
 	{
 		FreeConsole();
+	}
+
+	LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		switch (msg)
+		{
+		case WM_DESTROY:
+			nativeWindows.Remove(hWnd);
+			if (!nativeWindows.Count()) // Last window destroyed
+			{
+				PostQuitMessage(0);
+				Core::GetInstance()->ShutDown();
+			}
+			break;
+		}
+
+		return DefWindowProc(hWnd, msg, wParam, lParam);
+	}
+
+	WindowHandle Application::CreateNativeWindow(const WindowCreationParameters& aWindowParameters)
+	{
+		static TCHAR szWindowClass[] = "win32app";
+
+		HINSTANCE hInstance = GetModuleHandle(NULL);
+
+		WNDCLASSEX wcex;
+		wcex.cbSize = sizeof(WNDCLASSEX);
+		wcex.style = CS_HREDRAW | CS_VREDRAW;
+		wcex.lpfnWndProc = WndProc;
+		wcex.cbClsExtra = 0;
+		wcex.cbWndExtra = 0;
+		wcex.hInstance = hInstance;
+		wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
+		wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+		wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+		wcex.lpszMenuName = NULL;
+		wcex.lpszClassName = szWindowClass;
+		wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_APPLICATION));
+
+		if (!RegisterClassEx(&wcex))
+		{
+			return nullptr;
+		}
+
+		HWND hWnd = CreateWindow(
+			szWindowClass,
+			aWindowParameters.title.GetCharPointer(),
+			WS_OVERLAPPEDWINDOW,
+			CW_USEDEFAULT, CW_USEDEFAULT,
+			aWindowParameters.sizeX, 
+			aWindowParameters.sizeY,
+			NULL,
+			NULL,
+			hInstance,
+			NULL
+		);
+
+		if (!hWnd)
+		{
+			return nullptr;
+		}
+
+		ShowWindow(hWnd, SW_SHOW);
+
+		RegisterNativeWindow(hWnd);
+
+		return hWnd;
 	}
 }

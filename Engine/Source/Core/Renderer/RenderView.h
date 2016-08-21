@@ -7,20 +7,21 @@ namespace Vanguard
 
 	class RenderView
 	{
-	public:
+	private:
+		WindowHandle windowHandle;
 
+	public:
 		Camera* viewCamera;
 		int resolutionX;
 		int resolutionY;
 
-		RenderView(Camera* aViewCamera, int aResolutionX, int aResolutionY)
+		RenderView(WindowHandle aWindowHandle, Camera* aViewCamera)
 		{
+			windowHandle = aWindowHandle;
 			viewCamera = aViewCamera;
-			resolutionX = aResolutionX;
-			resolutionY = aResolutionY;
 		}
 		virtual ~RenderView() {}
 
-		virtual WindowHandle GetWindowHandle() = 0;
+		virtual WindowHandle GetWindowHandle() { return windowHandle; }
 	};
 }

@@ -17,7 +17,7 @@ namespace Vanguard
 
 		// IRenderer Implementation
 		virtual String RendererName() override;
-		virtual RenderView* CreateRenderView(Camera* aCamera, int aResolutionX, int aResolutionY) override;
+		virtual RenderView* CreateRenderView(WindowHandle aWindowHandle, Camera* aCamera) override;
 		virtual void RenderViews() override;		
 	};
 }

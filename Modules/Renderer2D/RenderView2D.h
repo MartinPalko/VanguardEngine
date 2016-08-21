@@ -13,7 +13,7 @@ namespace Vanguard
 		Color clearColor;
 		WindowHandle windowHandle;
 
-		RenderView2D(Camera* aViewCamera, int aResolutionX, int aResolutionY);
+		RenderView2D(WindowHandle aWindowHandle, Camera* aCamera);
 		~RenderView2D();
 
 		virtual WindowHandle GetWindowHandle() override;

@@ -1,5 +1,6 @@
 #pragma once
 #include "Core_Common.h"
+#include "Config/Config.h"
 
 namespace Vanguard
 {
@@ -32,9 +33,29 @@ namespace Vanguard
 
 	class CORE_API Application
 	{
+		static BooleanConfigVar fullscreen;
+		static Int32ConfigVar resolutionX;
+		static Int32ConfigVar resolutionY;
+
+		struct WindowCreationParameters
+		{
+			bool fullscreen;
+			String title;
+			size_t sizeX;
+			size_t sizeY;
+
+			WindowCreationParameters()
+				: fullscreen(false)
+				, title("Vanguard")
+				, sizeX(1280)
+				, sizeY(760)
+			{}
+		};
+
 		friend Core;
 	private:
 		static void SetApplicationArguments(int aArgC, char** aArgV);
+		static void RegisterNativeWindow(WindowHandle aWindowHandle);
 		static void ProcessNativeEvents();
 	public:
 		static ApplicationArguments GetApplicationArguments();
@@ -45,7 +66,7 @@ namespace Vanguard
 		static void RegisterNativeEventHandler(INativeEventHandler* aHandler);
 		static void UnregisterNativeEventHandler(INativeEventHandler* aHandler);
 
-		static void RegisterNativeWindow(WindowHandle aWindowHandle);
-		static void UnregisterNativeWindow(WindowHandle aWindowHandle);
+		static WindowHandle CreateNativeWindow();
+		static WindowHandle CreateNativeWindow(const WindowCreationParameters& aWindowParameters);
 	};
 }

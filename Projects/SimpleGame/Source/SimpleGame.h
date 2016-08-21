@@ -17,6 +17,7 @@ namespace SimpleGame
 	class SimpleGame : public GameModule, public INativeEventHandler
 	{
 	private:
+		WindowHandle gameWindow;
 		RenderView* playerView;
 		Entity* paddle;
 

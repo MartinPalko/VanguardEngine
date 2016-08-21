@@ -71,5 +71,7 @@ namespace Vanguard
 
 		static WindowHandle CreateNativeWindow();
 		static WindowHandle CreateNativeWindow(const WindowCreationParameters& aWindowParameters);
+
+		static void GetWindowSize(WindowHandle aWindowHandle, int& OUTSizeX, int& OUTSizeY);
 	};
 }

@@ -21,4 +21,9 @@ namespace Vanguard
 	{
 		// TODO:
 	}
+
+	void Application::GetWindowSize(WindowHandle aWindowHandle, int& OUTSizeX, int& OUTSizeY)
+	{
+
+	}
 }

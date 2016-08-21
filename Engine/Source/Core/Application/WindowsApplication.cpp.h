@@ -98,9 +98,11 @@ namespace Vanguard
 				Core::GetInstance()->ShutDown();
 			}
 			break;
+		default:
+			return DefWindowProc(hWnd, msg, wParam, lParam);
 		}
 
-		return DefWindowProc(hWnd, msg, wParam, lParam);
+		return 0;
 	}
 
 	WindowHandle Application::CreateNativeWindow(const WindowCreationParameters& aWindowParameters)
@@ -161,5 +163,13 @@ namespace Vanguard
 		RegisterNativeWindow(hWnd);
 
 		return hWnd;
+	}
+
+	void Application::GetWindowSize(WindowHandle aWindowHandle, int& OUTSizeX, int& OUTSizeY)
+	{
+		RECT windowRect;
+		GetClientRect(aWindowHandle, &windowRect);
+		OUTSizeX = windowRect.right - windowRect.left;
+		OUTSizeY = windowRect.bottom - windowRect.top;
 	}
 }

@@ -4,7 +4,6 @@
 #include "Foundation_Common.h"
 #include "IDictionary.h"
 #include "DynamicArray.h"
-#include "Types/IntegerDefs.h"
 
 namespace Vanguard
 {

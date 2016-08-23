@@ -1,39 +1,39 @@
 #pragma once
 #include "VanguardString.h"
 #include "Foundation_Common.h"
+#include "Utility/Crc32.h"
 
 namespace Vanguard
 {
 	class FOUNDATION_API StringID
 	{
 	private:
-		size_t Hash;
+		uint32 hash;
 
-		void HashString(const String& aString);
 	public:
-		inline bool operator == (const StringID& aOther) const { return Hash == aOther.Hash; }
-		inline bool operator != (const StringID& aOther) const { return Hash != aOther.Hash; }
-		inline bool operator < (const StringID& aOther) const { return Hash < aOther.Hash; }
-		inline bool operator > (const StringID& aOther) const { return Hash > aOther.Hash; }
+		inline bool operator == (const StringID& aOther) const { return hash == aOther.hash; }
+		inline bool operator != (const StringID& aOther) const { return hash != aOther.hash; }
+		inline bool operator < (const StringID& aOther) const { return hash < aOther.hash; }
+		inline bool operator > (const StringID& aOther) const { return hash > aOther.hash; }
 
-		StringID(const int& aHash)
+		inline StringID(uint32 aHash)
 		{
-			Hash = aHash;
+			hash = aHash;
 		}
 
-		StringID(const String& aString)
+		inline StringID(const String& aString)
 		{
-			HashString(aString);
+			hash = Crc32::CalcCrc(aString.GetCharPointer(), aString.GetLength());
 		}
 
-		StringID(const char* aCharPointer)
+		inline StringID(const char* aCharPointer)
 		{
-            HashString(aCharPointer);
+			hash = Crc32::CalcCrc(aCharPointer, strlen(aCharPointer));
 		}
 
 		inline size_t GetHash() const
 		{
-			return Hash;
+			return hash;
 		}
 
 	};

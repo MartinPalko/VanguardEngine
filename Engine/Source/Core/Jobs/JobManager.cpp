@@ -126,7 +126,7 @@ namespace Vanguard
 
 	void JobManager::ProcessFrame(Frame* aFrame)
 	{
-		DEBUG_LOG("Processing Frame " + String::FromInt32(aFrame->frameNumber))
+		DEBUG_LOG("Processing Frame " + String::FromInt(aFrame->frameNumber))
 
 		currentFrame = aFrame;
 		currentFrame->processing = true;

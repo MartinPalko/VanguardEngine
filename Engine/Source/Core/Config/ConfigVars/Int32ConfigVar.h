@@ -21,7 +21,7 @@ namespace Vanguard
 
 		virtual String ToText(const int32& aTypeInstance) const
 		{
-			return String::FromInt32(aTypeInstance);
+			return String::FromInt(aTypeInstance);
 		}
 	};
 }

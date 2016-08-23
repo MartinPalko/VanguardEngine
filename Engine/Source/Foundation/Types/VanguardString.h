@@ -40,7 +40,10 @@ namespace Vanguard
 		bool ToBoolean() const;
 
 		// To and from int32
-		static String FromInt32(int32 aInt32);
+		static String FromInt(int32 aInt);
+		static String FromInt(int64 aInt);
+		static String FromInt(uint32 aInt);
+		static String FromInt(uint64 aInt);
 		int32 ToInt32() const;
 
 		// From size

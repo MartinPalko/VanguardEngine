@@ -78,7 +78,7 @@ namespace Vanguard
 
 			if (pair.Count() != 2) // Line is invalid, so skip
 			{
-				DEBUG_WARN("Could not parse line " + String::FromInt32(i) + " in " + aConfigFilePath.GetFullPathName());
+				DEBUG_WARN("Could not parse line " + String::FromInt(i) + " in " + aConfigFilePath.GetFullPathName());
 				continue;
 			}
 

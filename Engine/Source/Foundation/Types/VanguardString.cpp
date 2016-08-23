@@ -54,10 +54,24 @@ namespace Vanguard
 		return this->ToLower() == TRUE_STRING;
 	}
 
-	// To and from int32
-	String String::FromInt32(int32 aInt32)
+	String String::FromInt(int32 aInt)
 	{
-		return ::std::to_string(aInt32).c_str();
+		return ::std::to_string(aInt).c_str();
+	}
+
+	String String::FromInt(int64 aInt)
+	{
+		return ::std::to_string(aInt).c_str();
+	}
+
+	String String::FromInt(uint32 aInt)
+	{
+		return ::std::to_string(aInt).c_str();
+	}
+
+	String String::FromInt(uint64 aInt)
+	{
+		return ::std::to_string(aInt).c_str();
 	}
 
 	String String::FromSize(size_t aSize)

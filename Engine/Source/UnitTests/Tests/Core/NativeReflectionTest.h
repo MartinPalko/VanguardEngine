@@ -54,7 +54,7 @@ namespace Vanguard
 
 		DynamicArray<Type*> allTypes = Type::GetAllTypes();
 
-		DEBUG_LOG(String::FromInt32(allTypes.Count()) + " types found:");
+		DEBUG_LOG(String::FromInt(allTypes.Count()) + " types found:");
 		for (uint32 i = 0; i < allTypes.Count(); i++)
 		{
 			if (allTypes[i]->GetBaseClass() == nullptr)

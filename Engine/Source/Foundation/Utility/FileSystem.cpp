@@ -37,7 +37,7 @@ namespace Vanguard
 		while (FileExists(newPath))
 		{
 			uniqueSuffix++;
-			String newFilename = aFilePath.GetFilenameWithoutExtension() + "_" + String::FromInt32(uniqueSuffix) + aFilePath.GetFileExtension();
+			String newFilename = aFilePath.GetFilenameWithoutExtension() + "_" + String::FromInt(uniqueSuffix) + aFilePath.GetFileExtension();
 			newPath = aFilePath.GetParentDirectory().GetRelative(newFilename);
 		}
 		return FilePath(newPath);

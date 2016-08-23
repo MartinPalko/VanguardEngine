@@ -172,7 +172,7 @@ namespace Vanguard
 		if (det == 0)
 			return GetIdentity();
 
-		det = 1.0 / det;
+		det = 1.0f / det;
 
 		float invOut[16];
 

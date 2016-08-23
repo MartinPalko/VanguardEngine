@@ -224,8 +224,6 @@ namespace Vanguard
 
 	TEST_F(StringTest, IntegerConversion)
 	{
-		EXPECT_EQ("15", String::FromInt32(15));
-		EXPECT_EQ("-64", String::FromInt32(-64));
 		EXPECT_EQ("15", String::FromInt(15));
 		EXPECT_EQ("-64", String::FromInt(-64));
 

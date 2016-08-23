@@ -2,7 +2,6 @@
 #include <unordered_map>
 
 #include "Collections/ICollection.h"
-#include "Types/IntegerDefs.h"
 #include "Types/VanguardString.h"
 #include "Types/StringID.h"
 

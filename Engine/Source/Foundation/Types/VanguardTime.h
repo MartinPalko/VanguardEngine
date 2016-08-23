@@ -1,5 +1,4 @@
 #pragma once
-#include "IntegerDefs.h"
 #include "VanguardString.h"
 #include "Foundation_Common.h"
 

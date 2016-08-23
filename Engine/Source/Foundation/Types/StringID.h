@@ -1,6 +1,5 @@
 #pragma once
 #include "VanguardString.h"
-#include "IntegerDefs.h"
 #include "Foundation_Common.h"
 
 namespace Vanguard

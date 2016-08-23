@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Collections/DynamicArray.h"
-#include "IntegerDefs.h"
 #include "Foundation_Common.h"
 
 namespace Vanguard

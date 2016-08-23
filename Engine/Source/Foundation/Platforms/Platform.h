@@ -23,13 +23,6 @@
 #error "Trying to compile for unsupported platform!"
 #endif
 
-namespace Vanguard
-{
-	typedef Platform::Exception Exception;
-	typedef Platform::WindowHandle WindowHandle;
-	typedef Platform::NativeMessage NativeMessage;
-}
-
 #if VANGUARD_WINDOWS
 #define API_EXPORT __declspec(dllexport)
 #define API_IMPORT __declspec(dllimport)

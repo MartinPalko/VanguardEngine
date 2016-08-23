@@ -1,5 +1,5 @@
 #pragma once
-#include "Types/IntegerDefs.h"
+#include "Platforms/Platform.h"
 #include <math.h>
 #include <random>
 

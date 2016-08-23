@@ -2,7 +2,6 @@
 #include <vector>
 
 #include "ICollection.h"
-#include "Types/IntegerDefs.h"
 
 #include "Foundation_Common.h"
 

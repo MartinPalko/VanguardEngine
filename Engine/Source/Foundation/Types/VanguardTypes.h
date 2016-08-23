@@ -5,7 +5,6 @@
 #include "DynamicLibrary.h"
 #include "Mutex.h"
 #include "FilePath.h"
-#include "IntegerDefs.h"
 #include "Quaternion.h"
 #include "Rect.h"
 #include "VanguardString.h"

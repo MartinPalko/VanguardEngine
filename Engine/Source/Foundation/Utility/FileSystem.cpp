@@ -125,11 +125,14 @@ namespace Vanguard
 		if (!(CreateFile(aFilePath) == ""))
 			return false;
 
+		if (!HasWriteAccess(aFilePath))
+			return false;
+
 		juce::FileOutputStream* outStream = aFilePath.file->createOutputStream();
 		outStream->setPosition(0);
-		outStream->writeText(aStringContents.GetCharPointer(), false, false);
+		const bool result = outStream->writeText(aStringContents.GetCharPointer(), false, false);
 		delete outStream;
-		return true;
+		return result;
 	}
 
 	// Append text to an existing file-> If the file does not exist, will create it and fill it with the supplied text.
@@ -142,9 +145,9 @@ namespace Vanguard
 			return false;
 
 		juce::FileOutputStream* outStream = aFilePath.file->createOutputStream();
-		outStream->writeText(aStringContents.GetCharPointer(), false, false);
+		const bool result = outStream->writeText(aStringContents.GetCharPointer(), false, false);
 		delete outStream;
-		return true;
+		return result;
 	}
 
 	String FileSystem::ReadFileAsText(const FilePath& aFilePath)

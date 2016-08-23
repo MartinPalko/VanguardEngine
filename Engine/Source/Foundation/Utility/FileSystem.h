@@ -2,6 +2,10 @@
 #include "Foundation_Common.h"
 #include "Types/VanguardTypes.h"
 
+// Windows redefines these
+#undef CreateFile
+#undef CreateDirectory
+
 namespace Vanguard
 {
 	struct FOUNDATION_API FileSystem

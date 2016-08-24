@@ -23,6 +23,7 @@ namespace Vanguard
 		Transform* GetTransform() { return transform; }
 
 		virtual void Tick(Frame* aFrame) {}
+		bool TickEnabled() { return tickEnabled; }
 
 	};
 }

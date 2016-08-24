@@ -20,7 +20,6 @@ namespace Vanguard
 		DynamicArray<std::function<void()>* > jobAddedCallbacks;
 
 		Job* GetNextJob();
-		size_t GetRemainingJobs();
 		void NotifyJobAdded();
 
 	public:

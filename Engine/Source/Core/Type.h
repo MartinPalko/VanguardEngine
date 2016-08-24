@@ -6,10 +6,9 @@
 
 namespace Vanguard
 {
-	class IClassFactory
+	struct IClassFactory
 	{
-	public:
-		virtual void* CreateInstance() = 0;
+		virtual void* CreateInstance() const = 0;
 	};
 
 	class CORE_API Type
@@ -61,7 +60,7 @@ namespace Vanguard
 #define BASETYPE_DECLARATION(ClassIdentifier) \
 friend class Type;\
 protected:\
-	static IClassFactory* ClassIdentifier##_ClassFactory;\
+	static Vanguard::IClassFactory* ClassIdentifier##_ClassFactory;\
 	static std::shared_ptr<Type> ClassIdentifier##_ClassInfo;\
 public:\
 	virtual Type* GetClassInfo() const { return &*ClassIdentifier##_ClassInfo; }
@@ -70,8 +69,8 @@ public:\
 	BASETYPE_DECLARATION(ClassIdentifier)
 
 #define DEFINE_TYPE_FACTORY(ClassIdentifier)\
-class ClassIdentifier##_Factory : public IClassFactory { public: virtual void* CreateInstance() override { return new ClassIdentifier(); } };\
-IClassFactory* ClassIdentifier::ClassIdentifier##_ClassFactory = new ClassIdentifier##_Factory();\
+class ClassIdentifier##_Factory : public Vanguard::IClassFactory { virtual void* CreateInstance() const override { return new ClassIdentifier(); } };\
+Vanguard::IClassFactory* ClassIdentifier::ClassIdentifier##_ClassFactory = new ClassIdentifier##_Factory();\
 
 #define BASETYPE_DEFINITION(ClassIdentifier)\
 	DEFINE_TYPE_FACTORY(ClassIdentifier)\

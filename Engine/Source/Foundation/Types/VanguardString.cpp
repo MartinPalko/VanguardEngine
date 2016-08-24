@@ -138,7 +138,7 @@ namespace Vanguard
 
 		for (uint32 i = 1; i < aStringList.Count(); i++)
 		{
-			newString += ";";
+			newString += aSeperatorCharacter;
 			newString += aStringList[i];
 		}
 		return newString;
@@ -166,7 +166,7 @@ namespace Vanguard
 
 	bool String::BeginsWith(const char& aCharacter) const
 	{
-		return FirstIndexOf(aCharacter) == 0;
+		return data->front() == aCharacter;
 	}
 
 	bool String::BeginsWithAny(const String& aCharacters) const
@@ -176,7 +176,7 @@ namespace Vanguard
 
 	bool String::EndsWith(const char& aCharacter) const
 	{
-		return LastIndexOf(aCharacter) == GetLength() - 1;
+		return data->back() == aCharacter;
 	}
 
 	bool String::EndsWithAny(const String& aCharacters) const
@@ -324,7 +324,13 @@ namespace Vanguard
 		return newString.c_str();
 	}
 
-	String String::TrimStart(const char& aChar) const { return TrimStart(&aChar); }
+	String String::TrimStart(const char& aChar) const
+	{
+		if (BeginsWith(aChar))
+			return String(data->c_str() + sizeof (char*));
+		else 
+			return String(data->c_str());
+	}
 
 	String String::TrimEnd(const char* aChars) const
 	{
@@ -336,7 +342,10 @@ namespace Vanguard
 
 	String String::TrimEnd(const char& aChar) const
 	{
-		return TrimEnd(&aChar);
+		if (EndsWith(aChar))
+			return String(std::string(data->c_str(), data->size() - 1).c_str());
+		else 
+			return String(data->c_str());
 	}
 
 	String String::Trim(const char* aChars) const
@@ -346,7 +355,7 @@ namespace Vanguard
 
 	String String::Trim(const char& aChar) const
 	{
-		return Trim(&aChar);
+		return TrimStart(aChar).TrimEnd(aChar);
 	}
 
 	String String::ToLower() const

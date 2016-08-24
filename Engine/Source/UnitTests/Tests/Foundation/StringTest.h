@@ -38,6 +38,8 @@ namespace Vanguard
 
 		EXPECT_EQ(vanguardFromLiteral, "test"); // Vanguard string with string literal
 		EXPECT_EQ("test", vanguardFromLiteral); // Flip lhs with rhs
+
+		EXPECT_EQ(String("a"), String('a')); // Constructing for character
 	}
 
 	TEST_F(StringTest, MiscQuery)

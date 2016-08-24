@@ -37,6 +37,16 @@ namespace Vanguard
 			data.push_back(aItem);
 		}
 
+		inline void PopBack()
+		{
+			data.pop_back();
+		}
+
+		inline T Back()
+		{
+			return data.back();
+		}
+
         inline size_t Count() const{ return data.size(); }
         
 		inline void Resize(uint32 aSize)

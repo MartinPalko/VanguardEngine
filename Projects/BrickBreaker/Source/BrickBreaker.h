@@ -17,10 +17,13 @@ namespace BrickBreaker
 {
 	class BrickBreaker : public GameModule, public INativeEventHandler
 	{
+	public:
+		const static Vector2 PlayAreaSize;
 	private:
 		WindowHandle gameWindow;
 		RenderView* playerView;
 		Paddle* paddle;
+		Ball* ball;
 
 		gainput::InputManager* inputManager;
 		gainput::InputMap* inputMap;

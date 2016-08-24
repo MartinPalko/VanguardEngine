@@ -1,7 +1,8 @@
 #include "Paddle.h"
 #include "SpriteComponent.h"
+#include "BrickBreaker.h"
 
-namespace Vanguard
+namespace BrickBreaker
 {
 	TYPE_DEFINITION(Paddle, Actor)
 
@@ -12,7 +13,6 @@ namespace Vanguard
 		, mass(1.0f)
 		, movementForce(800.0f)
 		, bounciness(0.4f)
-		, movementRange(100.0f)
 		, paddleWidth(20.0f)
 	{
 		SpriteComponent* spriteComponent = AddComponent<SpriteComponent>();
@@ -36,7 +36,7 @@ namespace Vanguard
 		// Move by velocity
 		GetTransform()->position.x += velocity * aFrame->deltaTime.InSeconds();
 
-		const float maxX = (movementRange - paddleWidth) / 2;
+		const float maxX = (BrickBreaker::PlayAreaSize.x - paddleWidth) / 2;
 		const float minX = -maxX;
 
 		// Detect collision with sides

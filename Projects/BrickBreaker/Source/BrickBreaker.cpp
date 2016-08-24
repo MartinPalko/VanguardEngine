@@ -24,6 +24,8 @@ namespace BrickBreaker
 {
 	VANGUARD_DECLARE_MODULE(BrickBreaker)
 
+	const Vector2 BrickBreaker::PlayAreaSize = Vector2(100, 150);
+
 	void BrickBreaker::SetupGame()
 	{
 		gameWindow = Application::CreateNativeWindow();
@@ -44,7 +46,7 @@ namespace BrickBreaker
 		// Background sprite
 		Actor* backgroundEntity = gameWorld->SpawnEntity<Actor>();
 		SpriteComponent* backgroundSprite = backgroundEntity->AddComponent<SpriteComponent>();
-		backgroundSprite->SetDimensions(Vector2(100, 150));
+		backgroundSprite->SetDimensions(PlayAreaSize);
 		backgroundSprite->SetColor(Color(0x33, 0x33, 0x33));
 
 		// Spawn the paddle
@@ -52,12 +54,17 @@ namespace BrickBreaker
 		paddle->GetTransform()->position = Vector3(0, -65.0f, 1);
 
 		// Spawn the ball
+		ball = gameWorld->SpawnEntity<Ball>();
+		ball->GetTransform()->position = Vector3(0, paddle->GetTransform()->position.y, 0);
+		ball->GetTransform()->position.y += paddle->GetComponent<SpriteComponent>()->GetDimensions().y / 2;
+		ball->GetTransform()->position.y += ball->GetComponent<SpriteComponent>()->GetDimensions().y / 2;
 
 		// Spawn the bricks
-		const int bricksX = 11;
+		const int bricksX = 12;
 		const int bricksY = 6;
-		const Vector2 brickOffset(-40.0f, 65.0f);
-		const Vector2 brickSpacing(8.0f, -4.0f);
+		const Vector2 brickSpacing(PlayAreaSize.x / bricksX, -4.f);
+		const Vector2 brickOffset((-PlayAreaSize.x + brickSpacing.x) / 2, PlayAreaSize.y / 2 + brickSpacing.y);
+		
 		const Color brickColors[] = {
 			Color(230, 120, 230, 230),
 			Color(120, 120, 230, 230),
@@ -110,6 +117,11 @@ namespace BrickBreaker
 			input -= 1;
 		if (inputMap->GetBool(eGameButton::Right))
 			input += 1;
+
+		if (!ball->TickEnabled() && input)
+		{
+			ball->EnableTick();
+		}
 
 		paddle->SetInput(input);
 	}

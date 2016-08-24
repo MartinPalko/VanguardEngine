@@ -1,6 +1,7 @@
+#pragma once
 #include "BrickBreaker_Common.h"
 
-namespace Vanguard
+namespace BrickBreaker
 {
 	class Paddle : public Actor
 	{
@@ -13,7 +14,6 @@ namespace Vanguard
 		float mass;
 		float movementForce;
 		float bounciness;
-		float movementRange;
 		float paddleWidth;
 
 	public:

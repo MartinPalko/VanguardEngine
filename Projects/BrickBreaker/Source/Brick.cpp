@@ -1,6 +1,6 @@
 #include "Brick.h"
 #include "SpriteComponent.h"
-namespace Vanguard
+namespace BrickBreaker
 {
 	TYPE_DEFINITION(Brick, Actor)
 

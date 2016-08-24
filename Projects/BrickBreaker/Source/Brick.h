@@ -1,6 +1,7 @@
+#pragma once
 #include "BrickBreaker_Common.h"
 
-namespace Vanguard
+namespace BrickBreaker
 {
 	class Brick : public Actor
 	{

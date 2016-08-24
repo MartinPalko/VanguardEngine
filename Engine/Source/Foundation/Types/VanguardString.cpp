@@ -166,7 +166,10 @@ namespace Vanguard
 
 	bool String::BeginsWith(const char& aCharacter) const
 	{
-		return data->front() == aCharacter;
+		if (data->size())
+			return data->at(0) == aCharacter;
+		else
+			return false;
 	}
 
 	bool String::BeginsWithAny(const String& aCharacters) const
@@ -176,7 +179,10 @@ namespace Vanguard
 
 	bool String::EndsWith(const char& aCharacter) const
 	{
-		return data->back() == aCharacter;
+		if (data->size())
+			return data->at(data->size() - 1) == aCharacter;
+		else
+			return false;
 	}
 
 	bool String::EndsWithAny(const String& aCharacters) const

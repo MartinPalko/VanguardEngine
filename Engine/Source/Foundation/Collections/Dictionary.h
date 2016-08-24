@@ -31,7 +31,6 @@ namespace Vanguard
 		//destrcutor
 		~Dictionary() = default;
         
-        
 		//methods
 		inline void Set(const K& aKey, const V& aValue)
 		{
@@ -48,7 +47,7 @@ namespace Vanguard
 
 		inline bool Contains(const K& aKey) const
 		{
-			return data.count(aKey) == 1;
+			return data.count(aKey);
 		}
 
 		inline bool ContainsKey(const K& aKey) const

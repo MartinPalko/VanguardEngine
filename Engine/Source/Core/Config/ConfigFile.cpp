@@ -20,7 +20,7 @@ namespace Vanguard
 
 	bool ConfigFile::ContainsValue(const String& aSection, const String& aKey)
 	{
-		return (sections.Contains(aSection) && sections[aSection].entries.Contains(aKey));
+		return (sections.count(aSection) && sections[aSection].entries.count(aKey));
 	}
 
 	String ConfigFile::GetValue(const String& aSection, const String& aKey)
@@ -52,7 +52,7 @@ namespace Vanguard
 
 		DynamicArray<String> lines = FileSystem::ReadFileLinesAsText(aConfigFilePath);
 
-		String CurrentSection = "";
+		StringID currentSection = "";
 
 		for (uint32 i = 0; i < lines.Count(); i++)
 		{
@@ -70,7 +70,7 @@ namespace Vanguard
 			// Section marker, begin new section.
 			if (lineText.BeginsWith('['))
 			{
-				CurrentSection = lineText.Trim("[]");
+				currentSection = lineText.Trim("[]");
 				continue;
 			}
 
@@ -82,42 +82,42 @@ namespace Vanguard
 				continue;
 			}
 
-			String key = pair[0];
+			String keyString = pair[0];
 			String value = pair[1];
 
 			// Determine if we're doing an addition or removal.
 			ConfigOperator operation = ConfigOperator::Set;
 
-			if (key.EndsWith('+'))
+			if (keyString.EndsWith('+'))
 			{
 				operation = ConfigOperator::Add;
-				key = key.TrimEnd('+');
+				keyString = keyString.TrimEnd('+');
 			}
-			else if (key.EndsWith('-'))
+			else if (keyString.EndsWith('-'))
 			{
 				operation = ConfigOperator::Remove;
-				key = key.TrimEnd('-');
+				keyString = keyString.TrimEnd('-');
 			}
 
 			// Make sure to trim whitespace AFTER we check for operators.
-			key = key.Trim();
+			StringID key = keyString.Trim();
 			value = value.Trim();
 
-			bool keyExists = sections[CurrentSection].entries.Contains(key);
+			bool keyExists = sections[currentSection].entries.count(key);
 
 			if (operation == ConfigOperator::Add && keyExists) // Append value
 			{
-				sections[CurrentSection].entries[key] += ',' + value;
+				sections[currentSection].entries[key] += ',' + value;
 			}
 			else if (operation == ConfigOperator::Remove)
 			{
 				if (!keyExists)
 				{
-					DEBUG_WARN("Trying to remove value " + value + " from key" + key + "when " + key + " does not exist");
+					DEBUG_WARN("Trying to remove value " + value + " from key" + keyString + "when " + keyString + " does not exist");
 					continue;
 				}
 
-				DynamicArray<String> existingValues = sections[CurrentSection].entries[key].Split(',');
+				DynamicArray<String> existingValues = sections[currentSection].entries[key].Split(',');
 				existingValues.Remove(value);
 
 				if (existingValues.Count() > 0)
@@ -131,12 +131,15 @@ namespace Vanguard
 				else
 				{
 					// No more values, remove key.
-					sections[CurrentSection].entries.Remove(key);
+					if (!sections[currentSection].entries.erase(StringID(key)))
+					{
+						bool thefuck = true;
+					}
 				}
 			}
 			else // Just set the value.
 			{
-				sections[CurrentSection].entries[key] = value;
+				sections[currentSection].entries[key] = value;
 			}
 		}
 	}

@@ -12,7 +12,9 @@ namespace Vanguard
 	{
 		friend class ConfigFile;
 	private:
-		Dictionary<String, String> entries;
+		std::map<StringID,String> entries;
+	public:
+		ConfigSection() : entries() {}
 	};
 
 	class CORE_API ConfigFile
@@ -25,7 +27,7 @@ namespace Vanguard
 			Remove
 		};
 
-		Dictionary<String, ConfigSection> sections;
+		std::map<StringID, ConfigSection> sections;
 
 	public:
 		ConfigFile();

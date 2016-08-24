@@ -10,7 +10,14 @@ namespace Vanguard
 	{
 		jobListMutex.Lock();
 		unfinishedJobs[(uint8)aPriority]++;
-		Job* newJob = new Job([aEntryPoint, this, aPriority]() {aEntryPoint(); this->unfinishedJobs[(uint8)aPriority]--; });
+		Job* newJob = new Job([aEntryPoint, this, aPriority]()
+		{
+			aEntryPoint(); 
+			jobListMutex.Lock();
+			this->unfinishedJobs[(uint8)aPriority]--;
+			jobListMutex.Unlock();
+
+		});
 		jobs[(uint8)aPriority].push(newJob);
 		queuedJobs[(uint8)aPriority]++;
 		jobListMutex.Unlock();

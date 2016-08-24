@@ -23,7 +23,7 @@ namespace Vanguard
 		Mutex threadMutex;
 
 		DynamicArray<JobWorker*> workers;
-		std::queue<JobWorker*> idleWorkers;
+		DynamicArray<JobWorker*> idleWorkers;
 		Mutex idleWorkersMutex;
 
 		Mutex jobListMutex;

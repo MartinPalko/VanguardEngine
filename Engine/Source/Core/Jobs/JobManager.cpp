@@ -9,10 +9,10 @@ namespace Vanguard
 	{
 		JobWorker* idleThread = nullptr;
 		idleWorkersMutex.Lock();
-		if (idleWorkers.size() > 0)
+		if (idleWorkers.Count() > 0)
 		{
-			idleThread = idleWorkers.front();
-			idleWorkers.pop();
+			idleThread = idleWorkers.Back();
+			idleWorkers.PopBack();
 		}
 		idleWorkersMutex.Unlock();
 		return idleThread;
@@ -21,7 +21,7 @@ namespace Vanguard
 	size_t JobManager::GetIdleWorkers()
 	{
 		idleWorkersMutex.Lock();
-		const size_t retval = idleWorkers.size();
+		const size_t retval = idleWorkers.Count();
 		idleWorkersMutex.Unlock();
 		return retval;
 	}
@@ -50,7 +50,7 @@ namespace Vanguard
 		else
 		{
 			idleWorkersMutex.Lock();
-			idleWorkers.push(aThread);
+			idleWorkers.PushBack(aThread);
 			idleWorkersMutex.Unlock();
 		}
 	}
@@ -62,13 +62,13 @@ namespace Vanguard
 			JobWorker* worker = nullptr;
 			Job* nextJob = nullptr;
 			idleWorkersMutex.Lock();
-			if (idleWorkers.size() > 0)
+			if (idleWorkers.Count() > 0)
 			{
 				nextJob = currentFrame->GetNextJob();
 				if (nextJob)
 				{
-					worker = idleWorkers.front();
-					idleWorkers.pop();
+					worker = idleWorkers.Back();
+					idleWorkers.PopBack();
 				}
 			}
 			idleWorkersMutex.Unlock();
@@ -96,7 +96,7 @@ namespace Vanguard
 			{
 				JobWorker* newJobWorker = new JobWorker(i, this);
 				workers.PushBack(newJobWorker);
-				idleWorkers.push(newJobWorker);
+				idleWorkers.PushBack(newJobWorker);
 			}
 		}
 		else

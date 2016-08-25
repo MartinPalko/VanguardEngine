@@ -18,6 +18,7 @@ namespace Vanguard
 
 		Entity* parent = nullptr;
 		DynamicArray<Entity*> children;
+		bool enabled;
 
 	public:
 		Entity();
@@ -40,5 +41,9 @@ namespace Vanguard
 		inline Component* AddComponent(const StringID& aComponentType) { return AddComponent(Type::GetType(aComponentType)); }		
 		template<class T> T* AddComponent() { return (T*)AddComponent(Type::GetType<T>()); }
 		virtual void ComponentAdded(Component* aComponent) {}
+
+		void Enable() { enabled = true; }
+		void Disable() { enabled = false; }
+		bool Enabled() { return enabled; }
 	};
 }

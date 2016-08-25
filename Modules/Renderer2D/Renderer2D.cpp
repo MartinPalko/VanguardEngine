@@ -64,6 +64,10 @@ namespace Vanguard
 			for (size_t i = 0; i < sprites.Count(); i++)
 			{
 				SpriteComponent* sprite = sprites[i];
+
+				if (!sprite->GetEntity()->Enabled())
+					continue;
+
 				Transform* spriteTransform = sprite->GetEntity()->GetComponent<Transform>();
 
 				Vector2 spriteDimensions = sprite->GetDimensions();

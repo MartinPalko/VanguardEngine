@@ -18,11 +18,12 @@ namespace BrickBreaker
 
 		Vector2 ballSize;
 		float speed;
+		float acceleration;
 		Vector3 direction;
+		Box previousBallBounds;
 
 		Ball();
 
-		virtual void Tick(Frame* aFrame) override;		
-		ECollision CheckCollision(Actor* aOther);
+		virtual void Tick(Frame* aFrame) override;
 	};
 }

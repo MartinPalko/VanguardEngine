@@ -51,7 +51,7 @@ namespace BrickBreaker
 
 		// Spawn the paddle
 		paddle = gameWorld->SpawnEntity<Paddle>();
-		paddle->GetTransform()->position = Vector3(0, -65.0f, 1);
+		paddle->GetTransform()->position = Vector3(0, -65.0f, 0);
 
 		// Spawn the ball
 		ball = gameWorld->SpawnEntity<Ball>();

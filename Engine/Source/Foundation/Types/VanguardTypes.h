@@ -1,6 +1,7 @@
 #pragma once
 #include "Platforms/Platform.h"
 
+#include "Box.h"
 #include "Color.h"
 #include "DynamicLibrary.h"
 #include "Mutex.h"

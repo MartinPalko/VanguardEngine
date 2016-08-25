@@ -48,15 +48,15 @@ namespace Vanguard
 
 		// ----Operators----
 
-		bool operator== (Timespan aOther) { return InSeconds() == aOther.InSeconds(); }
-		bool operator!= (Timespan aOther) { return InSeconds() != aOther.InSeconds(); }
-		bool operator>  (Timespan aOther) { return InSeconds() >  aOther.InSeconds(); }
-		bool operator<  (Timespan aOther) { return InSeconds() <  aOther.InSeconds(); }
-		bool operator>= (Timespan aOther) { return InSeconds() >= aOther.InSeconds(); }
-		bool operator<= (Timespan aOther) { return InSeconds() <= aOther.InSeconds(); }
+		bool operator== (const Timespan& aOther) const { return InSeconds() == aOther.InSeconds(); }
+		bool operator!= (const Timespan& aOther) const { return InSeconds() != aOther.InSeconds(); }
+		bool operator>  (const Timespan& aOther) const { return InSeconds() >  aOther.InSeconds(); }
+		bool operator<  (const Timespan& aOther) const { return InSeconds() <  aOther.InSeconds(); }
+		bool operator>= (const Timespan& aOther) const { return InSeconds() >= aOther.InSeconds(); }
+		bool operator<= (const Timespan& aOther) const { return InSeconds() <= aOther.InSeconds(); }
 
-		Timespan operator+ (Timespan aOther) { return Timespan(InSeconds() + aOther.InSeconds()); }
-		Timespan operator- (Timespan aOther) { return Timespan(InSeconds() - aOther.InSeconds()); }
+		Timespan operator+ (const Timespan& aOther) const { return Timespan(InSeconds() + aOther.InSeconds()); }
+		Timespan operator- (const Timespan& aOther) const { return Timespan(InSeconds() - aOther.InSeconds()); }
 	};
 
 	// Represents a specific moment in time. Only accurate down to the millisecond. For more accurate timing, see Timespan.

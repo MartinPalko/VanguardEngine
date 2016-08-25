@@ -23,6 +23,7 @@ namespace Vanguard
 		uint32 nextFrameNumber;
 		Timespan lastTickStartTime;
 		Timespan minimumTickDelta;
+		Timespan maximumTickDelta;
 		DynamicArray<TickFunction> registeredTicks; //TODO: Use a linkedlist for the registeredTicks	
 
 		World(String aWorldName);

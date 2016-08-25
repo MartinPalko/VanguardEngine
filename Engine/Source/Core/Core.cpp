@@ -93,17 +93,15 @@ namespace Vanguard
 				}
 				else
 				{
+					// First tick
 					deltaTime = world->minimumTickDelta;
 					world->lastTickStartTime = currentTime - deltaTime;
 				}
 
-				double ct = currentTime.InSeconds();
-				double dt = deltaTime.InSeconds();
-
 				if (deltaTime >= world->minimumTickDelta)
 				{
 					// Create a new frame for the world
-					Frame* frame = new Frame(world->nextFrameNumber, deltaTime, world);
+					Frame* frame = new Frame(world->nextFrameNumber, Math::Min(deltaTime, world->maximumTickDelta), world);
 					world->lastTickStartTime = currentTime;
 					world->nextFrameNumber++;
 

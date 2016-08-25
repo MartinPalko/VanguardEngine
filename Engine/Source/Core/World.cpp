@@ -11,6 +11,7 @@ namespace Vanguard
 		, nextFrameNumber(0)
 		, lastTickStartTime(0.0)
 		, minimumTickDelta(1.0 / 60.0) // 60 FPS
+		, maximumTickDelta(1.0 / 15.0) // 15 FPS
 		, registeredTicks()
 	{
 	}

@@ -1,4 +1,4 @@
-#include "crc32.h"
+#include "Crc32.h"
 
 #include "Types/VanguardString.h"
 #include "FileSystem.h"

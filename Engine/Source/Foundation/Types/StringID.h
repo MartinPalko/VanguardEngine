@@ -1,4 +1,5 @@
 #pragma once
+#include <cstring>
 #include "VanguardString.h"
 #include "Foundation_Common.h"
 #include "Utility/Crc32.h"

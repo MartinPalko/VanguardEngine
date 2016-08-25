@@ -39,5 +39,6 @@ namespace Vanguard
 		Component* AddComponent(Type* aComponentType);
 		inline Component* AddComponent(const StringID& aComponentType) { return AddComponent(Type::GetType(aComponentType)); }		
 		template<class T> T* AddComponent() { return (T*)AddComponent(Type::GetType<T>()); }
+		virtual void ComponentAdded(Component* aComponent) {}
 	};
 }

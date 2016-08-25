@@ -16,6 +16,8 @@ namespace Vanguard
 
 	public:
 		Entity* GetEntity() { return entity; }
+
+		virtual Box GetBounds() { return Box(); }
 		
 	};
 }

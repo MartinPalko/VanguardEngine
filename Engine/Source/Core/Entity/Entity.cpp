@@ -55,6 +55,8 @@ namespace Vanguard
 		}
 		components.PushBack(newComponent);
 
+		ComponentAdded(newComponent);
+
 		return newComponent;
 	}
 }

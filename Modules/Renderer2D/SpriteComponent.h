@@ -17,10 +17,12 @@ namespace Vanguard
 		}
 
 		inline Vector2 GetDimensions() const { return dimensions; }
-		void SetDimensions(Vector2 aDimensions) { dimensions = aDimensions; }
+		void SetDimensions(Vector2 aDimensions);
 		
 		inline Color GetColor() const { return color; }
 		void SetColor(Color aColor) { color = aColor; }
+
+		virtual Box GetBounds() override { return Box(Vector3(dimensions.x, dimensions.y, 0)); }
 
 	};
 }

@@ -231,6 +231,15 @@ namespace Vanguard
 			item.second->UnloadModule();
 	}
 
+	IModule* ModuleManager::GetLoadedModule(const String & aModuleName)
+	{
+		ModuleInfo* info = moduleInfos[aModuleName];
+		if (info && info->GetIsLoaded())
+			return info->GetInstance();
+		else
+			return nullptr;
+	}
+
 	DynamicArray<IModule*> ModuleManager::GetLoadedModules()
 	{
 		DynamicArray<IModule*> returnList = DynamicArray<IModule*>();

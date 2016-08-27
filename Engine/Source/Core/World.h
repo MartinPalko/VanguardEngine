@@ -26,13 +26,9 @@ namespace Vanguard
 		Timespan maximumTickDelta;
 		DynamicArray<TickFunction> registeredTicks; //TODO: Use a linkedlist for the registeredTicks	
 
+	public:
 		World(String aWorldName);
 		~World();
-
-	protected:
-		virtual void Tick(Frame* aFrame);
-
-	public:
 
 		String GetWorldName(){ return worldName; }
 
@@ -69,5 +65,9 @@ namespace Vanguard
 			}
 			return found;
 		}
+
+	protected:
+		virtual void Tick(Frame* aFrame);
+
 	};
 }

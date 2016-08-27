@@ -1,6 +1,9 @@
-#include "Ball.h"
-#include "BrickBreaker.h"
+#include "Brick.h"
+#include "Paddle.h"
+#include "BrickBreakerWorld.h"
 #include "SpriteComponent.h"
+
+#include "Ball.h"
 
 namespace BrickBreaker
 {
@@ -21,7 +24,7 @@ namespace BrickBreaker
 	void Ball::Tick(Frame* aFrame)
 	{
 		// Collide with edges
-		const Vector2 maxPos = (BrickBreaker::PlayAreaSize - ballSize) / 2;
+		const Vector2 maxPos = (BrickBreakerWorld::PlayAreaSize - ballSize) / 2;
 		const Vector2 minPos = -maxPos;
 
 		if (GetTransform()->position.x > maxPos.x)

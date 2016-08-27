@@ -1,6 +1,6 @@
-#include "Paddle.h"
 #include "SpriteComponent.h"
-#include "BrickBreaker.h"
+#include "BrickBreakerWorld.h"
+#include "Paddle.h"
 
 namespace BrickBreaker
 {
@@ -36,7 +36,7 @@ namespace BrickBreaker
 		// Move by velocity
 		GetTransform()->position.x += velocity * aFrame->deltaTime.InSeconds();
 
-		const float maxX = (BrickBreaker::PlayAreaSize.x - paddleWidth) / 2;
+		const float maxX = (BrickBreakerWorld::PlayAreaSize.x - paddleWidth) / 2;
 		const float minX = -maxX;
 
 		// Detect collision with sides

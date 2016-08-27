@@ -59,6 +59,9 @@ namespace Vanguard
 
 		CoreState state = CoreState::NotInitialized;
 
+		void AddWorld(World* world);
+		void DestroyWorld(World* aWorld);
+
 	public:
 		Core();
 		virtual ~Core() {};
@@ -67,18 +70,14 @@ namespace Vanguard
 		JobManager* GetJobManager();
 
 		// Implementation of ICore
-		virtual void Initialize(int aArgC, char** aArgV, const char* aProjectName = "") override;
-		virtual void Run() override;
-		virtual void ShutDown() override;
-		virtual void LoadModule(const char* aModuleName) override;
+		void Initialize(int aArgC, char** aArgV, const char* aProjectName = "") override;
+		void Run() override;
+		void ShutDown() override;
+		void LoadModule(const char* aModuleName) override;
 
 		inline CoreState GetState(){ return state; }
 
 		class Project* GetLoadedProject(){ return loadedProject; }
-
-		World* CreateWorld(const String& aWorldName);
-		World* GetWorld(const String& aWorldName);
-		void DestroyWorld(World* aWorld);
 
 		void RegisterRenderer(IRenderer* aRenderer);
 		void UnregisterRenderer(IRenderer* aRenderer);

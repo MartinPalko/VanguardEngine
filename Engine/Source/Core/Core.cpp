@@ -63,10 +63,24 @@ namespace Vanguard
 
 		// Load the project's module.
 		ModuleManager::eModuleLoadResult projectLoadResult = moduleManager->LoadModule(loadedProject->GetName());
-		if (projectLoadResult != ModuleManager::eModuleLoadResult::Success)
+		if (projectLoadResult == ModuleManager::eModuleLoadResult::Success)
 		{
-			Log::Error("Project " + loadedProject->GetName() + " failed to load!", "Core");
+			IModule* module = moduleManager->GetLoadedModule(loadedProject->GetName());
+			ProjectModule* projectModule = dynamic_cast<ProjectModule*>(module);
+			if (projectModule)
+			{
+				// Create the world specified by our project.
+				World* projectWorld = projectModule->CreateWorld();
+				if (projectWorld)
+				{
+					AddWorld(projectWorld);
+				}
+			}
+			else
+				Log::Error("Project " + loadedProject->GetName() + "'s module is not a Project module", "Core");
 		}
+		else
+			Log::Error("Project " + loadedProject->GetName() + " failed to load!", "Core");
 
 		Log::Message("Initialized Core", "Core");
 		state = CoreState::Initialized;
@@ -185,26 +199,9 @@ namespace Vanguard
 		moduleManager->LoadModule(aModuleName);
 	}
 
-	World* Core::CreateWorld(const String& aWorldName)
+	void Core::AddWorld(World* world)
 	{
-		if (GetWorld(aWorldName) == nullptr)
-		{			
-			World* newWorld = new World(aWorldName);
-			worlds.PushBack(newWorld);
-			return newWorld;
-		}
-		else
-			throw Exception(String("World with name \"" + aWorldName + "\" already exists").GetCharPointer());
-	}
-
-	World* Core::GetWorld(const String& aWorldName)
-	{
-		for (size_t i = 0; i < worlds.Count(); i++)
-		{
-			if (worlds[i]->GetWorldName() == aWorldName)
-				return worlds[i];
-		}
-		return nullptr;
+		worlds.PushBack(world);
 	}
 
 	void Core::DestroyWorld(World* aWorld)

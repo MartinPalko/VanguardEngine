@@ -17,6 +17,7 @@ namespace Vanguard
 		bool GetIsLoaded() { return moduleInstance != nullptr; }
 		bool LoadModule();
 		void UnloadModule();
+		IModule* GetInstance() { return moduleInstance; }
 
 	private:
 		ModuleInfo(const FilePath& aLibPath, const String& aName, DynamicArray<String> aDependencies);
@@ -59,7 +60,9 @@ namespace Vanguard
 		void UnloadModule(const String& aModuleName);
 		void UnloadAllModules();
 
+		IModule* GetLoadedModule(const String& aModuleName);
 		DynamicArray<IModule*> GetLoadedModules();
+		
 
 	private:
 		eModuleLoadResult LoadModule(const String& aModuleName, bool aExplicit);

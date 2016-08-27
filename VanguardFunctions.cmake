@@ -298,7 +298,7 @@ MACRO (IMPLEMENT_EXECUTABLE executableName dependencies)
 ENDMACRO ()
 
 FUNCTION (FIND_VANGUARD_PROJECTS_IN_FOLDER searchInFolder)
-	FILE(GLOB_RECURSE projectConfigFiles "${searchInFolder}/*project.cfg")
+	FILE(GLOB_RECURSE projectConfigFiles "${searchInFolder}/*Project.cfg")
 	
 	FOREACH(projectConfigFile ${projectConfigFiles})
 		GET_FILENAME_COMPONENT(projectFolder "${projectConfigFile}" DIRECTORY)

@@ -30,7 +30,18 @@ namespace Vanguard
 
 	void Core::Initialize(int aArgC, char** aArgV, const char* aProjectName)
 	{
+		if (state != CoreState::NotInitialized)
+		{
+			Log::Exception("Core is already initialized!", "Core");
+		}
+
 		state = CoreState::Initializing;
+
+		if (instance)
+		{
+			Log::Exception("There can only be one Vanguard Core initialized at a time!", "Core");
+		}
+
 		instance = this;
 
 		Application::SetApplicationArguments(aArgC, aArgV);
@@ -64,14 +75,16 @@ namespace Vanguard
 	void Core::Run()
 	{
 		if (state != CoreState::Initialized)
-			throw Exception("Core must be in state \"Initialized\" to run");
+		{
+			Log::Exception("Must initialize before running!", "Core");
+		}
 
 		Log::Message("Core Running", "Core");
 		state = CoreState::Running;
 
 		if (!worlds.Count())
 		{
-			Log::Error("No worlds have been registered!", "Core");
+			Log::Error("No worlds have been registered, shutting down", "Core");
 			ShutDown();
 		}
 
@@ -115,7 +128,6 @@ namespace Vanguard
 					GetPrimaryRenderer()->RenderViews();
 				}
 			}
-			//std::this_thread::sleep_for(std::chrono::microseconds(1));
 		}
 
 		if (state != CoreState::PendingShutdown)
@@ -160,6 +172,7 @@ namespace Vanguard
 			Log::Message("Flushing log and joining IO Thread", "Core");
 			Log::Flush();
 			AsyncIO::JoinIOThread();			
+			instance = nullptr;
 		}
 		else if (state == CoreState::Running || state == CoreState::PendingShutdown)
 		{

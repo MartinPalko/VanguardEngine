@@ -38,10 +38,9 @@ namespace Vanguard
 		inline float FSign(float aFloat) { return aFloat > 0 ? 1.0f : -1.0f; }
 		inline int32 ISign(int32 aFloat) { return aFloat > 0 ? 1 : -1; }
 
-		template<class T> T Clamp(const T& a, const T& lower, const T& upper) { return Min(Max(a, lower), upper); }
 		template<class T> T Max(const T& a, const T& b) { return (a < b) ? b : a; }
 		template<class T> T Min(const T& a, const T& b) { return (a < b) ? a : b; }
-
+		template<class T> T Clamp(const T& a, const T& lower, const T& upper) { return Min(Max(a, lower), upper); }
 
 		// Generates a random float between 0 and 1
 		inline float FRandom() { return (float)rand() / (float)RAND_MAX; }

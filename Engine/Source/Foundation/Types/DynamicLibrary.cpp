@@ -1,11 +1,16 @@
 #include "juce_core.h"
 #include "DynamicLibrary.h"
 
+#ifdef VANGUARD_LINUX
+#include <dlfcn.h>
+#endif
+
 namespace Vanguard
 {
 	DynamicLibrary::DynamicLibrary()
+		: data(new juce::DynamicLibrary())
+		, lastError()
 	{
-		data = new juce::DynamicLibrary();
 	}
 
 	DynamicLibrary::~DynamicLibrary()
@@ -13,19 +18,55 @@ namespace Vanguard
 		delete data;
 	}
 
-	bool DynamicLibrary::Open(const FilePath& aFilePath)
+	void DynamicLibrary::RecordError()
 	{
-		return data->open(aFilePath.GetFullPathName().GetCharPointer());
+		#if VANGUARD_LINUX
+		lastError = dlerror();
+		#endif
+		// TODO: Other platforms
 	}
 
-	bool DynamicLibrary::Open(const String& aFilePath)
+	bool DynamicLibrary::Open(const FilePath& aFilePath)
 	{
-		if (!aFilePath.Contains('.'))
+		return Open(aFilePath.GetFullPathName(), true);
+	}
+
+	bool DynamicLibrary::Open(const String& aLib, bool aExact)
+	{
+		if (aExact)
 		{
-			aFilePath.Append(String(".") + Platform::DynamicLibExtension());
+			if (data->open(aLib.GetCharPointer()))
+			{
+				return true;
+			}
+			else
+			{
+				RecordError();
+				return false;
+			}
 		}
 
-		return data->open(aFilePath.GetCharPointer());
+		String filePath = aLib;
+
+		// Add the correct file extension if none specified.
+		if (!filePath.Contains('.'))
+		{
+			filePath = filePath.Append(Platform::DynamicLibExtension());
+		}
+
+		if (data->open(filePath.GetCharPointer()))
+		{
+			return true;
+		}
+		
+		// Try adding the "lib" prefix.
+		if (!filePath.BeginsWith("lib"))
+		{
+			filePath = "lib" + filePath;
+		}
+
+		return data->open(filePath.GetCharPointer());
+
 	}
 
 	void DynamicLibrary::Close()

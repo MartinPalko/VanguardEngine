@@ -164,6 +164,11 @@ namespace Vanguard
 		return false;
 	}
 
+	bool String::BeginsWith(const String& aString) const
+	{
+		return (data->compare(0, aString.GetLength(), aString.GetCharPointer()) == 0);
+	}
+
 	bool String::BeginsWith(const char& aCharacter) const
 	{
 		if (data->size())
@@ -175,6 +180,11 @@ namespace Vanguard
 	bool String::BeginsWithAny(const String& aCharacters) const
 	{
 		return FirstIndexOfAny(aCharacters) == 0;
+	}
+
+	bool String::EndsWith(const String& aString) const
+	{
+		return (data->compare(GetLength() - aString.GetLength(), aString.GetLength(), aString.GetCharPointer()) == 0);
 	}
 
 	bool String::EndsWith(const char& aCharacter) const

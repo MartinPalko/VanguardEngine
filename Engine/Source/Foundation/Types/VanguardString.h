@@ -76,10 +76,16 @@ namespace Vanguard
 		bool ContainsAny(const String& aCharacters) const;
 
 		// Returns true if the first character of the string is the specified character
+		bool BeginsWith(const String& aCharacter) const;
+
+		// Returns true if the first character of the string is the specified character
 		bool BeginsWith(const char& aCharacter) const;
 
 		// Returns true if the first character of the string is any of the specified characters
 		bool BeginsWithAny(const String& aCharacters) const;
+
+		// Returns true if the first character of the string is the specified character
+		bool EndsWith(const String& aCharacter) const;
 
 		// Returrns true if the last character of the string is the specified character
 		bool EndsWith(const char& aCharacter) const;

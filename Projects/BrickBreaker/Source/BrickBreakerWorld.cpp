@@ -130,12 +130,15 @@ namespace BrickBreaker
 		// Super's tick AFTER we update input
 		World::Tick(aFrame);
 	}
-
+	
 	void BrickBreakerWorld::HandleNativeEvent(NativeEvent aEvent)
 	{
-#if VANGUARD_WINDOWS
+#ifdef VANGUARD_WINDOWS
 		// Forward any input messages to Gainput
 		inputManager->HandleMessage(aEvent.message);
+#endif
+#ifdef VANGUARD_LINUX
+		inputManager->HandleEvent((XEvent*)aEvent.message);
 #endif
 	}
 }

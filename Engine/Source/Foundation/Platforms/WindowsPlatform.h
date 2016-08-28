@@ -16,9 +16,6 @@ namespace Vanguard
 
 	typedef std::exception Exception;
 
-	typedef HWND WindowHandle;
-	typedef MSG NativeMessage;
-
 	typedef __int64 int64;
 	typedef __int32 int32;
 	typedef __int16 int16;

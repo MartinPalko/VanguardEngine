@@ -2,6 +2,9 @@
 #include "Core_Common.h"
 #include "Config/Config.h"
 
+typedef void* WindowHandle;
+typedef void* NativeMessage;
+
 namespace Vanguard
 {
 	class Core;
@@ -21,8 +24,8 @@ namespace Vanguard
 
 	struct NativeEvent
 	{
-		WindowHandle windowHandle;
 		NativeMessage message;
+		WindowHandle windowHandle;
 	};
 
 	class INativeEventHandler

@@ -1,5 +1,6 @@
 #pragma once
 #include "Foundation.h"
+#include "Application/Application.h"
 
 namespace Vanguard
 {

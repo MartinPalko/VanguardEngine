@@ -1,6 +1,6 @@
 #pragma once
 
-#if DEBUG || _DEBUG
+#if defined(DEBUG) || defined(_DEBUG)
 #define VANGUARD_DEBUG 1
 #else
 #define VANGUARD_RELEASE 1

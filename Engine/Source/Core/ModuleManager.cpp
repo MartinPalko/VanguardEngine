@@ -31,7 +31,7 @@ namespace Vanguard
 		if (!tempLoadedLib->Open(aModulePath))
 		{
 			// Could not load dynamic library
-			DEBUG_ERROR("Could not load library " + aModulePath.GetFilename());
+			Log::Error("Could not load library " + aModulePath.GetFilename() + ": \n" + tempLoadedLib->GetLastError(), "Modules");
 			delete tempLoadedLib;
 			return nullptr;
 		}

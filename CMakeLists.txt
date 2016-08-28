@@ -31,6 +31,8 @@ endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 SET(CMAKE_SUPPRESS_REGENERATION true)
 
 IF(UNIX AND NOT APPLE)
+	# Enable debug symbols for debug build.
+	set(CMAKE_CXX_FLAGS_DEBUG  "-g")
 	# Enable C++11
 	# -fPIC : Position independent code (needed for shared libs on UNIX based OS).
 	# -fexceptions -pthread : exeptions and threading.

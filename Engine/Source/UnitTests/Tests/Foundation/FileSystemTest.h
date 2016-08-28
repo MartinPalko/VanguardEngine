@@ -47,7 +47,7 @@ namespace Vanguard
 	TEST_F(FileSystemTest, FileCreationAndDeletion)
 	{
 		// Create a file on c drive called test.txt
-		FilePath File = FileSystem::GetSystemTempDirectory() + "/Test.txt";
+		FilePath File = FileSystem::GetSystemTempDirectory().GetRelative("Test.txt");
 
 		// Shouldn't exist initially
 		EXPECT_FALSE(FileSystem::FileExists(File));
@@ -71,7 +71,7 @@ namespace Vanguard
 
 	TEST_F(FileSystemTest, DirectoryCreationAndDeletion)
 	{
-		FilePath Directory = FileSystem::GetSystemTempDirectory() + "Test/";
+		FilePath Directory = FileSystem::GetSystemTempDirectory().GetRelative("Test");
 
 		EXPECT_FALSE(FileSystem::DirectoryExists(Directory));
 

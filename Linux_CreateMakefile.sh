@@ -1,7 +1,7 @@
-cmakeExecutable=$(dirname $0)"/ThirdParty/CMake/Linux/bin/cmake"
-sourceRoot=$(dirname $0)
+sourceRoot=$PWD
+cmakeExecutable=$sourceRoot"/ThirdParty/CMake/Linux/bin/cmake"
 
-projectfileDirectory=$(dirname $0)"/Intermediate/MakeFile/"
+projectfileDirectory=$sourceRoot"/Intermediate/Makefile/"
 mkdir -p $projectfileDirectory
 cd $projectfileDirectory
-$cmakeExecutable -G "Unix Makefiles" $sourceRoot
+$cmakeExecutable -G "Unix Makefiles" $sourceRoot -DCMAKE_BUILD_TYPE=Debug

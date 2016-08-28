@@ -8,6 +8,7 @@ namespace Vanguard
 	TYPE_DEFINITION(Entity, VanguardObject)
 
 	Entity::Entity() : VanguardObject()
+		, enabled(true)
 	{
 	}
 

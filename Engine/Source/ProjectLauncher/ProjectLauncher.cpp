@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 	int returnVal = 0;
 
 	DynamicLibrary* coreLib = new DynamicLibrary();
-	if (coreLib->Open("Core.dll"))
+	if (coreLib->Open("Core"))
 	{
 		T_VANGUARD_CREATE_CORE_FUNCTION createCoreFunction = (T_VANGUARD_CREATE_CORE_FUNCTION)coreLib->GetFunction(TO_STRING(VANGUARD_CREATE_CORE_FUNCTION));
 

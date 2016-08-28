@@ -1,5 +1,8 @@
 Timestep:
 http://gafferongames.com/game-physics/fix-your-timestep/
 
+Linux Games:
+http://the3fold.free.fr/doc/games.pdf
+
 The Bible:
 http://www.gameenginebook.com/

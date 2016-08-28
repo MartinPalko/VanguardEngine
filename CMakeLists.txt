@@ -37,7 +37,8 @@ IF(UNIX AND NOT APPLE)
 	# -fPIC : Position independent code (needed for shared libs on UNIX based OS).
 	# -fexceptions -pthread : exeptions and threading.
 	# -lrt : Links to the librt.so library, see: http://stackoverflow.com/questions/2418157/ubuntu-linux-c-error-undefined-reference-to-clock-gettime-and-clock-settim
-	set (CMAKE_CXX_FLAGS "-std=c++11 -fPIC -fexceptions -pthread -lrt")
+	# -lX11 -lXt: Links to the X11 window system library
+	set (CMAKE_CXX_FLAGS "-std=c++11 -fPIC -fexceptions -pthread -lrt -lX11 -lXt")
 ENDIF()
 
 IF (APPLE)

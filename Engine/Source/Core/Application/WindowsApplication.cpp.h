@@ -13,15 +13,15 @@ namespace Vanguard
 	{
 		for (size_t w = 0; w < nativeWindows.Count(); w++)
 		{
-			NativeMessage msg;
+			MSG msg;
 			WindowHandle handle = nativeWindows[w];
-			while (PeekMessage(&msg, handle, 0, 0, PM_REMOVE))
+			while (PeekMessage(&msg, (HWND)handle, 0, 0, PM_REMOVE))
 			{
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 
 				NativeEvent nativeEvent;
-				nativeEvent.message = msg;
+				nativeEvent.message = &msg;
 				nativeEvent.windowHandle = handle;
 
 				for (size_t h = 0; h < nativeEventHandlers.Count(); h++)
@@ -168,7 +168,7 @@ namespace Vanguard
 	void Application::GetWindowSize(WindowHandle aWindowHandle, int& OUTSizeX, int& OUTSizeY)
 	{
 		RECT windowRect;
-		GetClientRect(aWindowHandle, &windowRect);
+		GetClientRect((HWND)aWindowHandle, &windowRect);
 		OUTSizeX = windowRect.right - windowRect.left;
 		OUTSizeY = windowRect.bottom - windowRect.top;
 	}

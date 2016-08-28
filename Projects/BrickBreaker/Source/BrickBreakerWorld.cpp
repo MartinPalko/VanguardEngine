@@ -135,7 +135,7 @@ namespace BrickBreaker
 	{
 #ifdef VANGUARD_WINDOWS
 		// Forward any input messages to Gainput
-		inputManager->HandleMessage(aEvent.message);
+		inputManager->HandleMessage((MSG*)aEvent.message);
 #endif
 #ifdef VANGUARD_LINUX
 		inputManager->HandleEvent((XEvent*)aEvent.message);

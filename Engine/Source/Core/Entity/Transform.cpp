@@ -2,5 +2,5 @@
 
 namespace Vanguard
 {
-	TYPE_DEFINITION(Transform, Component)
+	TYPE_DEFINITION(Transform, Component);
 }

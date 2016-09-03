@@ -1,6 +1,7 @@
 #include "World.h"
 #include "Entity/Actor.h"
 #include "Jobs/Frame.h"
+#include "Core.h"
 
 namespace Vanguard
 {
@@ -10,7 +11,7 @@ namespace Vanguard
 		, objects()
 		, nextFrameNumber(0)
 		, lastTickStartTime(0.0)
-		, minimumTickDelta(1.0 / 60.0) // 60 FPS
+		, minimumTickDelta(1.0 / 240.0) // 60 FPS
 		, maximumTickDelta(1.0 / 15.0) // 15 FPS
 		, registeredTicks()
 	{
@@ -96,19 +97,22 @@ namespace Vanguard
 	
 	void World::Tick(Frame* aFrame)
 	{
-		DynamicArray<Job*> jobs;
+		// Dispatch render job (before tick, to work on last frame's data)
+		Job* renderJob = Core::GetInstance()->GetPrimaryRenderer()->StartRenderJob(aFrame);
+
+		DynamicArray<Job*> tickJobs;
 
 		// Dispatch all ticks to the job system.
 		for (size_t i = 0; i < registeredTicks.Count(); i++)
 		{
 			std::function<void(Frame*)> tickFunction = registeredTicks[i];
-			jobs.PushBack(aFrame->AddJob([tickFunction, aFrame]()-> void {tickFunction(aFrame); }));
+			tickJobs.PushBack(aFrame->AddJob([tickFunction, aFrame]()-> void {tickFunction(aFrame); }));
 		}
 
-		// Wait for all jobs to complete.
-		for (size_t i = 0; i < jobs.Count(); i++)
+		// Wait for all ticks to complete.
+		for (size_t i = 0; i < tickJobs.Count(); i++)
 		{
-			aFrame->WaitForJob(jobs[i]);
+			aFrame->WaitForJob(tickJobs[i]);
 		}
 	}
 

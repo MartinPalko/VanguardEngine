@@ -6,7 +6,29 @@
 #include "RenderView2D.h"
 
 namespace Vanguard
-{
+{		
+	enum class ERenderItemType
+	{
+		rectangle,
+	};
+
+	struct RenderItem
+	{
+		ERenderItemType type;
+		Color color;
+		Vector2 dimensions;
+		Vector3 position;
+	};
+
+	struct JobRenderView
+	{
+		Matrix4x4 projectionMatrix;
+		Matrix4x4 worldToCamera;
+		SDL_Window* window;
+		SDL_Renderer* renderer;
+		Color clearColor;
+	};
+
 	class Renderer2D : public IModule, public IRenderer
 	{
 		DynamicArray<RenderView2D*> renderViews;
@@ -18,6 +40,6 @@ namespace Vanguard
 		// IRenderer Implementation
 		virtual String RendererName() override;
 		virtual RenderView* CreateRenderView(Camera* aCamera, WindowCreationParameters aWindowParameters) override;
-		virtual void RenderViews() override;		
+		virtual Job* StartRenderJob(Frame* aFrame) override;
 	};
 }

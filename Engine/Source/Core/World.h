@@ -48,9 +48,10 @@ namespace Vanguard
 			return static_cast<T*>(SpawnEntity(requestedClass));
 		}
 
-		Entity* SpawnEntity(const String& aEntityType);		
+		Entity* SpawnEntity(const String& aEntityType);
 		Entity* SpawnEntity(Type* aRequestedClass);
-		template <class T> DynamicArray<T*> GetInstances()
+
+		template <class T> DynamicArray<T*> GetInstances() const
 		{
 			// TODO: Store all types in this world in a hashtable for quick retreival.
 			DynamicArray<T*> found;

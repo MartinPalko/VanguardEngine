@@ -132,9 +132,6 @@ namespace Vanguard
 
 					jobManager->ProcessFrame(frame);
 					delete frame;
-
-					// Render the new frame.
-					GetPrimaryRenderer()->RenderViews();
 				}
 			}
 		}

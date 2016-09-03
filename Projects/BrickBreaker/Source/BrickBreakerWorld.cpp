@@ -104,8 +104,7 @@ namespace BrickBreaker
 		inputManager->SetDisplaySize(displayX, displayY);
 		inputManager->Update(aFrame->deltaTime.InMilliseconds());
 
-		DEBUG_LOG("UPDATE GAME");
-		DEBUG_LOG("Seconds Elapsed: " + String::FromFloat(aFrame->deltaTime.InSeconds()));
+		DEBUG_LOG("FPS: " + String::FromFloat(1.0f / aFrame->deltaTime.InSeconds()));
 
 		if (inputMap->GetBool(eGameButton::Exit))
 		{

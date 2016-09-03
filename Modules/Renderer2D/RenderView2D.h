@@ -11,7 +11,7 @@ namespace Vanguard
 		SDL_Window* sdlWindow;
 		SDL_Renderer* sdlRenderer;
 
-		RenderView2D(WindowHandle aWindowHandle, Camera* aCamera);
+		RenderView2D(Camera* aCamera, WindowCreationParameters aWindowParameters);
 		~RenderView2D();
 	};
 }

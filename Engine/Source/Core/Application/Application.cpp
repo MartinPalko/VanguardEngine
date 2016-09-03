@@ -32,12 +32,12 @@ namespace Vanguard
 		nativeEventHandlers.Remove(aHandler);
 	}
 
-	void Application::RegisterNativeWindow(WindowHandle aWindowHandle)
+	WindowHandle Application::CreateNativeWindow()
 	{
-		nativeWindows.PushBack(aWindowHandle);
+		return CreateNativeWindow(GetWindowCreationParams());
 	}
 
-	WindowHandle Application::CreateNativeWindow()
+	WindowCreationParameters Application::GetWindowCreationParams()
 	{
 		WindowCreationParameters params;
 		params.fullscreen = fullscreen;
@@ -47,7 +47,7 @@ namespace Vanguard
 		if (resolutionY)
 			params.sizeY = resolutionY;
 		params.resizable = resizable;
-		return CreateNativeWindow(params);
+		return params;
 	}
 }
 

@@ -34,6 +34,23 @@ namespace Vanguard
 		virtual void HandleNativeEvent(NativeEvent aEvent) = 0;
 	};
 
+	struct WindowCreationParameters
+	{
+		bool fullscreen;
+		String title;
+		size_t sizeX;
+		size_t sizeY;
+		bool resizable;
+
+		WindowCreationParameters()
+			: fullscreen(false)
+			, title("Vanguard")
+			, sizeX(1280)
+			, sizeY(760)
+			, resizable(false)
+		{}
+	};
+
 	class CORE_API Application
 	{
 		static BooleanConfigVar fullscreen;
@@ -41,27 +58,9 @@ namespace Vanguard
 		static Int32ConfigVar resolutionY;
 		static BooleanConfigVar resizable;
 
-		struct WindowCreationParameters
-		{
-			bool fullscreen;
-			String title;
-			size_t sizeX;
-			size_t sizeY;
-			bool resizable;
-
-			WindowCreationParameters()
-				: fullscreen(false)
-				, title("Vanguard")
-				, sizeX(1280)
-				, sizeY(760)
-				, resizable(false)
-			{}
-		};
-
 		friend Core;
 	private:
 		static void SetApplicationArguments(int aArgC, char** aArgV);
-		static void RegisterNativeWindow(WindowHandle aWindowHandle);
 		static void ProcessNativeEvents();
 	public:
 		static ApplicationArguments GetApplicationArguments();
@@ -72,8 +71,10 @@ namespace Vanguard
 		static void RegisterNativeEventHandler(INativeEventHandler* aHandler);
 		static void UnregisterNativeEventHandler(INativeEventHandler* aHandler);
 
+		static void RegisterNativeWindow(WindowHandle aWindowHandle);
 		static WindowHandle CreateNativeWindow();
 		static WindowHandle CreateNativeWindow(const WindowCreationParameters& aWindowParameters);
+		static WindowCreationParameters GetWindowCreationParams();
 
 		static void GetWindowSize(WindowHandle aWindowHandle, int& OUTSizeX, int& OUTSizeY);
 	};

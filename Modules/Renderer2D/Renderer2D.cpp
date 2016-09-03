@@ -34,9 +34,9 @@ namespace Vanguard
 		return "2D";
 	}
 
-	RenderView* Renderer2D::CreateRenderView(WindowHandle aWindowHandle, Camera* aCamera)
+	RenderView* Renderer2D::CreateRenderView(Camera* aCamera, WindowCreationParameters aWindowParameters)
 	{
-		RenderView2D* newView = new RenderView2D(aWindowHandle, aCamera);
+		RenderView2D* newView = new RenderView2D(aCamera, aWindowParameters);
 		renderViews.PushBack(newView);
 		return newView;
 	}

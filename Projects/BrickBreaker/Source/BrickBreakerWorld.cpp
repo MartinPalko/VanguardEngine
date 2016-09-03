@@ -24,8 +24,6 @@ namespace BrickBreaker
 
 	BrickBreakerWorld::BrickBreakerWorld() : World("Brick Breaker")
 	{
-		gameWindow = Application::CreateNativeWindow();
-
 		Application::RegisterNativeEventHandler(this);
 
 		// Create a world and a renderview.
@@ -35,7 +33,7 @@ namespace BrickBreaker
 		playerCamera->SetOrthographic(true);
 
 		IRenderer* primaryRenderer = core->GetPrimaryRenderer();
-		playerView = core->GetPrimaryRenderer()->CreateRenderView(gameWindow, playerCamera);
+		playerView = core->GetPrimaryRenderer()->CreateRenderView(playerCamera);
 
 
 		// Background sprite

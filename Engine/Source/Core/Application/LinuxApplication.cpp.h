@@ -40,6 +40,11 @@ namespace Vanguard
 		// TODO:
 	}
 
+	void Application::RegisterNativeWindow(WindowHandle aWindowHandle)
+	{
+		nativeWindows.PushBack(aWindowHandle);
+	}
+
 	WindowHandle Application::CreateNativeWindow(const WindowCreationParameters& aWindowParameters)
 	{
 		if (!xDisplay)

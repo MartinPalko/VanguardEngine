@@ -105,6 +105,13 @@ namespace Vanguard
 		return 0;
 	}
 
+	void Application::RegisterNativeWindow(WindowHandle aWindowHandle)
+	{
+		nativeWindows.PushBack(aWindowHandle);
+		// Override the WNDPROC to use ours
+		SetWindowLongPtr((HWND)aWindowHandle, GWLP_WNDPROC, (LONG_PTR)&WndProc);
+	}
+
 	WindowHandle Application::CreateNativeWindow(const WindowCreationParameters& aWindowParameters)
 	{
 		static TCHAR szWindowClass[] = "win32app";
@@ -114,7 +121,8 @@ namespace Vanguard
 		WNDCLASSEX wcex;
 		wcex.cbSize = sizeof(WNDCLASSEX);
 		wcex.style = CS_HREDRAW | CS_VREDRAW;
-		wcex.lpfnWndProc = WndProc;
+		wcex.lpfnWndProc = NULL;
+		wcex.lpfnWndProc = WndProc;		
 		wcex.cbClsExtra = 0;
 		wcex.cbWndExtra = 0;
 		wcex.hInstance = hInstance;

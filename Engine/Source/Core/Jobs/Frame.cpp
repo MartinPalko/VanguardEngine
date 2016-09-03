@@ -38,6 +38,7 @@ namespace Vanguard
 				nextJob = jobs[i].front();
 				jobs[i].pop();
 				queuedJobs[i]--;
+				break;
 			}
 		}
 		jobListMutex.Unlock();

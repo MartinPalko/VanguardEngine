@@ -53,6 +53,7 @@ namespace Vanguard
 			if (name == "")
 				name = "Vanguard Thread " + GetID();
 			SetName(name);
+			SetAffinityMask(affinityMask);
 		}
 	}
 
@@ -87,6 +88,17 @@ namespace Vanguard
 			#pragma warning(pop)
 		}
 		#endif // VANGUARD_WINDOWS
+	}
+
+	void Thread::SetAffinityMask(size_t aAffinityMask)
+	{
+		affinityMask = aAffinityMask;
+#ifdef VANGUARD_WINDOWS
+		if (stdThread)
+		{
+			SetThreadAffinityMask(static_cast<HANDLE>(stdThread->native_handle()), aAffinityMask);
+		}
+#endif
 	}
 
 	String Thread::GetName()

@@ -1,10 +1,10 @@
-#include "juce_core.h"
+#include <thread>
 #include "SystemInfo.h"
 
 namespace Vanguard
 {
 	uint32 SystemInfo::GetNumberOfCores()
 	{
-		return juce::SystemStats::getNumCpus();
+		return std::thread::hardware_concurrency();
 	}
 }

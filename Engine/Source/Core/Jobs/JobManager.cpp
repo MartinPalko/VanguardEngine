@@ -95,6 +95,7 @@ namespace Vanguard
 			for (int i = 0; i < threadsToCreate; i++)
 			{
 				JobWorker* newJobWorker = new JobWorker(i, this);
+				newJobWorker->SetAffinityMask(1 << i);
 				workers.PushBack(newJobWorker);
 				idleWorkers.PushBack(newJobWorker);
 			}

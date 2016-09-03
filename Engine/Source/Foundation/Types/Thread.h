@@ -12,8 +12,9 @@ namespace Vanguard
 	{
 	private:
 		String name;
+		size_t affinityMask;
 		std::thread* stdThread;
-		bool running;		
+		bool running;
 		
 		void ThreadEntry();
 
@@ -30,6 +31,7 @@ namespace Vanguard
 		void Start();		
 
 		void SetName(const String& aThreadName);
+		void SetAffinityMask(size_t aAffinityMask);
 		String GetName();
 		String GetID();
 		void Join();

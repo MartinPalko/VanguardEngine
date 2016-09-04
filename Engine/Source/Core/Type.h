@@ -33,7 +33,7 @@ namespace Vanguard
 		void* CreateInstance() const{ return classFactory->CreateInstance(); }
 
 		String GetTypeName() const{ return className; };
-
+		size_t GetRuntimeHash() const { return runtimeHash; }
 		Type* GetBaseClass() const { return baseClass; }
 		DynamicArray<Type*> GetDerivedClasses() const;
 

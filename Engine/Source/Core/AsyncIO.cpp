@@ -14,6 +14,7 @@ namespace Vanguard
 				delete nextTask;
 				nextTask = GetNextTask();
 			}
+			std::this_thread::sleep_for(std::chrono::microseconds(100));
 		}
 	}
 

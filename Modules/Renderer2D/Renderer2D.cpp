@@ -103,7 +103,7 @@ namespace Vanguard
 		}
 	}
 
-	Job* Renderer2D::StartRenderJob(Frame* aFrame)
+	void Renderer2D::StartRenderJob(Frame* aFrame)
 	{
 		// Compose render job data
 
@@ -144,7 +144,7 @@ namespace Vanguard
 		}
 
 		// Add job to frame & return
-		return aFrame->AddJob([aFrame, jobViews, renderItems]()-> void {RenderJob(aFrame, jobViews, renderItems); });
+		aFrame->AddJob("Render2d", [aFrame, jobViews, renderItems]()-> void {RenderJob(aFrame, jobViews, renderItems); });
 	}
 
 	

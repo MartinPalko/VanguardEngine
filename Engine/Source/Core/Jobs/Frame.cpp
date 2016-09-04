@@ -6,64 +6,42 @@
 
 namespace Vanguard
 {
-	Job* Frame::AddJob(std::function<void()> aEntryPoint, JobPriority::Type aPriority)
+	void Frame::AddJob(String aName, std::function<void()> aEntryPoint)
 	{
-		jobListMutex.Lock();
-		unfinishedJobs[(uint8)aPriority]++;
-		Job* newJob = new Job([aEntryPoint, this, aPriority]()
+		unfinishedJobstMutex.Lock();
+		unfinishedJobs++;
+		unfinishedJobstMutex.Unlock();
+		Job* newJob = new Job(aName, [aEntryPoint, this]()
 		{
 			aEntryPoint(); 
-			jobListMutex.Lock();
-			this->unfinishedJobs[(uint8)aPriority]--;
-			jobListMutex.Unlock();
-
+			unfinishedJobstMutex.Lock();
+			this->unfinishedJobs--;
+			unfinishedJobstMutex.Unlock();
 		});
-		jobs[(uint8)aPriority].push(newJob);
-		queuedJobs[(uint8)aPriority]++;
-		jobListMutex.Unlock();
+
+		if (started)
+		{
+			Core::GetInstance()->GetJobManager()->AddJob(newJob);
+		}
+		else
+		{
+			pendingJobs.PushBack(newJob);
+		}
+	}
+
+	void Frame::Start()
+	{
+		for (int i = 0; i < pendingJobs.Count(); i++)
+		{
+			Core::GetInstance()->GetJobManager()->AddJob(pendingJobs[i]);
+		}
+		pendingJobs.Clear();
 		
-		NotifyJobAdded();
-
-		return newJob;
+		started = true;
 	}
 
-	Job* Frame::GetNextJob()
+	bool Frame::Finished()
 	{
-		jobListMutex.Lock();
-		Job* nextJob = nullptr;
-		for (int i = (uint8)JobPriority::qty - 1; i >= 0; i--)
-		{
-			if (queuedJobs[i] > 0)
-			{
-				nextJob = jobs[i].front();
-				jobs[i].pop();
-				queuedJobs[i]--;
-				break;
-			}
-		}
-		jobListMutex.Unlock();
-		return nextJob;
-	}
-
-	void Frame::NotifyJobAdded()
-	{
-		for (int i = 0; i < jobAddedCallbacks.Count(); i++)
-		{
-			(*jobAddedCallbacks[i])();
-		}
-	}
-
-	void Frame::WaitForJob(Job* aJob)
-	{
-		while (!aJob->finished)
-		{
-			// While we wait for the job to finish, try to execute other jobs.
-			Job* nextJob = GetNextJob();
-			if (nextJob != nullptr)
-			{
-				nextJob->Execute();
-			}
-
-		}
+		return started && unfinishedJobs == 0;
 	}
 }

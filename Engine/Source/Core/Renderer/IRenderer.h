@@ -13,6 +13,6 @@ namespace Vanguard
 		virtual String RendererName() = 0;
 		virtual RenderView* CreateRenderView(Camera* aCamera) { return CreateRenderView(aCamera, Application::GetWindowCreationParams()); };
 		virtual RenderView* CreateRenderView(Camera* aCamera, WindowCreationParameters aWindowParameters) = 0;
-		virtual Job* StartRenderJob(Frame* aFrame) = 0;
+		virtual void StartRenderJob(Frame* aFrame) = 0;
 	};
 }

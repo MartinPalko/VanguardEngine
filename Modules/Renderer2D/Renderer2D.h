@@ -40,6 +40,6 @@ namespace Vanguard
 		// IRenderer Implementation
 		virtual String RendererName() override;
 		virtual RenderView* CreateRenderView(Camera* aCamera, WindowCreationParameters aWindowParameters) override;
-		virtual Job* StartRenderJob(Frame* aFrame) override;
+		virtual void StartRenderJob(Frame* aFrame) override;
 	};
 }

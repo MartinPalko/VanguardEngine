@@ -97,22 +97,18 @@ namespace Vanguard
 	
 	void World::Tick(Frame* aFrame)
 	{
-		// Dispatch render job (before tick, to work on last frame's data)
-		Job* renderJob = Core::GetInstance()->GetPrimaryRenderer()->StartRenderJob(aFrame);
+		{
+			QuickProfiler profiler("Starting render job took ");
+			// Dispatch render job (before tick, to work on last frame's data)
+			Core::GetInstance()->GetPrimaryRenderer()->StartRenderJob(aFrame);
+		}
 
-		DynamicArray<Job*> tickJobs;
-
+		QuickProfiler profiler("Dispatching ticks took ");
 		// Dispatch all ticks to the job system.
 		for (size_t i = 0; i < registeredTicks.Count(); i++)
 		{
 			std::function<void(Frame*)> tickFunction = registeredTicks[i];
-			tickJobs.PushBack(aFrame->AddJob([tickFunction, aFrame]()-> void {tickFunction(aFrame); }));
-		}
-
-		// Wait for all ticks to complete.
-		for (size_t i = 0; i < tickJobs.Count(); i++)
-		{
-			aFrame->WaitForJob(tickJobs[i]);
+			aFrame->AddJob("Subtick", [tickFunction, aFrame]()-> void {tickFunction(aFrame); });
 		}
 	}
 

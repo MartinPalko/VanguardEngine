@@ -128,9 +128,11 @@ namespace Vanguard
 					world->nextFrameNumber++;
 
 					// Update the world
-					frame->AddJob([world, frame]()-> void { world->Tick(frame); });
+					frame->AddJob(world->GetWorldName() + " World Tick", [world, frame]()-> void { world->Tick(frame); });
+					frame->Start();
 
-					jobManager->ProcessFrame(frame);
+					while (!frame->Finished()) {}
+
 					delete frame;
 				}
 			}
@@ -239,12 +241,13 @@ namespace Vanguard
 		Log::Message("Unregistered renderer: " + aRenderer->RendererName(), "Core");
 	}
 
-	IRenderer * Core::GetPrimaryRenderer()
+	IRenderer* Core::GetPrimaryRenderer()
 	{
 		return primaryRenderer;
 	}
-	JobManager * Core::GetJobManager()
+
+	JobManager* Core::GetJobManager()
 	{
-		return nullptr;
+		return jobManager;
 	}
 }

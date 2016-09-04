@@ -1,29 +1,26 @@
 #include "JobManager.h"
 #include "JobWorker.h"
 #include "Job.h"
-#include "Frame.h"
+#include "Core.h"
 
 namespace Vanguard
 {
 	JobWorker* JobManager::GetIdleWorker()
 	{
+		std::lock_guard<std::mutex> lock(idleWorkersMutex);
 		JobWorker* idleThread = nullptr;
-		idleWorkersMutex.Lock();
 		if (idleWorkers.Count() > 0)
 		{
 			idleThread = idleWorkers.Back();
 			idleWorkers.PopBack();
 		}
-		idleWorkersMutex.Unlock();
 		return idleThread;
 	}
 
 	size_t JobManager::GetIdleWorkers()
 	{
-		idleWorkersMutex.Lock();
-		const size_t retval = idleWorkers.Count();
-		idleWorkersMutex.Unlock();
-		return retval;
+		std::lock_guard<std::mutex> lock(idleWorkersMutex);
+		return idleWorkers.Count();
 	}
 
 	JobWorker* JobManager::GetWorker()
@@ -42,47 +39,38 @@ namespace Vanguard
 	{
 		delete aJob;
 		
-		Job* nextJob = currentFrame->GetNextJob();
+		Job* nextJob = GetNextJob();
 		if (nextJob)
 		{
 			aThread->StartJob(nextJob);
 		}
 		else
 		{
-			idleWorkersMutex.Lock();
+			std::lock_guard<std::mutex> lock(idleWorkersMutex);
 			idleWorkers.PushBack(aThread);
-			idleWorkersMutex.Unlock();
 		}
 	}
 
-	void JobManager::KickoffJobs()
+	Job* JobManager::GetNextJob()
 	{
-		while (true)
+		std::lock_guard<std::mutex> lock(jobQueueMutex);
+		Job* nextJob = nullptr;
+		if (queuedJobs > 0)
 		{
-			JobWorker* worker = nullptr;
-			Job* nextJob = nullptr;
-			idleWorkersMutex.Lock();
-			if (idleWorkers.Count() > 0)
-			{
-				nextJob = currentFrame->GetNextJob();
-				if (nextJob)
-				{
-					worker = idleWorkers.Back();
-					idleWorkers.PopBack();
-				}
-			}
-			idleWorkersMutex.Unlock();
-
-			if (!worker)
-			{
-				break;
-			}
-
-			worker->StartJob(nextJob);
+			nextJob = jobs.front();
+			jobs.pop();
+			queuedJobs--;
 		}
+		return nextJob;
 	}
 
 	JobManager::JobManager()
+		: workers()
+		, idleWorkers()
+		, idleWorkersMutex()
+		, jobs()
+		, queuedJobs(0)
+		, jobQueueMutex()
 	{
 		size_t targetThreads = SystemInfo::GetNumberOfCores();
 
@@ -125,42 +113,37 @@ namespace Vanguard
 		workers.Clear();
 	}
 
-	void JobManager::ProcessFrame(Frame* aFrame)
+	void JobManager::AddJob(Job* aJob)
 	{
-		currentFrame = aFrame;
-		currentFrame->processing = true;
-
-
 		if (workers.Count())
 		{
-			KickoffJobs();
-
-			std::function<void()> jobAddedCallbackFunc = std::bind(&JobManager::KickoffJobs, this);
-
-			aFrame->RegisterJobAddedCallback(&jobAddedCallbackFunc);
-
-			// Wait until all jobs have been consumed.
-			while (!aFrame->JobsFinished())
-				std::this_thread::sleep_for(std::chrono::microseconds(1));
-
-			// And again until all threads have become idle.
-			while (GetIdleWorkers() != workers.Count())
-				std::this_thread::sleep_for(std::chrono::microseconds(1));
-
-			// TODO: Make sure this actually works.
-			aFrame->UnregisterJobAddedCallback(&jobAddedCallbackFunc);
+			JobWorker* idleWorker = GetIdleWorker();
+			if (idleWorker)
+			{
+				// Assign the job to an idle worker right away.
+				idleWorker->StartJob(aJob);
+			}
+			else
+			{
+				// Put it to the queue.
+				std::lock_guard<std::mutex> lock(jobQueueMutex);
+				queuedJobs++;
+				jobs.push(aJob);
+			}			
 		}
 		else
 		{
-			// No job threads, execute jobs synchronously.
-			Job* nextJob = currentFrame->GetNextJob();
-			while (nextJob)
-			{
-				nextJob->Execute();
-				nextJob = currentFrame->GetNextJob();
-			}
+			// No job threads, execute job synchronously.
+			aJob->Execute();
+			delete aJob;
+		}
+	}
+
+
+
+
+
 		}
 
-		currentFrame->processing = false;
 	}
 }

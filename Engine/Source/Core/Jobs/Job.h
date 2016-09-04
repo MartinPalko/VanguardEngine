@@ -5,22 +5,27 @@
 namespace Vanguard
 {
 	class Frame;
+
 	class Job
 	{
 		friend class Frame;
 	private:
+		String name;
 		bool running;
 		bool finished;
 
 		std::function<void()> entryPoint;
 
 	public:
-		Job(std::function<void()> aEntryPoint)
+		Job(String aName, std::function<void()> aEntryPoint)
 		{
+			name = aName;
 			running = false;
 			finished = false;
 			entryPoint = aEntryPoint;
 		}
+
+		String GetName() { return name; }
 
 		void Execute()
 		{

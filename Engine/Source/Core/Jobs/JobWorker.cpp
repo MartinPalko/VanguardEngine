@@ -10,18 +10,18 @@ namespace Vanguard
 	{
 		while (!wantsJoin)
 		{
-			if (currentJob == nullptr)
-			{
-				std::this_thread::sleep_for(std::chrono::microseconds(100));
-				//std::this_thread::yield();
-			}
-			else
+			if (currentJob)
 			{
 				currentJob->Execute();
 
 				Job* finishedJob = currentJob;
 				currentJob = nullptr;
-				jobManager->WorkerFinishedJob(this, finishedJob);
+				jobManager->WorkerFinishedJob(this, finishedJob);				
+			}
+			else
+			{
+				//std::this_thread::sleep_for(std::chrono::microseconds(100));
+				std::this_thread::yield();
 			}
 		}
 	}

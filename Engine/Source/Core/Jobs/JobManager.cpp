@@ -2,6 +2,7 @@
 #include "JobWorker.h"
 #include "Job.h"
 #include "Core.h"
+#include "JobProfiler.h"
 
 namespace Vanguard
 {
@@ -72,6 +73,13 @@ namespace Vanguard
 		, queuedJobs(0)
 		, jobQueueMutex()
 	{
+
+#ifdef JOB_PROFILING
+		profiler = new JobProfiler();
+#else
+		profiler = nullptr;
+#endif
+
 		size_t targetThreads = SystemInfo::GetNumberOfCores();
 
 		if (targetThreads > 1)
@@ -96,6 +104,12 @@ namespace Vanguard
 
 	JobManager::~JobManager()
 	{
+		if (profiler)
+		{
+			delete profiler;
+			profiler = nullptr;
+		}
+
 		JoinThreads();
 		for (int i = 0; i < workers.Count(); i++)
 		{
@@ -137,13 +151,5 @@ namespace Vanguard
 			aJob->Execute();
 			delete aJob;
 		}
-	}
-
-
-
-
-
-		}
-
 	}
 }

@@ -9,6 +9,7 @@ namespace Vanguard
 {
 	class Job;
 	class JobWorker;
+	class JobProfiler;
 	class Frame;
 
 	class JobManager
@@ -32,6 +33,7 @@ namespace Vanguard
 		void WorkerFinishedJob(JobWorker* aThread, Job* aJob);
 		Job* GetNextJob();
 
+		JobProfiler* profiler;
 
 	public:
 		JobManager();
@@ -40,5 +42,6 @@ namespace Vanguard
 		void JoinThreads();
 		void AddJob(Job* aJob);
 
+		JobProfiler* GetProfiler() { return profiler; }
 	};
 }

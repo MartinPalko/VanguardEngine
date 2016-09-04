@@ -59,20 +59,12 @@ namespace Vanguard
 			SDL_SetRenderDrawColor(view.renderer, SPLIT_COLOR(view.clearColor));
 			SDL_RenderClear(view.renderer);
 
-			DynamicArray<SpriteComponent*> sprites = world->GetInstances<SpriteComponent>();
-			for (size_t i = 0; i < sprites.Count(); i++)
+			for (size_t i = 0; i < renderItems.Count(); i++)
 			{
-				SpriteComponent* sprite = sprites[i];
-
-				if (!sprite->GetEntity()->Enabled())
-					continue;
-
-				Transform* spriteTransform = sprite->GetEntity()->GetComponent<Transform>();
-
-				Vector2 spriteDimensions = sprite->GetDimensions();
+				const RenderItem& renderItem = renderItems[i];
 
 				// World to camera
-				Vector3 cameraSpace = view.worldToCamera.TransformPoint(spriteTransform->position);
+				Vector3 cameraSpace = view.worldToCamera.TransformPoint(renderItem.position);
 
 				// Projection
 				Vector3 clipSpace = view.projectionMatrix.TransformPoint(cameraSpace);
@@ -88,17 +80,24 @@ namespace Vanguard
 
 				// Screenspace
 				Vector3 screenspace = ndcSpace * Vector3(screenX, screenY, 1);
-				Vector2 finalSize = spriteDimensions * scaleRelativeCamera * screenSize * aspectAdjustment;
+				Vector2 finalSize = renderItem.dimensions * scaleRelativeCamera * screenSize * aspectAdjustment;
 
-				SDL_Rect spriteRect;				
-				spriteRect.w = finalSize.x;
-				spriteRect.h = finalSize.y;
-				spriteRect.x = screenspace.x - spriteRect.w / 2;
-				spriteRect.y = screenspace.y - spriteRect.h / 2;
+				SDL_Rect screenRect;				
+				screenRect.w = finalSize.x;
+				screenRect.h = finalSize.y;
+				screenRect.x = screenspace.x - screenRect.w / 2;
+				screenRect.y = screenspace.y - screenRect.h / 2;
 
-				SDL_SetRenderDrawColor(view.renderer, SPLIT_COLOR(sprite->GetColor()));
+				SDL_SetRenderDrawColor(view.renderer, SPLIT_COLOR(renderItem.color));
 
-				SDL_RenderFillRect(view.renderer, &spriteRect);
+				switch (renderItem.type)
+				{
+				case ERenderItemType::rectangle:
+					SDL_RenderFillRect(view.renderer, &screenRect);
+				default:
+					break;
+				}
+				
 			}
 			SDL_RenderPresent(view.renderer);
 		}
@@ -132,15 +131,16 @@ namespace Vanguard
 		for (int i = 0; i < sprites.Count(); i++)
 		{
 			SpriteComponent* sprite = sprites[i];
-
-			RenderItem item = {
-				ERenderItemType::rectangle,
-				sprite->GetColor(),
-				sprite->GetDimensions(),
-				sprite->GetEntity()->GetComponent<Transform>()->position
-			};
-
-			renderItems.PushBack(item);
+			if (sprite->GetEntity()->Enabled())
+			{
+				RenderItem item = {
+					ERenderItemType::rectangle,
+					sprite->GetColor(),
+					sprite->GetDimensions(),
+					sprite->GetEntity()->GetComponent<Transform>()->position
+				};
+				renderItems.PushBack(item);
+			}
 		}
 
 		// Add job to frame & return

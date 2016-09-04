@@ -7,12 +7,12 @@ namespace Vanguard
 {
 	World::World(String aWorldName)
 		: worldName(aWorldName)
-		, entities()
 		, objects()
+		, objectTypemap()
 		, nextFrameNumber(0)
 		, lastTickStartTime(0.0)
-		, minimumTickDelta(1.0 / 240.0) // 60 FPS
-		, maximumTickDelta(1.0 / 15.0) // 15 FPS
+		, minimumTickDelta(0) // 60 FPS
+		, maximumTickDelta(5) // 15 FPS
 		, registeredTicks()
 	{
 	}
@@ -27,25 +27,14 @@ namespace Vanguard
 		}
 	}
 
-	template<typename T, typename... U>
-	size_t getAddress(std::function<T(U...)> f)
+	void World::RegisterTick(Entity* aActor)
 	{
-		typedef T(fnType)(U...);
-		fnType ** fnPointer = f.template target<fnType*>();
-		return (size_t)*fnPointer;
+		registeredTicks.PushBack(aActor);
 	}
 
-	void World::RegisterTick(TickFunction aTickFunction)
+	void World::UnregisterTick(Entity* aActor)
 	{
-		registeredTicks.PushBack(aTickFunction);
-	}
-
-	void World::UnregisterTick(TickFunction aTickFunction)
-	{
-		//TODO: Use a custom delegate class that supports equality comparison, so we can use .Remove()
-		for (size_t i = 0; i < registeredTicks.Count(); i++)
-			if (getAddress(aTickFunction) == getAddress(registeredTicks[i]))
-				registeredTicks.RemoveAt(i);
+		registeredTicks.Remove(aActor);
 	}
 
 	Entity* World::SpawnEntity(const String & aEntityType)
@@ -71,45 +60,55 @@ namespace Vanguard
 		}
 
 		Entity* newEntity = static_cast<Entity*>(aRequestedClass->CreateInstance());
-
-		newEntity->world = this;
-		objects.PushBack(newEntity);
-		entities.PushBack(newEntity);
+		RegisterObject(newEntity);
 
 		for (int i = 0; i < newEntity->GetNumComponents(); i++)
 		{
 			Component* component = newEntity->GetComponent(i);
-			component->world = this;
-			objects.PushBack(component);
+			RegisterObject(component);
 		}
 
-		if (aRequestedClass->IsA(Type::GetType<Actor>()))
+		if (newEntity->tickEnabled && !newEntity->tickRegistered)
 		{
-			Actor* newActor = static_cast<Actor*>(newEntity);
-			if (newActor->tickEnabled && !newActor->tickRegistered)
-			{
-				newActor->EnableTick();
-			}
+			newEntity->EnableTick();
 		}
 
 		return newEntity;
 	}
+
+	DynamicArray<VanguardObject*> World::GetInstances(Type* aType, bool aIncludeInherited) const
+	{
+		DynamicArray<VanguardObject*> found = objectTypemap.at(aType->GetRuntimeHash());
+
+		if (aIncludeInherited)
+		{
+			DynamicArray<Type*> derivedClasses = aType->GetDerivedClasses();
+			for (int i = 0; i < derivedClasses.Count(); i++)
+			{
+				found += GetInstances(derivedClasses[i], true);
+			}
+		}
+		return found;
+	}
 	
 	void World::Tick(Frame* aFrame)
 	{
-		{
-			QuickProfiler profiler("Starting render job took ");
-			// Dispatch render job (before tick, to work on last frame's data)
-			Core::GetInstance()->GetPrimaryRenderer()->StartRenderJob(aFrame);
-		}
+		// Start render job before ticks, to render last frame's data.
+		Core::GetInstance()->GetPrimaryRenderer()->StartRenderJob(aFrame);
 
-		QuickProfiler profiler("Dispatching ticks took ");
 		// Dispatch all ticks to the job system.
 		for (size_t i = 0; i < registeredTicks.Count(); i++)
 		{
-			std::function<void(Frame*)> tickFunction = registeredTicks[i];
-			aFrame->AddJob("Subtick", [tickFunction, aFrame]()-> void {tickFunction(aFrame); });
+			Entity* entity = registeredTicks[i];
+			aFrame->AddJob(entity->GetClassInfo()->GetTypeName() + " Tick" , [entity, aFrame]()-> void {entity->Tick(aFrame); });
 		}
+	}
+
+	void World::RegisterObject(VanguardObject * aObject)
+	{
+		aObject->world = this;
+		objects.PushBack(aObject);
+		objectTypemap[aObject->GetClassInfo()->GetRuntimeHash()].PushBack(aObject);
 	}
 
 }

@@ -9,6 +9,8 @@ namespace Vanguard
 
 	Entity::Entity() : VanguardObject()
 		, enabled(true)
+		, tickEnabled (false)
+		, tickRegistered (false)
 	{
 	}
 
@@ -51,13 +53,32 @@ namespace Vanguard
 		newComponent->entity = this;
 		if (GetWorld())
 		{
-			newComponent->world = GetWorld();
-			GetWorld()->objects.PushBack(newComponent);
+			world->RegisterObject(newComponent);
 		}
 		components.PushBack(newComponent);
 
 		ComponentAdded(newComponent);
 
 		return newComponent;
+	}
+
+	void Entity::EnableTick()
+	{
+		if (GetWorld())
+		{
+			GetWorld()->RegisterTick(this);
+			tickRegistered = true;
+		}
+		tickEnabled = true;
+	}
+
+	void Entity::DisableTick()
+	{
+		if (GetWorld())
+		{
+			GetWorld()->UnregisterTick(this);
+			tickRegistered = false;
+		}
+		tickEnabled = false;
 	}
 }

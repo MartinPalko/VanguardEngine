@@ -18,13 +18,17 @@ namespace Vanguard
 
 	private:
 		String worldName;
-		DynamicArray<Entity*> entities;
+
+		// Stores all objects in the world, in a contiguous array for fast iteration.
 		DynamicArray<VanguardObject*> objects;
+		// Stores all object in world, sorted by type.
+		std::map<size_t, DynamicArray<VanguardObject*>> objectTypemap;
+
 		uint32 nextFrameNumber;
 		Timespan lastTickStartTime;
 		Timespan minimumTickDelta;
 		Timespan maximumTickDelta;
-		DynamicArray<TickFunction> registeredTicks; //TODO: Use a linkedlist for the registeredTicks	
+		DynamicArray<Entity*> registeredTicks; //TODO: Use a linkedlist for the registeredTicks
 
 	public:
 		World(String aWorldName);
@@ -32,8 +36,8 @@ namespace Vanguard
 
 		String GetWorldName(){ return worldName; }
 
-		void RegisterTick(TickFunction aTickFunction);
-		void UnregisterTick(TickFunction aTickFunction);
+		void RegisterTick(Entity* aActor);
+		void UnregisterTick(Entity* aActor);
 
 		template <class T>		
 		T* SpawnEntity()
@@ -51,24 +55,22 @@ namespace Vanguard
 		Entity* SpawnEntity(const String& aEntityType);
 		Entity* SpawnEntity(Type* aRequestedClass);
 
-		template <class T> DynamicArray<T*> GetInstances() const
+		DynamicArray<VanguardObject*> GetInstances (Type* aType, bool aIncludeInherited = false) const;
+		template <class T> DynamicArray<T*> GetInstances(bool aIncludeInherited = false) const
 		{
-			// TODO: Store all types in this world in a hashtable for quick retreival.
-			DynamicArray<T*> found;
-			for (int i = 0; i < objects.Count(); i++)
+			// Can't just cast, have to do an actual copy over
+			DynamicArray<VanguardObject*> objectArray(GetInstances(Type::GetType<T>()));
+			DynamicArray<T*> returnArray(objectArray.Count());
+			for (int i = 0; i < objectArray.Count(); i++)
 			{
-				VanguardObject* o = objects[i];
-
-				if (o->GetClassInfo()->IsA(Type::GetType<T>()))
-				{
-					found.PushBack((T*)o);
-				}
+				returnArray.PushBack((T*)objectArray[i]);
 			}
-			return found;
+			return returnArray;
 		}
 
 	protected:
 		virtual void Tick(Frame* aFrame);
+		void RegisterObject(VanguardObject* aObject);
 
 	};
 }

@@ -2,6 +2,8 @@
 #include "VanguardObject.h"
 #include "Log.h"
 #include "Component.h"
+#include "World.h"
+#include "Jobs/Frame.h"
 
 namespace Vanguard
 {
@@ -11,6 +13,8 @@ namespace Vanguard
 
 	class CORE_API Entity : public VanguardObject
 	{
+		friend World;
+
 		TYPE_DECLARATION(Entity, VanguardObject)
 
 	private:
@@ -19,6 +23,9 @@ namespace Vanguard
 		Entity* parent = nullptr;
 		DynamicArray<Entity*> children;
 		bool enabled;
+
+		bool tickEnabled;
+		bool tickRegistered;
 
 	public:
 		Entity();
@@ -45,5 +52,10 @@ namespace Vanguard
 		void Enable() { enabled = true; }
 		void Disable() { enabled = false; }
 		bool Enabled() { return enabled; }
+
+		void EnableTick();
+		void DisableTick();
+		virtual void Tick(Frame* aFrame) {}
+		bool TickEnabled() { return tickEnabled; }
 	};
 }

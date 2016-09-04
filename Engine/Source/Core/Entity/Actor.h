@@ -1,30 +1,19 @@
 #pragma once
 #include "Entity.h"
 #include "Transform.h"
-#include "World.h"
 
 namespace Vanguard
 {
 	class CORE_API Actor : public Entity
 	{
-		friend World;
 		TYPE_DECLARATION(Actor, Entity)
 	private:
-		TickFunction tickFunction;
-		bool tickEnabled;
-		bool tickRegistered;
 		Transform* transform;
 		Box localBounds;
 	public:
-		Actor();
-		
-		void EnableTick();
-		void DisableTick();
+		Actor();	
 
 		Transform* GetTransform() { return transform; }
-
-		virtual void Tick(Frame* aFrame) {}
-		bool TickEnabled() { return tickEnabled; }
 
 		void UpdateBounds();
 		Box GetLocalBounds() { return localBounds; }

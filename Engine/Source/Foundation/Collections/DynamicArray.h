@@ -37,6 +37,11 @@ namespace Vanguard
 			data.push_back(aItem);
 		}
 
+		inline void Concatenate(const DynamicArray& other)
+		{
+			data.insert( data.end(), other.data.begin(), other.data.end());
+		}
+
 		inline void PopBack()
 		{
 			data.pop_back();
@@ -91,13 +96,18 @@ namespace Vanguard
 		}
 
 		//operators
-		inline DynamicArray& operator=(const DynamicArray& others)
+		inline DynamicArray& operator=(const DynamicArray& other)
 		{
-			if (this != &others)
+			if (this != &other)
 			{
-				data = others.data;
+				data = other.data;
 			}
 			return *this;
+		}
+
+		inline void operator+=(const DynamicArray& other)
+		{
+			Concatenate(other);
 		}
 
 		inline T operator[] (const size_t index) const

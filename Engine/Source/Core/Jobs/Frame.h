@@ -20,8 +20,7 @@ namespace Vanguard
 	private:
 		bool started;
 		DynamicArray<Job*> pendingJobs;
-		Mutex unfinishedJobstMutex;
-		size_t unfinishedJobs;
+		std::atomic<size_t> unfinishedJobs;
 	public:
 		const int frameNumber;
 		const Timespan deltaTime;

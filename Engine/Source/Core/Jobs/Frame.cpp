@@ -8,15 +8,11 @@ namespace Vanguard
 {
 	void Frame::AddJob(String aName, std::function<void()> aEntryPoint)
 	{
-		unfinishedJobstMutex.Lock();
 		unfinishedJobs++;
-		unfinishedJobstMutex.Unlock();
 		Job* newJob = new Job(aName, [aEntryPoint, this]()
 		{
 			aEntryPoint(); 
-			unfinishedJobstMutex.Lock();
 			this->unfinishedJobs--;
-			unfinishedJobstMutex.Unlock();
 		});
 
 		if (started)

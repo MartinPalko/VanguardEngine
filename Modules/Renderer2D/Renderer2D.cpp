@@ -106,7 +106,6 @@ namespace Vanguard
 	void Renderer2D::StartRenderJob(Frame* aFrame)
 	{
 		// Compose render job data
-
 		DynamicArray<JobRenderView> jobViews(renderViews.Count());
 		for (int i = 0; i < renderViews.Count(); i++)
 		{
@@ -126,11 +125,15 @@ namespace Vanguard
 			jobViews.PushBack(jobView);
 		}
 
-		DynamicArray<SpriteComponent*> sprites = aFrame->world->GetInstances<SpriteComponent>();
+		QuickProfiler prof("finding sprites ");
+		DynamicArray<VanguardObject*> sprites = aFrame->world->GetInstances(Type::GetType<SpriteComponent>());
+		prof.End();
 		DynamicArray<RenderItem> renderItems(sprites.Count());
+		QuickProfiler prof3("copying to sprites ");
+
 		for (int i = 0; i < sprites.Count(); i++)
 		{
-			SpriteComponent* sprite = sprites[i];
+			SpriteComponent* sprite = (SpriteComponent*)sprites[i];
 			if (sprite->GetEntity()->Enabled())
 			{
 				RenderItem item = {
@@ -142,6 +145,8 @@ namespace Vanguard
 				renderItems.PushBack(item);
 			}
 		}
+		prof3.End();
+
 
 		// Add job to frame & return
 		aFrame->AddJob("Render2d", [aFrame, jobViews, renderItems]()-> void {RenderJob(aFrame, jobViews, renderItems); });

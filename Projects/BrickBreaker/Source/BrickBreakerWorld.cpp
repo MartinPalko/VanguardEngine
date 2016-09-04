@@ -99,9 +99,9 @@ namespace BrickBreaker
 	void BrickBreakerWorld::Tick(Vanguard::Frame* aFrame)
 	{
 		// Update Gainput
-		int displayX, displayY;
+		/*int displayX, displayY;
 		Application::GetWindowSize(gameWindow, displayX, displayY);
-		inputManager->SetDisplaySize(displayX, displayY);
+		inputManager->SetDisplaySize(displayX, displayY);*/
 		inputManager->Update(aFrame->deltaTime.InMilliseconds());
 
 		//DEBUG_LOG("FPS: " + String::FromFloat(1.0f / aFrame->deltaTime.InSeconds()));

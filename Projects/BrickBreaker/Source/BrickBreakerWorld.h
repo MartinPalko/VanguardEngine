@@ -19,7 +19,6 @@ namespace BrickBreaker
 	public:
 		const static Vector2 PlayAreaSize;
 	private:
-		WindowHandle gameWindow;
 		RenderView* playerView;
 		Paddle* paddle;
 		Ball* ball;

@@ -27,6 +27,35 @@
 
 namespace Vanguard
 {
+	class QuickProfiler
+	{
+		Timespan startTime;
+		String message;
+		bool ended;
+
+	public:
+		QuickProfiler(String aMessage)
+		{
+			startTime = Timespan::GetElapsedSystemTime();
+			message = aMessage;
+			ended = false;
+		}
+
+		void End()
+		{
+			Timespan endTime = Timespan::GetElapsedSystemTime();
+			Timespan profileTime = endTime - startTime;
+			Log::Message(message + String::FromFloat(profileTime.InSeconds() * 1000.0) + "ms");
+			ended = true;
+		}
+
+		~QuickProfiler()
+		{
+			if (!ended)
+				End();
+		}
+	};
+
 	enum class CoreState : uint8
 	{
 		NotInitialized = 0,

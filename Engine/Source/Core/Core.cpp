@@ -5,6 +5,7 @@
 
 #include "ModuleManager.h"
 #include "Type.h"
+#include "Jobs/JobProfiler.h"
 
 VANGUARD_DECLARE_CORE_IMP(Vanguard::Core)
 
@@ -127,11 +128,19 @@ namespace Vanguard
 					world->lastTickStartTime = currentTime;
 					world->nextFrameNumber++;
 
+					if (world->nextFrameNumber == 20)
+					{
+						jobManager->GetProfiler()->StartProfiling();
+					}
+
 					// Update the world
 					frame->AddJob(world->GetWorldName() + " World Tick", [world, frame]()-> void { world->Tick(frame); });
 					frame->Start();
 
-					while (!frame->Finished()) {}
+					while (!frame->Finished()) { std::this_thread::yield(); }
+
+					if (jobManager->GetProfiler()->IsProfiling())
+						jobManager->GetProfiler()->EndProfiling(Directories::GetVanguardRootDirectory().GetRelative("Jobs.json"));
 
 					delete frame;
 				}

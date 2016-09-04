@@ -20,22 +20,21 @@ namespace Vanguard
 
 	Component* Entity::GetComponent(Type* aComponentType)
 	{
-		Type* componentType = Type::GetType<Component>();
+		Component* foundComponent = componentTypeMap[aComponentType->GetRuntimeHash()];
 
-		if (!aComponentType->IsA(componentType))
+		if (!foundComponent)
 		{
-			Log::Warning("Cannot add component. Class of type " + aComponentType->GetTypeName() + " does not derive from Component");
-			return nullptr;
+			// Check inherited classes.
+			DynamicArray<Type*> derivedClasses = aComponentType->GetDerivedClasses();
+			for (int i = 0; i < derivedClasses.Count(); i++)
+			{
+				foundComponent = GetComponent(derivedClasses[i]);
+				if (foundComponent)
+					break;
+			}
 		}
 
-		// TODO: Store components in a hashmap by type.
-		for (size_t i = 0; i < GetNumComponents(); i++)
-		{
-			if (components[i]->GetClassInfo()->IsA(aComponentType))
-				return (Component*)components[i];
-		}
-
-		return nullptr;
+		return foundComponent;
 	}
 
 	Component* Entity::AddComponent(Type* aComponentType)
@@ -56,6 +55,7 @@ namespace Vanguard
 			world->RegisterObject(newComponent);
 		}
 		components.PushBack(newComponent);
+		componentTypeMap[aComponentType->GetRuntimeHash()] = newComponent;
 
 		ComponentAdded(newComponent);
 

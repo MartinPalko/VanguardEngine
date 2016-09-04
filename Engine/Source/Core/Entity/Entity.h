@@ -19,6 +19,7 @@ namespace Vanguard
 
 	private:
 		DynamicArray<Component*> components;
+		std::map<size_t, Component*> componentTypeMap;
 
 		Entity* parent = nullptr;
 		DynamicArray<Entity*> children;

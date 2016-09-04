@@ -9,5 +9,7 @@ namespace BrickBreaker
 	public:
 		Brick();
 
+		virtual void Tick(Frame* aFrame) override;
+
 	};
 }

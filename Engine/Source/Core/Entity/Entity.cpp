@@ -64,12 +64,15 @@ namespace Vanguard
 
 	void Entity::EnableTick()
 	{
-		if (GetWorld())
+		if (!tickRegistered)
 		{
-			GetWorld()->RegisterTick(this);
-			tickRegistered = true;
+			if (GetWorld())
+			{
+				GetWorld()->RegisterTick(this);
+				tickRegistered = true;
+			}
+			tickEnabled = true;
 		}
-		tickEnabled = true;
 	}
 
 	void Entity::DisableTick()

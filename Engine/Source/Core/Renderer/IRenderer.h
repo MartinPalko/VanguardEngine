@@ -1,5 +1,5 @@
 #pragma once
-#include "Core_common.h"
+#include "Core_Common.h"
 #include "RenderView.h"
 #include "Jobs/Job.h"
 #include "Application/Application.h"

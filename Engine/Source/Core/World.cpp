@@ -125,6 +125,29 @@ namespace Vanguard
 		delete[] jobs;
 	}
 
+	FrameJob* World::MakeTickJob(Frame* aFrame)
+	{
+		class WorldTickJob : public FrameJob
+		{
+		protected:
+			World* world;
+
+		public:
+			WorldTickJob(const String& aName, Frame* aFrame, World* aWorld) : FrameJob(aName, aFrame)
+			{
+				world = aWorld;
+			}
+
+		protected:
+			virtual void DoJob() override
+			{
+				world->Tick(frame);
+			}
+		};
+
+		return new WorldTickJob(worldName + " Tick", aFrame, this);
+	}
+
 	void World::RegisterObject(VanguardObject * aObject)
 	{
 		aObject->world = this;

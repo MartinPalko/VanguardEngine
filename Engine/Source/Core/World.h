@@ -5,10 +5,12 @@
 namespace Vanguard
 {
 	class Frame;
+	class FrameJob;
 }
 
 namespace Vanguard
 {
+
 	typedef std::function<void(Frame*)> TickFunction;
 
 	class CORE_API World
@@ -70,7 +72,7 @@ namespace Vanguard
 
 	protected:
 		virtual void Tick(Frame* aFrame);
+		FrameJob* MakeTickJob(Frame* aFrame);
 		void RegisterObject(VanguardObject* aObject);
-
 	};
 }

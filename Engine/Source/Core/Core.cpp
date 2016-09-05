@@ -133,26 +133,8 @@ namespace Vanguard
 						jobManager->GetProfiler()->StartProfiling();
 					}
 
-					class WorldTickJob : public FrameJob
-					{
-					protected:
-						World* world;
-
-					public:
-						WorldTickJob(const String& aName, Frame* aFrame, World* aWorld) : FrameJob(aName, aFrame)
-						{
-							world = aWorld;
-						}
-
-					protected:
-						virtual void DoJob() override
-						{
-							world->Tick(frame);
-						}
-					};
-
 					// Update the world
-					frame->AddJob(new WorldTickJob(world->GetWorldName() + " World Tick", frame, world));
+					frame->AddJob(world->MakeTickJob(frame));
 					frame->Start();
 
 					while (!frame->Finished()) { std::this_thread::yield(); }

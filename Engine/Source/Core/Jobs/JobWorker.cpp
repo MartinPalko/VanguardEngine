@@ -11,11 +11,13 @@ namespace Vanguard
 	{
 		while (!wantsJoin)
 		{
-			if (currentJob)
+			if (jobManager->jobs.wait_dequeue_timed(currentJob, std::chrono::milliseconds(1)))
 			{
+				workerRunning = true;
 #ifdef JOB_PROFILING
 				Timespan startTime = Timespan::GetElapsedSystemTime();
 #endif
+
 				currentJob->Execute();
 
 #ifdef JOB_PROFILING
@@ -27,22 +29,9 @@ namespace Vanguard
 #endif
 				Job* finishedJob = currentJob;
 				currentJob = nullptr;
-				jobManager->WorkerFinishedJob(this, finishedJob);				
+				jobManager->WorkerFinishedJob(this, finishedJob);
+				workerRunning = false;
 			}
-			else
-			{
-				//std::this_thread::sleep_for(std::chrono::microseconds(100));
-				std::this_thread::yield();
-			}
-		}
-	}
-
-	void JobWorker::StartJob(Job* aJob)
-	{
-		currentJob = aJob;
-		if (!IsRunning())
-		{
-			Start();
 		}
 	}
 }

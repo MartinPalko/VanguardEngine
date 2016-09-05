@@ -3,36 +3,58 @@
 #include "JobEnums.h"
 
 namespace Vanguard
-{
+{	
 	class Frame;
 
 	class Job
 	{
-		friend class Frame;
+		// TODO: Add callbacks when job finishes.
+		friend class JobManager;
+		friend class JobWorker;
+
 	private:
 		String name;
 		bool running;
 		bool finished;
 
-		std::function<void()> entryPoint;
-
 	public:
-		Job(String aName, std::function<void()> aEntryPoint)
+		Job(const String& aName)
 		{
 			name = aName;
 			running = false;
 			finished = false;
-			entryPoint = aEntryPoint;
 		}
 
 		String GetName() { return name; }
 
-		void Execute()
+	protected:
+		// Only called by JobManager and/or JobWorker
+		virtual void Execute()
 		{
 			running = true;
-			entryPoint();
+			DoJob();
 			running = false;
 			finished = true;
+		}
+
+		virtual void DoJob() = 0;
+	};
+
+	class LambdaJob : public Job
+	{
+	private:
+		std::function<void()> entryPoint;
+
+	protected:
+		virtual void DoJob() override
+		{
+			entryPoint();
+		}
+
+	public:
+		LambdaJob(const String& aName, std::function<void()> aEntryPoint) : Job(aName)
+		{
+			entryPoint = aEntryPoint;
 		}
 	};
 }

@@ -2,6 +2,8 @@
 #include "Core_Common.h"
 #include "JobManager.h"
 
+#include "ThirdParty/ConcurrentQueue/blockingconcurrentqueue.h"
+
 // Comment out to disable job profiling.
 #define JOB_PROFILING
 
@@ -22,9 +24,8 @@ namespace Vanguard
 		};
 
 	private:
-		DynamicArray<Record> records;
-		Mutex recordMutex;
-		bool profiling;
+		moodycamel::BlockingConcurrentQueue<Record> records;
+		std::atomic<bool> profiling;
 		Timespan profilingStartTime;
 
 		void AddRecord(const Record& aRecord);

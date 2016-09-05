@@ -6,23 +6,24 @@
 
 namespace Vanguard
 {
-	void Frame::AddJob(String aName, std::function<void()> aEntryPoint)
+	void Frame::AddJob(FrameJob* aJob)
 	{
 		unfinishedJobs++;
-		Job* newJob = new Job(aName, [aEntryPoint, this]()
-		{
-			aEntryPoint(); 
-			this->unfinishedJobs--;
-		});
 
 		if (started)
 		{
-			Core::GetInstance()->GetJobManager()->AddJob(newJob);
+			Core::GetInstance()->GetJobManager()->AddJob(aJob);
 		}
 		else
 		{
-			pendingJobs.PushBack(newJob);
+			pendingJobs.PushBack(aJob);
 		}
+	}
+
+	void Frame::AddJobs(FrameJob** aJobs, size_t aNumJobs)
+	{
+		unfinishedJobs += aNumJobs;
+		Core::GetInstance()->GetJobManager()->AddJobs((Job**)aJobs, aNumJobs);
 	}
 
 	void Frame::Start()

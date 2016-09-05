@@ -16,7 +16,7 @@ namespace Vanguard
 	private:
 		class JobManager* jobManager;
 		Job* currentJob;		
-		bool workerRunning;
+		std::atomic<bool> workerRunning;
 		uint16 index;
 
 		virtual void Run() override;
@@ -30,8 +30,6 @@ namespace Vanguard
 		{
 		}
 
-		bool IsIdle() { return currentJob == nullptr; }
-
-		void StartJob(Job* aJob);
+		bool IsIdle() { return !workerRunning; }
 	};
 }

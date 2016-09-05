@@ -5,9 +5,10 @@ namespace Vanguard
 {
 	void JobProfiler::AddRecord(const Record& aRecord)
 	{
-		recordMutex.Lock();
-		records.PushBack(aRecord);
-		recordMutex.Unlock();
+		if (profiling)
+		{
+			records.enqueue(aRecord);
+		}
 	}
 
 	void JobProfiler::StartProfiling()
@@ -21,16 +22,20 @@ namespace Vanguard
 		profiling = false;
 
 		String outputString = "[";
-		recordMutex.Lock();
-		for (int i = 0; i < records.Count(); i++)
+		
+		const size_t maxDequeRecords = 128;
+		Record dequeuedRecords[128];
+		const size_t dequeuedRecordsCount = records.try_dequeue_bulk(dequeuedRecords, maxDequeRecords);
+
+		for (int i = 0; i < dequeuedRecordsCount; i++)
 		{
-			Record& record = records[i];
+			Record& record = dequeuedRecords[i];
 
 			if (i != 0)
 				outputString += ", ";
 
-			int startTime = (record.startTime - profilingStartTime).InSeconds() * 1000.0f * 1000.0f;
-			int endTime = (record.endTime - profilingStartTime).InSeconds() * 1000.0f * 1000.0f;
+			int startTime = (record.startTime - profilingStartTime).InSeconds() * 1000.0 * 1000.0 * 1000.0;
+			int endTime = (record.endTime - profilingStartTime).InSeconds() * 1000.0 * 1000.0 * 1000.0;
 
 			outputString += "{\n";
 			outputString += "\"Thread\": \"Worker " + String::FromInt(record.thread) + "\",\n";
@@ -39,8 +44,6 @@ namespace Vanguard
 			outputString += "\"End\": " + String::FromInt(endTime) + "\n";
 			outputString += "}";
 		}
-		records.Clear();
-		recordMutex.Unlock();
 
 		outputString += "]";
 

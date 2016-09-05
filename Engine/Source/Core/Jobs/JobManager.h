@@ -4,6 +4,7 @@
 
 #include "Foundation.h"
 #include "JobEnums.h"
+#include "ThirdParty/ConcurrentQueue/blockingconcurrentqueue.h"
 
 namespace Vanguard
 {
@@ -19,19 +20,11 @@ namespace Vanguard
 
 	private:
 		DynamicArray<JobWorker*> workers;
-		DynamicArray<JobWorker*> idleWorkers;
-		std::mutex idleWorkersMutex;
+		moodycamel::BlockingConcurrentQueue<Job*> jobs;
 
-		std::queue<Job*> jobs;
-		size_t queuedJobs;
-		std::mutex jobQueueMutex;
-
-		JobWorker* GetIdleWorker();
-		size_t GetIdleWorkers();
 		JobWorker* GetWorker();
 
 		void WorkerFinishedJob(JobWorker* aThread, Job* aJob);
-		Job* GetNextJob();
 
 		JobProfiler* profiler;
 
@@ -41,6 +34,7 @@ namespace Vanguard
 
 		void JoinThreads();
 		void AddJob(Job* aJob);
+		void AddJobs(Job** aJobs, size_t aNumJobs);
 
 		JobProfiler* GetProfiler() { return profiler; }
 	};

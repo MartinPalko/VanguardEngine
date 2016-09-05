@@ -12,11 +12,12 @@
 namespace Vanguard
 {
 	class World;
-	class Job;
 
 	class CORE_API Frame
 	{
 		friend class JobManager;
+		friend class FrameJob;
+
 	private:
 		bool started;
 		DynamicArray<Job*> pendingJobs;
@@ -39,8 +40,28 @@ namespace Vanguard
 		{
 		}
 
-		void AddJob(String aName, std::function<void()> aEntryPoint);
+		void AddJob(FrameJob* aJob);
+		void AddJobs(FrameJob** aJobs, size_t aNumJobs);
 		void Start();
 		bool Finished();
+	};
+
+	class FrameJob : public Job
+	{
+	protected:
+		Frame* frame;
+
+	public:
+		FrameJob(const String& aName, Frame* aFrame) : Job(aName)
+		{
+			frame = aFrame;
+		}
+
+	protected:
+		virtual void Execute()
+		{
+			Job::Execute();
+			frame->unfinishedJobs--;
+		}
 	};
 }

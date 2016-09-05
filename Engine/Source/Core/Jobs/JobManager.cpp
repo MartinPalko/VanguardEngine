@@ -6,24 +6,6 @@
 
 namespace Vanguard
 {
-	JobWorker* JobManager::GetIdleWorker()
-	{
-		std::lock_guard<std::mutex> lock(idleWorkersMutex);
-		JobWorker* idleThread = nullptr;
-		if (idleWorkers.Count() > 0)
-		{
-			idleThread = idleWorkers.Back();
-			idleWorkers.PopBack();
-		}
-		return idleThread;
-	}
-
-	size_t JobManager::GetIdleWorkers()
-	{
-		std::lock_guard<std::mutex> lock(idleWorkersMutex);
-		return idleWorkers.Count();
-	}
-
 	JobWorker* JobManager::GetWorker()
 	{
 		const String currentThreadID = Thread::CurrentThreadID();
@@ -39,39 +21,11 @@ namespace Vanguard
 	void JobManager::WorkerFinishedJob(JobWorker* aThread, Job* aJob)
 	{
 		delete aJob;
-		
-		Job* nextJob = GetNextJob();
-		if (nextJob)
-		{
-			aThread->StartJob(nextJob);
-		}
-		else
-		{
-			std::lock_guard<std::mutex> lock(idleWorkersMutex);
-			idleWorkers.PushBack(aThread);
-		}
-	}
-
-	Job* JobManager::GetNextJob()
-	{
-		std::lock_guard<std::mutex> lock(jobQueueMutex);
-		Job* nextJob = nullptr;
-		if (queuedJobs > 0)
-		{
-			nextJob = jobs.front();
-			jobs.pop();
-			queuedJobs--;
-		}
-		return nextJob;
 	}
 
 	JobManager::JobManager()
 		: workers()
-		, idleWorkers()
-		, idleWorkersMutex()
 		, jobs()
-		, queuedJobs(0)
-		, jobQueueMutex()
 	{
 
 #ifdef JOB_PROFILING
@@ -93,7 +47,7 @@ namespace Vanguard
 				JobWorker* newJobWorker = new JobWorker(i, this);
 				newJobWorker->SetAffinityMask(1 << i);
 				workers.PushBack(newJobWorker);
-				idleWorkers.PushBack(newJobWorker);
+				newJobWorker->Start();
 			}
 		}
 		else
@@ -131,25 +85,32 @@ namespace Vanguard
 	{
 		if (workers.Count())
 		{
-			JobWorker* idleWorker = GetIdleWorker();
-			if (idleWorker)
-			{
-				// Assign the job to an idle worker right away.
-				idleWorker->StartJob(aJob);
-			}
-			else
-			{
-				// Put it to the queue.
-				std::lock_guard<std::mutex> lock(jobQueueMutex);
-				queuedJobs++;
-				jobs.push(aJob);
-			}			
+			// Put it to the queue.
+			jobs.enqueue(aJob);
 		}
 		else
 		{
 			// No job threads, execute job synchronously.
 			aJob->Execute();
 			delete aJob;
+		}
+	}
+
+	void JobManager::AddJobs(Job** aJobs, size_t aNumJobs)
+	{
+		if (workers.Count())
+		{
+			// Put them to the queue.
+			jobs.enqueue_bulk(aJobs, aNumJobs);
+		}
+		else
+		{
+			// No job threads, execute job synchronously.
+			for (size_t i = 0; i < aNumJobs; i++)
+			{
+				aJobs[i]->Execute();
+				delete aJobs[i];
+			}
 		}
 	}
 }

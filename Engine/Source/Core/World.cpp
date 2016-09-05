@@ -12,7 +12,7 @@ namespace Vanguard
 		, nextFrameNumber(0)
 		, lastTickStartTime(0.0)
 		, minimumTickDelta(0) // 60 FPS
-		, maximumTickDelta(5) // 15 FPS
+		, maximumTickDelta(1.0 / 15.0) // 15 FPS
 		, registeredTicks()
 	{
 	}
@@ -90,18 +90,39 @@ namespace Vanguard
 		}
 		return found;
 	}
-	
+
+	class TickJob : public FrameJob
+	{
+	protected:
+		Entity* entity;
+
+	public:
+		TickJob(const String& aName, Frame* aFrame, Entity* aEntity) : FrameJob(aName, aFrame)
+		{
+			entity = aEntity;
+		}
+
+	protected:
+		virtual void DoJob() override
+		{
+			entity->Tick(frame);
+		}
+	};
+
 	void World::Tick(Frame* aFrame)
 	{
 		// Start render job before ticks, to render last frame's data.
 		Core::GetInstance()->GetPrimaryRenderer()->StartRenderJob(aFrame);
 
 		// Dispatch all ticks to the job system.
+		FrameJob** jobs = new FrameJob*[registeredTicks.Count()];		
 		for (size_t i = 0; i < registeredTicks.Count(); i++)
 		{
-			Entity* entity = registeredTicks[i];
-			aFrame->AddJob(entity->GetClassInfo()->GetTypeName() + " Tick" , [entity, aFrame]()-> void {entity->Tick(aFrame); });
+			jobs[i] = new TickJob(registeredTicks[i]->GetClassInfo()->GetTypeName(), aFrame, registeredTicks[i]);
 		}
+		aFrame->AddJobs(jobs, registeredTicks.Count());
+
+		delete[] jobs;
 	}
 
 	void World::RegisterObject(VanguardObject * aObject)

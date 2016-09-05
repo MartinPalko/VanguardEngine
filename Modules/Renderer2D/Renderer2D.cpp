@@ -41,72 +41,86 @@ namespace Vanguard
 		return newView;
 	}
 
-	void RenderJob(Frame* aFrame, DynamicArray<JobRenderView> renderViews, DynamicArray<RenderItem> renderItems)
+	class RenderJob : public FrameJob
 	{
-		for (int i = 0; i < renderViews.Count(); i++)
+	public:
+		DynamicArray<JobRenderView> renderViews;
+		DynamicArray<RenderItem> renderItems;
+
+		RenderJob(const String& aName, Frame* aFrame) : FrameJob(aName, aFrame)
+		, renderViews()
+		, renderItems()
+		{}
+
+		void DoJob() override
 		{
-			const JobRenderView& view = renderViews[i];
-
-			const World* world = aFrame->world;
-
-			int screenX;
-			int screenY;
-			SDL_GetWindowSize(view.window, &screenX, &screenY);
-			const float aspectRatio = (float)screenX / (float)screenY;
-			Vector2 screenSize(screenX, screenY);
-			Vector2 aspectAdjustment = aspectRatio > 1 ? Vector2(1 / aspectRatio, 1) : Vector2(1, aspectRatio);
-
-			SDL_SetRenderDrawColor(view.renderer, SPLIT_COLOR(view.clearColor));
-			SDL_RenderClear(view.renderer);
-
-			for (size_t i = 0; i < renderItems.Count(); i++)
+			for (int i = 0; i < renderViews.Count(); i++)
 			{
-				const RenderItem& renderItem = renderItems[i];
+				const JobRenderView& view = renderViews[i];
 
-				// World to camera
-				Vector3 cameraSpace = view.worldToCamera.TransformPoint(renderItem.position);
+				const World* world = frame->world;
 
-				// Projection
-				Vector3 clipSpace = view.projectionMatrix.TransformPoint(cameraSpace);
-				Vector3 scaleReference = view.projectionMatrix.TransformPoint(cameraSpace + Vector3(0,1,0));
-				float scaleRelativeCamera = (clipSpace - scaleReference).Length() / 2;
+				int screenX;
+				int screenY;
+				SDL_GetWindowSize(view.window, &screenX, &screenY);
+				const float aspectRatio = (float)screenX / (float)screenY;
+				Vector2 screenSize(screenX, screenY);
+				Vector2 aspectAdjustment = aspectRatio > 1 ? Vector2(1 / aspectRatio, 1) : Vector2(1, aspectRatio);
 
-				// Correct for aspect ratio
-				clipSpace *= Vector3(aspectAdjustment.x, aspectAdjustment.y, 1);
+				SDL_SetRenderDrawColor(view.renderer, SPLIT_COLOR(view.clearColor));
+				SDL_RenderClear(view.renderer);
 
-				// NDC space
-				Vector3 ndcSpace = (clipSpace + 1.0f) / 2.0f;
-				ndcSpace.y = 1 - ndcSpace.y;
-
-				// Screenspace
-				Vector3 screenspace = ndcSpace * Vector3(screenX, screenY, 1);
-				Vector2 finalSize = renderItem.dimensions * scaleRelativeCamera * screenSize * aspectAdjustment;
-
-				SDL_Rect screenRect;				
-				screenRect.w = finalSize.x;
-				screenRect.h = finalSize.y;
-				screenRect.x = screenspace.x - screenRect.w / 2;
-				screenRect.y = screenspace.y - screenRect.h / 2;
-
-				SDL_SetRenderDrawColor(view.renderer, SPLIT_COLOR(renderItem.color));
-
-				switch (renderItem.type)
+				for (size_t i = 0; i < renderItems.Count(); i++)
 				{
-				case ERenderItemType::rectangle:
-					SDL_RenderFillRect(view.renderer, &screenRect);
-				default:
-					break;
+					const RenderItem& renderItem = renderItems[i];
+
+					// World to camera
+					Vector3 cameraSpace = view.worldToCamera.TransformPoint(renderItem.position);
+
+					// Projection
+					Vector3 clipSpace = view.projectionMatrix.TransformPoint(cameraSpace);
+					Vector3 scaleReference = view.projectionMatrix.TransformPoint(cameraSpace + Vector3(0,1,0));
+					float scaleRelativeCamera = (clipSpace - scaleReference).Length() / 2;
+
+					// Correct for aspect ratio
+					clipSpace *= Vector3(aspectAdjustment.x, aspectAdjustment.y, 1);
+
+					// NDC space
+					Vector3 ndcSpace = (clipSpace + 1.0f) / 2.0f;
+					ndcSpace.y = 1 - ndcSpace.y;
+
+					// Screenspace
+					Vector3 screenspace = ndcSpace * Vector3(screenX, screenY, 1);
+					Vector2 finalSize = renderItem.dimensions * scaleRelativeCamera * screenSize * aspectAdjustment;
+
+					SDL_Rect screenRect;				
+					screenRect.w = finalSize.x;
+					screenRect.h = finalSize.y;
+					screenRect.x = screenspace.x - screenRect.w / 2;
+					screenRect.y = screenspace.y - screenRect.h / 2;
+
+					SDL_SetRenderDrawColor(view.renderer, SPLIT_COLOR(renderItem.color));
+
+					switch (renderItem.type)
+					{
+					case ERenderItemType::rectangle:
+						SDL_RenderFillRect(view.renderer, &screenRect);
+					default:
+						break;
+					}
+
 				}
-				
+				SDL_RenderPresent(view.renderer);
 			}
-			SDL_RenderPresent(view.renderer);
 		}
-	}
+	};
 
 	void Renderer2D::StartRenderJob(Frame* aFrame)
 	{
+		RenderJob* renderJob = new RenderJob("Render Job", aFrame);
+
 		// Compose render job data
-		DynamicArray<JobRenderView> jobViews(renderViews.Count());
+		renderJob->renderViews.Reserve(renderViews.Count());
 		for (int i = 0; i < renderViews.Count(); i++)
 		{
 			RenderView2D* worldView = renderViews[i];
@@ -122,15 +136,11 @@ namespace Vanguard
 				worldView->clearColor
 			};
 
-			jobViews.PushBack(jobView);
+			renderJob->renderViews.PushBack(jobView);
 		}
 
-		QuickProfiler prof("finding sprites ");
 		DynamicArray<VanguardObject*> sprites = aFrame->world->GetInstances(Type::GetType<SpriteComponent>());
-		prof.End();
-		DynamicArray<RenderItem> renderItems(sprites.Count());
-		QuickProfiler prof3("copying to sprites ");
-
+		renderJob->renderItems.Reserve(sprites.Count());
 		for (int i = 0; i < sprites.Count(); i++)
 		{
 			SpriteComponent* sprite = (SpriteComponent*)sprites[i];
@@ -142,14 +152,12 @@ namespace Vanguard
 					sprite->GetDimensions(),
 					sprite->GetEntity()->GetComponent<Transform>()->position
 				};
-				renderItems.PushBack(item);
+				renderJob->renderItems.PushBack(item);
 			}
 		}
-		prof3.End();
-
 
 		// Add job to frame & return
-		aFrame->AddJob("Render2d", [aFrame, jobViews, renderItems]()-> void {RenderJob(aFrame, jobViews, renderItems); });
+		aFrame->AddJob(renderJob);
 	}
 
 	

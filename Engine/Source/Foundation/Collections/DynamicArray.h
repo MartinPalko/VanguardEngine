@@ -95,6 +95,11 @@ namespace Vanguard
 			return false;
 		}
 
+		inline void Reserve(size_t aReserveSize)
+		{
+			data.reserve(aReserveSize);
+		}
+
 		//operators
 		inline DynamicArray& operator=(const DynamicArray& other)
 		{

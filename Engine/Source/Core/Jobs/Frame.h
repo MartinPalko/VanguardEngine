@@ -7,11 +7,10 @@
 #include "JobEnums.h"
 #include "Job.h"
 
-
-
 namespace Vanguard
 {
 	class World;
+	class FrameJob;
 
 	class CORE_API Frame
 	{

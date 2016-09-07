@@ -10,7 +10,7 @@ namespace Vanguard
 
 	ApplicationArguments applicationArguments = ApplicationArguments(0,nullptr);
 	DynamicArray<INativeEventHandler*> nativeEventHandlers;
-	DynamicArray<WindowHandle> nativeWindows;
+	DynamicArray<NativeWindow> nativeWindows;
 
 	void Application::SetApplicationArguments(int aArgC, char** aArgV)
 	{

@@ -17,7 +17,7 @@ namespace Vanguard
 		// TODO:
 	}
 
-	void Application::RegisterNativeWindow(WindowHandle aWindowHandle)
+	void Application::RegisterNativeWindow(NativeWindow aWindowHandle)
 	{
 		nativeWindows.PushBack(aWindowHandle);
 	}

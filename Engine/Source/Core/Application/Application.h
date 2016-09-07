@@ -2,9 +2,6 @@
 #include "Core_Common.h"
 #include "Config/Config.h"
 
-typedef void* WindowHandle;
-typedef void* NativeMessage;
-
 namespace Vanguard
 {
 	class Core;
@@ -20,6 +17,20 @@ namespace Vanguard
 	
 		int argc;
 		char **argv;
+	};
+
+	typedef void* WindowHandle;
+	typedef void* NativeMessage;
+#ifdef VANGUARD_LINUX
+	typedef void* X11Display;
+#endif
+
+	struct NativeWindow
+	{
+		WindowHandle handle;
+#ifdef VANGUARD_LINUX
+		X11Display display;
+#endif
 	};
 
 	struct NativeEvent
@@ -71,7 +82,7 @@ namespace Vanguard
 		static void RegisterNativeEventHandler(INativeEventHandler* aHandler);
 		static void UnregisterNativeEventHandler(INativeEventHandler* aHandler);
 
-		static void RegisterNativeWindow(WindowHandle aWindowHandle);
+		static void RegisterNativeWindow(NativeWindow aWindowHandle);
 		static WindowHandle CreateNativeWindow();
 		static WindowHandle CreateNativeWindow(const WindowCreationParameters& aWindowParameters);
 		static WindowCreationParameters GetWindowCreationParams();

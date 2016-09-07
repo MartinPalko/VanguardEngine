@@ -14,7 +14,7 @@ namespace Vanguard
 		for (size_t w = 0; w < nativeWindows.Count(); w++)
 		{
 			MSG msg;
-			WindowHandle handle = nativeWindows[w];
+			WindowHandle handle = nativeWindows[w].handle;
 			while (PeekMessage(&msg, (HWND)handle, 0, 0, PM_REMOVE))
 			{
 				TranslateMessage(&msg);
@@ -91,11 +91,19 @@ namespace Vanguard
 		switch (msg)
 		{
 		case WM_DESTROY:
-			nativeWindows.Remove(hWnd);
+			for (int i = 0; i < nativeWindows.Count(); i++)
+			{
+				if (nativeWindows[i].handle == hWnd)
+				{
+					nativeWindows.RemoveAt(i);
+					continue;
+				}
+			}
+
 			if (!nativeWindows.Count()) // Last window destroyed
 			{
-				PostQuitMessage(0);
 				Core::GetInstance()->ShutDown();
+				PostQuitMessage(0);
 			}
 			break;
 		default:
@@ -105,11 +113,11 @@ namespace Vanguard
 		return 0;
 	}
 
-	void Application::RegisterNativeWindow(WindowHandle aWindowHandle)
+	void Application::RegisterNativeWindow(NativeWindow aWindowHandle)
 	{
 		nativeWindows.PushBack(aWindowHandle);
 		// Override the WNDPROC to use ours
-		SetWindowLongPtr((HWND)aWindowHandle, GWLP_WNDPROC, (LONG_PTR)&WndProc);
+		SetWindowLongPtr((HWND)aWindowHandle.handle, GWLP_WNDPROC, (LONG_PTR)&WndProc);
 	}
 
 	WindowHandle Application::CreateNativeWindow(const WindowCreationParameters& aWindowParameters)
@@ -168,7 +176,7 @@ namespace Vanguard
 
 		ShowWindow(hWnd, SW_SHOW);
 
-		RegisterNativeWindow(hWnd);
+		RegisterNativeWindow(NativeWindow{ hWnd });
 
 		return hWnd;
 	}

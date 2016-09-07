@@ -2,23 +2,6 @@
 #include "SDL_syswm.h"
 #include "RenderView2D.h"
 
-#ifdef VANGUARD_LINUX
-// // Hack from: http://forums.libsdl.org/viewtopic.php?p=44634&sid=ac3883de654fcade89ffea73492c2a05
-struct SDL_Window 
-{
-	const void *magic; 
-	Uint32 id; 
-	char *title; 
-	SDL_Surface *icon; 
-	int x, y; 
-	int w, h; 
-	int min_w, min_h; 
-	int max_w, max_h; 
-	Uint32 flags; 
-}; 
-typedef struct SDL_Window SDL_Window; 
-#endif
-
 namespace Vanguard
 {
 	RenderView2D::RenderView2D(Camera* aCamera, WindowCreationParameters aWindowParameters)
@@ -34,17 +17,27 @@ namespace Vanguard
 		if (aWindowParameters.resizable)
 			windowFlags |= SDL_WINDOW_RESIZABLE;
 
-		sdlWindow = SDL_CreateWindowFrom(Application::CreateNativeWindow(aWindowParameters));
+		sdlWindow = SDL_CreateWindow(aWindowParameters.title.GetCharPointer(),
+			SDL_WINDOWPOS_CENTERED,
+			SDL_WINDOWPOS_CENTERED,
+			aWindowParameters.sizeX,
+			aWindowParameters.sizeY,
+			windowFlags);
+		
+		SDL_SysWMinfo windowInfo;
+		SDL_VERSION(&windowInfo.version);
+		SDL_GetWindowWMInfo(sdlWindow, &windowInfo);
+
+		#if defined(VANGUARD_WINDOWS)
+		Application::RegisterNativeWindow(NativeWindow{ windowInfo.info.win.window });
+		#elif defined (VANGUARD_LINUX)
+		Application::RegisterNativeWindow(NativeWindow{ windowInfo.info.x11.window, windowInfo->info.x11.display });
+		#endif
 
 		if (!sdlWindow)
 		{
 			Log::Exception("Failed to create SDL window!", "Renderer2d");
 		}
-
-#ifdef VANGUARD_LINUX
-		sdlWindow->flags |= SDL_WINDOW_OPENGL; 
-		SDL_GL_LoadLibrary(NULL); 
-#endif
 
 		sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_ACCELERATED);
 		

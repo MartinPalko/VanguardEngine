@@ -71,6 +71,7 @@ namespace Vanguard
 		}
 
 	protected:
+		virtual Timespan GetNextDesiredTickTime();
 		virtual void Tick(Frame* aFrame);
 		FrameJob* MakeTickJob(Frame* aFrame);
 		void RegisterObject(VanguardObject* aObject);

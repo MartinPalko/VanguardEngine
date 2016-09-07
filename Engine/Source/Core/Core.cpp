@@ -128,22 +128,49 @@ namespace Vanguard
 					world->lastTickStartTime = currentTime;
 					world->nextFrameNumber++;
 
-					if (world->nextFrameNumber == 20)
-					{
-						jobManager->GetProfiler()->StartProfiling();
-					}
+					jobManager->GetProfiler()->StartProfiling();
 
 					// Update the world
 					frame->AddJob(world->MakeTickJob(frame));
 					frame->Start();
 
+					// Wait for frame to finish
 					while (!frame->Finished()) { std::this_thread::yield(); }
 
-					if (jobManager->GetProfiler()->IsProfiling())
+
+					// Temp debugging					
+					const float frameTime = (Timespan::GetElapsedSystemTime() - currentTime).InSeconds() * 1000.0;
+					Log::Message("Frame time : " + String::FromFloat(frameTime));
+
+					if (jobManager->GetProfiler()->IsProfiling() && frameTime > 10.0f)
 						jobManager->GetProfiler()->EndProfiling(Directories::GetVanguardRootDirectory().GetRelative("Jobs.json"));
+					else 
+						jobManager->GetProfiler()->EndProfiling();
 
 					delete frame;
 				}
+			}
+
+			if (worlds.Count())
+			{
+				// Estimate how long we can sleep,until the next frame needs to be done.
+				Timespan nextFrameTime = worlds[0]->GetNextDesiredTickTime();
+				for (int i = 1; i < worlds.Count(); i++)
+				{
+					nextFrameTime = Math::Min(nextFrameTime, worlds[i]->GetNextDesiredTickTime());
+				}
+
+				const Timespan currentTime = Timespan::GetElapsedSystemTime();
+				if (currentTime < nextFrameTime)
+				{
+					auto sleepTime = (nextFrameTime - currentTime).InMilliseconds();
+					// And sleep
+					std::this_thread::sleep_for(std::chrono::microseconds((currentTime - nextFrameTime).InMicroseconds()));
+				}
+			}
+			else
+			{
+				std::this_thread::yield();
 			}
 		}
 

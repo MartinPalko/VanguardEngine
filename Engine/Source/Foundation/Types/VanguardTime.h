@@ -34,7 +34,8 @@ namespace Vanguard
 		inline static Timespan FromDays(double aNumberOfDays) { return Timespan(aNumberOfDays  * 86400.0); }
 		inline static Timespan FromWeeks(double aNumberOfWeeks) { return Timespan(aNumberOfWeeks * 604800.0); }
 
-		inline int64 InMilliseconds() const { return (int64)(InSeconds() * 1000); }
+		inline size_t InMilliseconds() const { return (int64)(InSeconds() * 1000.0); }
+		inline size_t InMicroseconds() const { return (int64)(InSeconds() * 1000.0 * 1000.0); }
 
 		double InSeconds() const;
 		double InMinutes() const;

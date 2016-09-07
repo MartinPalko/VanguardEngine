@@ -32,7 +32,6 @@ namespace Vanguard
 	}
 
 	double Timespan::InSeconds() const { return data->inSeconds(); }
-
 	double Timespan::InMinutes() const { return data->inMinutes(); }
 	double Timespan::InHours() const { return data->inHours(); }
 	double Timespan::InDays() const { return data->inDays(); }

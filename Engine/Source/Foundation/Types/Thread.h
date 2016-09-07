@@ -19,7 +19,7 @@ namespace Vanguard
 		void ThreadEntry();
 
 	protected:
-		bool wantsJoin;
+		std::atomic<bool> wantsJoin;
 		virtual void Run() = 0;
 
 	public:

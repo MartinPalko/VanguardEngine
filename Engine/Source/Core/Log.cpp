@@ -101,7 +101,7 @@ namespace Vanguard
 		if (!initialized)
 			return;
 
-		static bool flushingLog(false);
+		static std::atomic<bool> flushingLog(false);
 
 		if (!flushingLog)
 		{

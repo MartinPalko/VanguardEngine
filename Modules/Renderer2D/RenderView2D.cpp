@@ -28,10 +28,12 @@ namespace Vanguard
 		SDL_VERSION(&windowInfo.version);
 		SDL_GetWindowWMInfo(sdlWindow, &windowInfo);
 
-		#if defined(VANGUARD_WINDOWS)
+		#if defined(VANGUARD_WINDOWS) && defined(SDL_VIDEO_DRIVER_WINDOWS)
 		Application::RegisterNativeWindow(NativeWindow{ windowInfo.info.win.window });
-		#elif defined (VANGUARD_LINUX)
-		Application::RegisterNativeWindow(NativeWindow{ windowInfo.info.x11.window, windowInfo->info.x11.display });
+		#elif defined(VANGUARD_LINUX) && defined(SDL_VIDEO_DRIVER_X11)
+		Application::RegisterNativeWindow(NativeWindow{ windowInfo.info.x11.window, windowInfo.info.x11.display });
+		#else
+		#error Unknown SDL video driver
 		#endif
 
 		if (!sdlWindow)

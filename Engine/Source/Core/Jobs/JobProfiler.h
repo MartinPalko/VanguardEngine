@@ -33,6 +33,7 @@ namespace Vanguard
 	public:
 		void StartProfiling();
 		bool IsProfiling() { return profiling; }
+		void EndProfiling();
 		void EndProfiling(FilePath aWriteResultsTo);
 	};
 }

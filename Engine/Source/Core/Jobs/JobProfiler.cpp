@@ -17,6 +17,14 @@ namespace Vanguard
 		profilingStartTime = Timespan::GetElapsedSystemTime();
 	}
 
+	void JobProfiler::EndProfiling()
+	{
+		// Nowhere to dump to, so just discard the record queue.
+		const size_t maxDequeRecords = 128;
+		Record dequeuedRecords[128];
+		while (records.try_dequeue_bulk(dequeuedRecords, maxDequeRecords));
+	}
+
 	void JobProfiler::EndProfiling(FilePath aWriteResultsTo)
 	{		
 		profiling = false;
@@ -25,24 +33,29 @@ namespace Vanguard
 		
 		const size_t maxDequeRecords = 128;
 		Record dequeuedRecords[128];
-		const size_t dequeuedRecordsCount = records.try_dequeue_bulk(dequeuedRecords, maxDequeRecords);
-
-		for (int i = 0; i < dequeuedRecordsCount; i++)
+		size_t dequeuedRecordsCount = -1;
+		
+		while (dequeuedRecordsCount != 0)
 		{
-			Record& record = dequeuedRecords[i];
+			dequeuedRecordsCount = records.try_dequeue_bulk(dequeuedRecords, maxDequeRecords);
 
-			if (i != 0)
-				outputString += ", ";
+			for (int i = 0; i < dequeuedRecordsCount; i++)
+			{
+				Record& record = dequeuedRecords[i];
 
-			int startTime = (record.startTime - profilingStartTime).InSeconds() * 1000.0 * 1000.0 * 1000.0;
-			int endTime = (record.endTime - profilingStartTime).InSeconds() * 1000.0 * 1000.0 * 1000.0;
+				if (i != 0)
+					outputString += ", ";
 
-			outputString += "{\n";
-			outputString += "\"Thread\": \"Worker " + String::FromInt(record.thread) + "\",\n";
-			outputString += "\"Name\": \"" + record.jobName + "\",\n";
-			outputString += "\"Start\": " + String::FromInt(startTime) + ",\n";
-			outputString += "\"End\": " + String::FromInt(endTime) + "\n";
-			outputString += "}";
+				int startTime = (record.startTime - profilingStartTime).InSeconds() * 1000.0 * 1000.0 * 1000.0;
+				int endTime = (record.endTime - profilingStartTime).InSeconds() * 1000.0 * 1000.0 * 1000.0;
+
+				outputString += "{\n";
+				outputString += "\"Thread\": \"Worker " + String::FromInt(record.thread) + "\",\n";
+				outputString += "\"Name\": \"" + record.jobName + "\",\n";
+				outputString += "\"Start\": " + String::FromInt(startTime) + ",\n";
+				outputString += "\"End\": " + String::FromInt(endTime) + "\n";
+				outputString += "}";
+			}
 		}
 
 		outputString += "]";

@@ -4,16 +4,14 @@
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
 
-static Display *xDisplay;
-Window xWindow;
-
-
 namespace Vanguard
 {
 	void Application::ProcessNativeEvents()
 	{
-		if (xDisplay)
+		for (size_t i = 0; i < nativeWindows.Count(); i++)
 		{
+			Display* xDisplay = (Display*)nativeWindows[i].display;
+
 			XEvent event;
 			while (XPending(xDisplay))
 			{
@@ -47,19 +45,16 @@ namespace Vanguard
 
 	WindowHandle Application::CreateNativeWindow(const WindowCreationParameters& aWindowParameters)
 	{
+		Display* xDisplay = XOpenDisplay(NULL);
+
 		if (!xDisplay)
 		{
-			xDisplay = XOpenDisplay(NULL);
-
-			if (!xDisplay)
-			{
-				return nullptr;
-			}
-		}		
+			return nullptr;
+		}	
 		
 		int xScreen = DefaultScreen(xDisplay);
 
-		xWindow = XCreateSimpleWindow(
+		Window xWindow = XCreateSimpleWindow(
 			xDisplay,
 			RootWindow(xDisplay, xScreen),
 			0,

@@ -44,13 +44,13 @@ namespace Vanguard
 	}
 
 	// Returns the time when the file was last modified. Returns invalid time if file does not exist.
-	Time FileSystem::GetTimeLastModified(const FilePath& aFilePath)
+	DateAndTime FileSystem::GetTimeLastModified(const FilePath& aFilePath)
 	{
 		return aFilePath.file->getLastModificationTime().toMilliseconds();
 	}
 
 	// Returns the time when the file was created. Returns invalid time if file does not exist.
-	Time FileSystem::GetTimeCreated(const FilePath& aFilePath)
+	DateAndTime FileSystem::GetTimeCreated(const FilePath& aFilePath)
 	{
 		return aFilePath.file->getCreationTime().toMilliseconds();
 	}

@@ -21,7 +21,7 @@ namespace Vanguard
 		String message;
 		String channel;
 		LogEntryErrorLevel errorLevel;
-		Time timestamp;
+		DateAndTime timestamp;
 	public:
 
 		// Constructor
@@ -29,12 +29,12 @@ namespace Vanguard
 			: message(aMessage),
 			channel(aChannel),
 			errorLevel(aErrorLevel),
-			timestamp(Time::CurrentTime()){}
+			timestamp(DateAndTime::CurrentTime()){}
 
 		String GetMessage() { return message; }
 		String GetCategory() { return channel; }
 		LogEntryErrorLevel GetWarningLevel() { return errorLevel; }
-		Time GetTimestamp(){ return timestamp; }
+		DateAndTime GetTimestamp(){ return timestamp; }
 
 		String GetFormattedLogEntry()
 		{

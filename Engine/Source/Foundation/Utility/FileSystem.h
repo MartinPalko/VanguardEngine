@@ -24,10 +24,10 @@ namespace Vanguard
 		static FilePath MakeUniqueFileName(const FilePath& aFilePath);
 
 		// Returns the time when the file was last modified. Returns invalid time if file does not exist.
-		static Time GetTimeLastModified(const FilePath& aFilePath);
+		static DateAndTime GetTimeLastModified(const FilePath& aFilePath);
 
 		// Returns the time when the file was created. Returns invalid time if file does not exist.
-		static Time GetTimeCreated(const FilePath& aFilePath);
+		static DateAndTime GetTimeCreated(const FilePath& aFilePath);
 
 		// True if filepath exists as either a file or directory.
 		static bool Exists(const FilePath& aFilePath);

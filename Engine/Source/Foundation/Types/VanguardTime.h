@@ -62,7 +62,7 @@ namespace Vanguard
 
 	// Represents a specific moment in time. Only accurate down to the millisecond. For more accurate timing, see Timespan.
 	// Wrapper for juce::Time
-	struct FOUNDATION_API Time
+	struct FOUNDATION_API DateAndTime
 	{
 		friend struct Timespan;
 	private:
@@ -84,16 +84,16 @@ namespace Vanguard
 		@param useLocalTime     if true, encode using the current machine's local time; if
 		false, it will always work in GMT.
 		*/
-		Time(int32 aYear, int32 aMonth, int32 aDay, int32 aHours, int32 aMinutes, int32 aSeconds = 0, int32 aMilliseconds = 0, bool aUseLocalTime = true);
+		DateAndTime(int32 aYear, int32 aMonth, int32 aDay, int32 aHours, int32 aMinutes, int32 aSeconds = 0, int32 aMilliseconds = 0, bool aUseLocalTime = true);
 
-		Time(int64 aMiliseconds);
-		Time(const Time& aOther);
-		Time& operator = (const Time& aOther);
+		DateAndTime(int64 aMiliseconds);
+		DateAndTime(const DateAndTime& aOther);
+		DateAndTime& operator = (const DateAndTime& aOther);
 
-		~Time();
+		~DateAndTime();
 
 		// Returns a Time object that is set to the current system time.
-		static Time CurrentTime();
+		static DateAndTime CurrentTime();
 
 		// Returns the time as a number of milliseconds since Jan 1st 1970.
 		int64 ToMilliseconds() const;
@@ -180,32 +180,20 @@ namespace Vanguard
 		static int64 SecondsToHighResolutionTicks(double aSeconds);
 
 		// Returns a Time based on the value of the __DATE__ macro when this module was compiled
-		static Time GetCompilationDate();
+		static DateAndTime GetCompilationDate();
 
 		// ----Operators----
 
-		inline Time operator+ (const Timespan& aDeltaTime) { return Time(ToMilliseconds() + aDeltaTime.InMilliseconds()); }
-		inline Time operator- (const Timespan& aDeltaTime) { return Time(ToMilliseconds() - aDeltaTime.InMilliseconds()); }
+		inline DateAndTime operator+ (const Timespan& aDeltaTime) { return DateAndTime(ToMilliseconds() + aDeltaTime.InMilliseconds()); }
+		inline DateAndTime operator- (const Timespan& aDeltaTime) { return DateAndTime(ToMilliseconds() - aDeltaTime.InMilliseconds()); }
 
-		inline Timespan operator- (const Time& aOther) { return Timespan::FromMilliseconds(ToMilliseconds() - aOther.ToMilliseconds()); }
+		inline Timespan operator- (const DateAndTime& aOther) { return Timespan::FromMilliseconds(ToMilliseconds() - aOther.ToMilliseconds()); }
 
-		//inline Time& operator+= (const Timespan& aDeltaTime)
-		//{
-		//	this->data += aDeltaTime.data;
-		//	return *this;
-		//}
-
-		//inline Time& operator-= (const Timespan& aDeltaTime)
-		//{
-		//	this->data -= aDeltaTime.data;
-		//	return *this;
-		//}
-
-		inline bool operator== (const Time& aOther) { return data == aOther.data;}
-		inline bool operator!= (const Time& aOther) { return data != aOther.data;}
-		inline bool operator<  (const Time& aOther) { return data < aOther.data;}
-		inline bool operator<= (const Time& aOther) { return data <= aOther.data;}
-		inline bool operator>  (const Time& aOther) { return data > aOther.data;}
-		inline bool operator>= (const Time& aOther) { return data >= aOther.data;}
+		inline bool operator== (const DateAndTime& aOther) { return data == aOther.data;}
+		inline bool operator!= (const DateAndTime& aOther) { return data != aOther.data;}
+		inline bool operator<  (const DateAndTime& aOther) { return data < aOther.data;}
+		inline bool operator<= (const DateAndTime& aOther) { return data <= aOther.data;}
+		inline bool operator>  (const DateAndTime& aOther) { return data > aOther.data;}
+		inline bool operator>= (const DateAndTime& aOther) { return data >= aOther.data;}
 	};
 }

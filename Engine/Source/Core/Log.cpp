@@ -37,10 +37,10 @@ namespace Vanguard
 		while (logFiles.Count() >= maxLogFiles)
 		{
 			size_t oldestFile = 0;
-			Time oldestCreationTime = FileSystem::GetTimeCreated(logFiles[oldestFile]);
+			DateAndTime oldestCreationTime = FileSystem::GetTimeCreated(logFiles[oldestFile]);
 			for (size_t i = 1; i < logFiles.Count(); i++)
 			{
-				Time currentCreationTime = FileSystem::GetTimeCreated(logFiles[oldestFile]);
+				DateAndTime currentCreationTime = FileSystem::GetTimeCreated(logFiles[oldestFile]);
 				if (currentCreationTime < oldestCreationTime)
 				{
 					oldestFile = i;
@@ -52,7 +52,7 @@ namespace Vanguard
 		}
 
 		// Create a new log file, named after the current time.
-		String fileName = logfilePrefix + "_" + Time::CurrentTime().ToString(true, true, false, false);
+		String fileName = logfilePrefix + "_" + DateAndTime::CurrentTime().ToString(true, true, false, false);
 		fileName = fileName.Replace(' ', '-');
 		fileName = fileName.Replace(':', '.');
 

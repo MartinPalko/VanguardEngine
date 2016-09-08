@@ -1,5 +1,6 @@
 #pragma once
 #include "Core.h"
+#include "VanguardSDL.h"
 using namespace Vanguard;
 
 #ifdef Renderer2D_EXPORTS

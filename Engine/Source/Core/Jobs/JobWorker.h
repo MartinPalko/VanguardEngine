@@ -11,7 +11,6 @@ namespace Vanguard
 	class JobWorker : public Thread
 	{
 		friend JobManager;
-		friend JobWorker;
 
 	private:
 		class JobManager* jobManager;

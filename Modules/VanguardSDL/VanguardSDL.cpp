@@ -3,8 +3,6 @@
 
 #include "Foundation.h"
 
-#include <SDL.h>
-
 namespace Vanguard
 {
 	VANGUARD_DECLARE_MODULE(VanguardSDL)

@@ -11,4 +11,5 @@ using namespace Vanguard;
 // Enables check to make sure we're using the proper config.h
 #define USING_GENERATED_CONFIG_H
 // Include the generated config (If included by SDL headers, they will prefer the non-generated config)
-#include "SDL_config.h"
+#include <SDL_config.h>
+#include <SDL.h>

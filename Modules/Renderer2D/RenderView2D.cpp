@@ -1,4 +1,5 @@
 #include "VanguardSDL.h"
+#include "SDL.h"
 #include "SDL_syswm.h"
 #include "RenderView2D.h"
 
@@ -9,7 +10,7 @@ namespace Vanguard
 		, sdlWindow(nullptr)
 		, sdlRenderer(nullptr)
 	{
-		int windowFlags = SDL_WINDOW_OPENGL;
+		int windowFlags = 0;
 
 		if (aWindowParameters.fullscreen)
 			windowFlags |= SDL_WINDOW_FULLSCREEN;
@@ -23,15 +24,16 @@ namespace Vanguard
 			aWindowParameters.sizeX,
 			aWindowParameters.sizeY,
 			windowFlags);
-		
+
 		SDL_SysWMinfo windowInfo;
 		SDL_VERSION(&windowInfo.version);
 		SDL_GetWindowWMInfo(sdlWindow, &windowInfo);
 
+		// Register with vanguard application so it will handle processing events for this window.
 		#if defined(VANGUARD_WINDOWS) && defined(SDL_VIDEO_DRIVER_WINDOWS)
 		Application::RegisterNativeWindow(NativeWindow{ windowInfo.info.win.window });
 		#elif defined(VANGUARD_LINUX) && defined(SDL_VIDEO_DRIVER_X11)
-		Application::RegisterNativeWindow(NativeWindow{ windowInfo.info.x11.window, windowInfo.info.x11.display });
+		Application::RegisterNativeWindow(NativeWindow{ (void*)windowInfo.info.x11.window, (void*)windowInfo.info.x11.display });
 		#else
 		#error Unknown SDL video driver
 		#endif

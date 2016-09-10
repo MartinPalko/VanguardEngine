@@ -2,11 +2,6 @@
 
 namespace Vanguard
 {
-	void Application::ProcessNativeEvents()
-	{
-		// TODO:
-	}
-
 	void Application::ShowConsoleWindow()
 	{
 		// TODO:
@@ -15,11 +10,6 @@ namespace Vanguard
 	void Application::HideConsoleWindow()
 	{
 		// TODO:
-	}
-
-	void Application::RegisterNativeWindow(NativeWindow aWindowHandle)
-	{
-		nativeWindows.PushBack(aWindowHandle);
 	}
 
 	WindowHandle Application::CreateNativeWindow(const WindowCreationParameters& aWindowParameters)

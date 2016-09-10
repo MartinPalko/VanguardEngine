@@ -131,12 +131,11 @@ namespace BrickBreaker
 	
 	void BrickBreakerWorld::HandleNativeEvent(NativeEvent aEvent)
 	{
-#ifdef VANGUARD_WINDOWS
-		// Forward any input messages to Gainput
-		inputManager->HandleMessage((MSG*)aEvent.message);
-#endif
-#ifdef VANGUARD_LINUX
-		inputManager->HandleEvent((XEvent*)aEvent.message);
-#endif
+		#if defined(VANGUARD_WINDOWS)
+			// Forward any input messages to Gainput
+			inputManager->HandleMessage((MSG*)aEvent);
+		#elif defined(VANGUARD_LINUX)
+			inputManager->HandleEvent((XEvent*)aEvent);
+		#endif
 	}
 }

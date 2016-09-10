@@ -20,7 +20,7 @@ namespace Vanguard
 	};
 
 	typedef void* WindowHandle;
-	typedef void* NativeMessage;
+	typedef void* NativeEvent;
 #ifdef VANGUARD_LINUX
 	typedef void* X11Display;
 #endif
@@ -33,10 +33,10 @@ namespace Vanguard
 #endif
 	};
 
-	struct NativeEvent
+	class INativeEventProcessor
 	{
-		NativeMessage message;
-		WindowHandle windowHandle;
+	public:
+		virtual bool GetNextEvent(NativeEvent& aOutNextEvent) = 0;
 	};
 
 	class INativeEventHandler
@@ -79,10 +79,11 @@ namespace Vanguard
 		static void ShowConsoleWindow();
 		static void HideConsoleWindow();
 
+		static void RegisterNativeEventProcessor(INativeEventProcessor* aProcessor);
+		static void UnregisterNativeEventProcessor(INativeEventProcessor* aProcessor);
 		static void RegisterNativeEventHandler(INativeEventHandler* aHandler);
 		static void UnregisterNativeEventHandler(INativeEventHandler* aHandler);
 
-		static void RegisterNativeWindow(NativeWindow aWindowHandle);
 		static WindowHandle CreateNativeWindow();
 		static WindowHandle CreateNativeWindow(const WindowCreationParameters& aWindowParameters);
 		static WindowCreationParameters GetWindowCreationParams();

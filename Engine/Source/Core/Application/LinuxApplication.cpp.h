@@ -6,28 +6,6 @@
 
 namespace Vanguard
 {
-	void Application::ProcessNativeEvents()
-	{
-		for (size_t i = 0; i < nativeWindows.Count(); i++)
-		{
-			Display* xDisplay = (Display*)nativeWindows[i].display;
-
-			XEvent event;
-			while (XPending(xDisplay))
-			{
-				XNextEvent(xDisplay, &event);
-
-				NativeEvent nativeEvent;
-				nativeEvent.message = &event;
-				
-				for (size_t h = 0; h < nativeEventHandlers.Count(); h++)
-				{
-					nativeEventHandlers[h]->HandleNativeEvent(nativeEvent);
-				}
-			}
-		}
-	}
-
 	void Application::ShowConsoleWindow()
 	{
 		// TODO:
@@ -38,19 +16,39 @@ namespace Vanguard
 		// TODO:
 	}
 
-	void Application::RegisterNativeWindow(NativeWindow aWindowHandle)
+	class LinuxEventProcessor : public INativeEventProcessor
 	{
-		nativeWindows.PushBack(aWindowHandle);
-	}
+	private:
+		Display* display;
+
+	public:
+		LinuxEventProcessor(Display* aDisplay) : display(aDisplay) { Application::RegisterNativeEventProcessor(this); }
+		~LinuxEventProcessor() { Application::UnregisterNativeEventProcessor(this); }
+
+		virtual bool GetNextEvent(NativeEvent& aOutNextEvent) override
+		{
+			if (XPending(display))
+			{
+				XNextEvent(display, aOutNextEvent);
+				return true;
+			}
+			return false;
+		}
+	};
 
 	WindowHandle Application::CreateNativeWindow(const WindowCreationParameters& aWindowParameters)
 	{
-		Display* xDisplay = XOpenDisplay(NULL);
+		static Display* xDisplay = nullptr;
 
 		if (!xDisplay)
 		{
-			return nullptr;
-		}	
+			xDisplay = XOpenDisplay(NULL);
+
+			if (!xDisplay)
+				return nullptr;
+		}
+
+		static LinuxEventProcessor(xDisplay);
 		
 		int xScreen = DefaultScreen(xDisplay);
 

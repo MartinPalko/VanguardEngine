@@ -1,10 +1,11 @@
 #pragma once
 #include "VanguardSDL_Common.h"
 #include "Interfaces/IModule.h"
+#include "Application/Application.h"
 
 namespace Vanguard
 {
-	class VANGUARDSDL_API VanguardSDL : public IModule
+	class VANGUARDSDL_API VanguardSDL : public IModule , public INativeEventProcessor
 	{
 	public:
 		enum SDLModule : int32
@@ -21,7 +22,11 @@ namespace Vanguard
 		static void RegisterModuleUse(SDLModule module);
 		static void UnregisterModuleUse(SDLModule module);
 
+		// Implement IModule
 		virtual void LoadModule();
 		virtual void UnloadModule();
+
+		// Implement INativeEventProcessor
+		virtual bool GetNextEvent(NativeEvent& aOutNextEvent) override;
 	};
 }

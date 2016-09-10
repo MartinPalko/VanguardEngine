@@ -9,29 +9,6 @@
 
 namespace Vanguard
 {
-	void Application::ProcessNativeEvents()
-	{
-		for (size_t w = 0; w < nativeWindows.Count(); w++)
-		{
-			MSG msg;
-			WindowHandle handle = nativeWindows[w].handle;
-			while (PeekMessage(&msg, (HWND)handle, 0, 0, PM_REMOVE))
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-
-				NativeEvent nativeEvent;
-				nativeEvent.message = &msg;
-				nativeEvent.windowHandle = handle;
-
-				for (size_t h = 0; h < nativeEventHandlers.Count(); h++)
-				{
-					nativeEventHandlers[h]->HandleNativeEvent(nativeEvent);
-				}
-			}
-		}
-	}
-
 	BOOL WINAPI ConsoleEventHandler(_In_ DWORD dwCtrlType)
 	{
 		// For info, see: https://msdn.microsoft.com/en-us/library/windows/desktop/ms683242(v=vs.85).aspx
@@ -86,6 +63,32 @@ namespace Vanguard
 		FreeConsole();
 	}
 
+	class WindowsEventProcessor : public INativeEventProcessor
+	{
+	private:
+		HWND handle;
+
+	public:
+		WindowsEventProcessor(HWND aHandle) : handle(aHandle) {}
+
+		virtual bool GetNextEvent(NativeEvent& aOutNextEvent) override
+		{
+			LPMSG msg;
+			if (PeekMessage(msg, (HWND)handle, 0, 0, PM_REMOVE))
+			{
+				TranslateMessage(msg);
+				DispatchMessage(msg);
+
+				aOutNextEvent = msg;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	};
+
 	LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		switch (msg)
@@ -111,13 +114,6 @@ namespace Vanguard
 		}
 
 		return 0;
-	}
-
-	void Application::RegisterNativeWindow(NativeWindow aWindowHandle)
-	{
-		nativeWindows.PushBack(aWindowHandle);
-		// Override the WNDPROC to use ours
-		SetWindowLongPtr((HWND)aWindowHandle.handle, GWLP_WNDPROC, (LONG_PTR)&WndProc);
 	}
 
 	WindowHandle Application::CreateNativeWindow(const WindowCreationParameters& aWindowParameters)
@@ -176,7 +172,8 @@ namespace Vanguard
 
 		ShowWindow(hWnd, SW_SHOW);
 
-		RegisterNativeWindow(NativeWindow{ hWnd });
+		// Add a new event processor to service events for this window.
+		RegisterNativeEventProcessor(new WindowsEventProcessor(hWnd));
 
 		return hWnd;
 	}

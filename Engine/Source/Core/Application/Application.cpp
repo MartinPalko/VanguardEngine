@@ -9,6 +9,7 @@ namespace Vanguard
 	BooleanConfigVar Application::resizable = BooleanConfigVar("Core", "Application", "Resizable", false);
 
 	ApplicationArguments applicationArguments = ApplicationArguments(0,nullptr);
+	DynamicArray<INativeEventProcessor*> nativeEventProcessors;
 	DynamicArray<INativeEventHandler*> nativeEventHandlers;
 	DynamicArray<NativeWindow> nativeWindows;
 
@@ -17,9 +18,35 @@ namespace Vanguard
 		applicationArguments = ApplicationArguments(aArgC, aArgV);
 	}
 
+	void Application::ProcessNativeEvents()
+	{
+		for (size_t i = 0; i < nativeEventProcessors.Count(); i++)
+		{
+			NativeEvent nativeEvent;
+
+			while (nativeEventProcessors[i]->GetNextEvent(nativeEvent))
+			{
+				for (size_t h = 0; h < nativeEventHandlers.Count(); h++)
+				{
+					nativeEventHandlers[h]->HandleNativeEvent(nativeEvent);
+				}
+			}
+		}
+	}
+
 	ApplicationArguments Application::GetApplicationArguments()
 	{
 		return applicationArguments;
+	}
+
+	void Application::RegisterNativeEventProcessor(INativeEventProcessor* aProcessor)
+	{
+		nativeEventProcessors.PushBack(aProcessor);
+	}
+
+	void Application::UnregisterNativeEventProcessor(INativeEventProcessor* aProcessor)
+	{
+		nativeEventProcessors.Remove(aProcessor);
 	}
 
 	void Application::RegisterNativeEventHandler(INativeEventHandler* aHandler)

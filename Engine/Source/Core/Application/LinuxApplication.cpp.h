@@ -70,8 +70,6 @@ namespace Vanguard
 
 		GC gc = XCreateGC(xDisplay, xWindow, 0, 0);
 
-		RegisterNativeWindow(NativeWindow{ (void*)xWindow, (void*)xDisplay });
-
 		// Process events to show new window.
 		ProcessNativeEvents();
 		return (void*)xWindow;

@@ -29,7 +29,7 @@ namespace Vanguard
 		{
 			if (XPending(display))
 			{
-				XNextEvent(display, aOutNextEvent);
+				XNextEvent(display, (XEvent*)aOutNextEvent);
 				return true;
 			}
 			return false;
@@ -48,7 +48,7 @@ namespace Vanguard
 				return nullptr;
 		}
 
-		static LinuxEventProcessor(xDisplay);
+		static LinuxEventProcessor eventProcessor(xDisplay);
 		
 		int xScreen = DefaultScreen(xDisplay);
 

@@ -34,7 +34,11 @@ namespace Vanguard
 		profiler = nullptr;
 #endif
 
+#ifdef VANGUARD_LINUX
+		size_t targetThreads = 0; // Job system not currently working properly on linux.
+#else
 		size_t targetThreads = SystemInfo::GetNumberOfCores();
+#endif
 
 		if (targetThreads > 1)
 		{

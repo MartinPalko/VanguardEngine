@@ -100,7 +100,7 @@ namespace Vanguard
 				aOutNextEvent = &lastWinMsg;
 				return true;
 #elif defined(VANGUARD_LINUX)
-				aOutNextEvent = sdlSysMsg->msg.x11.event;
+				aOutNextEvent = (NativeEvent)(&sdlSysMsg->msg.x11.event);
 				return true;
 #endif
 			}

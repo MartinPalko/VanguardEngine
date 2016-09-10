@@ -42,7 +42,7 @@ namespace Vanguard
 
 		if (targetThreads > 1)
 		{
-			Log::Message("Creating " + String::FromSize(targetThreads) + " job threads", "JobSystem");
+			LOG_MESSAGE("Creating " + String::FromSize(targetThreads) + " job threads", "JobSystem");
 
 			size_t threadsToCreate = targetThreads - workers.Count();
 
@@ -56,7 +56,7 @@ namespace Vanguard
 		}
 		else
 		{
-			Log::Message("Job Manager running in synchronouse mode", "JobSystem");
+			LOG_MESSAGE("Job Manager running in synchronouse mode", "JobSystem");
 		}
 	}
 

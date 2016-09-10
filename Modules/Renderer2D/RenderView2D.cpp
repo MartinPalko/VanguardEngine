@@ -31,14 +31,14 @@ namespace Vanguard
 
 		if (!sdlWindow)
 		{
-			Log::Exception("Failed to create SDL window!", "Renderer2d");
+			LOG_EXCEPTION("Failed to create SDL window!", "Renderer2d");
 		}
 
 		sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, SDL_RENDERER_ACCELERATED);
 		
 		if (!sdlRenderer)
 		{
-			Log::Exception("Failed to create SDL renderer!", "Renderer2d");
+			LOG_EXCEPTION("Failed to create SDL renderer!", "Renderer2d");
 		}
 	}
 

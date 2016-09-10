@@ -88,10 +88,13 @@ namespace Vanguard
 		if (initialized && (aErrorLevel >= LogEntryErrorLevel::Error || GetUnflushedEntriesArray().Count() >= maxEntriesBetweenFlushes))
 		{
 			Flush();
-		}
 
-		if (aErrorLevel == LogEntryErrorLevel::Exception)
-			throw Vanguard::Exception(newEntry.GetMessage().GetCharPointer());
+			if (aErrorLevel == LogEntryErrorLevel::Exception)
+			{
+				// Allow IO thread to finish writing log file before continuing.
+				AsyncIO::JoinIOThread();
+			}
+		}
 
 		functionMutex.Unlock();
 	}

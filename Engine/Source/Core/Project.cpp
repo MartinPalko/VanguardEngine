@@ -21,6 +21,6 @@ namespace Vanguard
 		friendlyName = projectConfigFile.GetValue("Project", "FriendlyName");
 		description = projectConfigFile.GetValue("Project", "Description");
 
-		Log::Message("Loaded project " + friendlyName + ": " + description,"Projects");
+		LOG_MESSAGE("Loaded project " + friendlyName + ": " + description,"Projects");
 	}
 }

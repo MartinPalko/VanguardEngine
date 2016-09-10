@@ -42,7 +42,7 @@ namespace Vanguard
 
 		if (hashMap.count(aRuntimeHash) || nameMap.count(nameHash))
 		{
-			Log::Exception("Trying to register type " + String(aClassName) + " when type already exists!", "Type");
+			LOG_EXCEPTION("Trying to register type " + String(aClassName) + " when type already exists!", "Type");
 		}
 
 		Type* newClassInfo = new Type(aClassFactory, aClassName, aBaseClassName, aRuntimeHash);

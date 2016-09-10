@@ -42,7 +42,7 @@ namespace Vanguard
 		Type* requestedClass = Type::GetType(aEntityType);
 		if (requestedClass == nullptr)
 		{
-			Log::Warning("Entity spawning failed, requested class " + aEntityType + " could not be found", "World");
+			LOG_WARNING("Entity spawning failed, requested class " + aEntityType + " could not be found", "World");
 			return nullptr;
 		}
 
@@ -55,7 +55,7 @@ namespace Vanguard
 
 		if (!aRequestedClass->IsA(entityType))
 		{
-			Log::Warning("Entity spawning failed, " + aRequestedClass->GetTypeName() + " is not a " + entityType->GetTypeName(), "World");
+			LOG_WARNING("Entity spawning failed, " + aRequestedClass->GetTypeName() + " is not a " + entityType->GetTypeName(), "World");
 			return nullptr;
 		}
 

@@ -23,7 +23,7 @@ namespace Vanguard
 		if (moduleUsers[module] == 0)
 		{
 			SDL_InitSubSystem(module);
-			Log::Message("SDL initialized " + moduleNames[module] + " subsystem", "SDL");
+			LOG_MESSAGE("SDL initialized " + moduleNames[module] + " subsystem", "SDL");
 		}
 
 		// Ensure native window manager events are enabled.
@@ -39,7 +39,7 @@ namespace Vanguard
 		if (moduleUsers[module] == 0)
 		{
 			SDL_QuitSubSystem(module);
-			Log::Message("SDL quit " + moduleNames[module] + " subsystem", "SDL");
+			LOG_MESSAGE("SDL quit " + moduleNames[module] + " subsystem", "SDL");
 		}
 	}
 
@@ -49,7 +49,7 @@ namespace Vanguard
 
 		Application::RegisterNativeEventProcessor(this);
 
-		Log::Message("SDL initialized", "SDL");
+		LOG_MESSAGE("SDL initialized", "SDL");
 
 		// Initialize all module users to 0.
 		moduleUsers[SDLModule::Timer] = 0;
@@ -74,7 +74,7 @@ namespace Vanguard
 	{
 		SDL_Quit();
 		Application::UnregisterNativeEventProcessor(this);
-		Log::Message("SDL quit", "SDL");
+		LOG_MESSAGE("SDL quit", "SDL");
 	}
 
 	bool VanguardSDL::GetNextEvent(NativeEvent& aOutNextEvent)

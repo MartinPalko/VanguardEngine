@@ -45,7 +45,7 @@ namespace Vanguard
 #if VANGUARD_DEBUG
 			if (!GetClassinfoHashMap().count(typeHash))
 			{
-				Log::Exception("Trying to get class info for unregistered type: " + String(typeid(T).raw_name()));
+				LOG_EXCEPTION("Trying to get class info for unregistered type: " + String(typeid(T).raw_name()), "Type");
 			}
 #endif
 			return GetClassinfoHashMap()[typeHash];

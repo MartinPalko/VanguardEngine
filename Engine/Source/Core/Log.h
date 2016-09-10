@@ -81,37 +81,36 @@ namespace Vanguard
 	public:
 		static void Initialize();
 
-		static void Write(const String& aMessage, const LogEntryErrorLevel& aErrorLevel, const String& aChannel = "");
-
-		static inline void Message(const String& aMessage, const String& aChannel = "") { Write(aMessage, LogEntryErrorLevel::Message, aChannel); }
-		static inline void Warning(const String& aMessage, const String& aChannel = "") { Write(aMessage, LogEntryErrorLevel::Warning, aChannel); }
-		static inline void Error(const String& aMessage, const String& aChannel = "") { Write(aMessage, LogEntryErrorLevel::Error, aChannel); }
-		static inline void Exception(const String& aMessage, const String& aChannel = "") { Write(aMessage, LogEntryErrorLevel::Exception, aChannel); }
+		static void Write(const String& aMessage, const LogEntryErrorLevel& aErrorLevel, const String& aChannel);
 
 		static void Flush();
 	};
 }
 
+#define LOG_MESSAGE(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Message, channel);}
+#define LOG_WARNING(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Warning, channel);}
+#define LOG_ERROR(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Error, channel);}
+#define LOG_EXCEPTION(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Exception, channel); throw Vanguard::Exception(String(message).GetCharPointer());}
+
 #if VANGUARD_DEBUG
-#define DEBUG_LOG(message) {Vanguard::Log::Message(message, "Debug");}
-#define DEBUG_WARN(message) {Vanguard::Log::Warning(message, "Debug");}
-#define DEBUG_ERROR(message) {Vanguard::Log::Error(message, "Debug");}
-#define DEBUG_EXCEPTION(message) {Vanguard::Log::Exception(message, "Debug");}
+	#define DEBUG_LOG(message) LOG_MESSAGE(message, "Debug")
+	#define DEBUG_WARN(message) LOG_WARNING(message, "Debug")
+	#define DEBUG_ERROR(message) LOG_ERROR(message, "Debug")
+	#define DEBUG_EXCEPTION(message) LOG_EXCEPTION(message, "Debug")
 
-#define DEBUG_LOG_IF(condition, message) if (condition) {Vanguard::Log::Message(message, "Debug");}
-#define DEBUG_WARN_IF(condition, message) if (condition) {Vanguard::Log::Warning(message, "Debug");}
-#define DEBUG_ERROR_IF(condition, message) if (condition) {Vanguard::Log::Error(message, "Debug");}
-#define DEBUG_EXCEPTION_IF(condition, message) if (condition) {Vanguard::Log::Exception(message, "Debug");}
+	#define DEBUG_LOG_IF(condition, message) if (condition) LOG_MESSAGE(message, "Debug")
+	#define DEBUG_WARN_IF(condition, message) if (condition) LOG_WARNING(message, "Debug")
+	#define DEBUG_ERROR_IF(condition, message) if (condition) LOG_ERROR(message, "Debug")
+	#define DEBUG_EXCEPTION_IF(condition, message) if (condition) LOG_EXCEPTION(message, "Debug")
 #else
-// Compile out to nothing in non-debug builds.
-#define DEBUG_LOG(message)
-#define DEBUG_WARN(message)
-#define DEBUG_ERROR(message)
-#define DEBUG_EXCEPTION(message)
+	// Compile out to nothing in non-debug builds.
+	#define DEBUG_LOG(message)
+	#define DEBUG_WARN(message)
+	#define DEBUG_ERROR(message)
+	#define DEBUG_EXCEPTION(message)
 
-#define DEBUG_LOG_IF(condition, message)
-#define DEBUG_WARN_IF(condition, message)
-#define DEBUG_ERROR_IF(condition, message)
-#define DEBUG_EXCEPTION_IF(condition, message)
+	#define DEBUG_LOG_IF(condition, message)
+	#define DEBUG_WARN_IF(condition, message)
+	#define DEBUG_ERROR_IF(condition, message)
+	#define DEBUG_EXCEPTION_IF(condition, message)
 #endif
-

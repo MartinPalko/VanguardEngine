@@ -45,7 +45,7 @@ namespace Vanguard
 		{
 			Timespan endTime = Timespan::GetElapsedSystemTime();
 			Timespan profileTime = endTime - startTime;
-			Log::Message(message + String::FromFloat(profileTime.InSeconds() * 1000.0) + "ms");
+			LOG_MESSAGE(message + String::FromFloat(profileTime.InSeconds() * 1000.0) + "ms", "Quick Profiler");
 			ended = true;
 		}
 
@@ -118,7 +118,7 @@ namespace Vanguard
 
 #if VANGUARD_DEBUG
 #define ASSERT_MAIN_THREAD \
-if (Vanguard::Core::GetInstance()->GetMainThreadID() != Thread::CurrentThreadID()) Log::Exception("This code must execute on the main thread!");
+if (Vanguard::Core::GetInstance()->GetMainThreadID() != Thread::CurrentThreadID()) LOG_EXCEPTION("This code must execute on the main thread!", "Core");
 #else
 #define ASSERT_MAIN_THREAD
 #endif

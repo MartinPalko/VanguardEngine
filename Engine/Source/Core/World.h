@@ -47,7 +47,7 @@ namespace Vanguard
 			Type* requestedClass = Type::GetType<T>();
 			if (requestedClass == nullptr)
 			{
-				Log::Warning("Entity spawning failed, requested class could not be found", "World");
+				LOG_WARNING("Entity spawning failed, requested class could not be found", "World");
 				return nullptr;
 			}
 

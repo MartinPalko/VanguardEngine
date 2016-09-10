@@ -31,7 +31,7 @@ namespace Vanguard
 		if (!tempLoadedLib->Open(aModulePath))
 		{
 			// Could not load dynamic library
-			Log::Error("Could not load library " + aModulePath.GetFilename() + ": \n" + tempLoadedLib->GetLastError(), "Modules");
+			LOG_ERROR("Could not load library " + aModulePath.GetFilename() + ": \n" + tempLoadedLib->GetLastError(), "Modules");
 			delete tempLoadedLib;
 			return nullptr;
 		}
@@ -68,7 +68,7 @@ namespace Vanguard
 		if (!dynamicLibReference->Open(filePath))
 		{
 			UnloadModule();
-			Log::Error("Could not load module \"" + filePath.GetFullPathName() + "\", library cannot be opened.", "Modules");
+			LOG_ERROR("Could not load module \"" + filePath.GetFullPathName() + "\", library cannot be opened.", "Modules");
 			return false;
 		}
 
@@ -77,7 +77,7 @@ namespace Vanguard
 		if (InstantiationFunction == nullptr)
 		{
 			UnloadModule();
-			Log::Error("Could not load module \"" + filePath.GetFullPathName() + "\", library does not contain function: " + TO_STRING(VANGUARD_MODULE_INST_FUNCTION), "Modules");
+			LOG_ERROR("Could not load module \"" + filePath.GetFullPathName() + "\", library does not contain function: " + TO_STRING(VANGUARD_MODULE_INST_FUNCTION), "Modules");
 			return false;
 		}
 
@@ -155,7 +155,7 @@ namespace Vanguard
 		{
 			if (aExplicit)
 			{
-				Log::Error("Loading module " + aModuleName + " failed; could not find module", "Modules");
+				LOG_ERROR("Loading module " + aModuleName + " failed; could not find module", "Modules");
 			}
 			return eModuleLoadResult::NotFound;
 		}
@@ -187,13 +187,13 @@ namespace Vanguard
 			}
 			else
 			{
-				Log::Error("Loading module dependencies for " + aModuleName + " failed", "Modules");
+				LOG_ERROR("Loading module dependencies for " + aModuleName + " failed", "Modules");
 				UnloadModule(aModuleName);
 				return eModuleLoadResult::Error;
 			}
 		}
 
-		Log::Message("Loading module: " + aModuleName, "Modules");
+		LOG_MESSAGE("Loading module: " + aModuleName, "Modules");
 		return moduleInfo->LoadModule() ? eModuleLoadResult::Success : eModuleLoadResult::Error;
 	}
 

@@ -32,14 +32,14 @@ namespace Vanguard
 	{
 		if (state != CoreState::NotInitialized)
 		{
-			Log::Exception("Core is already initialized!", "Core");
+			LOG_EXCEPTION("Core is already initialized!", "Core");
 		}
 
 		state = CoreState::Initializing;
 
 		if (instance)
 		{
-			Log::Exception("There can only be one Vanguard Core initialized at a time!", "Core");
+			LOG_EXCEPTION("There can only be one Vanguard Core initialized at a time!", "Core");
 		}
 
 		instance = this;
@@ -75,12 +75,12 @@ namespace Vanguard
 				}
 			}
 			else
-				Log::Error("Project " + loadedProject->GetName() + "'s module is not a Project module", "Core");
+				LOG_ERROR("Project " + loadedProject->GetName() + "'s module is not a Project module", "Core");
 		}
 		else
-			Log::Error("Project " + loadedProject->GetName() + " failed to load!", "Core");
+			LOG_ERROR("Project " + loadedProject->GetName() + " failed to load!", "Core");
 
-		Log::Message("Initialized Core", "Core");
+		LOG_MESSAGE("Initialized Core", "Core");
 		state = CoreState::Initialized;
 	}
 
@@ -90,15 +90,15 @@ namespace Vanguard
 
 		if (state != CoreState::Initialized)
 		{
-			Log::Exception("Must initialize before running!", "Core");
+			LOG_EXCEPTION("Must initialize before running!", "Core");
 		}
 
-		Log::Message("Core Running", "Core");
+		LOG_MESSAGE("Core Running", "Core");
 		state = CoreState::Running;
 
 		if (!worlds.Count())
 		{
-			Log::Error("No worlds have been registered, shutting down", "Core");
+			LOG_ERROR("No worlds have been registered, shutting down", "Core");
 			ShutDown();
 		}
 
@@ -149,7 +149,7 @@ namespace Vanguard
 
 					// Temp debugging					
 					const float frameTime = (Timespan::GetElapsedSystemTime() - currentTime).InSeconds() * 1000.0;
-					Log::Message("Frame time : " + String::FromFloat(frameTime));
+					LOG_MESSAGE("Frame time : " + String::FromFloat(frameTime), "Core");
 
 					if (jobManager->GetProfiler()->IsProfiling() && frameTime > 10.0f)
 						jobManager->GetProfiler()->EndProfiling(Directories::GetVanguardRootDirectory().GetRelative("Jobs.json"));
@@ -205,7 +205,7 @@ namespace Vanguard
 
 			state = CoreState::ShuttingDown;
 
-			Log::Message("Shutting down Core", "Core");
+			LOG_MESSAGE("Shutting down Core", "Core");
 
 			jobManager->JoinThreads();
 			delete jobManager;
@@ -220,11 +220,11 @@ namespace Vanguard
 			delete loadedProject;
 			loadedProject = nullptr;
 
-			Log::Message("Core shut down successfully", "Core");
+			LOG_MESSAGE("Core shut down successfully", "Core");
 			state = CoreState::ShutDown;
 
 			// Want to flush the log as late as possible to make sure all entries get written to disk.
-			Log::Message("Flushing log and joining IO Thread", "Core");
+			LOG_MESSAGE("Flushing log and joining IO Thread", "Core");
 			Log::Flush();
 			AsyncIO::JoinIOThread();			
 			instance = nullptr;
@@ -258,7 +258,7 @@ namespace Vanguard
 	{
 		if (renderers.Contains(aRenderer))
 		{
-			Log::Warning("A renderer already registered!", "Core");
+			LOG_WARNING("A renderer already registered!", "Core");
 			return;
 		}
 
@@ -269,7 +269,7 @@ namespace Vanguard
 			primaryRenderer = aRenderer;
 		}
 
-		Log::Message("Registered renderer: " + aRenderer->RendererName(), "Core");
+		LOG_MESSAGE("Registered renderer: " + aRenderer->RendererName(), "Core");
 	}
 
 	void Core::UnregisterRenderer(IRenderer * aRenderer)
@@ -285,7 +285,7 @@ namespace Vanguard
 		{
 			primaryRenderer = renderers[0];
 		}
-		Log::Message("Unregistered renderer: " + aRenderer->RendererName(), "Core");
+		LOG_MESSAGE("Unregistered renderer: " + aRenderer->RendererName(), "Core");
 	}
 
 	IRenderer* Core::GetPrimaryRenderer()

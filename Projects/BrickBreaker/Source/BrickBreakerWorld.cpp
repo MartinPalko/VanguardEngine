@@ -105,7 +105,7 @@ namespace BrickBreaker
 		inputManager->Update(aFrame->deltaTime.InMilliseconds());
 
 		//DEBUG_LOG("FPS: " + String::FromFloat(1.0f / aFrame->deltaTime.InSeconds()));
-		Log::Message("FPS: " + String::FromFloat(1.0f / aFrame->deltaTime.InSeconds()));
+		LOG_MESSAGE("FPS: " + String::FromFloat(1.0f / aFrame->deltaTime.InSeconds()), "Brick Breaker");
 
 		if (inputMap->GetBool(eGameButton::Exit))
 		{

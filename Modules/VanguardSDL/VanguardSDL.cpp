@@ -84,6 +84,11 @@ namespace Vanguard
 		SDL_Event sdlEvent;
 		if (SDL_PollEvent(&sdlEvent))
 		{
+			if (sdlEvent.type == SDL_QUIT)
+			{
+				Core::GetInstance()->ShutDown();
+			}
+
 			if (sdlEvent.type == SDL_SYSWMEVENT)
 			{
 				SDL_SysWMmsg* sdlSysMsg = sdlEvent.syswm.msg;

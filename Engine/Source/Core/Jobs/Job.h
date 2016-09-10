@@ -14,13 +14,15 @@ namespace Vanguard
 
 	private:
 		String name;
+		bool requiresMainThreadExecution;
 		bool running;
 		bool finished;
 
 	public:
-		Job(const String& aName)
+		Job(const String& aName, bool aRequiresMainThreadExecution = false)
 		{
 			name = aName;
+			requiresMainThreadExecution = aRequiresMainThreadExecution;
 			running = false;
 			finished = false;
 		}

@@ -23,13 +23,15 @@ namespace Vanguard
 		, renderers()
 		, primaryRenderer(nullptr)
 	{
-		
+		mainThreadID = Thread::CurrentThreadID();
 	}
 
 	Core* Core::GetInstance() { return instance; }
 
 	void Core::Initialize(int aArgC, char** aArgV, const char* aProjectName)
 	{
+		ASSERT_MAIN_THREAD;
+
 		if (state != CoreState::NotInitialized)
 		{
 			Log::Exception("Core is already initialized!", "Core");
@@ -84,6 +86,8 @@ namespace Vanguard
 
 	void Core::Run()
 	{
+		ASSERT_MAIN_THREAD;
+
 		if (state != CoreState::Initialized)
 		{
 			Log::Exception("Must initialize before running!", "Core");
@@ -102,6 +106,7 @@ namespace Vanguard
 		while (state == CoreState::Running)
 		{
 			Application::ProcessNativeEvents();
+			jobManager->ServiceMainThreadJobs();
 
 			// Tick worlds
 			for (int i = 0; i < worlds.Count(); i++)
@@ -134,9 +139,13 @@ namespace Vanguard
 					frame->AddJob(world->MakeTickJob(frame));
 					frame->Start();
 
-					// Wait for frame to finish
-					while (!frame->Finished()) { std::this_thread::yield(); }
-
+					// Wait for the frame to finish
+					while (!frame->Finished())
+					{
+						// Service main thread jobs dispatched by the frame.
+						jobManager->ServiceMainThreadJobs();
+						std::this_thread::yield(); 
+					}
 
 					// Temp debugging					
 					const float frameTime = (Timespan::GetElapsedSystemTime() - currentTime).InSeconds() * 1000.0;
@@ -192,6 +201,8 @@ namespace Vanguard
 
 		if (state == CoreState::StartingShutdown)
 		{
+			ASSERT_MAIN_THREAD;
+
 			state = CoreState::ShuttingDown;
 
 			Log::Message("Shutting down Core", "Core");

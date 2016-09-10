@@ -85,12 +85,30 @@ namespace Vanguard
 		workers.Clear();
 	}
 
+	void JobManager::ServiceMainThreadJobs()
+	{
+		ASSERT_MAIN_THREAD;
+
+		Job* job;
+		while (mainThreadJobs.try_dequeue(job))
+		{
+			job->Execute();
+		}
+	}
+
 	void JobManager::AddJob(Job* aJob)
 	{
 		if (workers.Count())
 		{
 			// Put it to the queue.
-			jobs.enqueue(aJob);
+			if (aJob->requiresMainThreadExecution)
+			{
+				mainThreadJobs.enqueue(aJob);
+			}
+			else
+			{
+				jobs.enqueue(aJob);
+			}
 		}
 		else
 		{

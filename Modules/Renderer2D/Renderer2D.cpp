@@ -47,7 +47,7 @@ namespace Vanguard
 		DynamicArray<JobRenderView> renderViews;
 		DynamicArray<RenderItem> renderItems;
 
-		RenderJob(const String& aName, Frame* aFrame) : FrameJob(aName, aFrame)
+		RenderJob(const String& aName, Frame* aFrame) : FrameJob(aName, aFrame, true)
 		, renderViews()
 		, renderItems()
 		{}

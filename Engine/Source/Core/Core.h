@@ -77,6 +77,7 @@ namespace Vanguard
 		static BooleanConfigVar showConsoleOnStart;
 
 		static Core* instance;
+		String mainThreadID;
 
 		JobManager* jobManager;
 
@@ -96,6 +97,7 @@ namespace Vanguard
 		virtual ~Core() {};
 
 		static Core* GetInstance();
+		String GetMainThreadID() { return mainThreadID; }
 		JobManager* GetJobManager();
 
 		// Implementation of ICore
@@ -113,3 +115,10 @@ namespace Vanguard
 		IRenderer* GetPrimaryRenderer();
 	};
 }
+
+#if VANGUARD_DEBUG
+#define ASSERT_MAIN_THREAD \
+if (Vanguard::Core::GetInstance()->GetMainThreadID() != Thread::CurrentThreadID()) Log::Exception("This code must execute on the main thread!");
+#else
+#define ASSERT_MAIN_THREAD
+#endif

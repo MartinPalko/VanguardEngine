@@ -51,7 +51,7 @@ namespace Vanguard
 		Frame* frame;
 
 	public:
-		FrameJob(const String& aName, Frame* aFrame) : Job(aName)
+		FrameJob(const String& aName, Frame* aFrame, bool aRequiresMainThreadExecution = false) : Job(aName, aRequiresMainThreadExecution)
 		{
 			frame = aFrame;
 		}

@@ -21,6 +21,7 @@ namespace Vanguard
 	private:
 		DynamicArray<JobWorker*> workers;
 		moodycamel::BlockingConcurrentQueue<Job*> jobs;
+		moodycamel::BlockingConcurrentQueue<Job*> mainThreadJobs;
 
 		JobWorker* GetWorker();
 
@@ -33,6 +34,7 @@ namespace Vanguard
 		~JobManager();
 
 		void JoinThreads();
+		void ServiceMainThreadJobs();
 		void AddJob(Job* aJob);
 		void AddJobs(Job** aJobs, size_t aNumJobs);
 

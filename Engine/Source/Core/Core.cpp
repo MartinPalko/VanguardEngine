@@ -30,8 +30,6 @@ namespace Vanguard
 
 	void Core::Initialize(int aArgC, char** aArgV, const char* aProjectName)
 	{
-		ASSERT_MAIN_THREAD;
-
 		if (state != CoreState::NotInitialized)
 		{
 			Log::Exception("Core is already initialized!", "Core");
@@ -45,6 +43,8 @@ namespace Vanguard
 		}
 
 		instance = this;
+
+		ASSERT_MAIN_THREAD;
 
 		Application::SetApplicationArguments(aArgC, aArgV);
 

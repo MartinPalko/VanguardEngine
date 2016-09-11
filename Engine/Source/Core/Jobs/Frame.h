@@ -18,7 +18,7 @@ namespace Vanguard
 		friend class FrameJob;
 
 	private:
-		bool started;
+		std::atomic<bool> started;
 		DynamicArray<Job*> pendingJobs;
 		std::atomic<size_t> unfinishedJobs;
 	public:

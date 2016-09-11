@@ -28,13 +28,12 @@ namespace Vanguard
 
 	void Frame::Start()
 	{
+		started = true;
 		for (int i = 0; i < pendingJobs.Count(); i++)
 		{
 			Core::GetInstance()->GetJobManager()->AddJob(pendingJobs[i]);
 		}
-		pendingJobs.Clear();
-		
-		started = true;
+		pendingJobs.Clear();		
 	}
 
 	bool Frame::Finished()

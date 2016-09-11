@@ -3,9 +3,7 @@
 // Comment out headers of unit tests you want to disable
 
 // Foundation
-#include "Tests/Foundation/DictionaryTest.h"
 #include "Tests/Foundation/FileSystemTest.h"
-#include "Tests/Foundation/HashtableTest.h"
 #include "Tests/Foundation/MathFunctionsTest.h"
 #include "Tests/Foundation/StringIDTest.h"
 #include "Tests/Foundation/StringTest.h"

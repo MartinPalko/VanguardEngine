@@ -2,13 +2,12 @@
 #include <map>
 
 #include "Foundation_Common.h"
-#include "IDictionary.h"
 #include "DynamicArray.h"
 
 namespace Vanguard
 {
 	template<typename K, typename V>
-	class Dictionary : public IDictionary<K,V>
+	class Dictionary
 	{
 	private:
 		std::map<K, V> data;

@@ -1,14 +1,12 @@
 #pragma once
 #include <vector>
 
-#include "ICollection.h"
-
 #include "Foundation_Common.h"
 
 namespace Vanguard
 {
 	template<class T>
-	class DynamicArray : public ICollection<T>
+	class DynamicArray
 	{
 	private:
 		std::vector<T> data;

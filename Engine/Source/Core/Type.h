@@ -1,5 +1,6 @@
 #pragma once
 #include <typeinfo>
+#include <unordered_map>
 #include "Foundation.h"
 #include "Core_Common.h"
 #include "Log.h"

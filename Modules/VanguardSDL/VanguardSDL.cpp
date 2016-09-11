@@ -14,9 +14,8 @@ namespace Vanguard
 {
 	VANGUARD_DECLARE_MODULE(VanguardSDL)
 
-	Hashtable<int32> moduleUsers;
-	Hashtable<String> moduleNames;
-	
+	std::unordered_map<int32, int32> moduleUsers;
+	std::unordered_map<int32, String> moduleNames;
 
 	void VanguardSDL::RegisterModuleUse(SDLModule module)
 	{

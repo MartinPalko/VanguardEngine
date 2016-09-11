@@ -13,18 +13,18 @@ namespace Vanguard
 		static FilePath GetVanguardRootDirectory();
 		static FilePath GetLogDirectory();
 
-		// ---------- Engine Directories ----------
-
 		static FilePath GetEngineBinDirectory();
 		static FilePath GetEngineModuleDirectory();
 		static FilePath GetEngineDirectory();
 		static FilePath GetEngineConfigDirectory();
-
-		// ---------- Project Directories ----------
+		static FilePath GetEngineResourceDirectory();
 
 		static FilePath GetProjectTempDirectory();
 		static FilePath GetProjectDirectory();
 		static FilePath GetProjectConfigDirectory();
 		static FilePath GetProjectModuleDirectory();
+		static FilePath GetProjectResourceDirectory();
+
+		static DynamicArray<FilePath> GetResourceDirectories();
 	};
 }

@@ -21,11 +21,9 @@ namespace Vanguard
 		return logDir;
 	}
 
-	// ---------- Engine Directories ----------
-
 	FilePath Directories::GetEngineBinDirectory()
 	{
-		FilePath engineExecutable = FileSystem::GetHostApplicationPath();
+		static FilePath engineExecutable = FileSystem::GetHostApplicationPath();
 		return engineExecutable.GetParentDirectory();
 	}
 
@@ -37,7 +35,6 @@ namespace Vanguard
 	FilePath Directories::GetEngineDirectory()
 	{
 		return GetVanguardRootDirectory().GetRelative("Engine");
-		//return GetEngineBinDirectory().GetParentDirectory();
 	}
 
 	FilePath Directories::GetEngineConfigDirectory()
@@ -48,7 +45,10 @@ namespace Vanguard
 		return configDir;
 	}
 
-	// ---------- Project Directories ----------
+	FilePath Directories::GetEngineResourceDirectory()
+	{
+		return GetEngineDirectory().GetRelative("Resources");
+	}
 
 	// Gets a directory inside of the users temp directory, useful for temporary files.
 	FilePath Directories::GetProjectTempDirectory()
@@ -75,5 +75,18 @@ namespace Vanguard
 	FilePath Directories::GetProjectModuleDirectory()
 	{
 		return GetEngineModuleDirectory();
+	}
+
+	FilePath Directories::GetProjectResourceDirectory()
+	{
+		return GetProjectDirectory().GetRelative("Resources");
+	}
+
+	DynamicArray<FilePath> Directories::GetResourceDirectories()
+	{
+		DynamicArray<FilePath> resourceDirectories(2);
+		resourceDirectories.PushBack(GetProjectResourceDirectory());
+		resourceDirectories.PushBack(GetEngineResourceDirectory());
+		return resourceDirectories;
 	}
 }

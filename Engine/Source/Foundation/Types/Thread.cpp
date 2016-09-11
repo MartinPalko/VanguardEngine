@@ -33,6 +33,7 @@ namespace Vanguard
 		running = true;
 		stdThread = nullptr;
 		name = aString;
+		affinityMask = 0;
 	}
 
 	Thread::~Thread()
@@ -53,7 +54,8 @@ namespace Vanguard
 			if (name == "")
 				name = "Vanguard Thread " + GetID();
 			SetName(name);
-			SetAffinityMask(affinityMask);
+			if (affinityMask)
+				SetAffinityMask(affinityMask);
 		}
 	}
 

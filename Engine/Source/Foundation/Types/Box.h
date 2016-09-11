@@ -14,6 +14,8 @@ namespace Vanguard
 		inline Box(Vector3 aSize) : Box(-aSize / 2, aSize / 2) {}
 		inline Box() : Box(Vector3(0, 0, 0), Vector3(0, 0, 0)) {}
 
+		inline Vector3 GetSize() { return max - min; }
+
 		inline void AddBox(const Box& aOtherBox)
 		{
 			min = Vector3::Min(min, aOtherBox.min);

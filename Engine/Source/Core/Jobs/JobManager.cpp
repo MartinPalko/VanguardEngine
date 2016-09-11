@@ -3,6 +3,8 @@
 #include "Job.h"
 #include "Core.h"
 
+#define MAX_JOB_WORKERS 32u
+
 namespace Vanguard
 {
 	void JobManager::WorkerFinishedJob(JobWorker* aThread, Job* aJob)
@@ -14,29 +16,25 @@ namespace Vanguard
 		: workers()
 		, jobs()
 	{
-#ifdef VANGUARD_LINUX
-		size_t targetThreads = 0; // Job system not currently working properly on linux.
-#else
-		size_t targetThreads = SystemInfo::GetNumberOfCores();
-#endif
+		// One less worker than the number of cores on the system (since the main thread will help out)
+		//size_t targetThreads = Math::Min(SystemInfo::GetNumberOfCores() - 1, MAX_JOB_WORKERS);
+		size_t targetThreads =0;
 
-		if (targetThreads > 1)
+		if (!targetThreads)
 		{
-			LOG_MESSAGE("Creating " + String::FromSize(targetThreads) + " job threads", "JobSystem");
-
-			size_t threadsToCreate = targetThreads - workers.Count();
-
-			for (int i = 0; i < threadsToCreate; i++)
-			{
-				JobWorker* newJobWorker = new JobWorker(i, this);
-				newJobWorker->SetAffinityMask(1 << i);
-				workers.PushBack(newJobWorker);
-				newJobWorker->Start();
-			}
+			LOG_MESSAGE("Job Manager running in synchronouse mode", "JobSystem");
 		}
 		else
 		{
-			LOG_MESSAGE("Job Manager running in synchronouse mode", "JobSystem");
+			LOG_MESSAGE("Creating " + String::FromSize(targetThreads) + " job threads", "JobSystem");
+		}
+
+		for (int i = 0; i < targetThreads; i++)
+		{
+			JobWorker* newJobWorker = new JobWorker(i, this);
+			//newJobWorker->SetAffinityMask(1 << i); // Disabled setting affinity for now. Need to investigate the implications.
+			workers.PushBack(newJobWorker);
+			newJobWorker->Start();
 		}
 	}
 
@@ -65,6 +63,15 @@ namespace Vanguard
 
 		Job* job;
 		while (mainThreadJobs.try_dequeue(job))
+		{
+			job->Execute();
+		}
+	}
+
+	void JobManager::HelpWithJob()
+	{
+		Job* job;
+		if (jobs.try_dequeue(job))
 		{
 			job->Execute();
 		}

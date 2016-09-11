@@ -31,6 +31,7 @@ namespace Vanguard
 
 		void JoinThreads();
 		void ServiceMainThreadJobs();
+		void HelpWithJob();
 		void AddJob(Job* aJob);
 		void AddJobs(Job** aJobs, size_t aNumJobs);
 

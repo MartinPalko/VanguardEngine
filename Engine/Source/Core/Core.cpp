@@ -145,7 +145,8 @@ namespace Vanguard
 					{
 						// Service main thread jobs dispatched by the frame.
 						jobManager->ServiceMainThreadJobs();
-						std::this_thread::yield(); 
+						// Help out the worker threads while we wait.
+						jobManager->HelpWithJob();
 					}
 
 					// Temp debugging					

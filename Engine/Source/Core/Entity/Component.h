@@ -15,8 +15,9 @@ namespace Vanguard
 		Entity* entity;
 
 	public:
-		Entity* GetEntity() { return entity; }
+		Component() : entity(nullptr) {}
 
+		Entity* GetEntity() { return entity; }
 		virtual Box GetBounds() { return Box(); }
 		
 	};

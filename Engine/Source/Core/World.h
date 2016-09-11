@@ -34,7 +34,7 @@ namespace Vanguard
 
 	public:
 		World(String aWorldName);
-		~World();
+		virtual ~World();
 
 		String GetWorldName(){ return worldName; }
 

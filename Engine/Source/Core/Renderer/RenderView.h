@@ -16,10 +16,12 @@ namespace Vanguard
 		Color clearColor;
 
 		RenderView(Camera* aViewCamera)
-			: clearColor(0, 0, 0)
+			: windowHandle(nullptr)
+			, viewCamera(aViewCamera)
+			, clearColor(0, 0, 0)			
 		{
-			viewCamera = aViewCamera;
 		}
+
 		virtual ~RenderView() {}
 
 		WindowHandle GetWindowHandle() { return windowHandle; }

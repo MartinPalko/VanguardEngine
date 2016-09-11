@@ -39,7 +39,7 @@ addons:
       description: "Build submitted via Travis CI"
     notification_email: jeeprubi@hotmail.com
     build_command_prepend: "cov-configure --comptype gcc --compiler gcc-4.8"
-    build_command:  (cd ${TRAVIS_BUILD_DIR}/Intermediate && make)
+    build_command:  cd ${TRAVIS_BUILD_DIR}/Intermediate && make
     branch_pattern: coverity_scan
 
 # Create makefile

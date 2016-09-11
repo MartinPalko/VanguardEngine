@@ -5,7 +5,7 @@
 #include "Jobs/Frame.h"
 #include "BrickBreaker.h"
 #include "Entity/Transform.h"
-#include "SpriteComponent.h"
+#include "SpriteRenderer.h"
 #include "BrickBreakerWorld.h"
 
 namespace eGameButton
@@ -35,10 +35,9 @@ namespace BrickBreaker
 		IRenderer* primaryRenderer = core->GetPrimaryRenderer();
 		playerView = core->GetPrimaryRenderer()->CreateRenderView(playerCamera);
 
-
 		// Background sprite
 		Actor* backgroundEntity = SpawnEntity<Actor>();
-		SpriteComponent* backgroundSprite = backgroundEntity->AddComponent<SpriteComponent>();
+		SpriteRenderer* backgroundSprite = backgroundEntity->AddComponent<SpriteRenderer>();
 		backgroundSprite->SetDimensions(PlayAreaSize);
 		backgroundSprite->SetColor(Color(0x33, 0x33, 0x33));
 
@@ -49,8 +48,8 @@ namespace BrickBreaker
 		// Spawn the ball
 		ball = SpawnEntity<Ball>();
 		ball->GetTransform()->position = Vector3(0, paddle->GetTransform()->position.y, 0);
-		ball->GetTransform()->position.y += paddle->GetComponent<SpriteComponent>()->GetDimensions().y / 2;
-		ball->GetTransform()->position.y += ball->GetComponent<SpriteComponent>()->GetDimensions().y / 2;
+		ball->GetTransform()->position.y += paddle->GetLocalBounds().GetSize().y / 2;
+		ball->GetTransform()->position.y += ball->GetLocalBounds().GetSize().y / 2;
 
 		// Spawn the bricks
 		const int bricksX = 12;
@@ -73,7 +72,7 @@ namespace BrickBreaker
 			{
 				Brick* newBrick = SpawnEntity<Brick>();
 				newBrick->GetTransform()->position = Vector3((float)x * brickSpacing.x + brickOffset.x, (float)y * brickSpacing.y + brickOffset.y, 0);
-				newBrick->GetComponent<SpriteComponent>()->SetColor(brickColors[y % (sizeof(brickColors) / sizeof(Color))]);
+				newBrick->GetComponent<SpriteRenderer>()->SetColor(brickColors[y % (sizeof(brickColors) / sizeof(Color))]);
 			}
 		}
 
@@ -99,12 +98,8 @@ namespace BrickBreaker
 	void BrickBreakerWorld::Tick(Vanguard::Frame* aFrame)
 	{
 		// Update Gainput
-		/*int displayX, displayY;
-		Application::GetWindowSize(gameWindow, displayX, displayY);
-		inputManager->SetDisplaySize(displayX, displayY);*/
 		inputManager->Update(aFrame->deltaTime.InMilliseconds());
 
-		//DEBUG_LOG("FPS: " + String::FromFloat(1.0f / aFrame->deltaTime.InSeconds()));
 		LOG_MESSAGE("FPS: " + String::FromFloat(1.0f / aFrame->deltaTime.InSeconds()), "Brick Breaker");
 
 		if (inputMap->GetBool(eGameButton::Exit))

@@ -1,4 +1,4 @@
-#include "SpriteComponent.h"
+#include "SpriteRenderer.h"
 #include "BrickBreakerWorld.h"
 #include "Paddle.h"
 
@@ -15,7 +15,7 @@ namespace BrickBreaker
 		, bounciness(0.4f)
 		, paddleWidth(20.0f)
 	{
-		SpriteComponent* spriteComponent = AddComponent<SpriteComponent>();
+		SpriteRenderer* spriteComponent = AddComponent<SpriteRenderer>();
 		spriteComponent->SetDimensions(Vector2(paddleWidth, 2.0f));
 		spriteComponent->SetColor(Color(150, 150, 150));
 

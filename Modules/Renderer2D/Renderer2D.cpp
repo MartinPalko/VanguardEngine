@@ -4,11 +4,30 @@
 #include "RenderView2D.h"
 #include "Entity/Transform.h"
 
-#define SPLIT_COLOR(VanguardColor) VanguardColor.r, VanguardColor.g, VanguardColor.b, VanguardColor.a
+#define SPLIT_COLOR_RGBA(VanguardColor) VanguardColor.r, VanguardColor.g, VanguardColor.b, VanguardColor.a
+#define SPLIT_COLOR_RGB(VanguardColor) VanguardColor.r, VanguardColor.g, VanguardColor.b
 
 namespace Vanguard
 {
 	VANGUARD_DECLARE_MODULE(Renderer2D)
+
+	struct RenderItem
+	{
+		Color color;
+		Vector2 dimensions;
+		Vector3 position;
+		SDL_Texture *texture;
+		SDL_BlendMode blendMode;
+	};
+
+	struct JobRenderView
+	{
+		Matrix4x4 projectionMatrix;
+		Matrix4x4 worldToCamera;
+		SDL_Window* window;
+		SDL_Renderer* renderer;
+		Color clearColor;
+	};
 
 	void Renderer2D::LoadModule()
 	{
@@ -67,7 +86,7 @@ namespace Vanguard
 				Vector2 screenSize(screenX, screenY);
 				Vector2 aspectAdjustment = aspectRatio > 1 ? Vector2(1 / aspectRatio, 1) : Vector2(1, aspectRatio);
 
-				SDL_SetRenderDrawColor(view.renderer, SPLIT_COLOR(view.clearColor));
+				SDL_SetRenderDrawColor(view.renderer, SPLIT_COLOR_RGBA(view.clearColor));
 				SDL_RenderClear(view.renderer);
 
 				for (size_t i = 0; i < renderItems.Count(); i++)
@@ -93,20 +112,21 @@ namespace Vanguard
 					Vector3 screenspace = ndcSpace * Vector3(screenX, screenY, 1);
 					Vector2 finalSize = renderItem.dimensions * scaleRelativeCamera * screenSize * aspectAdjustment;
 
-					SDL_Rect screenRect;				
-					screenRect.w = finalSize.x;
-					screenRect.h = finalSize.y;
-					screenRect.x = screenspace.x - screenRect.w / 2;
-					screenRect.y = screenspace.y - screenRect.h / 2;
+					SDL_Rect screenspaceRect;				
+					screenspaceRect.w = finalSize.x;
+					screenspaceRect.h = finalSize.y;
+					screenspaceRect.x = screenspace.x - screenspaceRect.w / 2;
+					screenspaceRect.y = screenspace.y - screenspaceRect.h / 2;
 
-					SDL_SetRenderDrawColor(view.renderer, SPLIT_COLOR(renderItem.color));
-
-					switch (renderItem.type)
+					if (renderItem.texture)
 					{
-					case ERenderItemType::rectangle:
-						SDL_RenderFillRect(view.renderer, &screenRect);
-					default:
-						break;
+						SDL_SetTextureColorMod(renderItem.texture, SPLIT_COLOR_RGB(renderItem.color));
+						SDL_RenderCopy(view.renderer, renderItem.texture, NULL, &screenspaceRect);
+					}
+					else
+					{
+						SDL_SetRenderDrawColor(view.renderer, SPLIT_COLOR_RGBA(renderItem.color));
+						SDL_RenderFillRect(view.renderer, &screenspaceRect);
 					}
 
 				}
@@ -139,18 +159,19 @@ namespace Vanguard
 			renderJob->renderViews.PushBack(jobView);
 		}
 
-		DynamicArray<VanguardObject*> sprites = aFrame->world->GetInstances(Type::GetType<SpriteComponent>());
+		DynamicArray<VanguardObject*> sprites = aFrame->world->GetInstances(Type::GetType<SpriteRenderer>(), true);
 		renderJob->renderItems.Reserve(sprites.Count());
 		for (int i = 0; i < sprites.Count(); i++)
 		{
-			SpriteComponent* sprite = (SpriteComponent*)sprites[i];
+			SpriteRenderer* sprite = (SpriteRenderer*)sprites[i];
 			if (sprite->GetEntity()->Enabled())
 			{
 				RenderItem item = {
-					ERenderItemType::rectangle,
 					sprite->GetColor(),
 					sprite->GetDimensions(),
-					sprite->GetEntity()->GetComponent<Transform>()->position
+					sprite->GetEntity()->GetComponent<Transform>()->position,
+					nullptr,
+					SDL_BLENDMODE_NONE
 				};
 				renderJob->renderItems.PushBack(item);
 			}

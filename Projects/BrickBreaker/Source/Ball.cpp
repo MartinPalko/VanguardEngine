@@ -1,8 +1,7 @@
 #include "Brick.h"
 #include "Paddle.h"
 #include "BrickBreakerWorld.h"
-#include "SpriteComponent.h"
-
+#include "SpriteRenderer.h"
 #include "Ball.h"
 
 namespace BrickBreaker
@@ -16,7 +15,7 @@ namespace BrickBreaker
 		, direction(Vector3(1,1,0))
 		, previousBallBounds(Vector3(0.0f, 0.0f, 0.0f))
 	{
-		SpriteComponent* spriteComponent = AddComponent<SpriteComponent>();
+		SpriteRenderer* spriteComponent = AddComponent<SpriteRenderer>();
 		spriteComponent->SetDimensions(Vector2(2.0f, 2.0f));
 		spriteComponent->SetColor(Color(200, 200, 200));
 	}

@@ -1,7 +1,7 @@
 #pragma once
 #include "Platforms/Platform.h"
+#include "Foundation_Common.h"
 #include <math.h>
-#include <random>
 
 namespace Vanguard
 {
@@ -43,9 +43,10 @@ namespace Vanguard
 		template<class T> T Clamp(const T& a, const T& lower, const T& upper) { return Min(Max(a, lower), upper); }
 
 		// Generates a random float between 0 and 1
-		inline float FRandom() { return (float)rand() / (float)RAND_MAX; }
+		FOUNDATION_API float FRandom();
+		FOUNDATION_API int32 IRandom();
+		FOUNDATION_API void SeedRandom(int aSeed);
 
-		inline int32 IRandom() { return rand(); }
 
 		inline float FRandomRange(const float& aMin, const float& aMax)
 		{

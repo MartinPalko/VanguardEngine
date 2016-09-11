@@ -3,10 +3,10 @@
 
 #if VANGUARD_DEBUG
 // Uncomment to enable memory leak detection on debug builds
-//#define MEMORY_LEAK_DEBUG_ENABLED 1
+//#define MEMORY_LEAK_DEBUG_ENABLED
 #endif
 
-#if VANGUARD_WINDOWS && MEMORY_LEAK_DEBUG_ENABLED
+#if VANGUARD_WINDOWS && defined(MEMORY_LEAK_DEBUG_ENABLED)
 #define VANGUARD_DUMP_MEMORY_LEAK_DEBUG _CrtDumpMemoryLeaks
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>

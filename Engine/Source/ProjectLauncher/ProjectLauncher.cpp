@@ -36,9 +36,8 @@ int main(int argc, char **argv)
 	}
 	delete coreLib;
 
-#if MEMORY_LEAK_DEBUG_ENABLED
+#ifdef MEMORY_LEAK_DEBUG_ENABLED
 	VANGUARD_DUMP_MEMORY_LEAK_DEBUG();
 #endif
 	return returnVal;
-
 }

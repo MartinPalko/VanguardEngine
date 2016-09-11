@@ -32,7 +32,7 @@ namespace Vanguard
         }
         
 		//Methods
-		inline void PushBack(T aItem)
+		inline void PushBack(const T& aItem)
 		{
 			data.push_back(aItem);
 		}
@@ -64,7 +64,7 @@ namespace Vanguard
 			data.clear();
 		}
 
-		inline void Remove(T aItem)
+		inline void Remove(const T& aItem)
 		{
 			if (!data.size())
 				return;

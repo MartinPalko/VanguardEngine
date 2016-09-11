@@ -74,15 +74,11 @@ namespace Vanguard
 
 	void Log::Write(const String& aMessage, const LogEntryErrorLevel& aErrorLevel, const String& aCategoty)
 	{
-		static Mutex functionMutex;
-		static LogEntry newEntry = LogEntry("",LogEntryErrorLevel::Message,"");
-
-		functionMutex.Lock();
+		static std::mutex logWriteMutex;
+		std::lock_guard<std::mutex> lock(logWriteMutex);
 		
-		newEntry = LogEntry(aMessage, aErrorLevel, aCategoty);
-
+		const LogEntry newEntry(aMessage, aErrorLevel, aCategoty);
 		GetUnflushedEntriesArray().PushBack(newEntry);
-
 		std::cout << newEntry.GetFormattedLogEntry().GetCharPointer() << "\n";
 
 		if (initialized && (aErrorLevel >= LogEntryErrorLevel::Error || GetUnflushedEntriesArray().Count() >= maxEntriesBetweenFlushes))
@@ -95,8 +91,6 @@ namespace Vanguard
 				AsyncIO::JoinIOThread();
 			}
 		}
-
-		functionMutex.Unlock();
 	}
 
 	void Log::Flush()

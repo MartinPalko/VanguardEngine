@@ -4,7 +4,6 @@
 #include "Box.h"
 #include "Color.h"
 #include "DynamicLibrary.h"
-#include "Mutex.h"
 #include "FilePath.h"
 #include "Quaternion.h"
 #include "Rect.h"

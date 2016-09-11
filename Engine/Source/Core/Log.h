@@ -31,12 +31,12 @@ namespace Vanguard
 			errorLevel(aErrorLevel),
 			timestamp(DateAndTime::CurrentTime()){}
 
-		String GetMessage() { return message; }
-		String GetCategory() { return channel; }
-		LogEntryErrorLevel GetWarningLevel() { return errorLevel; }
-		DateAndTime GetTimestamp(){ return timestamp; }
+		String GetMessage() const { return message; }
+		String GetCategory() const { return channel; }
+		LogEntryErrorLevel GetWarningLevel() const { return errorLevel; }
+		DateAndTime GetTimestamp() const { return timestamp; }
 
-		String GetFormattedLogEntry()
+		String GetFormattedLogEntry() const
 		{
 			String messagePrefix = "[" + timestamp.ToString(true, true, true, false) + "] ";
 

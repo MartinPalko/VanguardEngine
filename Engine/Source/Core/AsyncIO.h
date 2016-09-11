@@ -19,12 +19,9 @@ namespace Vanguard
 			virtual void Run() override;
 		};
 
-		static std::queue<IOTask*> taskQueue;
-		static Mutex taskQueueMutex;
 		static IOThread* ioThread;
 
 		static void AddTask(IOTask* task);
-		static IOTask* GetNextTask();
 
 	public:
 		static void JoinIOThread();

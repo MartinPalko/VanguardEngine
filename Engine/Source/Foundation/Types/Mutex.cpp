@@ -1,4 +1,3 @@
-#pragma once
 #include <mutex>
 #include "Mutex.h"
 

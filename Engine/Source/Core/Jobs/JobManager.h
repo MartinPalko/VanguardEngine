@@ -23,11 +23,7 @@ namespace Vanguard
 		moodycamel::BlockingConcurrentQueue<Job*> jobs;
 		moodycamel::BlockingConcurrentQueue<Job*> mainThreadJobs;
 
-		JobWorker* GetWorker();
-
 		void WorkerFinishedJob(JobWorker* aThread, Job* aJob);
-
-		JobProfiler* profiler;
 
 	public:
 		JobManager();
@@ -38,6 +34,6 @@ namespace Vanguard
 		void AddJob(Job* aJob);
 		void AddJobs(Job** aJobs, size_t aNumJobs);
 
-		JobProfiler* GetProfiler() { return profiler; }
+		JobWorker* GetWorkerByThreadID(size_t aThreadID);
 	};
 }

@@ -5,7 +5,6 @@
 
 #include "ModuleManager.h"
 #include "Type.h"
-#include "Jobs/JobProfiler.h"
 
 VANGUARD_DECLARE_CORE_IMP(Vanguard::Core)
 
@@ -56,6 +55,8 @@ namespace Vanguard
 		Log::Initialize();
 
 		jobManager = new JobManager();
+
+		profiler = new Profiler();
 
 		moduleManager = new ModuleManager();
 
@@ -133,7 +134,7 @@ namespace Vanguard
 					world->lastTickStartTime = currentTime;
 					world->nextFrameNumber++;
 
-					jobManager->GetProfiler()->StartProfiling();
+					profiler->StartProfiling();
 
 					// Update the world
 					frame->AddJob(world->MakeTickJob(frame));
@@ -151,10 +152,10 @@ namespace Vanguard
 					const float frameTime = (Timespan::GetElapsedSystemTime() - currentTime).InSeconds() * 1000.0;
 					LOG_MESSAGE("Frame time : " + String::FromFloat(frameTime), "Core");
 
-					if (jobManager->GetProfiler()->IsProfiling() && frameTime > 10.0f)
-						jobManager->GetProfiler()->EndProfiling(Directories::GetVanguardRootDirectory().GetRelative("Jobs.json"));
+					if (profiler->IsProfiling() && world->nextFrameNumber == 10)
+						profiler->EndProfiling(Directories::GetVanguardRootDirectory().GetRelative("ProfilerResults.json"));
 					else 
-						jobManager->GetProfiler()->EndProfiling();
+						profiler->EndProfiling();
 
 					delete frame;
 				}
@@ -206,6 +207,9 @@ namespace Vanguard
 			state = CoreState::ShuttingDown;
 
 			LOG_MESSAGE("Shutting down Core", "Core");
+
+			delete profiler;
+			profiler = nullptr;
 
 			jobManager->JoinThreads();
 			delete jobManager;
@@ -296,5 +300,10 @@ namespace Vanguard
 	JobManager* Core::GetJobManager()
 	{
 		return jobManager;
+	}
+
+	Profiler* Core::GetProfiler()
+	{
+		return profiler;
 	}
 }

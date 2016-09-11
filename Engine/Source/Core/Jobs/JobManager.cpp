@@ -2,22 +2,9 @@
 #include "JobWorker.h"
 #include "Job.h"
 #include "Core.h"
-#include "JobProfiler.h"
 
 namespace Vanguard
 {
-	JobWorker* JobManager::GetWorker()
-	{
-		const String currentThreadID = Thread::CurrentThreadID();
-
-		for (uint32 i = 0; i < workers.Count(); i++)
-		{
-			if (workers[i]->GetID() == currentThreadID)
-				return workers[i];
-		}
-		return nullptr;
-	}
-
 	void JobManager::WorkerFinishedJob(JobWorker* aThread, Job* aJob)
 	{
 		delete aJob;
@@ -27,13 +14,6 @@ namespace Vanguard
 		: workers()
 		, jobs()
 	{
-
-#ifdef JOB_PROFILING
-		profiler = new JobProfiler();
-#else
-		profiler = nullptr;
-#endif
-
 #ifdef VANGUARD_LINUX
 		size_t targetThreads = 0; // Job system not currently working properly on linux.
 #else
@@ -62,12 +42,6 @@ namespace Vanguard
 
 	JobManager::~JobManager()
 	{
-		if (profiler)
-		{
-			delete profiler;
-			profiler = nullptr;
-		}
-
 		JoinThreads();
 		for (int i = 0; i < workers.Count(); i++)
 		{
@@ -134,5 +108,15 @@ namespace Vanguard
 				delete aJobs[i];
 			}
 		}
+	}
+
+	JobWorker* JobManager::GetWorkerByThreadID(size_t aThreadID)
+	{
+		for (uint32 i = 0; i < workers.Count(); i++)
+		{
+			if (workers[i]->GetID() == aThreadID)
+				return workers[i];
+		}
+		return nullptr;
 	}
 }

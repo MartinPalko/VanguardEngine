@@ -21,7 +21,7 @@ namespace Vanguard
 		virtual void Run() override;
 
 	public:
-		explicit JobWorker(int aIndex, JobManager* aJobManager) : Thread("Vanguard Worker " + String::FromInt(aIndex))
+		explicit JobWorker(int aIndex, JobManager* aJobManager) : Thread("Worker " + String::FromInt(aIndex))
 			, jobManager(aJobManager)
 			, currentJob (nullptr)
 			, workerRunning(true)

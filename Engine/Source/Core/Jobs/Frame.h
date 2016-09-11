@@ -45,7 +45,7 @@ namespace Vanguard
 		bool Finished();
 	};
 
-	class FrameJob : public Job
+	class CORE_API FrameJob : public Job
 	{
 	protected:
 		Frame* frame;

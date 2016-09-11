@@ -6,7 +6,7 @@ namespace Vanguard
 {	
 	class Frame;
 
-	class Job
+	class CORE_API Job
 	{
 		// TODO: Add callbacks when job finishes.
 		friend class JobManager;
@@ -31,18 +31,12 @@ namespace Vanguard
 
 	protected:
 		// Only called by JobManager and/or JobWorker
-		virtual void Execute()
-		{
-			running = true;
-			DoJob();
-			running = false;
-			finished = true;
-		}
+		virtual void Execute();
 
 		virtual void DoJob() = 0;
 	};
 
-	class LambdaJob : public Job
+	class CORE_API LambdaJob : public Job
 	{
 	private:
 		std::function<void()> entryPoint;

@@ -9,6 +9,7 @@
 #include "Application/Application.h"
 #include "AsyncIO.h"
 #include "Log.h"
+#include "Profiler.h"
 #include "Project.h"
 #include "Directories.h"
 
@@ -77,9 +78,10 @@ namespace Vanguard
 		static BooleanConfigVar showConsoleOnStart;
 
 		static Core* instance;
-		String mainThreadID;
+		size_t mainThreadID;
 
 		JobManager* jobManager;
+		Profiler* profiler;
 
 		class Project* loadedProject;
 		class ModuleManager* moduleManager;
@@ -97,8 +99,9 @@ namespace Vanguard
 		virtual ~Core() {};
 
 		static Core* GetInstance();
-		String GetMainThreadID() { return mainThreadID; }
+		size_t GetMainThreadID() { return mainThreadID; }
 		JobManager* GetJobManager();
+		Profiler* GetProfiler();
 
 		// Implementation of ICore
 		void Initialize(int aArgC, char** aArgV, const char* aProjectName = "") override;

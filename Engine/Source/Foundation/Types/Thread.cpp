@@ -12,13 +12,6 @@
 
 namespace Vanguard
 {
-	static String ThreadIDToString(std::thread::id id)
-	{
-		std::ostringstream ss;
-		ss << id;
-		return std::string(ss.str()).c_str();
-	}
-
 	void Thread::ThreadEntry()
 	{
 		wantsJoin = false;
@@ -41,18 +34,20 @@ namespace Vanguard
 		Join();
 	}
 
-	String Thread::CurrentThreadID()
+	size_t Thread::CurrentThreadID()
 	{
-		return ThreadIDToString(std::this_thread::get_id());
+		return std::hash<std::thread::id>()(std::this_thread::get_id());
 	}
 
 	void Thread::Start()
 	{
 		if (!IsRunning())
 		{
+			
+
 			stdThread = new std::thread(&Thread::ThreadEntry, this);
 			if (name == "")
-				name = "Vanguard Thread " + GetID();
+				name = "Vanguard Thread " + String::FromInt(GetID());
 			SetName(name);
 			if (affinityMask)
 				SetAffinityMask(affinityMask);
@@ -108,9 +103,9 @@ namespace Vanguard
 		return name;
 	}
 
-	String Thread::GetID()
+	size_t Thread::GetID()
 	{
-		return ThreadIDToString(stdThread->get_id());
+		return std::hash<std::thread::id>()(stdThread->get_id());
 	}
 
 	void Thread::Join()

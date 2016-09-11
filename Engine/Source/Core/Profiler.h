@@ -1,6 +1,5 @@
 #pragma once
 #include "Core_Common.h"
-#include "JobManager.h"
 
 #include "ThirdParty/ConcurrentQueue/blockingconcurrentqueue.h"
 
@@ -10,31 +9,29 @@
 #ifdef JOB_PROFILING
 namespace Vanguard
 {
-	class CORE_API JobProfiler
+	class CORE_API Profiler
 	{
-		friend class JobWorker;
-
 	public:
-		struct Record
+		struct JobProfile
 		{
-			int thread;
+			String threadName;
 			String jobName;
 			Timespan startTime;
 			Timespan endTime;
 		};
 
 	private:
-		moodycamel::BlockingConcurrentQueue<Record> records;
+		moodycamel::BlockingConcurrentQueue<JobProfile> jobProfiles;
 		std::atomic<bool> profiling;
 		Timespan profilingStartTime;
-
-		void AddRecord(const Record& aRecord);
 
 	public:
 		void StartProfiling();
 		bool IsProfiling() { return profiling; }
 		void EndProfiling();
 		void EndProfiling(FilePath aWriteResultsTo);
+
+		void RecordJobProfile(const String& aJobName, Timespan aStartTime);
 	};
 }
 #endif

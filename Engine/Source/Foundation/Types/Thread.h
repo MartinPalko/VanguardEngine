@@ -15,6 +15,8 @@ namespace Vanguard
 		size_t affinityMask;
 		std::thread* stdThread;
 		bool running;
+
+		size_t threadID;
 		
 		void ThreadEntry();
 
@@ -26,14 +28,14 @@ namespace Vanguard
 		explicit Thread(const String& aName);
 		virtual ~Thread();
 
-		static String CurrentThreadID();
+		static size_t CurrentThreadID();
 
 		void Start();		
 
 		void SetName(const String& aThreadName);
 		void SetAffinityMask(size_t aAffinityMask);
 		String GetName();
-		String GetID();
+		size_t GetID();
 		void Join();
 		bool IsRunning();
 	};

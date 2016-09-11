@@ -17,8 +17,7 @@ namespace Vanguard
 		, jobs()
 	{
 		// One less worker than the number of cores on the system (since the main thread will help out)
-		//size_t targetThreads = Math::Min(SystemInfo::GetNumberOfCores() - 1, MAX_JOB_WORKERS);
-		size_t targetThreads =0;
+		const size_t targetThreads = Math::Min(SystemInfo::GetNumberOfCores() - 1, MAX_JOB_WORKERS);
 
 		if (!targetThreads)
 		{

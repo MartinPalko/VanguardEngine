@@ -19,6 +19,17 @@ namespace Vanguard
 		return *this;
 	}
 
+	Timespan& Timespan::operator = (Timespan&& aOther)
+	{
+		if (this != &aOther)
+		{
+			delete data;
+			data = aOther.data;
+			aOther.data = nullptr;
+		}
+		return *this;
+	}
+
 	Timespan::~Timespan()
 	{
 		delete data;
@@ -63,6 +74,17 @@ namespace Vanguard
 	DateAndTime& DateAndTime::operator = (const DateAndTime& aOther)
 	{
 		*data = juce::Time(aOther.ToMilliseconds());
+		return *this;
+	}
+
+	DateAndTime& DateAndTime::operator = (DateAndTime&& aOther)
+	{
+		if (this != &aOther)
+		{
+			delete data;
+			data = aOther.data;
+			aOther.data = nullptr;
+		}
 		return *this;
 	}
 

@@ -15,6 +15,7 @@ namespace Vanguard
 		String(const String& aString);
 		String(const char* aCharPointer);
 		String(const char& aChar);
+		String& operator = (String&& aOther);
 		void operator = (const String& aOther);
 		void operator += (const String& aOther);
 		~String();

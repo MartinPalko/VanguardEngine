@@ -16,6 +16,16 @@ namespace Vanguard
 	String::String(const String& aString) { data = new std::string(*aString.data); }
 	String::String(const char* aCharPointer) { data = new std::string(aCharPointer); }
 	String::String(const char& aChar) { data = new std::string(1, aChar); }
+	String& String::operator = (String&& aOther)
+	{
+		if (this != &aOther)
+		{
+			delete data;
+			data = aOther.data;
+			aOther.data = nullptr;
+		}
+		return *this;
+	}
 	void String::operator = (const String& aOther) { data->assign(*aOther.data); }
 	void String::operator += (const String& aOther) { data->assign(*Append(aOther).data); }
 	String::~String() { delete data; }

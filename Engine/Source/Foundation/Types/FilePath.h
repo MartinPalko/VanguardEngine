@@ -27,6 +27,7 @@ namespace Vanguard
 		FilePath(const FilePath& aOther);
 
 		FilePath& operator = (const FilePath& aOther);
+		FilePath& operator = (FilePath&& aOther);
 
 		~FilePath();
 

@@ -27,6 +27,17 @@ namespace Vanguard
 		return *this;
 	}
 
+	FilePath& FilePath::operator = (FilePath&& aOther)
+	{
+		if (this != &aOther)
+		{
+			delete file;
+			file = aOther.file;
+			aOther.file = nullptr;
+		}
+		return *this;
+	}
+
 	FilePath::~FilePath()
 	{
 		delete file;

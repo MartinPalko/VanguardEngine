@@ -22,6 +22,7 @@ namespace Vanguard
 		explicit Timespan(double aSeconds = 0.0);
 		Timespan(const Timespan& aOther);
 		Timespan& operator = (const Timespan& aOther);
+		Timespan& operator = (Timespan&& aOther);
 		~Timespan();
 
 		static Timespan GetElapsedSystemTime();
@@ -89,6 +90,7 @@ namespace Vanguard
 		DateAndTime(int64 aMiliseconds);
 		DateAndTime(const DateAndTime& aOther);
 		DateAndTime& operator = (const DateAndTime& aOther);
+		DateAndTime& operator = (DateAndTime&& aOther);
 
 		~DateAndTime();
 

@@ -64,6 +64,7 @@ namespace Vanguard
 		while (mainThreadJobs.try_dequeue(job))
 		{
 			job->Execute();
+			delete job;
 		}
 	}
 
@@ -73,6 +74,7 @@ namespace Vanguard
 		if (jobs.try_dequeue(job))
 		{
 			job->Execute();
+			delete job;
 		}
 	}
 

@@ -211,6 +211,12 @@ namespace Vanguard
 
 			LOG_MESSAGE("Shutting down Core", "Core");
 
+			for (int i = 0; i < worlds.Count(); i++)
+			{
+				delete worlds[i];
+			}
+			worlds.Clear();
+
 			delete profiler;
 			profiler = nullptr;
 

@@ -26,6 +26,7 @@ namespace Vanguard
 			running = false;
 			finished = false;
 		}
+		virtual ~Job() {}
 
 		String GetName() { return name; }
 

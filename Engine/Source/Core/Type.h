@@ -61,7 +61,8 @@ namespace Vanguard
 #define BASETYPE_DECLARATION(ClassIdentifier) \
 friend class Type;\
 protected:\
-	static Vanguard::IClassFactory* ClassIdentifier##_ClassFactory;\
+	class Factory : public Vanguard::IClassFactory { virtual void* CreateInstance() const override;};\
+	static Factory ClassIdentifier##_Factory;\
 	static std::shared_ptr<Type> ClassIdentifier##_ClassInfo;\
 public:\
 	virtual Type* GetClassInfo() const { return &*ClassIdentifier##_ClassInfo; }
@@ -70,13 +71,13 @@ public:\
 	BASETYPE_DECLARATION(ClassIdentifier)
 
 #define DEFINE_TYPE_FACTORY(ClassIdentifier)\
-class ClassIdentifier##_Factory : public Vanguard::IClassFactory { virtual void* CreateInstance() const override { return new ClassIdentifier(); } };\
-Vanguard::IClassFactory* ClassIdentifier::ClassIdentifier##_ClassFactory = new ClassIdentifier##_Factory();\
+void* ClassIdentifier::Factory::CreateInstance() const { return new ClassIdentifier();}\
+ClassIdentifier::Factory ClassIdentifier::ClassIdentifier##_Factory;\
 
 #define BASETYPE_DEFINITION(ClassIdentifier)\
 	DEFINE_TYPE_FACTORY(ClassIdentifier)\
-	std::shared_ptr<Type> ClassIdentifier::ClassIdentifier##_ClassInfo (Type::Register(ClassIdentifier::ClassIdentifier##_ClassFactory, typeid(ClassIdentifier).hash_code(), #ClassIdentifier));
+	std::shared_ptr<Type> ClassIdentifier::ClassIdentifier##_ClassInfo (Type::Register(&ClassIdentifier::ClassIdentifier##_Factory, typeid(ClassIdentifier).hash_code(), #ClassIdentifier));
 
 #define TYPE_DEFINITION(ClassIdentifier, BaseIdentifier)\
 	DEFINE_TYPE_FACTORY(ClassIdentifier)\
-	std::shared_ptr<Type> ClassIdentifier::ClassIdentifier##_ClassInfo (Type::Register(ClassIdentifier::ClassIdentifier##_ClassFactory, typeid(ClassIdentifier).hash_code(), #ClassIdentifier, #BaseIdentifier));
+	std::shared_ptr<Type> ClassIdentifier::ClassIdentifier##_ClassInfo (Type::Register(&ClassIdentifier::ClassIdentifier##_Factory, typeid(ClassIdentifier).hash_code(), #ClassIdentifier, #BaseIdentifier));

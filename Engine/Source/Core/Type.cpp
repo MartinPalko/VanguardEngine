@@ -97,6 +97,7 @@ namespace Vanguard
 		}
 		return false;
 	}
+
 	void Type::UpdateHierarchyReferences()
 	{
 		// First clear all references.

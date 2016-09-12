@@ -34,9 +34,12 @@ namespace Vanguard
 
 	void AsyncIO::JoinIOThread()
 	{
-		ioThread->Join();
-		delete ioThread;
-		ioThread = nullptr;
+		if (!ioThread)
+		{
+			ioThread->Join();
+			delete ioThread;
+			ioThread = nullptr;
+		}
 	}
 
 	void AsyncIO::WriteToFile(const FilePath & aFilePath, const String & aStringContents)

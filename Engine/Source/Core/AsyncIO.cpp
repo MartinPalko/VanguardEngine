@@ -12,19 +12,21 @@ namespace Vanguard
 		while (!wantsJoin)
 		{
 			IOTask* nextTask = nullptr;
-			while (taskQueue.try_dequeue(nextTask))
+			while (taskQueue.wait_dequeue_timed(nextTask, std::chrono::milliseconds(1)))
 			{
 				(*nextTask)();
 				delete nextTask;
 			}
-			std::this_thread::sleep_for(std::chrono::microseconds(100));
 		}
 	}
 
 	void AsyncIO::AddTask(IOTask* task)
 	{
 		taskQueue.enqueue(task);
+	}
 
+	void AsyncIO::StartIOThread()
+	{
 		if (!ioThread)
 		{
 			ioThread = new IOThread();

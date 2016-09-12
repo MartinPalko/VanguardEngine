@@ -47,6 +47,8 @@ namespace Vanguard
 
 		Application::SetApplicationArguments(aArgC, aArgV);
 
+		AsyncIO::StartIOThread();
+
 		loadedProject = new Project(Directories::GetVanguardProjectsDirectory().GetRelative(aProjectName));
 
 		// Load config as early as possible, otherwise some classes might be stuck reading their default values!

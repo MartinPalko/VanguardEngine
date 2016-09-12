@@ -24,6 +24,7 @@ namespace Vanguard
 		static void AddTask(IOTask* task);
 
 	public:
+		static void StartIOThread();
 		static void JoinIOThread();
 
 		static void WriteToFile(const FilePath& aFilePath, const String& aStringContents);

@@ -35,9 +35,8 @@ namespace Vanguard
 
 #if defined(VANGUARD_WINDOWS)
 			handle = LoadLibrary(aLib.GetCharPointer());
-#elif defined(VANGUARD_LINUX)
-			// TODO:
-			//handle = dlopen (name.isEmpty() ? nullptr : name.toUTF8().getAddress(), RTLD_LOCAL | RTLD_NOW);
+#else
+			handle = dlopen (aLib.GetCharPointer(), RTLD_LOCAL | RTLD_NOW);
 #endif
 
 		if (!handle)
@@ -86,8 +85,8 @@ namespace Vanguard
 		if (handle)
 		{
 #if defined(VANGUARD_WINDOWS)
-			FreeLibrary ((HMODULE) handle);
-#elif defined(VANGUARD_LINUX)
+			FreeLibrary (handle);
+#else
 			dlclose(handle);
 #endif
 			handle = nullptr;
@@ -101,9 +100,8 @@ namespace Vanguard
 			void* funcPtr = nullptr;
 #if defined(VANGUARD_WINDOWS)
 			funcPtr = GetProcAddress((HMODULE)handle, aFunctionName.GetCharPointer());
-#elif defined(VANGUARD_LINUX)
-			// TODO:
-			//GetProcAddress ((HMODULE) handle, functionName.toUTF8())
+#else
+			funcPtr = dlsym(handle, aFunctionName.GetCharPointer());
 #endif
 			if (!funcPtr)
 				RecordError();

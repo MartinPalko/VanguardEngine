@@ -34,7 +34,7 @@ namespace Vanguard
 
 	void AsyncIO::JoinIOThread()
 	{
-		if (!ioThread)
+		if (ioThread)
 		{
 			ioThread->Join();
 			delete ioThread;

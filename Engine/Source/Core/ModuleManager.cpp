@@ -114,7 +114,7 @@ namespace Vanguard
 		ClearModuleList();
 	}
 
-	typedef IModule * (*MODULE_INST_FUNCTION)();
+	typedef IModule* (*MODULE_INST_FUNCTION)();
 
 	void ModuleManager::UpdateModuleList()
 	{

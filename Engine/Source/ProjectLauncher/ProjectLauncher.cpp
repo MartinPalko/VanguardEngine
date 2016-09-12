@@ -34,6 +34,7 @@ int main(int argc, char **argv)
 	{
 		returnVal = 1;
 	}
+	coreLib->Close();
 	delete coreLib;
 
 #ifdef MEMORY_LEAK_DEBUG_ENABLED

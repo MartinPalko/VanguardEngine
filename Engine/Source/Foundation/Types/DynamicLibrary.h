@@ -13,7 +13,7 @@ namespace Vanguard
 	class FOUNDATION_API DynamicLibrary
 	{
 	private:
-		juce::DynamicLibrary* data;
+		void* handle;
 		String lastError;
 
 		// Private because they should not be used.
@@ -21,6 +21,7 @@ namespace Vanguard
 		DynamicLibrary& operator = (const DynamicLibrary& aOther){ return *this; }
 
 		void RecordError();
+		bool DoOpen(const String& aLib);
 	public:
 
 		DynamicLibrary();

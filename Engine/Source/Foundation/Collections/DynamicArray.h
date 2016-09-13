@@ -12,7 +12,6 @@ namespace Vanguard
 		std::vector<T> data;
 
 	public:
-		//Constructors
 		DynamicArray() = default;
 		DynamicArray(size_t aReserveSize) { data.reserve(aReserveSize); }
 		DynamicArray(const DynamicArray& rhs)
@@ -28,8 +27,17 @@ namespace Vanguard
         ~DynamicArray()
         {
         }
+
+		auto begin()
+		{
+			return data.begin();
+		}
         
-		//Methods
+		auto end()
+		{
+			return data.end();
+		}
+
 		inline void PushBack(const T& aItem)
 		{
 			data.push_back(aItem);
@@ -98,7 +106,6 @@ namespace Vanguard
 			data.reserve(aReserveSize);
 		}
 
-		//operators
 		inline DynamicArray& operator=(const DynamicArray& other)
 		{
 			if (this != &other)

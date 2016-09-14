@@ -16,6 +16,7 @@ namespace Vanguard
 
 	Core::Core()
 		: jobManager(nullptr)
+		, profiler(nullptr)
 		, loadedProject(nullptr)
 		, moduleManager(nullptr)
 		, worlds()

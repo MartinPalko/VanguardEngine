@@ -112,10 +112,8 @@ namespace Vanguard
 			jobManager->ServiceMainThreadJobs();
 
 			// Tick worlds
-			for (int i = 0; i < worlds.Count(); i++)
+			for (World* world : worlds)
 			{
-				World* world = worlds[i];
-
 				Timespan currentTime(Timespan::GetElapsedSystemTime());
 				Timespan deltaTime;
 				if (world->lastTickStartTime.InSeconds() != 0.0)

@@ -85,7 +85,7 @@ namespace Vanguard
 		if (handle)
 		{
 #if defined(VANGUARD_WINDOWS)
-			FreeLibrary (handle);
+			FreeLibrary ((HMODULE)handle);
 #else
 			dlclose(handle);
 #endif

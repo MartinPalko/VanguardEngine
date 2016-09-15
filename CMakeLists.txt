@@ -66,21 +66,13 @@ ENDIF()
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS "ON")
 
 # First do thirdparty
-add_subdirectory ("${EngineRoot}/ThirdParty")
+add_subdirectory("${EngineRoot}/ThirdParty")
 
 # Then engine
-ADD_TOPLEVEL_MAKELISTS("${EngineRoot}/Engine/Source")
+add_subdirectory("${EngineRoot}/Engine")
 
 # Then modules
-ADD_TOPLEVEL_MAKELISTS("${EngineRoot}/Modules")
+add_subdirectory("${EngineRoot}/Modules")
 
 # Then projects
-FIND_VANGUARD_PROJECTS_IN_FOLDER("${EngineRoot}/Projects")
-
-
-# Now Create and link all the deferred projects
-MESSAGE("Creating deferred projects:")
-	
-FOREACH(project ${deferredAddProjects})
-	ADD_DEFFERED_PROJECTS_RECURSIVE(${project})
-ENDFOREACH()
+add_subdirectory("${EngineRoot}/Projects")

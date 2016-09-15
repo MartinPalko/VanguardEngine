@@ -1,1 +1,1 @@
-IMPLEMENT_DYNAMIC_LIB(Foundation "juce_core")
+IMPLEMENT_DYNAMIC_LIB(Foundation "" "juce_core")

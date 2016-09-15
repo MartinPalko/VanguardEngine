@@ -1,0 +1,1 @@
+FIND_VANGUARD_PROJECTS_IN_FOLDER("${EngineRoot}/Projects")

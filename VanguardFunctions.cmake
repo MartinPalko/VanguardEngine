@@ -93,13 +93,59 @@ FUNCTION (FIND_MAKELISTS_RECURSIVE return_list_var directoryToSearch)
 ENDFUNCTION()
 
 # Same as IMPLEMENT_PROJECT, but .h and .cpp are found automatically by scanning sub-directories.
-MACRO (IMPLEMENT_PROJECT_AUTOFINDSOURCES projType projName projDependencies)
+MACRO (IMPLEMENT_PROJECT_AUTOFINDSOURCES projType projName publicDependencies privateDependencies)
 	FILE (GLOB_RECURSE sourceFiles "*.h" "*.cpp")
-	IMPLEMENT_PROJECT("${projType}" "${projName}" "${projDependencies}" "${sourceFiles}")
+	IMPLEMENT_PROJECT("${projType}" "${projName}" "${publicDependencies}" "${privateDependencies}" "${sourceFiles}")
+	PUT_IN_FOLDER_RELATIVE_ROOT ("${projName}" "${CMAKE_CURRENT_SOURCE_DIR}/..")
+ENDMACRO()
+
+MACRO (LINK_DEPENDENCY projName dependency IsPrivate)
+	if (TARGET ${dependency})		
+		GET_TARGET_PROPERTY(publicIncludeDirectories ${dependency} INCLUDE_DIRECTORIES)	
+		IF (publicIncludeDirectories)
+			TARGET_INCLUDE_DIRECTORIES(${projName} PRIVATE ${publicIncludeDirectories})
+		ELSEIF(NOT ${dependency}_INCLUDES)
+			MESSAGE("Warning: ${dependency} has no includes")
+		ENDIF()
+	
+		# Atm, just assume all non-deferred projects are thirdparty. This might need to be changed.
+		SET(IsThirdparty "true")
+		
+		FOREACH(defferedProj deferredAddProjects)
+			IF(${defferedProj} MATCHES ${dependency})
+				SET(IsThirdparty "false")
+			ENDIF()
+		ENDFOREACH()
+		
+		#Thirdparty libs link privately.
+		if (NOT ${IsPrivate})
+			GET_TARGET_PROPERTY(interfaceIncludeDirectories ${dependency} INTERFACE_INCLUDE_DIRECTORIES)	
+			
+			IF (interfaceIncludeDirectories)
+				TARGET_INCLUDE_DIRECTORIES(${projName} PUBLIC ${interfaceIncludeDirectories})
+			ELSEIF(NOT ${dependency}_INCLUDES)
+				MESSAGE("Warning: ${dependency} has no interface includes")
+			ENDIF()	
+		
+			TARGET_LINK_LIBRARIES(${projName} PUBLIC ${dependency})
+			MESSAGE("  public dependency ${dependency}")
+		ELSE()
+			TARGET_LINK_LIBRARIES(${projName} PRIVATE ${dependency})
+			MESSAGE("  private dependency ${dependency}")
+		endif()
+		
+		TARGET_LINK_LIBRARIES(${projName} PUBLIC ${dependency})
+		
+	ELSEIF(${dependency}) #Could be linking directly to lib file.
+		MESSAGE("lib ${dependency}")
+		TARGET_LINK_LIBRARIES(${projName} PRIVATE ${${dependency}})
+	ELSE()
+		MESSAGE("ERROR: Dependency ${dependency} not found")
+	ENDIF()
 ENDMACRO()
 
 # Macro to easily implement a project. Automatically includes all code files, and writes dependencies to "recordedProjectDependencies" for linking later.
-MACRO (IMPLEMENT_PROJECT projType projName projDependencies sourceFiles)
+MACRO (IMPLEMENT_PROJECT projType projName publicDependencies privateDependencies sourceFiles)
 	MESSAGE("Creating project \"${projName}\"")
 
 	# Ensure source files are absolute
@@ -112,22 +158,55 @@ MACRO (IMPLEMENT_PROJECT projType projName projDependencies sourceFiles)
 			LIST(APPEND absoluteSourceFiles ${sourcePath})
 		ENDIF()
 	ENDFOREACH()
+
+	IF (${projType} MATCHES "EXECUTABLE")
+		ADD_EXECUTABLE(${projName} ${sourceFiles})
+		
+		# If not specified as a console project, set subsystem to windows (will not spawn console window)
+		IF(NOT "${${projName}_IS_CONSOLE}" AND WIN32)
+			set_target_properties(${projName} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+		ENDIF()
+		
+	ELSE()
+		ADD_LIBRARY(${projName} ${projType} ${sourceFiles})
+	ENDIF()
 	
-	#Add it to list of projects to add at a later time.
-	LIST(APPEND deferredAddProjects ${projName})
-	#SET(deferredAddProjects ${deferredAddProjects} PARENT_SCOPE)
-	SET(deferredAddProjects ${deferredAddProjects} CACHE INTERNAL "deferredAddProjects")
+	SET(projectPath "${CMAKE_CURRENT_SOURCE_DIR}")
 	
-	#Create variables for project type, sources, and dependencies for use later.
-	SET("${projName}_Type" "${projType}")
-	SET("${projName}_Sources" "${absoluteSourceFiles}")
-	SET("${projName}_Dependencies" "${projDependencies}")
-	SET("${projName}_Path" "${CMAKE_CURRENT_SOURCE_DIR}")
+	# Project path is a public include directory, so other modules can access it's headers
+	TARGET_INCLUDE_DIRECTORIES(${projName} PUBLIC ${projectPath})
 	
-	SET("${projName}_Type" "${projType}" CACHE INTERNAL "${projName}_Type")
-	SET("${projName}_Sources" "${absoluteSourceFiles}" CACHE INTERNAL "${projName}_Sources")
-	SET("${projName}_Dependencies" "${projDependencies}" CACHE INTERNAL "${projName}_Dependencies")
-	SET("${projName}_Path" "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "${projName}_Path")
+	ADD_FLAGS(${projName} "-DVANGUARD_LIB_NAME=\"${projName}\"")
+	ADD_FLAGS(${projName} "-DVANGUARD_LIB_DEPENDENCIES=\"${publicDependencies};${privateDependencies}\"")
+
+	#On Unix, link libraries needed for dynamic links.
+	IF(UNIX AND NOT ${projType} MATCHES "STATIC")
+		target_link_libraries(${projName} PUBLIC ${CMAKE_DL_LIBS})
+		#SUPER HACKY
+		IF(NOT APPLE)
+		target_link_libraries(${projName} PUBLIC ${CMAKE_CXX_FLAGS})
+		ENDIF()
+	ENDIF()
+	
+	# Group source files in the same way that they are found in the folders
+	FOREACH (file ${sourceFiles})
+		file (RELATIVE_PATH relative_file "${projectPath}" ${file}) # Make relative to CMakeLists
+		GET_FILENAME_COMPONENT(dir_path ${relative_file} DIRECTORY) # Get folder path
+		STRING (REPLACE "/" "\\" fixed "${dir_path}") # On windows the dir_path will have forward slashes and subgroups use backslashes, so convert them.
+		SOURCE_GROUP("${fixed}" FILES ${file}) # Put in group
+	ENDFOREACH()
+	
+	MESSAGE("Linking dependencies for ${projName}:")
+	
+	#Now link us to our dependencies
+	FOREACH(dependency ${publicDependencies})
+		LINK_DEPENDENCY(${projName} ${dependency} "false")
+	ENDFOREACH()	
+	FOREACH(dependency ${privateDependencies})
+		LINK_DEPENDENCY(${projName} ${dependency} "true")
+	ENDFOREACH()	
+	
+	MESSAGE("")
 ENDMACRO ()
 
 MACRO (ADD_FLAGS project flags)
@@ -141,160 +220,36 @@ MACRO (ADD_FLAGS project flags)
 ENDMACRO()
 
 FUNCTION(ADD_DEFFERED_PROJECTS_RECURSIVE in_project)
-	SET(projectName ${in_project})
-	SET(projectType "${${in_project}_Type}")
-	SET(projectSources "${${in_project}_Sources}")
-	SET(projectDependencies "${${in_project}_Dependencies}")
-	SET(projectPath "${${in_project}_Path}")	
-	
-	#For each dependency we have, add it first
-	FOREACH(dependency ${projectDependencies})
-		IF(NOT TARGET "${dependency}")
-			ADD_DEFFERED_PROJECTS_RECURSIVE(${dependency})
-		ENDIF()
-	ENDFOREACH()
-	
-	#If target does not exist, it needs to be added, so do it.	
-	IF(NOT TARGET "${projectName}" AND projectType)
-		IF (${projectType} MATCHES "EXECUTABLE")
-			MESSAGE("Adding executable target ${projectName}")
-			ADD_EXECUTABLE(${projectName} ${projectSources})
-			
-			# If not specified as a console project, set subsystem to windows (will not spawn console window)
-			IF(NOT "${${projectName}_IS_CONSOLE}" AND WIN32)
-				set_target_properties(${projectName} PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
-			ENDIF()
-			
-			# See if we're a launcher for a project, if so, then insert a macro so we know which project we're launching.
-			FOREACH(launcher ${projectLaunchers})
-				IF(${projectName} MATCHES "${launcher}_Launcher")
-					ADD_FLAGS(${projectName} "-DVANGUARD_PROJECT=${launcher}")
-				ENDIF()
-			ENDFOREACH()
 
-			IF (Modules)
-				#If executable, add all modules as dependencies, so they automatically build when debugging.
-				ADD_DEPENDENCIES(${projectName} ${Modules})
-			ENDIF()
-			
-		ELSE()
-			ADD_LIBRARY(${projectName} ${projectType} ${projectSources})
-		ENDIF()
-
-		MESSAGE("${projectDependencies}")
-		
-		ADD_FLAGS(${projectName} "-DVANGUARD_LIB_NAME=\"${projectName}\"")
-		ADD_FLAGS(${projectName} "-DVANGUARD_LIB_DEPENDENCIES=\"${projectDependencies}\"")
-		
-		#On Unix, link libraries needed for dynamic links.
-		IF(UNIX AND NOT ${projectType} MATCHES "STATIC")
-			target_link_libraries(${projectName} PUBLIC ${CMAKE_DL_LIBS})
-			#SUPER HACKY
-			IF(NOT APPLE)
-			target_link_libraries(${projectName} PUBLIC ${CMAKE_CXX_FLAGS})
-			ENDIF()
-		ENDIF()
-		
-		PUT_IN_FOLDER_RELATIVE_ROOT ("${projectName}" "${projectPath}/..")
-		
-		# Group source files in the same way that they are found in the folders
-		FOREACH (file ${projectSources})
-			file (RELATIVE_PATH relative_file "${projectPath}" ${file}) # Make relative to CMakeLists
-			GET_FILENAME_COMPONENT(dir_path ${relative_file} DIRECTORY) # Get folder path
-			STRING (REPLACE "/" "\\" fixed "${dir_path}") # On windows the dir_path will have forward slashes and subgroups use backslashes, so convert them.
-			SOURCE_GROUP("${fixed}" FILES ${file}) # Put in group
-		ENDFOREACH()
-		
-		# Project path is a public include directory.
-		TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${projectPath})		
-		
-	ENDIF()
-	
-	MESSAGE("Linking dependencies for ${projectName} ")
-	
-	#Now link us to our dependencies
-	FOREACH(dependency ${projectDependencies})
-		IF (${dependency}_INCLUDES)
-			TARGET_INCLUDE_DIRECTORIES(${projectName} PRIVATE ${${dependency}_INCLUDES})
-		ENDIF()
-		
-		if (TARGET ${dependency})
-			# Atm, just assume all non-deffered projects are thirdparty. This might need to be changed.
-			SET(IsThirdparty "true")
-			
-			FOREACH(defferedProj deferredAddProjects)
-				IF(${defferedProj} MATCHES ${dependency})
-					SET(IsThirdparty "false")
-				ENDIF()
-			ENDFOREACH()
-			
-			if (${IsThirdparty})
-				GET_TARGET_PROPERTY(publicIncludeDirectories ${dependency} INCLUDE_DIRECTORIES)	
-				IF (publicIncludeDirectories)
-					TARGET_INCLUDE_DIRECTORIES(${projectName} PRIVATE ${publicIncludeDirectories})
-				ELSEIF(NOT ${dependency}_INCLUDES)
-					MESSAGE("Warning: ${dependency} has no includes")
-				ENDIF()		
-				
-			ELSE()
-				GET_TARGET_PROPERTY(interfaceIncludeDirectories ${dependency} INTERFACE_INCLUDE_DIRECTORIES)	
-				
-				IF (interfaceIncludeDirectories)
-					TARGET_INCLUDE_DIRECTORIES(${projectName} PUBLIC ${interfaceIncludeDirectories})
-				ELSEIF(NOT ${dependency}_INCLUDES)
-					MESSAGE("Warning: ${dependency} has no interface includes")
-				ENDIF()		
-			endif()
-				
-			
-			#Thirdparty libs link privately.
-			if (NOT ${IsThirdparty})
-				TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${dependency})
-				MESSAGE("  public dependency ${dependency}")
-			ELSE()
-				TARGET_LINK_LIBRARIES(${projectName} PRIVATE ${dependency})
-				MESSAGE("  private dependency ${dependency}")
-			endif()
-			
-			TARGET_LINK_LIBRARIES(${projectName} PUBLIC ${dependency})
-			
-		ELSEIF(${dependency})#Could be linking directly to lib file.
-			MESSAGE("lib ${dependency}")
-			TARGET_LINK_LIBRARIES(${projectName} PRIVATE ${${dependency}})
-		ELSE()
-			MESSAGE("ERROR: Dependency ${dependency} not found")
-		ENDIF()
-		
-	ENDFOREACH()
 	
 	MESSAGE("")
 ENDFUNCTION()
 
 # Macro for implementing modules
-MACRO (IMPLEMENT_MODULE moduleName dependencies)
+MACRO (IMPLEMENT_MODULE moduleName publicDependencies privateDependencies)
 	SET(Modules ${Modules} ${moduleName} PARENT_SCOPE)
 	#IMPLEMENT_PROJECT_AUTOFINDSOURCES("MODULE" "${moduleName}" "${dependencies}")
 	#Shared libraries behave the same as actual modules, but also allow dependencies.
-	IMPLEMENT_PROJECT_AUTOFINDSOURCES("SHARED" "${moduleName}" "${dependencies}")
+	IMPLEMENT_PROJECT_AUTOFINDSOURCES("SHARED" "${moduleName}" "${publicDependencies}"  "${privateDependencies}")
 ENDMACRO ()
 
 # Macro for implementing static libraries
-MACRO (IMPLEMENT_STATIC_LIB libName dependencies)
-	IMPLEMENT_PROJECT_AUTOFINDSOURCES("STATIC" "${libName}" "${dependencies}")
+MACRO (IMPLEMENT_STATIC_LIB libName publicDependencies privateDependencies)
+	IMPLEMENT_PROJECT_AUTOFINDSOURCES("STATIC" "${libName}" "${publicDependencies}")
 ENDMACRO ()
 
 # Macro for implementing static libraries
-MACRO (IMPLEMENT_DYNAMIC_LIB libName dependencies)
-	IMPLEMENT_PROJECT_AUTOFINDSOURCES("SHARED" "${libName}" "${dependencies}")
+MACRO (IMPLEMENT_DYNAMIC_LIB libName publicDependencies privateDependencies)
+	IMPLEMENT_PROJECT_AUTOFINDSOURCES("SHARED" "${libName}" "${publicDependencies}" "${privateDependencies}" "${privateDependencies}")
 ENDMACRO ()
 
-MACRO (IMPLEMENT_CONSOLE_EXECUTABLE executableName dependencies)
+MACRO (IMPLEMENT_CONSOLE_EXECUTABLE executableName publicDependencies privateDependencies)
 	SET("${executableName}_IS_CONSOLE" TRUE PARENT_SCOPE)
-	IMPLEMENT_PROJECT_AUTOFINDSOURCES("EXECUTABLE" "${executableName}" "${dependencies}")	
+	IMPLEMENT_PROJECT_AUTOFINDSOURCES("EXECUTABLE" "${executableName}" "${publicDependencies}" "${privateDependencies}")
 ENDMACRO ()
 # Macro for implementing executables
-MACRO (IMPLEMENT_EXECUTABLE executableName dependencies)
-	IMPLEMENT_PROJECT_AUTOFINDSOURCES("EXECUTABLE" "${executableName}" "${dependencies}")	
+MACRO (IMPLEMENT_EXECUTABLE executableName publicDependencies privateDependencies)
+	IMPLEMENT_PROJECT_AUTOFINDSOURCES("EXECUTABLE" "${executableName}" "${publicDependencies}" "${privateDependencies}")
 ENDMACRO ()
 
 FUNCTION (FIND_VANGUARD_PROJECTS_IN_FOLDER searchInFolder)
@@ -334,8 +289,12 @@ ENDMACRO()
 MACRO (VANGUARD_CREATE_PROJECT_LAUNCHER projectFolder projectName)
 	SET(launcherFolder "${EngineRoot}/Engine/Source/ProjectLauncher")
 	FILE (GLOB_RECURSE sourceFiles "${launcherFolder}/*.h" "${launcherFolder}/*.cpp")
-	MESSAGE("Found source files: ${sourceFiles}")
-	IMPLEMENT_PROJECT("EXECUTABLE" "${projectName}_Launcher" "Foundation" "${sourceFiles}")
-	SET ("${projectName}_Launcher_Path" "${projectFolder}/${projectName}" CACHE INTERNAL "${projectName}_Launcher_Path")
-	SET (projectLaunchers "${projectLaunchers}" ${projectName} CACHE INTERNAL projectLaunchers)
+	MESSAGE("Creating Launcher:  ${projectName}")
+	SET(launcherName  "${projectName}_Launcher")
+	
+	IMPLEMENT_PROJECT("EXECUTABLE" "${launcherName}" "Foundation" "" "${sourceFiles}")
+	
+	# Insert a macro so we know which project we're launching at runtime
+	ADD_FLAGS(${launcherName} "-DVANGUARD_PROJECT=${projectName}")	
+	PUT_IN_FOLDER_RELATIVE_ROOT ("${launcherName}" "${CMAKE_CURRENT_SOURCE_DIR}/${projectName}")
 ENDMACRO()

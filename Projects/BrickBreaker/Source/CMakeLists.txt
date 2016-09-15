@@ -1,1 +1,1 @@
-IMPLEMENT_MODULE(BrickBreaker "Core;Renderer2D;gainput")
+IMPLEMENT_MODULE(BrickBreaker "Core;Renderer2D" "gainput")

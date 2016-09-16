@@ -25,7 +25,7 @@ namespace Vanguard
 #define VANGUARD_DECLARE_MODULE(ModuleClass)\
 	extern "C"{API_EXPORT Vanguard::IModule* VANGUARD_MODULE_INST_FUNCTION(){ return new ModuleClass(); }}\
 	extern "C"{API_EXPORT const char* VANGUARD_MODULE_NAME_FUNCTION(){ return TO_STRING(VANGUARD_LIB_NAME); }}\
-	extern "C"{API_EXPORT const char* VANGUARD_MODULE_DEPENDENCY_FUNCTION() { return TO_STRING(VANGUARD_LIB_DEPENDENCIES); }}
+	extern "C"{API_EXPORT const char* VANGUARD_MODULE_DEPENDENCY_FUNCTION() { return "" TO_STRING(VANGUARD_LIB_DEPENDENCIES); }}
 
 namespace Vanguard
 {

@@ -11,6 +11,7 @@
 #include "Log.h"
 #include "Profiler.h"
 #include "Project.h"
+#include "ResourceManager.h"
 #include "Directories.h"
 
 #include "Entity/Actor.h"
@@ -82,9 +83,9 @@ namespace Vanguard
 
 		JobManager* jobManager;
 		Profiler* profiler;
-
-		class Project* loadedProject;
-		class ModuleManager* moduleManager;
+		ResourceManager* resourceManager;
+		Project* loadedProject;
+		ModuleManager* moduleManager;
 		DynamicArray<World*> worlds;
 		class DynamicArray<IRenderer*> renderers;
 		IRenderer* primaryRenderer;
@@ -102,12 +103,13 @@ namespace Vanguard
 		size_t GetMainThreadID() { return mainThreadID; }
 		JobManager* GetJobManager();
 		Profiler* GetProfiler();
+		ResourceManager* GetResourceManager();
 
 		// Implementation of ICore
-		void Initialize(int aArgC, char** aArgV, const char* aProjectName = "") override;
-		void Run() override;
-		void ShutDown() override;
-		void LoadModule(const char* aModuleName) override;
+		virtual void Initialize(int aArgC, char** aArgV, const char* aProjectName = "") override;
+		virtual void Run() override;
+		virtual void ShutDown() override;
+		virtual void LoadModule(const char* aModuleName) override;
 
 		inline CoreState GetState(){ return state; }
 

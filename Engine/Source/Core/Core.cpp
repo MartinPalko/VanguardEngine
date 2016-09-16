@@ -17,6 +17,7 @@ namespace Vanguard
 	Core::Core()
 		: jobManager(nullptr)
 		, profiler(nullptr)
+		, resourceManager(nullptr)
 		, loadedProject(nullptr)
 		, moduleManager(nullptr)
 		, worlds()
@@ -30,6 +31,11 @@ namespace Vanguard
 
 	void Core::Initialize(int aArgC, char** aArgV, const char* aProjectName)
 	{
+		if (String(aProjectName) == "")
+		{
+			LOG_EXCEPTION("No project specified!", "Core");
+		}
+
 		if (state != CoreState::NotInitialized)
 		{
 			LOG_EXCEPTION("Core is already initialized!", "Core");
@@ -60,6 +66,8 @@ namespace Vanguard
 		jobManager = new JobManager();
 
 		profiler = new Profiler();
+
+		resourceManager = new ResourceManager();
 
 		moduleManager = new ModuleManager();
 
@@ -216,6 +224,9 @@ namespace Vanguard
 			}
 			worlds.Clear();
 
+			delete resourceManager;
+			resourceManager = nullptr;
+
 			delete profiler;
 			profiler = nullptr;
 
@@ -313,5 +324,10 @@ namespace Vanguard
 	Profiler* Core::GetProfiler()
 	{
 		return profiler;
+	}
+
+	ResourceManager * Core::GetResourceManager()
+	{
+		return resourceManager;
 	}
 }

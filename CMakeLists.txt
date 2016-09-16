@@ -71,6 +71,9 @@ add_subdirectory("${EngineRoot}/ThirdParty")
 # Then engine
 add_subdirectory("${EngineRoot}/Engine")
 
+# Then editor
+add_subdirectory("${EngineRoot}/Editor")
+
 # Then modules
 add_subdirectory("${EngineRoot}/Modules")
 

@@ -119,7 +119,7 @@ MACRO (LINK_DEPENDENCY projName dependency IsPrivate)
 		
 		#Thirdparty libs link privately.
 		if (NOT ${IsPrivate})
-			GET_TARGET_PROPERTY(interfaceIncludeDirectories ${dependency} INTERFACE_INCLUDE_DIRECTORIES)	
+			GET_TARGET_PROPERTY(interfaceIncludeDirectories ${dependency} INTERFACE_INCLUDE_DIRECTORIES)
 			
 			IF (interfaceIncludeDirectories)
 				TARGET_INCLUDE_DIRECTORIES(${projName} PUBLIC ${interfaceIncludeDirectories})

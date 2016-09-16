@@ -268,6 +268,19 @@ namespace Vanguard
 		return aFilePath.file->containsSubDirectories();
 	}
 
+	DynamicArray<FilePath> FileSystem::GetSubdirectories(const FilePath & aFilePath)
+	{
+		juce::Array<juce::File> juceChildFiles;
+		const int numChildren = aFilePath.file->findChildFiles(juceChildFiles, juce::File::TypesOfFileToFind::findDirectories, false);
+		DynamicArray<FilePath> subdirectories(numChildren);
+
+		for (juce::File juceFile : juceChildFiles)
+		{
+			subdirectories.PushBack(String(juceFile.getFullPathName().getCharPointer()));
+		}
+		return subdirectories;
+	}
+
 	// Reads the contents of the file as if it were plain text.
 	String FileSystem::LoadFileAsString(const FilePath& aFilePath)
 	{

@@ -96,6 +96,9 @@ namespace Vanguard
 		// Returns true if file path has any subdirectories
 		static bool HasSubdirectories(const FilePath& aFilePath);
 
+		// Return a list of all direct subdirectories
+		static DynamicArray<FilePath>GetSubdirectories(const FilePath& aFilePath);
+
 		// Reads the contents of the file as if it were plain text.
 		static String LoadFileAsString(const FilePath& aFilePath);
 

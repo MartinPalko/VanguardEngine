@@ -8,7 +8,7 @@ namespace Vanguard
 	void SpriteRenderer::SetDimensions(Vector2 aDimensions)
 	{
 		dimensions = aDimensions;
-		if (GetEntity()->GetClassInfo()->IsA(Type::GetType<Actor>()))
+		if (GetEntity()->GetType()->IsA(Type::GetType<Actor>()))
 			static_cast<Actor*>(GetEntity())->UpdateBounds();
 	}
 

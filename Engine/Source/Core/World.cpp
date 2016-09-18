@@ -123,7 +123,7 @@ namespace Vanguard
 		FrameJob** jobs = new FrameJob*[registeredTicks.Count()];		
 		for (size_t i = 0; i < registeredTicks.Count(); i++)
 		{
-			jobs[i] = new TickJob(registeredTicks[i]->GetClassInfo()->GetTypeName(), aFrame, registeredTicks[i]);
+			jobs[i] = new TickJob(registeredTicks[i]->GetType()->GetTypeName(), aFrame, registeredTicks[i]);
 		}
 		aFrame->AddJobs(jobs, registeredTicks.Count());
 
@@ -157,7 +157,7 @@ namespace Vanguard
 	{
 		aObject->world = this;
 		objects.PushBack(aObject);
-		objectTypemap[aObject->GetClassInfo()->GetRuntimeHash()].PushBack(aObject);
+		objectTypemap[aObject->GetType()->GetRuntimeHash()].PushBack(aObject);
 	}
 
 }

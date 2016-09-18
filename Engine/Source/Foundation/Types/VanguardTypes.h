@@ -10,6 +10,7 @@
 #include "VanguardString.h"
 #include "StringID.h"
 #include "Thread.h"
+#include "UUID.h"
 #include "VanguardTime.h"
 #include "Vector2.h"
 #include "Vector3.h"

@@ -11,6 +11,7 @@
 #include "Tests/Foundation/MatrixTest.h"
 #include "Tests/Foundation/QuaternionTest.h"
 #include "Tests/Foundation/UtilitiesTest.h"
+#include "Tests/Foundation/UUIDTest.h"
 
 // Core
 #include "Tests/Core/EntityComponentTest.h"

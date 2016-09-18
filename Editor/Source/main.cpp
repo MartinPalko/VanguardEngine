@@ -1,10 +1,11 @@
 #include "Editor_Common.h"
 #include "EditorCore.h"
+#include "EditorDirectories.h"
 
 #include "ProjectSelector.h"
 
 #include <QApplication>
-
+#include <QFile>
 
 int main(int argc, char **argv)
 {
@@ -12,6 +13,14 @@ int main(int argc, char **argv)
 
 	// Create the QApplication
 	QApplication qApplication(argc, argv);
+
+	{
+		Vanguard::FilePath styleSheetPath = Vanguard::EditorDirectories::GetStyleDirectory().GetRelative("EditorStyle.css");
+		QFile styleSheetFile(styleSheetPath.GetFullPathName().GetCharPointer());
+		styleSheetFile.open(QFile::ReadOnly);
+		QString styleSheet = QLatin1String(styleSheetFile.readAll());
+		qApplication.setStyleSheet(styleSheet);
+	}
 
 	QString project = "";
 

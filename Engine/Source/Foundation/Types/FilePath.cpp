@@ -45,6 +45,11 @@ namespace Vanguard
 
 	// ----------- Methods -----------
 
+	FilePath::operator bool() const
+	{
+		return file->getFullPathName() != "";
+	}
+
 	const String FilePath::GetFullPathName() const
 	{
 		return String(file->getFullPathName().getCharPointer());

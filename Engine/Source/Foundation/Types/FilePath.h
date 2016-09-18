@@ -46,6 +46,8 @@ namespace Vanguard
 
 		inline FilePath operator-- () const { return GetParentDirectory(); }
 
+		operator bool() const;
+
 		// ----------- Methods -----------
 
 		// Gets the entire path name, including drive, filename, and extension if applicable.

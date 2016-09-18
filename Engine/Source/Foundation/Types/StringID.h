@@ -17,19 +17,19 @@ namespace Vanguard
 		inline bool operator < (const StringID& aOther) const { return hash < aOther.hash; }
 		inline bool operator > (const StringID& aOther) const { return hash > aOther.hash; }
 
-		inline StringID(uint32 aHash)
+		inline StringID(uint32 aHash) 
+			: hash(aHash)
 		{
-			hash = aHash;
 		}
 
 		inline StringID(const String& aString)
+			: hash(Crc32::CalcCrc(aString.GetCharPointer(), aString.GetLength()))
 		{
-			hash = Crc32::CalcCrc(aString.GetCharPointer(), aString.GetLength());
 		}
 
 		inline StringID(const char* aCharPointer)
+			: hash (Crc32::CalcCrc(aCharPointer, strlen(aCharPointer)))
 		{
-			hash = Crc32::CalcCrc(aCharPointer, strlen(aCharPointer));
 		}
 
 		inline size_t GetHash() const

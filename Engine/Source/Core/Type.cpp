@@ -15,7 +15,7 @@ namespace Vanguard
 		return allClassInfos;
 	}
 
-	Type::Type(IClassFactory * aClassFactory, const String & aClassName, const String & aBaseClassName, size_t aRuntimeHash)
+	Type::Type(IClassFactory* aClassFactory, const String& aClassName, const String& aBaseClassName, size_t aRuntimeHash)
 	{
 		classFactory = aClassFactory;
 		className = aClassName;
@@ -32,7 +32,7 @@ namespace Vanguard
 		hashMap.erase(this->runtimeHash);
 	}
 
-	Type* Type::Register(IClassFactory * aClassFactory, size_t aRuntimeHash, const char * aClassName, const char * aBaseClassName)
+	Type* Type::Register(IClassFactory* aClassFactory, size_t aRuntimeHash, const char * aClassName, const char * aBaseClassName)
 	{
 		// TODO: Create Unregister, and make sure it's called when DLL is unloaded.
 		

@@ -31,9 +31,10 @@ namespace Vanguard
 
 		static Type* Register(IClassFactory* aClassFactory, size_t aRuntimeHash, const char* aClassName, const char* aBaseClassName = "");
 
-		void* CreateInstance() const{ return classFactory->CreateInstance(); }
+		bool IsAbstract() const { return classFactory == nullptr; }
+		void* CreateInstance() const { return classFactory ? classFactory->CreateInstance() : nullptr; }
 
-		String GetTypeName() const{ return className; };
+		String GetTypeName() const { return className; };
 		size_t GetRuntimeHash() const { return runtimeHash; }
 		Type* GetBaseClass() const { return baseClass; }
 		DynamicArray<Type*> GetDerivedClasses() const;
@@ -59,14 +60,22 @@ namespace Vanguard
 }
 
 // Type Declatation macros
-#define BASETYPE_DECLARATION(ClassIdentifier) \
+#define ABSTRACT_BASETYPE_DECLARATION(ClassIdentifier)\
 friend class Type;\
 protected:\
-	class Factory : public Vanguard::IClassFactory { virtual void* CreateInstance() const override;};\
-	static Factory ClassIdentifier##_Factory;\
 	static std::shared_ptr<Type> ClassIdentifier##_Type;\
 public:\
 	virtual Type* GetType() const { return &*ClassIdentifier##_Type; }
+
+#define ABSTRACT_TYPE_DECLARATION(ClassIdentifier, BaseIdentifier)\
+ABSTRACT_BASETYPE_DECLARATION(ClassIdentifier)
+
+#define BASETYPE_DECLARATION(ClassIdentifier) \
+ABSTRACT_BASETYPE_DECLARATION(ClassIdentifier) \
+protected:\
+	class Factory : public Vanguard::IClassFactory { virtual void* CreateInstance() const override;};\
+public:\
+	static Factory ClassIdentifier##_Factory;\
 
 #define TYPE_DECLARATION(ClassIdentifier, BaseIdentifier)\
 	BASETYPE_DECLARATION(ClassIdentifier)
@@ -83,3 +92,9 @@ ClassIdentifier::Factory ClassIdentifier::ClassIdentifier##_Factory;\
 #define TYPE_DEFINITION(ClassIdentifier, BaseIdentifier)\
 	DEFINE_TYPE_FACTORY(ClassIdentifier)\
 	std::shared_ptr<Type> ClassIdentifier::ClassIdentifier##_Type (Type::Register(&ClassIdentifier::ClassIdentifier##_Factory, typeid(ClassIdentifier).hash_code(), #ClassIdentifier, #BaseIdentifier));
+
+#define ABSTRACT_BASETYPE_DEFINITION(ClassIdentifier)\
+	std::shared_ptr<Type> ClassIdentifier::ClassIdentifier##_Type (Type::Register(nullptr, typeid(ClassIdentifier).hash_code(), #ClassIdentifier));
+
+#define ABSTRACT_TYPE_DEFINITION(ClassIdentifier, BaseIdentifier)\
+	std::shared_ptr<Type> ClassIdentifier::ClassIdentifier##_Type (Type::Register(nullptr, typeid(ClassIdentifier).hash_code(), #ClassIdentifier, #BaseIdentifier));

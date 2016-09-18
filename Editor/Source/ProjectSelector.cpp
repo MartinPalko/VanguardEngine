@@ -16,6 +16,7 @@ namespace Vanguard
 		setWindowTitle("Select Project");
 
 		auto mainLayout = new QVBoxLayout(this);
+		setLayout(mainLayout);
 
 		projectList = new QListWidget(this);
 		mainLayout->addWidget(projectList);

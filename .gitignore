@@ -7,3 +7,4 @@
 *.db
 /*.lnk
 /.vscode
+ProfilerResults.json

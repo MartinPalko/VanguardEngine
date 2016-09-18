@@ -1,3 +1,4 @@
+#pragma once
 #include "Foundation_Common.h"
 #include "VanguardString.h"
 

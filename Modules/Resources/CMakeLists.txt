@@ -1,0 +1,1 @@
+IMPLEMENT_MODULE(Resources "Core" "png_static")

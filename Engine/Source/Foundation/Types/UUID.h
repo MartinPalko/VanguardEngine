@@ -6,6 +6,8 @@ namespace Vanguard
 {
 	class FOUNDATION_API UUID
 	{
+		friend struct std::hash<Vanguard::UUID>;
+
 		byte data[16];
 	public:
 		UUID();
@@ -15,5 +17,18 @@ namespace Vanguard
 		String ToString();
 
 		bool operator ==(const UUID& aOther) const;
+	};
+}
+
+namespace std
+{
+	template <> 
+	struct hash<Vanguard::UUID>
+	{
+		size_t operator()(Vanguard::UUID const& x) const noexcept
+		{
+			// Just use the first bit of data as our hash
+			return *(size_t*)x.data;
+		}
 	};
 }

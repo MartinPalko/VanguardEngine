@@ -8,6 +8,8 @@ namespace Vanguard
 {
 	class FOUNDATION_API StringID
 	{
+		friend struct std::hash<Vanguard::StringID>;
+
 	private:
 		uint32 hash;
 
@@ -16,6 +18,8 @@ namespace Vanguard
 		inline bool operator != (const StringID& aOther) const { return hash != aOther.hash; }
 		inline bool operator < (const StringID& aOther) const { return hash < aOther.hash; }
 		inline bool operator > (const StringID& aOther) const { return hash > aOther.hash; }
+
+		operator uint32 () const { return hash; }
 
 		inline StringID(uint32 aHash) 
 			: hash(aHash)
@@ -37,5 +41,17 @@ namespace Vanguard
 			return hash;
 		}
 
+	};
+}
+
+namespace std
+{
+	template <> 
+	struct hash<Vanguard::StringID>
+	{
+		size_t operator()(Vanguard::StringID const& x) const noexcept
+		{
+			return x.hash;
+		}
 	};
 }

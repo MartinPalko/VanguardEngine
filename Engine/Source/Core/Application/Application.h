@@ -49,8 +49,8 @@ namespace Vanguard
 	{
 		bool fullscreen;
 		String title;
-		size_t sizeX;
-		size_t sizeY;
+		int sizeX;
+		int sizeY;
 		bool resizable;
 
 		WindowCreationParameters()
@@ -84,10 +84,6 @@ namespace Vanguard
 		static void RegisterNativeEventHandler(INativeEventHandler* aHandler);
 		static void UnregisterNativeEventHandler(INativeEventHandler* aHandler);
 
-		static WindowHandle CreateNativeWindow();
-		static WindowHandle CreateNativeWindow(const WindowCreationParameters& aWindowParameters);
 		static WindowCreationParameters GetWindowCreationParams();
-
-		static void GetWindowSize(WindowHandle aWindowHandle, int& OUTSizeX, int& OUTSizeY);
 	};
 }

@@ -59,11 +59,6 @@ namespace Vanguard
 		nativeEventHandlers.Remove(aHandler);
 	}
 
-	WindowHandle Application::CreateNativeWindow()
-	{
-		return CreateNativeWindow(GetWindowCreationParams());
-	}
-
 	WindowCreationParameters Application::GetWindowCreationParams()
 	{
 		WindowCreationParameters params;

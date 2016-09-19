@@ -11,14 +11,4 @@ namespace Vanguard
 	{
 		// TODO:
 	}
-
-	WindowHandle Application::CreateNativeWindow(const WindowCreationParameters& aWindowParameters)
-	{
-		// TODO:
-	}
-
-	void Application::GetWindowSize(WindowHandle aWindowHandle, int& OUTSizeX, int& OUTSizeY)
-	{
-
-	}
 }

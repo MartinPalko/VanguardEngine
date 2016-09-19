@@ -1,1 +1,1 @@
-IMPLEMENT_MODULE(Renderer2D "Core;VanguardSDL" "")
+IMPLEMENT_MODULE(Renderer2D "Core;VanguardSDL;Resources" "")

@@ -1,5 +1,6 @@
 #include "SpriteRenderer.h"
 #include "Entity/Actor.h"
+#include "ResourceManager.h"
 
 namespace Vanguard
 {
@@ -12,4 +13,8 @@ namespace Vanguard
 			static_cast<Actor*>(GetEntity())->UpdateBounds();
 	}
 
+	void SpriteRenderer::SetImage(const String & aImageName)
+	{
+		image = Core::GetInstance()->GetResourceManager()->LoadResource<ImageResource>(aImageName);
+	}
 }

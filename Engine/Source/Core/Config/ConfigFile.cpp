@@ -103,7 +103,7 @@ namespace Vanguard
 			StringID key = keyString.Trim();
 			value = value.Trim();
 
-			bool keyExists = sections[currentSection].entries.count(key);
+			bool keyExists = sections[currentSection].entries.count(key) == 0;
 
 			if (operation == ConfigOperator::Add && keyExists) // Append value
 			{

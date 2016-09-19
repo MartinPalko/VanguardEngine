@@ -1,11 +1,11 @@
 #pragma once
 #include "Platforms/Platform.h"
+#pragma warning (disable : 4275) // non dll-interface struct used as base for dll-interface class
 
 namespace Vanguard
 {
-	class ICore
+	struct ICore
 	{
-	public:
 		virtual ~ICore() {};
 
 		virtual void Initialize(int aArgC, char** aArgV, const char* aProjectName = "") = 0;

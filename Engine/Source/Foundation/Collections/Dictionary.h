@@ -46,7 +46,7 @@ namespace Vanguard
 
 		inline bool Contains(const K& aKey) const
 		{
-			return data.count(aKey);
+			return data.count(aKey) == 0;
 		}
 
 		inline bool ContainsKey(const K& aKey) const

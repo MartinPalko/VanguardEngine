@@ -209,14 +209,14 @@ namespace Vanguard
 		}
 
 		const float frustumDepth = aZFar - aZNear;
-		const float oneOverDepth = 1 / frustumDepth;
+		const float oneOverDepth = 1.0f / frustumDepth;
 
-		result.elements[1][1] = 1 / tan(0.5f * aFov);
-		result.elements[0][0] = (aLeftHanded ? 1 : -1) * result.elements[1][1] / aAspect;
+		result.elements[1][1] = 1.0f / Math::FTan(0.5f * aFov);
+		result.elements[0][0] = (aLeftHanded ? 1.0f : -1.0f) * result.elements[1][1] / aAspect;
 		result.elements[2][2] = aZFar * oneOverDepth;
 		result.elements[3][2] = (-aZFar * aZNear) * oneOverDepth;
-		result.elements[2][3] = 1;
-		result.elements[3][3] = 0;
+		result.elements[2][3] = 1.0f;
+		result.elements[3][3] = 0.0f;
 
 		return result;
 	}

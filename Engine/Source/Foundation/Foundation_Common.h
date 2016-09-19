@@ -1,4 +1,6 @@
 #pragma once
+#pragma warning(disable : 4244) // Conversion double to float
+
 #include "Platforms/Platform.h"
 
 #if VANGUARD_DEBUG

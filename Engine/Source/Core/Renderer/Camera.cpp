@@ -5,10 +5,10 @@ namespace Vanguard
 	TYPE_DEFINITION(Camera, Actor);
 	
 	Camera::Camera() : Actor()
-		, fov (60)
+		, fov (60.0f)
 		, orthographic(false)
-		, zNear(0.1)
-		, zFar(1000)
+		, zNear(0.1f)
+		, zFar(1000.0f)
 	{
 	}
 

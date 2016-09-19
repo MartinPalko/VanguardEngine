@@ -25,12 +25,11 @@ namespace Vanguard
 
 	bool ReadPNG(const FilePath& aFile)
 	{
-		// Work in progres, currently just leaks memory like a boss.
+		// Work in progres
+		return false;
 
 		String pathName = aFile.GetFullPathName();
 		const char* file_name = pathName.GetCharPointer();
-
-		int x, y;
 
 		int width, height;
 		png_byte color_type;
@@ -103,7 +102,7 @@ namespace Vanguard
 		}
 
 		row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * height);
-		for (y=0; y<height; y++)
+		for (int y = 0; y < height; y++)
 			row_pointers[y] = (png_byte*) malloc(png_get_rowbytes(png_ptr,info_ptr));
 
 		png_read_image(png_ptr, row_pointers);

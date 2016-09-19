@@ -11,7 +11,6 @@
 #include "Log.h"
 #include "Profiler.h"
 #include "Project.h"
-#include "ResourceManager.h"
 #include "Directories.h"
 
 #include "Entity/Actor.h"
@@ -29,6 +28,8 @@
 
 namespace Vanguard
 {
+	class ResourceManager;
+
 	class QuickProfiler
 	{
 		Timespan startTime;
@@ -103,7 +104,6 @@ namespace Vanguard
 		size_t GetMainThreadID() { return mainThreadID; }
 		JobManager* GetJobManager();
 		Profiler* GetProfiler();
-		ResourceManager* GetResourceManager();
 
 		// Implementation of ICore
 		virtual void Initialize(int aArgC, char** aArgV, const char* aProjectName = "") override;
@@ -114,6 +114,10 @@ namespace Vanguard
 		inline CoreState GetState(){ return state; }
 
 		class Project* GetLoadedProject(){ return loadedProject; }
+
+		void RegisterResourceManager(ResourceManager* aResourceManager);
+		void UnregisterResourceManager();
+		ResourceManager* GetResourceManager();
 
 		void RegisterRenderer(IRenderer* aRenderer);
 		void UnregisterRenderer(IRenderer* aRenderer);

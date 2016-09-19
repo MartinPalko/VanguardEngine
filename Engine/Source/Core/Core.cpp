@@ -67,8 +67,6 @@ namespace Vanguard
 
 		profiler = new Profiler();
 
-		resourceManager = new ResourceManager();
-
 		moduleManager = new ModuleManager();
 
 		// Load the project's module.
@@ -224,9 +222,6 @@ namespace Vanguard
 			}
 			worlds.Clear();
 
-			delete resourceManager;
-			resourceManager = nullptr;
-
 			delete profiler;
 			profiler = nullptr;
 
@@ -277,6 +272,35 @@ namespace Vanguard
 		}
 	}
 
+	void Core::RegisterResourceManager(ResourceManager* aResourceManager)
+	{
+		if (!resourceManager)
+		{
+			resourceManager = aResourceManager;
+		}
+		else
+		{
+			LOG_EXCEPTION("Cannot register resource manager, a resource manager is already registered", "Core");
+		}
+	}
+
+	void Core::UnregisterResourceManager()
+	{
+		if (resourceManager)
+		{
+			resourceManager = nullptr;
+		}
+		else
+		{
+			LOG_EXCEPTION("Cannot unregister resource manager, no resource manager is registered", "Core");
+		}
+	}
+
+	ResourceManager* Core::GetResourceManager()
+	{
+		return resourceManager;
+	}
+
 	void Core::RegisterRenderer(IRenderer * aRenderer)
 	{
 		if (renderers.Contains(aRenderer))
@@ -324,10 +348,5 @@ namespace Vanguard
 	Profiler* Core::GetProfiler()
 	{
 		return profiler;
-	}
-
-	ResourceManager * Core::GetResourceManager()
-	{
-		return resourceManager;
 	}
 }

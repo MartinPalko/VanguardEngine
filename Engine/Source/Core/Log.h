@@ -78,11 +78,14 @@ namespace Vanguard
 		static FilePath logFile;
 		static FilePath rollingLogFile;
 
-	public:
+		// Called from Core on startup. Creates the log file, named appropriately, and prepares for writing.
 		static void Initialize();
 
+	public:
+		// Write should generally not be called directly, a set of macros are provided.
 		static void Write(const String& aMessage, const LogEntryErrorLevel& aErrorLevel, const String& aChannel);
 
+		// Write all pending log messages to the log file.
 		static void Flush();
 	};
 }

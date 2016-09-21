@@ -8,6 +8,8 @@ namespace Vanguard
 {
 	class IModule;
 
+	// Information struct about a module.
+	// All modules located in the modules directory have a ModuleInfo created for them, whether they are loaded or not.
 	struct ModuleInfo
 	{
 		friend class ModuleManager;
@@ -17,6 +19,7 @@ namespace Vanguard
 		bool GetIsLoaded() { return moduleInstance != nullptr; }
 		bool LoadModule();
 		void UnloadModule();
+		// Pointer to the instance of this module. nullptr if not loaded.
 		IModule* GetInstance() { return moduleInstance; }
 
 	private:
@@ -26,7 +29,13 @@ namespace Vanguard
 		FilePath filePath;
 		DynamicLibrary* dynamicLibReference;
 		IModule* moduleInstance;
+
+		// If not loaded explicitly, module has been loaded as a result of another module's dependencies,
+		// and will automatically be unloaded when it's no longer in use by another module.
 		bool loadedExplicitly;
+
+		// List of other loaded modules currently using this module.
+		// This module cannot be unloaded until it's no longer in use by another module.
 		DynamicArray<String> inUseBy;
 
 	protected:

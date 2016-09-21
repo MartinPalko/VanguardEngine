@@ -4,28 +4,29 @@
 
 namespace Vanguard
 {
-	class Directories
+	// A collection of functions for retrieving directory paths of the running instance.
+	struct CORE_API Directories
 	{
 	private:
 		Directories(){}
 
 	public:
-		static CORE_API FilePath GetVanguardProjectsDirectory();
-		static CORE_API FilePath GetVanguardRootDirectory();
-		static CORE_API FilePath GetLogDirectory();
+		static FilePath GetVanguardProjectsDirectory();
+		static FilePath GetVanguardRootDirectory();
+		static FilePath GetLogDirectory();
 
-		static CORE_API FilePath GetEngineBinDirectory();
-		static CORE_API FilePath GetEngineModuleDirectory();
-		static CORE_API FilePath GetEngineDirectory();
-		static CORE_API FilePath GetEngineConfigDirectory();
-		static CORE_API FilePath GetEngineResourceDirectory();
+		static FilePath GetEngineBinDirectory();
+		static FilePath GetEngineModuleDirectory();
+		static FilePath GetEngineDirectory();
+		static FilePath GetEngineConfigDirectory();
+		static FilePath GetEngineResourceDirectory();
 
-		static CORE_API FilePath GetProjectTempDirectory();
-		static CORE_API FilePath GetProjectDirectory();
-		static CORE_API FilePath GetProjectConfigDirectory();
-		static CORE_API FilePath GetProjectModuleDirectory();
-		static CORE_API FilePath GetProjectResourceDirectory();
+		static FilePath GetProjectTempDirectory();
+		static FilePath GetProjectDirectory();
+		static FilePath GetProjectConfigDirectory();
+		static FilePath GetProjectModuleDirectory();
+		static FilePath GetProjectResourceDirectory();
 
-		static CORE_API DynamicArray<FilePath> GetResourceDirectories();
+		static DynamicArray<FilePath> GetResourceDirectories();
 	};
 }

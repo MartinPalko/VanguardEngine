@@ -7,6 +7,7 @@
 
 namespace Vanguard
 {
+	// Static class for Asynchronous reading and writing to and from the file system.
 	class CORE_API AsyncIO
 	{
 	public:

@@ -30,6 +30,8 @@ namespace Vanguard
 {
 	class ResourceManager;
 
+	// Small helper class that uses RAII behaviour for logging
+	// TODO: This should be moved out of Core.h
 	class QuickProfiler
 	{
 		Timespan startTime;
@@ -73,6 +75,9 @@ namespace Vanguard
 
 	class ModuleManager;
 
+	// Core is the main class of the Engine. Only one instance of core can be initialized and running at a time.
+	// It is responsible for allocating and initializing all other systems, as well as shutting down and deallocating them.
+	// Core also provides a singleton for access. The singleton is set on initialization, and cleared on shutdown.
 	class CORE_API Core : public ICore
 	{
 	private:
@@ -106,9 +111,13 @@ namespace Vanguard
 		Profiler* GetProfiler();
 
 		// Implementation of ICore
+		// Allocate and initialize all Core systems.
 		virtual void Initialize(int aArgC, char** aArgV, const char* aProjectName = "") override;
+		// Enter the main application loop. This function will not return until Core has shut down.
 		virtual void Run() override;
+		// Shuts down and exits Core. Calling this while running will exit the main application loop.
 		virtual void ShutDown() override;
+
 		virtual void LoadModule(const char* aModuleName) override;
 
 		inline CoreState GetState(){ return state; }

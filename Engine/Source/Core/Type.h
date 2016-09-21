@@ -12,6 +12,8 @@ namespace Vanguard
 		virtual void* CreateInstance() const = 0;
 	};
 
+	// Type provides runtime information about a class, such as class name, base classes, and derived classes.
+	// Type also provides a factory for creating new instances of the class it describes.
 	class CORE_API Type
 	{
 	protected:
@@ -59,7 +61,9 @@ namespace Vanguard
 	};
 }
 
-// Type Declatation macros
+// Type macros. You must use these macros inside your classes to register them with the type system.
+
+// Declarations
 #define ABSTRACT_BASETYPE_DECLARATION(ClassIdentifier)\
 friend class Type;\
 protected:\
@@ -80,7 +84,7 @@ public:\
 #define TYPE_DECLARATION(ClassIdentifier, BaseIdentifier)\
 	BASETYPE_DECLARATION(ClassIdentifier)
 
-// Type Definition macros
+// Definitions
 #define DEFINE_TYPE_FACTORY(ClassIdentifier)\
 void* ClassIdentifier::Factory::CreateInstance() const { return new ClassIdentifier();}\
 ClassIdentifier::Factory ClassIdentifier::ClassIdentifier##_Factory;\

@@ -13,6 +13,9 @@ namespace Vanguard
 
 	typedef std::function<void(Frame*)> TickFunction;
 
+	// A world contains all information about a running game. Typically, there is one world instance per game instance.
+	// It is possible to have multiple worlds exist simultaneously, but typically, they do not directly communicate.
+	// Eg. an Editor world, Play-in-editor world, and a game server world could all exist simultaneously, but should behave independently.
 	class CORE_API World
 	{
 		friend class Core;

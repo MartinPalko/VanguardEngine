@@ -15,6 +15,6 @@ namespace Vanguard
 
 	void SpriteRenderer::SetImage(const String & aImageName)
 	{
-		image = Core::GetInstance()->GetResourceManager()->LoadResource<ImageResource>(aImageName);
+		image = Core::GetInstance()->GetResourceManager()->LoadResource<SDLImageResource>(aImageName);
 	}
 }

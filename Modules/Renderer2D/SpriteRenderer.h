@@ -1,6 +1,6 @@
 #pragma once
 #include "Renderer2D_Common.h"
-#include "ImageResource.h"
+#include "SDLImageResource.h"
 
 namespace Vanguard
 {
@@ -10,7 +10,7 @@ namespace Vanguard
 	private:
 		Vector2 dimensions;
 		Color color;
-		ImageResource* image;
+		SDLImageResource* image;
 
 	public:
 		SpriteRenderer() : Component()
@@ -29,6 +29,7 @@ namespace Vanguard
 		virtual Box GetBounds() override { return Box(Vector3(dimensions.x, dimensions.y, 0)); }
 
 		void SetImage(const String& aImageName);
+		SDLImageResource* GetImage() { return image; }
 
 	};
 }

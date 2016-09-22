@@ -6,16 +6,10 @@ namespace Vanguard
 {
 	class RESOURCES_API ImageResource : public Resource
 	{
-		TYPE_DECLARATION(ImageResource, Resource);
+		ABSTRACT_TYPE_DECLARATION(ImageResource, Resource);
 
 	public:
-		ImageResource();
-		virtual ~ImageResource();
-
-		// Implement Resource
-		virtual bool LoadResource();
-		virtual bool UnloadResource();
-		virtual bool IsLoaded();
-		virtual size_t GetSize();
+		virtual int GetStride() = 0;
+		virtual int GetPixelDepth() = 0;
 	};
 }

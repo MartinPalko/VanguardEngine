@@ -13,3 +13,4 @@ using namespace Vanguard;
 // Include the generated config (If included by SDL headers, they will prefer the non-generated config)
 #include <SDL_config.h>
 #include <SDL.h>
+#include <SDL_Image.h>

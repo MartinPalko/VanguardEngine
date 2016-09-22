@@ -100,11 +100,11 @@ MACRO (IMPLEMENT_PROJECT_AUTOFINDSOURCES projType projName publicDependencies pr
 ENDMACRO()
 
 MACRO (LINK_DEPENDENCY projName dependency IsPrivate)
-	if (TARGET ${dependency})		
+	if (TARGET ${dependency})
 		GET_TARGET_PROPERTY(publicIncludeDirectories ${dependency} INCLUDE_DIRECTORIES)	
 		IF (publicIncludeDirectories)
 			TARGET_INCLUDE_DIRECTORIES(${projName} PRIVATE ${publicIncludeDirectories})
-		ELSEIF(NOT ${dependency}_INCLUDES)
+		ELSEIF(NOT publicIncludeDirectories)
 			MESSAGE("Warning: ${dependency} has no includes")
 		ENDIF()
 	
@@ -123,7 +123,7 @@ MACRO (LINK_DEPENDENCY projName dependency IsPrivate)
 			
 			IF (interfaceIncludeDirectories)
 				TARGET_INCLUDE_DIRECTORIES(${projName} PUBLIC ${interfaceIncludeDirectories})
-			ELSEIF(NOT ${dependency}_INCLUDES)
+			ELSEIF(NOT publicIncludeDirectories)
 				MESSAGE("Warning: ${dependency} has no interface includes")
 			ENDIF()	
 		

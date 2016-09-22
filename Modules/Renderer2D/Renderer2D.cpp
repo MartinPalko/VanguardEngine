@@ -3,6 +3,7 @@
 #include "VanguardSDL.h"
 #include "RenderView2D.h"
 #include "Entity/Transform.h"
+#include "SDLImageResource.h"
 
 #define SPLIT_COLOR_RGBA(VanguardColor) VanguardColor.r, VanguardColor.g, VanguardColor.b, VanguardColor.a
 #define SPLIT_COLOR_RGB(VanguardColor) VanguardColor.r, VanguardColor.g, VanguardColor.b
@@ -16,7 +17,7 @@ namespace Vanguard
 		Color color;
 		Vector2 dimensions;
 		Vector3 position;
-		SDL_Texture *texture;
+		SDL_Texture* texture;
 		SDL_BlendMode blendMode;
 	};
 
@@ -166,11 +167,19 @@ namespace Vanguard
 			SpriteRenderer* sprite = (SpriteRenderer*)sprites[i];
 			if (sprite->GetEntity()->Enabled())
 			{
+				SDL_Texture* sdlTexture = nullptr;
+
+				const SDLImageResource* imageResource = sprite->GetImage();
+				if (imageResource && imageResource->sdlSurface)
+				{
+					sdlTexture = SDL_CreateTextureFromSurface(renderViews[0]->sdlRenderer, imageResource->sdlSurface);
+				}
+
 				RenderItem item = {
 					sprite->GetColor(),
 					sprite->GetDimensions(),
 					sprite->GetEntity()->GetComponent<Transform>()->position,
-					nullptr,
+					sdlTexture,
 					SDL_BLENDMODE_NONE
 				};
 				renderJob->renderItems.PushBack(item);

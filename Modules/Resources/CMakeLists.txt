@@ -1,1 +1,1 @@
-IMPLEMENT_MODULE(Resources "Core")
+IMPLEMENT_MODULE(Resources "Core" "")

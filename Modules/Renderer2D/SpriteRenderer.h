@@ -41,7 +41,7 @@ namespace Vanguard
 	public:
 		SpriteRenderer() : Component()
 			, dimensions(1, 1)
-			, color(1, 1, 1, 1)
+			, color(255, 255, 255, 255)
 			, image(nullptr)
 			, blendMode(eSpriteBlendMode::None)
 			, flipped(eSpriteFlip::None)

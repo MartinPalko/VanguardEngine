@@ -184,7 +184,7 @@ namespace Vanguard
 
 	Vector4 Matrix4x4::Transform(const Vector4& aVector) const
 	{
-		return Vector4(GetRow(0).Dot(aVector), GetRow(1).Dot(aVector), GetRow(2).Dot(aVector), GetRow(3).Dot(aVector));
+		return Vector4(GetColumn(0).Dot(aVector), GetColumn(1).Dot(aVector), GetColumn(2).Dot(aVector), GetColumn(3).Dot(aVector));
 	}
 
 	Vector3 Matrix4x4::TransformDirection(const Vector3& aPoint) const

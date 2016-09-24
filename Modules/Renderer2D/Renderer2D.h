@@ -10,6 +10,8 @@ namespace Vanguard
 {
 	class Renderer2D : public IModule, public IRenderer
 	{
+		static Int32ConfigVar defaultTextureFiltering;
+
 		DynamicArray<RenderView2D*> renderViews;
 
 		// IModule Implementation

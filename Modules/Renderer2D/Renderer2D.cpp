@@ -10,7 +10,9 @@
 
 namespace Vanguard
 {
-	VANGUARD_DECLARE_MODULE(Renderer2D)
+	VANGUARD_DECLARE_MODULE(Renderer2D);
+
+	Int32ConfigVar Renderer2D::defaultTextureFiltering = Int32ConfigVar("Renderer2D", "", "DefaultTextureFiltering", 1);
 
 	struct RenderItem
 	{
@@ -36,6 +38,20 @@ namespace Vanguard
 	{
 		VanguardSDL::RegisterModuleUse(VanguardSDL::Video);
 		Core::GetInstance()->RegisterRenderer(this);
+
+		switch (defaultTextureFiltering)
+		{
+		case 0:
+			SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+			break;
+		case 1:
+			SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+			break;
+		case 2:
+		default:
+			SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
+			break;
+		}
 	}
 
 	void Renderer2D::UnloadModule()

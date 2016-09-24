@@ -17,6 +17,8 @@ namespace Vanguard
 		Color color;
 		Vector2 dimensions;
 		Vector3 position;
+		double rotation;
+		SDL_RendererFlip flip;
 		SDL_Texture* texture;
 		SDL_BlendMode blendMode;
 	};
@@ -121,8 +123,12 @@ namespace Vanguard
 
 					if (renderItem.texture)
 					{
+						const static SDL_Point zeroPoint = { 0, 0 };
+
+						SDL_SetTextureBlendMode(renderItem.texture, renderItem.blendMode);
 						SDL_SetTextureColorMod(renderItem.texture, SPLIT_COLOR_RGB(renderItem.color));
-						SDL_RenderCopy(view.renderer, renderItem.texture, NULL, &screenspaceRect);
+						SDL_SetTextureAlphaMod(renderItem.texture, renderItem.color.a);
+						SDL_RenderCopyEx(view.renderer, renderItem.texture, NULL, &screenspaceRect, renderItem.rotation, &zeroPoint, renderItem.flip);
 					}
 					else
 					{
@@ -179,8 +185,10 @@ namespace Vanguard
 					sprite->GetColor(),
 					sprite->GetDimensions(),
 					sprite->GetEntity()->GetComponent<Transform>()->position,
+					0, // TODO: Support rotation from Transform
+					(SDL_RendererFlip)sprite->GetFlipped(),
 					sdlTexture,
-					SDL_BLENDMODE_NONE
+					(SDL_BlendMode)sprite->GetBlendMode()
 				};
 				renderJob->renderItems.PushBack(item);
 			}

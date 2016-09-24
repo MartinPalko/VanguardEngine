@@ -2,6 +2,7 @@
 #include "Foundation.h"
 
 #include "Directories.h"
+#include "Config/Config.h"
 
 namespace Vanguard
 {
@@ -80,6 +81,10 @@ namespace Vanguard
 			LOG_ERROR("Could not load module \"" + filePath.GetFullPathName() + "\", library does not contain function: " + TO_STRING(VANGUARD_MODULE_INST_FUNCTION), "Modules");
 			return false;
 		}
+
+		// Update config tables with new values
+		ConfigTable::LoadConfigFromDisk();
+		// TODO: Trigger rebuild of typesystem (also need to do on unload of module)
 
 		moduleInstance = InstantiationFunction();
 		moduleInstance->LoadModule();

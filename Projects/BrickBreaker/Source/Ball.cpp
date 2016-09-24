@@ -18,7 +18,8 @@ namespace BrickBreaker
 		SpriteRenderer* spriteComponent = AddComponent<SpriteRenderer>();
 		spriteComponent->SetDimensions(Vector2(2.0f, 2.0f));
 		spriteComponent->SetColor(Color(200, 200, 200));
-		spriteComponent->SetImage("ball.bmp");
+		spriteComponent->SetImage("ball.png");
+		spriteComponent->SetBlendMode(eSpriteBlendMode::Blend);
 	}
 
 	void Ball::Tick(Frame* aFrame)

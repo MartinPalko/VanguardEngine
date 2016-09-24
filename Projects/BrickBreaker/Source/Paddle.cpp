@@ -18,6 +18,8 @@ namespace BrickBreaker
 		SpriteRenderer* spriteComponent = AddComponent<SpriteRenderer>();
 		spriteComponent->SetDimensions(Vector2(paddleWidth, 2.0f));
 		spriteComponent->SetColor(Color(150, 150, 150));
+		spriteComponent->SetImage("paddle.png");
+		spriteComponent->SetBlendMode(eSpriteBlendMode::Blend);
 
 		EnableTick();
 	}

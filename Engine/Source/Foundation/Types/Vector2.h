@@ -38,6 +38,7 @@ namespace Vanguard
 		inline Vector2 operator-() const { return Vector2(-x, -y); }
 
 		inline bool operator==(const Vector2& aV) { return x == aV.x && y == aV.y; }
+		inline bool operator!=(const Vector2& aV) { return x != aV.x || y != aV.y; }
 
 		inline Vector2 operator+(const Vector2& aV) const { return Vector2(x + aV.x, y + aV.y); }
 		inline Vector2 operator-(const Vector2& aV) const { return Vector2(x - aV.x, y - aV.y); }
@@ -49,10 +50,15 @@ namespace Vanguard
 		inline void operator*=(const Vector2& aV) { x *= aV.x; y *= aV.y; }
 		inline void operator/=(const Vector2& aV) { x /= aV.x; y /= aV.y; }
 
-		inline Vector2 operator+(const float& aF) const	{ return Vector2(x + aF, y + aF); }
-		inline Vector2 operator-(const float& aF) const	{ return Vector2(x - aF, y - aF); }
+		inline Vector2 operator+(const float& aF) const { return Vector2(x + aF, y + aF); }
+		inline Vector2 operator-(const float& aF) const { return Vector2(x - aF, y - aF); }
 		inline Vector2 operator*(const float& aF) const { return Vector2(x * aF, y * aF); }
 		inline Vector2 operator/(const float& aF) const { return Vector2(x / aF, y / aF); }
+
+		inline void operator+=(const float& aF) { x += aF; y += aF; }
+		inline void operator-=(const float& aF) { x -= aF; y -= aF; }
+		inline void operator*=(const float& aF) { x *= aF; y *= aF; }
+		inline void operator/=(const float& aF) { x /= aF; y /= aF; }
 
 		// Static Functions
 

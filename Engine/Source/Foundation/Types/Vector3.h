@@ -44,6 +44,7 @@ namespace Vanguard
 		inline Vector3 operator-() const { return Vector3(-x, -y, -z); }
 
 		inline bool operator==(const Vector3& aV) { return x == aV.x && y == aV.y && z == aV.z; }
+		inline bool operator!=(const Vector3& aV) { return x != aV.x || y != aV.y || z != aV.z; }
 
 		inline Vector3 operator+(const Vector3& aV) const { return Vector3(x + aV.x, y + aV.y, z + aV.z); }
 		inline Vector3 operator-(const Vector3& aV) const { return Vector3(x - aV.x, y - aV.y, z - aV.z); }
@@ -59,6 +60,11 @@ namespace Vanguard
 		inline Vector3 operator-(const float& aF) const	{ return Vector3(x - aF, y - aF, z - aF); }
 		inline Vector3 operator*(const float& aF) const { return Vector3(x * aF, y * aF, z * aF); }
 		inline Vector3 operator/(const float& aF) const { return Vector3(x / aF, y / aF, z / aF); }
+
+		inline void operator+=(const float& aF) { x += aF; y += aF; z += aF;}
+		inline void operator-=(const float& aF) { x -= aF; y -= aF; z -= aF;}
+		inline void operator*=(const float& aF) { x *= aF; y *= aF; z *= aF;}
+		inline void operator/=(const float& aF) { x /= aF; y /= aF; z /= aF;}
 
 		// Static Functions
 

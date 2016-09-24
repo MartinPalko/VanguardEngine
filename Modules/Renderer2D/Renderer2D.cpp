@@ -153,7 +153,7 @@ namespace Vanguard
 			RenderView2D* worldView = renderViews[i];
 
 			const Matrix4x4 projectionMatrix = worldView->viewCamera->GetProjectionMatrix();
-			const Matrix4x4 worldToCamera = Matrix4x4::CreateTranslation(worldView->viewCamera->GetTransform()->position);
+			const Matrix4x4 worldToCamera = Matrix4x4::CreateTranslation(worldView->viewCamera->GetTransform()->position).GetInverse();
 
 			JobRenderView jobView = {
 				projectionMatrix,

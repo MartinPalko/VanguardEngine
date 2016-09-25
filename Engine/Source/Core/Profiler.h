@@ -29,7 +29,7 @@ namespace Vanguard
 	private:
 		std::atomic<bool> profileNextFrame;
 		std::atomic<bool> profilingFrame;
-		FrameProfile* currentFrameProfile;
+		FrameProfile currentFrameProfile;
 
 		void BeginFrameProfile();
 		

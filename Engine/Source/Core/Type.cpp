@@ -70,6 +70,17 @@ namespace Vanguard
 		return returnArray;
 	}
 
+	DynamicArray<Type*> Type::GetAllBaseTypes()
+	{
+		DynamicArray<Type*> returnArray(GetClassinfoNameMap().size());
+		for (auto pair : GetClassinfoNameMap())
+		{
+			if (!pair.second->baseClass)
+				returnArray.PushBack(pair.second);
+		}
+		return returnArray;
+	}
+
 	Type* Type::GetType(const StringID& aTypeName)
 	{
 		const size_t nameHash = aTypeName.GetHash();

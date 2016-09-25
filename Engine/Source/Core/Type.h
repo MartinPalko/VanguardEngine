@@ -42,6 +42,7 @@ namespace Vanguard
 		DynamicArray<Type*> GetDerivedClasses() const;
 
 		static DynamicArray<Type*> GetAllTypes();
+		static DynamicArray<Type*> GetAllBaseTypes();
 		static Type* GetType(const StringID& aTypeName);
 		template<class T>static Type* GetType()
 		{

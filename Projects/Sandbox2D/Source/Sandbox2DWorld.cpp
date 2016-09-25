@@ -14,6 +14,7 @@ namespace eGameButton
 	enum eType
 	{
 		Exit = 0,
+		ProfileFrame,
 		CameraMoveLeft,
 		CameraMoveRight,
 		CameraMoveUp,
@@ -48,14 +49,21 @@ namespace Sandbox2D
 
 		// TestSprites
 		Vector3 testSpriteLocations[] = {
-			Vector3(0,0,0)
+			Vector3(0,0,0),
+			Vector3(120,120,0),
+			Vector3(60,40,0),
+			Vector3(200,30,0),
+			Vector3(120,300,0),
+			Vector3(60,120,0),
+			Vector3(40,160,0),
+			Vector3(200,200,0)
 		};
 
-		for (int i = 0; i < sizeof(Vector3) / sizeof(testSpriteLocations); i++)
+		for (int i = 0; i < sizeof(testSpriteLocations) / sizeof(Vector3); i++)
 		{
-			
 			Actor* testSpriteActor = SpawnEntity<Actor>();
-			SpriteRenderer* testSprite = backgroundEntity->AddComponent<SpriteRenderer>();
+			testSpriteActor->GetTransform()->position = testSpriteLocations[i];
+			SpriteRenderer* testSprite = testSpriteActor->AddComponent<SpriteRenderer>();
 			testSprite->SetDimensions(Vector2(50, 50));
 			testSprite->SetImage("Sprite.png");
 			testSprite->SetBlendMode(Vanguard::eSpriteBlendMode::Blend);
@@ -67,6 +75,7 @@ namespace Sandbox2D
 
 		inputMap = new gainput::InputMap(*inputManager);
 		inputMap->MapBool(eGameButton::Exit, keyboardId, gainput::KeyEscape);
+		inputMap->MapBool(eGameButton::ProfileFrame, keyboardId, gainput::KeyP);
 		inputMap->MapBool(eGameButton::CameraMoveLeft, keyboardId, gainput::KeyLeft);
 		inputMap->MapBool(eGameButton::CameraMoveLeft, keyboardId, gainput::KeyA);
 		inputMap->MapBool(eGameButton::CameraMoveRight, keyboardId, gainput::KeyRight);
@@ -97,6 +106,9 @@ namespace Sandbox2D
 		{
 			Core::GetInstance()->ShutDown();
 		}
+
+		if (inputMap->GetBoolIsNew(eGameButton::ProfileFrame))
+			Core::GetInstance()->GetProfiler()->ProfileNextFrame();
 
 		Vector3 input(0, 0, 0);
 		if (inputMap->GetBool(eGameButton::CameraMoveLeft))

@@ -5,11 +5,21 @@ namespace Vanguard
 {
 	TYPE_DEFINITION(SDLImageResource, ImageResource);
 
+	SDL_Texture* SDLImageResource::getSDLTexture(SDL_Renderer* sdlRenderer)
+	{
+		if (sdlTextures.count(sdlRenderer))
+			return sdlTextures[sdlRenderer];
+
+		if (!sdlSurface)
+			return nullptr;
+
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(sdlRenderer, sdlSurface);
+		sdlTextures[sdlRenderer] = texture;
+		return texture;
+	}
+
 	bool SDLImageResource::LoadResource()
 	{
-		if (sdlSurface)
-			return false;
-
 		const String path = GetResourcePath();
 		sdlSurface = IMG_Load(path.GetCharPointer());
 
@@ -22,9 +32,15 @@ namespace Vanguard
 		{
 			SDL_FreeSurface(sdlSurface);
 			sdlSurface = nullptr;
-			return true;
 		}
-		return false;
+
+		for (auto pair : sdlTextures)
+		{
+			SDL_DestroyTexture(pair.second);
+		}
+		sdlTextures.clear();
+
+		return true;
 	}
 
 	bool SDLImageResource::IsLoaded()

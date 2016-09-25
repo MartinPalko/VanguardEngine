@@ -5,6 +5,7 @@
 
 struct SDL_Surface;
 struct SDL_Texture;
+struct SDL_Renderer;
 
 namespace Vanguard
 {
@@ -16,6 +17,7 @@ namespace Vanguard
 
 	private:
 		SDL_Surface* sdlSurface;
+		std::unordered_map<SDL_Renderer*, SDL_Texture*> sdlTextures; 
 
 	public:
 		SDLImageResource() : ImageResource()
@@ -25,6 +27,8 @@ namespace Vanguard
 		}
 
 		~SDLImageResource() {}
+
+		SDL_Texture* getSDLTexture(SDL_Renderer* sdlRenderer);
 
 		// Implement Resource
 		virtual bool LoadResource() override;

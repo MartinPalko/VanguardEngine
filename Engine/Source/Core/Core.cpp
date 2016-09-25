@@ -141,7 +141,11 @@ namespace Vanguard
 					world->lastTickStartTime = currentTime;
 					world->nextFrameNumber++;
 
-					profiler->StartProfiling();
+					if (profiler->profileNextFrame)
+					{
+						profiler->profileNextFrame = false;
+						profiler->BeginFrameProfile();
+					}
 
 					// Update the world
 					frame->AddJob(world->MakeTickJob(frame));
@@ -160,10 +164,8 @@ namespace Vanguard
 					const float frameTime = (Timespan::GetElapsedSystemTime() - currentTime).InSeconds() * 1000.0;
 					LOG_MESSAGE("Frame time : " + String::FromFloat(frameTime), "Core");
 
-					if (profiler->IsProfiling() && world->nextFrameNumber == 10)
-						profiler->EndProfiling(Directories::GetVanguardRootDirectory().GetRelative("ProfilerResults.json"));
-					else 
-						profiler->EndProfiling();
+					if (profiler->IsProfilingFrame())
+						profiler->EndFrameProfile(Directories::GetLogDirectory().GetRelative("ProfilerResults.json"));
 
 					delete frame;
 				}

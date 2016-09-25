@@ -3,14 +3,14 @@
 
 #include "ThirdParty/ConcurrentQueue/blockingconcurrentqueue.h"
 
-// Comment out to disable job profiling.
 #define JOB_PROFILING
 
-#ifdef JOB_PROFILING
 namespace Vanguard
 {
 	class CORE_API Profiler
 	{
+		friend class Core;
+
 	public:
 		struct JobProfile
 		{
@@ -20,18 +20,28 @@ namespace Vanguard
 			Timespan endTime;
 		};
 
+		struct FrameProfile
+		{
+			Timespan profilingStartTime;
+			moodycamel::BlockingConcurrentQueue<JobProfile> jobProfiles;
+		};
+
 	private:
-		moodycamel::BlockingConcurrentQueue<JobProfile> jobProfiles;
-		std::atomic<bool> profiling;
-		Timespan profilingStartTime;
+		std::atomic<bool> profileNextFrame;
+		std::atomic<bool> profilingFrame;
+		FrameProfile* currentFrameProfile;
+
+		void BeginFrameProfile();
+		
+		void EndFrameProfile();
+		void EndFrameProfile(FilePath aWriteResultsTo);		
 
 	public:
-		void StartProfiling();
-		bool IsProfiling() { return profiling; }
-		void EndProfiling();
-		void EndProfiling(FilePath aWriteResultsTo);
+		Profiler();
+		~Profiler();
 
+		bool IsProfilingFrame() { return profilingFrame; }
+		void ProfileNextFrame() { profileNextFrame = true; }
 		void RecordJobProfile(const String& aJobName, Timespan aStartTime);
 	};
 }
-#endif

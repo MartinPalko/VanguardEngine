@@ -12,7 +12,7 @@ namespace Vanguard
 		DoJob();
 #ifdef JOB_PROFILING
 		Profiler* profiler = Core::GetInstance()->GetProfiler();
-		if (profiler && profiler->IsProfiling())
+		if (profiler && profiler->IsProfilingFrame())
 			profiler->RecordJobProfile(name, startTime);
 #endif
 		running = false;

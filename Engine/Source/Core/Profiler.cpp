@@ -5,33 +5,61 @@
 
 namespace Vanguard
 {
-	void Profiler::StartProfiling()
+	Profiler::Profiler()
+		: profileNextFrame(false)
+		, profilingFrame(false)
+		, currentFrameProfile(nullptr)
 	{
-		profiling = true;
-		profilingStartTime = Timespan::GetElapsedSystemTime();
+
 	}
 
-	void Profiler::EndProfiling()
+	Profiler::~Profiler()
 	{
+
+	}
+
+	void Profiler::BeginFrameProfile()
+	{
+		ASSERT_MAIN_THREAD;
+		if (profilingFrame)
+		{
+			LOG_ERROR("Already profiling frame. Cannot begin a new frame profile before the last one has ended.", "Profiler");
+			return;
+		}
+
+		profilingFrame = true;
+		currentFrameProfile = new FrameProfile();
+		currentFrameProfile->profilingStartTime = Timespan::GetElapsedSystemTime();
+		
+	}
+
+	void Profiler::EndFrameProfile()
+	{
+		ASSERT_MAIN_THREAD;
+
 		// Nowhere to dump to, so just discard the record queue.
 		const size_t maxDequeRecords = 128;
 		JobProfile dequeuedRecords[128];
-		while (jobProfiles.try_dequeue_bulk(dequeuedRecords, maxDequeRecords));
+		while (currentFrameProfile->jobProfiles.try_dequeue_bulk(dequeuedRecords, maxDequeRecords));
 	}
 
-	void Profiler::EndProfiling(FilePath aWriteResultsTo)
-	{		
-		profiling = false;
+	void Profiler::EndFrameProfile(FilePath aWriteResultsTo)
+	{
+		ASSERT_MAIN_THREAD;
+
+		profilingFrame = false;
 
 		String outputString = "[";
 		
 		const size_t maxDequeRecords = 128;
 		JobProfile dequeuedRecords[128];
 		size_t dequeuedRecordsCount = -1;
+
+		FrameProfile* frameProfile = currentFrameProfile;
 		
 		while (dequeuedRecordsCount != 0)
 		{
-			dequeuedRecordsCount = jobProfiles.try_dequeue_bulk(dequeuedRecords, maxDequeRecords);
+			dequeuedRecordsCount = frameProfile->jobProfiles.try_dequeue_bulk(dequeuedRecords, maxDequeRecords);
 
 			for (int i = 0; i < dequeuedRecordsCount; i++)
 			{
@@ -40,8 +68,8 @@ namespace Vanguard
 				if (i != 0)
 					outputString += ", ";
 
-				int startTime = (jobProfile.startTime - profilingStartTime).InSeconds() * 1000.0 * 1000.0 * 1000.0;
-				int endTime = (jobProfile.endTime - profilingStartTime).InSeconds() * 1000.0 * 1000.0 * 1000.0;
+				int startTime = (jobProfile.startTime - frameProfile->profilingStartTime).InSeconds() * 1000.0 * 1000.0 * 1000.0;
+				int endTime = (jobProfile.endTime - frameProfile->profilingStartTime).InSeconds() * 1000.0 * 1000.0 * 1000.0;
 
 				outputString += "{\n";
 				outputString += "\"Thread\": \"" + jobProfile.threadName + "\",\n";
@@ -59,7 +87,7 @@ namespace Vanguard
 
 	void Profiler::RecordJobProfile(const String & aJobName, Timespan aStartTime)
 	{
-		if (profiling)
+		if (profilingFrame)
 		{
 			JobProfile newProfile;
 
@@ -75,9 +103,9 @@ namespace Vanguard
 
 			newProfile.jobName = aJobName;
 			newProfile.startTime = aStartTime;
-			newProfile.endTime = Timespan::GetElapsedSystemTime();			
+			newProfile.endTime = Timespan::GetElapsedSystemTime();
 
-			jobProfiles.enqueue(newProfile);
+			currentFrameProfile->jobProfiles.enqueue(newProfile);
 		}
 	}
 

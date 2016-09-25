@@ -8,9 +8,9 @@ namespace Sandbox2D
 		, input(0.0f, 0.0f, 0.0f)
 		, velocity(0.0f, 0.0f, 0.0f)
 		, drag(4.0f)
-		, brakingFriction(200.0f)
+		, brakingFriction(500.0f)
 		, movementForce(800.0f)
-		, zoomSpeed(0.3f)
+		, zoomSpeed(1.0f)
 	{
 		EnableTick();
 	}

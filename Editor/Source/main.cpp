@@ -3,6 +3,7 @@
 #include "EditorDirectories.h"
 
 #include "ProjectSelector.h"
+#include "Widgets/ProjectSelector.h"
 
 #include <QApplication>
 #include <QFile>

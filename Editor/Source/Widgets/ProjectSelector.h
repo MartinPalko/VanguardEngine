@@ -1,3 +1,4 @@
+#pragma once
 #include "Editor_Common.h"
 
 #include <QDialog>
@@ -9,8 +10,7 @@ namespace Vanguard
 {
 	class ProjectSelector : public QDialog
 	{
-		// TODO: Need to get MOC working.
-		//Q_OBJECT;
+		Q_OBJECT;
 
 	private:
 		QString& outSelectedProject;

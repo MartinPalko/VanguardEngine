@@ -101,6 +101,11 @@ namespace Vanguard
 			return false;
 		}
 
+		inline size_t IndexOf(const T& aItem) const
+		{
+			return find(data.begin(), data.end(), aItem) - data.begin();
+		}
+
 		inline void Reserve(size_t aReserveSize)
 		{
 			data.reserve(aReserveSize);

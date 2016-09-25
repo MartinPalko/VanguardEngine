@@ -9,6 +9,7 @@ namespace Vanguard
 		virtual ~ICore() {};
 
 		virtual void Initialize(int aArgC, char** aArgV, const char* aProjectName = "") = 0;
+		virtual class World* CreateProjectWorld() = 0;
 		virtual void Run() = 0;
 		virtual void ShutDown() = 0;
 		virtual void LoadModule(const char* aModuleName) = 0;

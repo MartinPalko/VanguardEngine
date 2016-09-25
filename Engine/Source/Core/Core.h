@@ -95,11 +95,9 @@ namespace Vanguard
 		DynamicArray<World*> worlds;
 		class DynamicArray<IRenderer*> renderers;
 		IRenderer* primaryRenderer;
+		ProjectModule* projectModule;
 
 		CoreState state = CoreState::NotInitialized;
-
-		void AddWorld(World* world);
-		void DestroyWorld(World* aWorld);
 
 	public:
 		Core();
@@ -113,6 +111,8 @@ namespace Vanguard
 		// Implementation of ICore
 		// Allocate and initialize all Core systems.
 		virtual void Initialize(int aArgC, char** aArgV, const char* aProjectName = "") override;
+		// Create a new instance of the project's world.
+		virtual World* CreateProjectWorld() override;
 		// Enter the main application loop. This function will not return until Core has shut down.
 		virtual void Run() override;
 		// Shuts down and exits Core. Calling this while running will exit the main application loop.
@@ -131,6 +131,10 @@ namespace Vanguard
 		void RegisterRenderer(IRenderer* aRenderer);
 		void UnregisterRenderer(IRenderer* aRenderer);
 		IRenderer* GetPrimaryRenderer();
+
+	protected:
+		void AddWorld(World* world);
+		void DestroyWorld(World* aWorld);
 	};
 }
 

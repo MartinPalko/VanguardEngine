@@ -23,6 +23,7 @@ namespace Vanguard
 		, worlds()
 		, renderers()
 		, primaryRenderer(nullptr)
+		, projectModule(nullptr)
 	{
 		mainThreadID = Thread::CurrentThreadID();
 	}
@@ -74,17 +75,8 @@ namespace Vanguard
 		if (projectLoadResult == ModuleManager::eModuleLoadResult::Success)
 		{
 			IModule* module = moduleManager->GetLoadedModule(loadedProject->GetName());
-			ProjectModule* projectModule = dynamic_cast<ProjectModule*>(module);
-			if (projectModule)
-			{
-				// Create the world specified by our project.
-				World* projectWorld = projectModule->CreateWorld();
-				if (projectWorld)
-				{
-					AddWorld(projectWorld);
-				}
-			}
-			else
+			projectModule = dynamic_cast<ProjectModule*>(module);
+			if (!projectModule)
 				LOG_ERROR("Project " + loadedProject->GetName() + "'s module is not a Project module", "Core");
 		}
 		else
@@ -92,6 +84,13 @@ namespace Vanguard
 
 		LOG_MESSAGE("Initialized Core", "Core");
 		state = CoreState::Initialized;
+	}
+
+	World* Core::CreateProjectWorld()
+	{
+		World* projectWorld = projectModule->CreateWorld();
+		AddWorld(projectWorld);
+		return projectWorld;
 	}
 
 	void Core::Run()

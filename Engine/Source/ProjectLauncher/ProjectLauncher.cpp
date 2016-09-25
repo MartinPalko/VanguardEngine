@@ -15,12 +15,9 @@ int main(int argc, char **argv)
 		if (createCoreFunction)
 		{
 			ICore* VanguardCore = createCoreFunction();
-
-#ifdef VANGUARD_PROJECT
 			VanguardCore->Initialize(argc, argv, TO_STRING(VANGUARD_PROJECT));
-#else 
-			VanguardCore->Initialize(argc, argv);
-#endif
+			VanguardCore->CreateProjectWorld();
+
 			VanguardCore->Run();
 
 			delete VanguardCore;

@@ -2,7 +2,6 @@
 #include "EditorCore.h"
 #include "EditorDirectories.h"
 
-#include "ProjectSelector.h"
 #include "Widgets/ProjectSelector.h"
 
 #include <QApplication>
@@ -25,7 +24,6 @@ int main(int argc, char **argv)
 
 	QString project = "";
 
-	// Scoped so ProjectSelector is allocated on the stack, and deleted right after it's done.
 	{
 		Vanguard::ProjectSelector projectSelector(project);
 		projectSelector.exec();
@@ -34,7 +32,7 @@ int main(int argc, char **argv)
 	if (project != "")
 	{
 		// Create, initialize, and run EditorCore.
-		Vanguard::EditorCore EditorCore;
+		Vanguard::EditorCore EditorCore(&qApplication);
 		EditorCore.Initialize(argc, argv, project.toLatin1());
 		EditorCore.Run();
 	}

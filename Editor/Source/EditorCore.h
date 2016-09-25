@@ -3,18 +3,30 @@
 #include "Interfaces/IModule.h"
 
 class QApplication;
-class QMainWindow;
 
 namespace Vanguard
 {
-	class EditorCore : public Core
+	class EditorMainWindow;
+	class EditorWorld;
+
+	class EditorCore : public Core , public INativeEventProcessor
 	{
 		QApplication* qApplication;
-		QMainWindow* qMainWindow;
+		EditorMainWindow* mainWindow;
+
+		EditorWorld* editorWorld;
 
 	public:
-		virtual void Initialize(int aArgC, char** aArgV, const char* aProjectName = "") override;
+		EditorCore(QApplication* aQApplication) : Core()
+			, qApplication(aQApplication)
+		{}
+
+		// Override Core
+		virtual void Initialize(int aArgC, char** aArgV, const char* aProjectName) override;
 		virtual void Run() override;
 		virtual void ShutDown() override;
+
+		// Implement INativeEventProcessor
+		virtual bool GetNextEvent(NativeEvent& aOutNextEvent) override;
 	};
 }

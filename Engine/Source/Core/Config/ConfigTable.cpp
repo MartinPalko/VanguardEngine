@@ -3,11 +3,13 @@
 #include "Directories.h"
 #include "Log.h"
 
+#include <unordered_map>
+
 namespace Vanguard
 {
-	Dictionary<String, ConfigFile>& ConfigFiles()
+	std::unordered_map<StringID, ConfigFile>& ConfigFiles()
 	{
-		static Dictionary<String, ConfigFile> configFiles;
+		static std::unordered_map<StringID, ConfigFile> configFiles;
 		return configFiles;
 	}
 
@@ -16,7 +18,7 @@ namespace Vanguard
 		//DEBUG_LOG("Config var created: " + aNewVar.file + "/" + aNewVar.section + "/" + aNewVar.name);
 
 		// Set to default if it doesn't exist yet.
-		if (!ConfigFiles().Contains(aNewVar.file) || !ConfigFiles()[aNewVar.file].ContainsValue(aNewVar.section, aNewVar.name))
+		if (!ConfigFiles().count(aNewVar.file) || !ConfigFiles()[aNewVar.file].ContainsValue(aNewVar.section, aNewVar.name))
 		{
 			ConfigFiles()[aNewVar.file].SetValue(aNewVar.section, aNewVar.name,aConfigDefault);
 		}
@@ -37,7 +39,7 @@ namespace Vanguard
 			FilePath configFile = engineConfigFilePaths[i];
 			String fileName = configFile.GetFilenameWithoutExtension();
 			
-			if (ConfigFiles().ContainsKey(fileName))
+			if (ConfigFiles().count(fileName))
 				ConfigFiles()[fileName].LoadAdditive(engineConfigFilePaths[i]);
 			else
 				ConfigFiles()[fileName] = ConfigFile::Load(engineConfigFilePaths[i]);
@@ -51,7 +53,7 @@ namespace Vanguard
 			FilePath configFile = projectConfigFilePaths[i];
 			String fileName = configFile.GetFilenameWithoutExtension();
 
-			if (ConfigFiles().ContainsKey(fileName))
+			if (ConfigFiles().count(fileName))
 				ConfigFiles()[fileName].LoadAdditive(projectConfigFilePaths[i]);
 			else
 				ConfigFiles()[fileName] = ConfigFile::Load(projectConfigFilePaths[i]);

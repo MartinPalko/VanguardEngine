@@ -7,7 +7,7 @@ namespace Vanguard
 	class CORE_API StringConfigVar : public ConfigVar_T<String>
 	{
 	public:
-		StringConfigVar(const String& aConfigFile, const String& aConfigSection, const String& aName, String aDefaultValue)
+		StringConfigVar(const String& aConfigFile, StringID aConfigSection, StringID aName, String aDefaultValue)
 			: ConfigVar_T<String>(aConfigFile, aConfigSection, aName, aDefaultValue)
 		{
 			Register();

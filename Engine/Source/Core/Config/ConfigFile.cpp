@@ -13,17 +13,17 @@ namespace Vanguard
 	{
 	}
 
-	void ConfigFile::SetValue(const String& aSection, const String& aKey, const String& aValue)
+	void ConfigFile::SetValue(StringID aSection, StringID aKey, const String& aValue)
 	{
 		sections[aSection].entries[aKey] = aValue;
 	}
 
-	bool ConfigFile::ContainsValue(const String& aSection, const String& aKey)
+	bool ConfigFile::ContainsValue(StringID aSection, StringID aKey)
 	{
 		return (sections.count(aSection) && sections[aSection].entries.count(aKey));
 	}
 
-	String ConfigFile::GetValue(const String& aSection, const String& aKey)
+	String ConfigFile::GetValue(StringID aSection, StringID aKey)
 	{
 		if (ContainsValue(aSection, aKey))
 		{
@@ -31,12 +31,12 @@ namespace Vanguard
 		}
 		else
 		{
-			DEBUG_ERROR("Config file does not contain " + aKey + " in section " + aSection)
-				return "";
+			DEBUG_EXCEPTION("Config file does not contain specified key in section");
+			return "";
 		}
 	}
 
-	DynamicArray<String> ConfigFile::GetArrayValues(const String& aSection, const String& aKey)
+	DynamicArray<String> ConfigFile::GetArrayValues(StringID aSection, StringID aKey)
 	{
 		String value = GetValue(aSection, aKey);
 		return value.Split(',');

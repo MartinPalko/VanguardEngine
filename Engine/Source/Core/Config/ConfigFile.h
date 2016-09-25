@@ -6,13 +6,15 @@
 #include "Types/FilePath.h"
 #include "Collections/Dictionary.h"
 
+#include <unordered_map>
+
 namespace Vanguard
 {
 	struct ConfigSection
 	{
 		friend class ConfigFile;
 	private:
-		std::map<StringID,String> entries;
+		std::unordered_map<StringID, String> entries;
 	public:
 		ConfigSection() : entries() {}
 	};
@@ -27,16 +29,16 @@ namespace Vanguard
 			Remove
 		};
 
-		std::map<StringID, ConfigSection> sections;
+		std::unordered_map<StringID, ConfigSection> sections;
 
 	public:
 		ConfigFile();
 		~ConfigFile();
 
-		void SetValue(const String& aSection, const String& aKey, const String& aValue);
-		bool ContainsValue(const String& aSection, const String& aKey);
-		String GetValue(const String& aSection, const String& aKey);
-		DynamicArray<String> GetArrayValues(const String& aSection, const String& aKey);
+		void SetValue(StringID aSection, StringID aKey, const String& aValue);
+		bool ContainsValue(StringID aSection, StringID aKey);
+		String GetValue(StringID aSection, StringID aKey);
+		DynamicArray<String> GetArrayValues(StringID aSection, StringID aKey);
 
 		void LoadAdditive(const FilePath& aConfigFilePath);
 

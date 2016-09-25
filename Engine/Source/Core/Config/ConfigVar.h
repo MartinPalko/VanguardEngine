@@ -10,9 +10,12 @@ namespace Vanguard
 		friend class ConfigTable;
 	protected:
 		String file;
-		String section;
-		String name;
-		ConfigVar() {}
+		StringID section;
+		StringID name;
+		ConfigVar()
+			: section((uint32)0)
+			, name((uint32)0)
+		{}
 		virtual ~ConfigVar() {}
 	};
 
@@ -31,7 +34,7 @@ namespace Vanguard
 		}
 
 	public:
-		ConfigVar_T(const String& aConfigFile, const String& aConfigSection, const String& aName, T aDefaultValue)
+		ConfigVar_T(const String& aConfigFile, StringID aConfigSection, StringID aName, T aDefaultValue)
 		{
 			file = aConfigFile;
 			section = aConfigSection;

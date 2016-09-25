@@ -8,14 +8,13 @@ namespace Vanguard
 	class FOUNDATION_API String
 	{
 	private:
-		std::string* data;
+		std::string data;
 
 	public:
 		String();
 		String(const String& aString);
 		String(const char* aCharPointer);
 		String(const char& aChar);
-		String& operator = (String&& aOther);
 		void operator = (const String& aOther);
 		void operator += (const String& aOther);
 		~String();

@@ -12,32 +12,23 @@
 
 namespace Vanguard
 {
-	String::String() { data = new std::string(""); }
-	String::String(const String& aString) { data = new std::string(*aString.data); }
-	String::String(const char* aCharPointer) { data = new std::string(aCharPointer); }
-	String::String(const char& aChar) { data = new std::string(1, aChar); }
-	String& String::operator = (String&& aOther)
-	{
-		if (this != &aOther)
-		{
-			delete data;
-			data = aOther.data;
-			aOther.data = nullptr;
-		}
-		return *this;
-	}
-	void String::operator = (const String& aOther) { data->assign(*aOther.data); }
-	void String::operator += (const String& aOther) { data->assign(*Append(aOther).data); }
-	String::~String() { delete data; }
+	String::String() { data = ""; }
+	String::String(const String& aString) { data = std::string(aString.data); }
+	String::String(const char* aCharPointer) { data = std::string(aCharPointer); }
+	String::String(const char& aChar) { data = std::string(1, aChar); }
 
-	bool String::operator == (const String& aOther) const { return *data == *aOther.data; }
-	bool String::operator != (const String& aOther) const { return *data != *aOther.data; }
-	bool String::operator < (const String& aOther) const { return *data < *aOther.data; }
-	bool String::operator <= (const String& aOther) const { return *data <= *aOther.data; }
-	bool String::operator > (const String& aOther) const { return *data > *aOther.data; }
-	bool String::operator >= (const String& aOther) const { return *data >= *aOther.data; }
+	void String::operator = (const String& aOther) { data.assign(aOther.data); }
+	void String::operator += (const String& aOther) { data.assign(Append(aOther).data); }
+	String::~String() { }
 
-	const char* String::GetCharPointer() const { return data->c_str(); }
+	bool String::operator == (const String& aOther) const { return data == aOther.data; }
+	bool String::operator != (const String& aOther) const { return data != aOther.data; }
+	bool String::operator < (const String& aOther) const { return data < aOther.data; }
+	bool String::operator <= (const String& aOther) const { return data <= aOther.data; }
+	bool String::operator > (const String& aOther) const { return data > aOther.data; }
+	bool String::operator >= (const String& aOther) const { return data >= aOther.data; }
+
+	const char* String::GetCharPointer() const { return data.c_str(); }
 
 	size_t String::NPos()
 	{
@@ -51,7 +42,7 @@ namespace Vanguard
 		if (aIndex < 0 || aIndex >= GetLength())
 			throw std::invalid_argument("String index out of range");
 #endif
-		return (*data)[aIndex];
+		return data[aIndex];
 	}
 
 	String String::FromBoolean(const bool& aBool)
@@ -91,10 +82,10 @@ namespace Vanguard
 
 	int32 String::ToInt32() const
 	{
-		if (*data == "")
+		if (data == "")
 			return 0;
 		else
-			return std::stoi(*data);
+			return std::stoi(data);
 	}
 
 	String String::FromFloat(float aFloat)
@@ -104,12 +95,12 @@ namespace Vanguard
 
 	float String::ToFloat() const
 	{
-		return std::stof(*data);
+		return std::stof(data);
 	}
 
 	size_t String::GetLength() const
 	{
-		return data->length();
+		return data.length();
 	}
 
 	bool String::IsEmpty() const
@@ -119,8 +110,8 @@ namespace Vanguard
 
 	String String::Append(const String& aString) const
 	{
-		std::string newString = *data;
-		newString.append(*aString.data);
+		std::string newString = data;
+		newString.append(aString.data);
 		return newString.c_str();
 	}
 
@@ -128,7 +119,7 @@ namespace Vanguard
 	{
 		DynamicArray<String> splitList = DynamicArray<String>();
 
-		std::stringstream strStream(*data);
+		std::stringstream strStream(data);
 		std::string segment;
 
 		while (std::getline(strStream, segment, aSplitBy))
@@ -156,19 +147,19 @@ namespace Vanguard
 
 	bool String::Contains(const String& aString) const
 	{
-		return !(data->find(aString.GetCharPointer()) == std::string::npos);
+		return !(data.find(aString.GetCharPointer()) == std::string::npos);
 	}
 
 	bool String::Contains(const char& aCharacter) const
 	{
-		return !(data->find(aCharacter) == std::string::npos);
+		return !(data.find(aCharacter) == std::string::npos);
 	}
 
 	bool String::ContainsAny(const String& aCharacters) const
 	{
 		for (size_t i = 0; i < aCharacters.GetLength(); i++)
 		{
-			if (!(data->find(aCharacters[i]) == std::string::npos))
+			if (!(data.find(aCharacters[i]) == std::string::npos))
 				return true;
 		}
 		return false;
@@ -176,13 +167,13 @@ namespace Vanguard
 
 	bool String::BeginsWith(const String& aString) const
 	{
-		return (data->compare(0, aString.GetLength(), aString.GetCharPointer()) == 0);
+		return (data.compare(0, aString.GetLength(), aString.GetCharPointer()) == 0);
 	}
 
 	bool String::BeginsWith(const char& aCharacter) const
 	{
-		if (data->size())
-			return data->at(0) == aCharacter;
+		if (data.size())
+			return data.at(0) == aCharacter;
 		else
 			return false;
 	}
@@ -194,13 +185,13 @@ namespace Vanguard
 
 	bool String::EndsWith(const String& aString) const
 	{
-		return (data->compare(GetLength() - aString.GetLength(), aString.GetLength(), aString.GetCharPointer()) == 0);
+		return (data.compare(GetLength() - aString.GetLength(), aString.GetLength(), aString.GetCharPointer()) == 0);
 	}
 
 	bool String::EndsWith(const char& aCharacter) const
 	{
-		if (data->size())
-			return data->at(data->size() - 1) == aCharacter;
+		if (data.size())
+			return data.at(data.size() - 1) == aCharacter;
 		else
 			return false;
 	}
@@ -212,47 +203,47 @@ namespace Vanguard
 
 	size_t String::FirstIndexOf(const char& aCharacter) const
 	{
-		return data->find_first_of(aCharacter);
+		return data.find_first_of(aCharacter);
 	}
 
 	size_t String::FirstIndexOfAny(const String& aCharacters) const
 	{
-		return data->find_first_of(aCharacters.GetCharPointer());
+		return data.find_first_of(aCharacters.GetCharPointer());
 	}
 
 	size_t String::LastIndexOf(const char& aCharacter) const
 	{
-		return data->find_last_of(aCharacter);
+		return data.find_last_of(aCharacter);
 	}
 
 	size_t String::LastIndexOfAny(const String& aCharacters) const
 	{
-		return data->find_last_of(aCharacters.GetCharPointer());
+		return data.find_last_of(aCharacters.GetCharPointer());
 	}
 
 	size_t String::FirstIndexNotOf(const char& aCharacter) const
 	{
-		return data->find_first_not_of(aCharacter);
+		return data.find_first_not_of(aCharacter);
 	}
 
 	size_t String::FirstIndexNotOfAny(const String& aCharacters) const
 	{
-		return data->find_first_not_of(aCharacters.GetCharPointer());
+		return data.find_first_not_of(aCharacters.GetCharPointer());
 	}
 
 	size_t String::LastIndexNotOf(const char& aCharacter) const
 	{
-		return data->find_last_not_of(aCharacter);
+		return data.find_last_not_of(aCharacter);
 	}
 
 	size_t String::LastIndexNotOfAny(const String& aCharacters) const
 	{
-		return data->find_last_not_of(aCharacters.GetCharPointer());
+		return data.find_last_not_of(aCharacters.GetCharPointer());
 	}
 
 	String String::Replace(const char& aChar, const char& aWithChar) const
 	{
-		std::string newString = *data;
+		std::string newString = data;
 		std::replace(newString.begin(), newString.end(), aChar, aWithChar);
 		return newString.c_str();
 	}
@@ -260,7 +251,7 @@ namespace Vanguard
 	String String::Replace(const String& aString, const String& aWithString) const
 	{
 		size_t start_pos = 0;
-		std::string newString = *data;
+		std::string newString = data;
 		while ((start_pos = newString.find(aString.GetCharPointer(), start_pos)) != std::string::npos)
 		{
 			newString.replace(start_pos, aString.GetLength(), aWithString.GetCharPointer());
@@ -271,21 +262,21 @@ namespace Vanguard
 
 	String String::Insert(const int32& aAtIndex, const String& aStringToInsert) const
 	{
-		std::string newString = *data;
+		std::string newString = data;
 		newString.insert(aAtIndex, aStringToInsert.GetCharPointer());
 		return newString.c_str();
 	}
 
 	String String::Remove(const int32& aAtIndex, const int32& aCharactersToRemove) const
 	{
-		std::string newString = *data;
+		std::string newString = data;
 		newString.erase(aAtIndex, aCharactersToRemove);
 		return newString.c_str();
 	}
 
 	String String::Remove(const char& aChar) const
 	{
-		std::string newString = *data;
+		std::string newString = data;
 		newString.erase(std::remove(newString.begin(), newString.end(), aChar), newString.end());
 		return newString.c_str();
 	}
@@ -297,7 +288,7 @@ namespace Vanguard
 
 	String String::RemoveBetween(const size_t& aFirstIndex, const size_t& aSecondIndex) const
 	{
-		std::string newString = *data;
+		std::string newString = data;
 		if (aFirstIndex < aSecondIndex)
 			newString.erase(aFirstIndex, aSecondIndex - aFirstIndex);
 		else if (aSecondIndex < aFirstIndex)
@@ -317,7 +308,7 @@ namespace Vanguard
 
 	String String::RemoveCharacters(const char* aCharacters) const
 	{
-		std::string newString = *data;
+		std::string newString = data;
 		for (unsigned int i = 0; i < strlen(aCharacters); ++i)
 			newString.erase(std::remove(newString.begin(), newString.end(), aCharacters[i]), newString.end());
 		return newString.c_str();
@@ -325,14 +316,14 @@ namespace Vanguard
 
 	String String::TrimStart() const
 	{
-		std::string newString = *data;
+		std::string newString = data;
 		newString.erase(newString.begin(), std::find_if(newString.begin(), newString.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
 		return newString.c_str();
 	}
 
 	String String::TrimEnd() const
 	{
-		std::string newString = *data;
+		std::string newString = data;
 		newString.erase(std::find_if(newString.rbegin(), newString.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), newString.end());
 		return newString.c_str();
 	}
@@ -344,7 +335,7 @@ namespace Vanguard
 
 	String String::TrimStart(const char* aChars) const
 	{
-		std::string newString = *data;
+		std::string newString = data;
 		size_t newStart = newString.find_first_not_of(aChars);
 		newString.erase(0, newStart);
 		return newString.c_str();
@@ -353,14 +344,14 @@ namespace Vanguard
 	String String::TrimStart(const char& aChar) const
 	{
 		if (BeginsWith(aChar))
-			return String(data->c_str() + sizeof (char*));
+			return String(data.c_str() + sizeof (char*));
 		else 
-			return String(data->c_str());
+			return String(data.c_str());
 	}
 
 	String String::TrimEnd(const char* aChars) const
 	{
-		std::string newString = *data;
+		std::string newString = data;
 		size_t newLength = newString.find_last_not_of(aChars) + 1;
 		newString.resize(newLength);
 		return newString.c_str();
@@ -369,9 +360,9 @@ namespace Vanguard
 	String String::TrimEnd(const char& aChar) const
 	{
 		if (EndsWith(aChar))
-			return String(std::string(data->c_str(), data->size() - 1).c_str());
+			return String(std::string(data.c_str(), data.size() - 1).c_str());
 		else 
-			return String(data->c_str());
+			return String(data.c_str());
 	}
 
 	String String::Trim(const char* aChars) const
@@ -386,14 +377,14 @@ namespace Vanguard
 
 	String String::ToLower() const
 	{
-		std::string newString = *data;
+		std::string newString = data;
 		transform(newString.begin(), newString.end(), newString.begin(), ::tolower);
 		return newString.c_str();
 	}
 
 	String String::ToUpper() const
 	{
-		std::string stdstring = *data;
+		std::string stdstring = data;
 		transform(stdstring.begin(), stdstring.end(), stdstring.begin(), ::toupper);
 		return stdstring.c_str();
 	}

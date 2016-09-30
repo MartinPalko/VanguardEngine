@@ -18,5 +18,9 @@ namespace Vanguard
 
 	public:
 		EditorMainWindow();
+
+	public:
+		// QWidgetOverrides
+		virtual QSize sizeHint() const override;
 	};
 }

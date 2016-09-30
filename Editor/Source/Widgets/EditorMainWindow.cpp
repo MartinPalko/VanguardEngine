@@ -27,4 +27,9 @@ namespace Vanguard
 		worldHierarchy = new WorldHierarchy(this);
 		addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, worldHierarchy);
 	}
+
+	QSize EditorMainWindow::sizeHint() const
+	{
+		return QSize(1280, 720);
+	}
 }

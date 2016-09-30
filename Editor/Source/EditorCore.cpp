@@ -10,38 +10,30 @@ namespace Vanguard
 {
 	void EditorCore::Initialize(int aArgC, char** aArgV, const char* aProjectName)
 	{
-		Application::RegisterNativeEventProcessor(this);
-
 		Core::Initialize(aArgC, aArgV, aProjectName);
 
 		editorWorld = new EditorWorld();
 		AddWorld(editorWorld);
 
 		mainWindow = new EditorMainWindow();
-	}
-
-	void EditorCore::Run()
-	{
 		mainWindow->show();
-		while (mainWindow->isVisible())
-		{
-			if (qApplication->hasPendingEvents())
-				qApplication->processEvents();
-		}
-
-		//Core::Run();
 	}
 
 	void EditorCore::ShutDown()
 	{
 		Core::ShutDown();
-
-		mainWindow->close();
-		delete mainWindow;
 	}
 
-	bool EditorCore::GetNextEvent(NativeEvent & aOutNextEvent)
+	void EditorCore::ProcessEvents()
 	{
-		return false;
+		Core::ProcessEvents();
+
+		if (qApplication->hasPendingEvents())
+			qApplication->processEvents();		
+	}
+
+	World* EditorCore::GetEditorWorld()
+	{
+		return editorWorld;
 	}
 }

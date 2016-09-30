@@ -9,7 +9,7 @@ namespace Vanguard
 	class EditorMainWindow;
 	class EditorWorld;
 
-	class EditorCore : public Core , public INativeEventProcessor
+	class EditorCore : public Core
 	{
 		QApplication* qApplication;
 		EditorMainWindow* mainWindow;
@@ -23,10 +23,12 @@ namespace Vanguard
 
 		// Override Core
 		virtual void Initialize(int aArgC, char** aArgV, const char* aProjectName) override;
-		virtual void Run() override;
 		virtual void ShutDown() override;
+		virtual void ProcessEvents() override;
 
-		// Implement INativeEventProcessor
-		virtual bool GetNextEvent(NativeEvent& aOutNextEvent) override;
+	public:
+		static EditorCore* GetInstance() { return static_cast<EditorCore*>(Core::GetInstance()); }
+
+		World* GetEditorWorld();
 	};
 }

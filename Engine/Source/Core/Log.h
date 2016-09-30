@@ -67,8 +67,14 @@ namespace Vanguard
 	class Int32ConfigVar;
 	class BooleanConfigVar;
 
+	struct ILogListener
+	{
+		virtual void OnMessageLogged(LogEntry aMessage) = 0;
+	};
+
 	class CORE_API Log
 	{
+	public:
 		friend class Core;
 	private:
 		static Int32ConfigVar maxLogFiles;
@@ -80,6 +86,8 @@ namespace Vanguard
 		static FilePath logFile;
 		static FilePath rollingLogFile;
 
+		static DynamicArray<ILogListener*> logListeners;
+
 		// Called from Core on startup. Creates the log file, named appropriately, and prepares for writing.
 		static void Initialize();
 
@@ -89,6 +97,9 @@ namespace Vanguard
 
 		// Write all pending log messages to the log file.
 		static void Flush();
+
+		static void RegisterListener(ILogListener* aListener);
+		static void UnregisterListener(ILogListener* aListener);
 	};
 }
 

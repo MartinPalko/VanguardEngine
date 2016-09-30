@@ -18,6 +18,8 @@ namespace Vanguard
 	FilePath Log::logFile;
 	FilePath Log::rollingLogFile;
 
+	DynamicArray<ILogListener*> Log::logListeners;
+
 	// Retreive as a function-static variable so it will always be initialized, even when calling before main (from config var, or reflection system setup etc.)
 	DynamicArray<LogEntry>& GetUnflushedEntriesArray()
 	{
@@ -81,6 +83,11 @@ namespace Vanguard
 		GetUnflushedEntriesArray().PushBack(newEntry);
 		std::cout << newEntry.GetFormattedLogEntry().GetCharPointer() << "\n";
 
+		for (ILogListener* listener : logListeners)
+		{
+			listener->OnMessageLogged(newEntry);
+		}
+
 		if (initialized && (aErrorLevel >= LogEntryErrorLevel::Error || GetUnflushedEntriesArray().Count() >= maxEntriesBetweenFlushes))
 		{
 			Flush();
@@ -118,5 +125,14 @@ namespace Vanguard
 			GetUnflushedEntriesArray().Clear();
 			flushingLog = false;
 		}
+	}
+	void Log::RegisterListener(ILogListener* aListener)
+	{
+		logListeners.PushBack(aListener);
+	}
+
+	void Log::UnregisterListener(ILogListener* aListener)
+	{
+		logListeners.Remove(aListener);
 	}
 }

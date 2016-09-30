@@ -114,7 +114,7 @@ namespace Vanguard
 		// Main engine loop
 		while (state == CoreState::Running)
 		{
-			Application::ProcessNativeEvents();
+			ProcessEvents();
 			jobManager->ServiceMainThreadJobs();
 
 			// Tick worlds
@@ -158,10 +158,6 @@ namespace Vanguard
 						// Help out the worker threads while we wait.
 						jobManager->HelpWithJob();
 					}
-
-					// Temp debugging					
-					const float frameTime = (Timespan::GetElapsedSystemTime() - currentTime).InSeconds() * 1000.0;
-					LOG_MESSAGE("Frame time : " + String::FromFloat(frameTime), "Core");
 
 					if (profiler->IsProfilingFrame())
 						profiler->EndFrameProfile(Directories::GetLogDirectory().GetRelative("ProfilerResults.json"));
@@ -257,6 +253,11 @@ namespace Vanguard
 	void Core::LoadModule(const char* aModuleName)
 	{
 		moduleManager->LoadModule(aModuleName);
+	}
+
+	void Core::ProcessEvents()
+	{
+		Application::ProcessNativeEvents();
 	}
 
 	void Core::AddWorld(World* world)

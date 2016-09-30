@@ -120,6 +120,8 @@ namespace Vanguard
 
 		virtual void LoadModule(const char* aModuleName) override;
 
+		virtual void ProcessEvents();
+
 		inline CoreState GetState(){ return state; }
 
 		class Project* GetLoadedProject(){ return loadedProject; }

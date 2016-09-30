@@ -13,6 +13,12 @@ namespace Vanguard
 		
 		setWidget(textWidget);
 
+		// Add messages that happened before we were created.
+		for (int i = 0; i < Log::GetNumCachedEntries(); i++)
+		{
+			OnMessageLogged(Log::GetCachedEntry(i));
+		}
+
 		Log::RegisterListener(this);
 	}
 

@@ -6,10 +6,7 @@ namespace Vanguard
 {
 	class Frame;
 	class FrameJob;
-}
-
-namespace Vanguard
-{
+	class RenderView;
 
 	typedef std::function<void(Frame*)> TickFunction;
 
@@ -40,6 +37,7 @@ namespace Vanguard
 		virtual ~World();
 
 		String GetWorldName(){ return worldName; }
+		virtual RenderView* GetPrimaryRenderView() { return nullptr; }
 
 		void RegisterTick(Entity* aActor);
 		void UnregisterTick(Entity* aActor);

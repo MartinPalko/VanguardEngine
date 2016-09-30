@@ -3,6 +3,8 @@
 #include "Core_Common.h"
 #include "Foundation.h"
 
+//#define VANGUARD_DISABLE_LOGGING
+
 namespace Vanguard
 {
 	enum class LogEntryErrorLevel : uint8
@@ -90,12 +92,20 @@ namespace Vanguard
 	};
 }
 
-#define LOG_MESSAGE(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Message, channel);}
-#define LOG_WARNING(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Warning, channel);}
-#define LOG_ERROR(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Error, channel);}
-#define LOG_EXCEPTION(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Exception, channel); throw Vanguard::Exception(String(message).GetCharPointer());}
+#if ! defined(VANGUARD_DISABLE_LOGGING)
+	#define LOG_MESSAGE(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Message, channel);}
+	#define LOG_WARNING(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Warning, channel);}
+	#define LOG_ERROR(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Error, channel);}
+	#define LOG_EXCEPTION(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Exception, channel); throw Vanguard::Exception(String(message).GetCharPointer());}
+#else
+	#define LOG_MESSAGE(message, channel)
+	#define LOG_WARNING(message, channel)
+	#define LOG_ERROR(message, channel)
+	#define LOG_EXCEPTION(message, channel) throw Vanguard::Exception(String(message).GetCharPointer());
+#endif
 
-#if VANGUARD_DEBUG
+
+#if defined(VANGUARD_DEBUG) && ! defined(VANGUARD_DISABLE_LOGGING)
 	#define DEBUG_LOG(message) LOG_MESSAGE(message, "Debug")
 	#define DEBUG_WARN(message) LOG_WARNING(message, "Debug")
 	#define DEBUG_ERROR(message) LOG_ERROR(message, "Debug")

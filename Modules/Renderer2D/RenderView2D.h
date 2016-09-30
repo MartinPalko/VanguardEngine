@@ -13,5 +13,7 @@ namespace Vanguard
 
 		RenderView2D(Camera* aCamera, WindowCreationParameters aWindowParameters);
 		~RenderView2D();
+
+		virtual NativeWindow GetWindowHandle() override;
 	};
 }

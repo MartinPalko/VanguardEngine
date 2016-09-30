@@ -47,4 +47,19 @@ namespace Vanguard
 		SDL_DestroyRenderer(sdlRenderer);
 		SDL_DestroyWindow(sdlWindow);
 	}
+
+	NativeWindow RenderView2D::GetWindowHandle()
+	{
+		SDL_SysWMinfo windowInfo;
+		SDL_VERSION(&windowInfo.version);
+		SDL_GetWindowWMInfo(sdlWindow, &windowInfo);
+
+		NativeWindow nativeWindow;
+
+#if VANGUARD_WINDOWS
+		nativeWindow.handle = windowInfo.info.win.window;
+#endif
+
+		return nativeWindow;
+	}
 }

@@ -26,12 +26,20 @@ namespace Vanguard
 		DateAndTime timestamp;
 	public:
 
-		// Constructor
+		// Constructors
+		LogEntry(): message(""),
+			channel(""),
+			errorLevel(LogEntryErrorLevel::Message),
+			timestamp(0)
+		{}
+
+
 		LogEntry(String aMessage, LogEntryErrorLevel aErrorLevel, String aChannel)
 			: message(aMessage),
 			channel(aChannel),
 			errorLevel(aErrorLevel),
-			timestamp(DateAndTime::CurrentTime()){}
+			timestamp(DateAndTime::CurrentTime())
+		{}
 
 		String GetMessage() const { return message; }
 		String GetCategory() const { return channel; }
@@ -77,6 +85,7 @@ namespace Vanguard
 	public:
 		friend class Core;
 	private:
+		static Int32ConfigVar maxCachedLogEntries;
 		static Int32ConfigVar maxLogFiles;
 		static Int32ConfigVar maxEntriesBetweenFlushes;
 		static BooleanConfigVar rollingLogFileEnabled;
@@ -87,6 +96,7 @@ namespace Vanguard
 		static FilePath rollingLogFile;
 
 		static DynamicArray<ILogListener*> logListeners;
+		static CircularBuffer<LogEntry> cachedEntries;
 
 		// Called from Core on startup. Creates the log file, named appropriately, and prepares for writing.
 		static void Initialize();
@@ -100,6 +110,9 @@ namespace Vanguard
 
 		static void RegisterListener(ILogListener* aListener);
 		static void UnregisterListener(ILogListener* aListener);
+
+		static size_t GetNumCachedEntries();
+		static LogEntry GetCachedEntry(size_t i);
 	};
 }
 

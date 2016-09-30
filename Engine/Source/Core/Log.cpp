@@ -6,9 +6,9 @@
 #include "Config/Config.h"
 #include "Core.h"
 
-
 namespace Vanguard
-{
+{	
+	Int32ConfigVar Log::maxCachedLogEntries = Int32ConfigVar("Core", "Log", "MaxCachedLogEntries", 512);
 	Int32ConfigVar Log::maxLogFiles = Int32ConfigVar("Core", "Log", "MaxLogFiles", 10);
 	Int32ConfigVar Log::maxEntriesBetweenFlushes = Int32ConfigVar("Core", "Log", "MaxEntriesBetweenFlushes", 5);
 	BooleanConfigVar Log::rollingLogFileEnabled = BooleanConfigVar("Core", "Log", "RollingLogfileEnabled", false);
@@ -19,6 +19,7 @@ namespace Vanguard
 	FilePath Log::rollingLogFile;
 
 	DynamicArray<ILogListener*> Log::logListeners;
+	CircularBuffer<LogEntry> Log::cachedEntries(16);
 
 	// Retreive as a function-static variable so it will always be initialized, even when calling before main (from config var, or reflection system setup etc.)
 	DynamicArray<LogEntry>& GetUnflushedEntriesArray()
@@ -31,6 +32,8 @@ namespace Vanguard
 	{
 		if (initialized)
 			return;
+
+		cachedEntries.Resize(maxCachedLogEntries);
 
 		String logfilePrefix = Core::GetInstance()->GetLoadedProject()->GetName();
 
@@ -88,6 +91,8 @@ namespace Vanguard
 			listener->OnMessageLogged(newEntry);
 		}
 
+		cachedEntries.PushBack(newEntry);
+
 		if (initialized && (aErrorLevel >= LogEntryErrorLevel::Error || GetUnflushedEntriesArray().Count() >= maxEntriesBetweenFlushes))
 		{
 			Flush();
@@ -134,5 +139,15 @@ namespace Vanguard
 	void Log::UnregisterListener(ILogListener* aListener)
 	{
 		logListeners.Remove(aListener);
+	}
+
+	size_t Log::GetNumCachedEntries()
+	{
+		return cachedEntries.Count();
+	}
+
+	LogEntry Log::GetCachedEntry(size_t i)
+	{
+		return cachedEntries[i];
 	}
 }

@@ -56,7 +56,11 @@ namespace Vanguard
 
 		for (uint32 i = 0; i < lines.Count(); i++)
 		{
-			String lineText = lines[i];
+			String lineText = lines[i].Trim();
+
+			// Skip blank lines
+			if (lineText == "")
+				continue;
 
 			// Disregard full line comments
 			if (lineText.BeginsWithAny(";#"))

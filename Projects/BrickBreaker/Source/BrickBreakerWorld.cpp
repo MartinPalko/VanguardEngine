@@ -28,7 +28,7 @@ namespace BrickBreaker
 
 		// Create a world and a renderview.
 		Core* core = Core::GetInstance();
-		Camera* playerCamera = SpawnEntity<Camera>();
+		playerCamera = SpawnEntity<Camera>();
 		playerCamera->SetFov(100);
 		playerCamera->SetOrthographic(true);
 
@@ -97,6 +97,21 @@ namespace BrickBreaker
 
 	void BrickBreakerWorld::Tick(Vanguard::Frame* aFrame)
 	{
+		// Adjust camera FOV so the entire play area is always visible
+		int renderWidth, renderHeight;
+		playerView->GetSize(renderWidth, renderHeight);
+
+		float playAreaAspect = PlayAreaSize.x / PlayAreaSize.y;
+		float renderAsepect = (float)renderWidth / (float)renderHeight;
+
+		if (playAreaAspect > renderAsepect)
+			playerCamera->SetFov(PlayAreaSize.x);
+		else if (renderAsepect > 1)
+			playerCamera->SetFov(PlayAreaSize.y);
+		else
+			playerCamera->SetFov(PlayAreaSize.MaxValue() * renderAsepect);
+
+
 		// Update Gainput
 		inputManager->Update(aFrame->deltaTime.InMilliseconds());
 
@@ -111,7 +126,7 @@ namespace BrickBreaker
 		if (inputMap->GetBool(eGameButton::Right))
 			input += 1;
 
-		if (!ball->TickEnabled() && input)
+		//if (!ball->TickEnabled() && input)
 		{
 			ball->EnableTick();
 		}

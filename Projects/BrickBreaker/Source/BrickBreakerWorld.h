@@ -19,6 +19,7 @@ namespace BrickBreaker
 	public:
 		const static Vector2 PlayAreaSize;
 	private:
+		Camera* playerCamera;
 		RenderView* playerView;
 		Paddle* paddle;
 		Ball* ball;

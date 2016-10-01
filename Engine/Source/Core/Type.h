@@ -7,6 +7,45 @@
 
 namespace Vanguard
 {
+	class CORE_API Property
+	{
+		String name;
+		StringID id;
+		size_t offset;
+		size_t typeId;
+
+	public:
+		Property() = delete;
+
+		Property(const String& aName, size_t aOffset, size_t aTypeId)
+			: name(aName)
+			, id(aName)
+			, offset(aOffset) 
+			, typeId(aTypeId)
+		{}
+
+		virtual ~Property() {}
+
+		String GetName() { return name; }
+		StringID GetId() { return id; }
+		size_t GetOffset() { return offset; }
+
+		template<class T> bool Is()
+		{
+			return typeid(T).hash_code() == typeID;
+		}
+
+		template<class T> T Get(void* aFromInstance)
+		{
+			return *(T*)((byte*)aFromInstance + offset);
+		}
+
+		template<class T> void Set(const T& aValue, void* aOnInstance)
+		{
+			*(T*)((byte*)aOnInstance + offset) = aValue;
+		}
+	};
+
 	struct IClassFactory
 	{
 		virtual void* CreateInstance() const = 0;
@@ -26,12 +65,14 @@ namespace Vanguard
 		size_t runtimeHash; // This hash is ONLY useful for runtime comparisons. It may differ from build to build, or from compiler to compiler.
 		Type* baseClass = nullptr;
 		DynamicArray<Type*> derivedClasses;
+		std::unordered_map<StringID, Property*> properties;
 
 		Type(IClassFactory* aClassFactory, const String& aClassName, const String& aBaseClassName, size_t aRuntimeHash);
 	public:
 		~Type();
 
 		static Type* Register(IClassFactory* aClassFactory, size_t aRuntimeHash, const char* aClassName, const char* aBaseClassName = "");
+		void RegisterProperty(Property* aProperty);
 
 		bool IsAbstract() const { return classFactory == nullptr; }
 		void* CreateInstance() const { return classFactory ? classFactory->CreateInstance() : nullptr; }
@@ -40,6 +81,8 @@ namespace Vanguard
 		size_t GetRuntimeHash() const { return runtimeHash; }
 		Type* GetBaseClass() const { return baseClass; }
 		DynamicArray<Type*> GetDerivedClasses() const;
+
+		Property* GetProperty(StringID aName) const { return properties.at(aName); }
 
 		static DynamicArray<Type*> GetAllTypes();
 		static DynamicArray<Type*> GetAllBaseTypes();
@@ -103,3 +146,19 @@ ClassIdentifier::Factory ClassIdentifier::ClassIdentifier##_Factory;\
 
 #define ABSTRACT_TYPE_DEFINITION(ClassIdentifier, BaseIdentifier)\
 	std::shared_ptr<Type> ClassIdentifier::ClassIdentifier##_Type (Type::Register(nullptr, typeid(ClassIdentifier).hash_code(), #ClassIdentifier, #BaseIdentifier));
+
+// Properties
+#define START_REGISTER_PROPERTIES(ClassIdentifier)\
+struct ClassIdentifier##_propertyRegistrar\
+{\
+public:\
+	ClassIdentifier##_propertyRegistrar()\
+	{\
+		Type* t = Type::GetType<ClassIdentifier>();
+
+#define REGISTER_PROPERTY(ClassIdentifier, PropertyName) t->RegisterProperty(new Property(#PropertyName, sizeof(ClassIdentifier::PropertyName), typeid(ClassIdentifier::PropertyName).hash_code()));
+
+#define FINISH_REGISTER_PROPERTIES(ClassIdentifier)\
+	}\
+};\
+auto Transform_properties = ClassIdentifier##_propertyRegistrar();

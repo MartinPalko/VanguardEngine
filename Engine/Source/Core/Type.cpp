@@ -55,6 +55,11 @@ namespace Vanguard
 		return newClassInfo;
 	}
 
+	void Type::RegisterProperty(Property* aProperty)
+	{
+		properties[aProperty->GetId()] = aProperty;
+	}
+
 	DynamicArray<Type*> Type::GetDerivedClasses() const
 	{
 		return derivedClasses;

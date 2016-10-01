@@ -1,7 +1,7 @@
 #pragma once
 #include "Core_Common.h"
 
-#include "ThirdParty/ConcurrentQueue/blockingconcurrentqueue.h"
+#include "blockingconcurrentqueue.h"
 
 #define JOB_PROFILING
 

@@ -1,4 +1,4 @@
-#include "ThirdParty/ConcurrentQueue/blockingconcurrentqueue.h"
+#include "blockingconcurrentqueue.h"
 #include "AsyncIO.h"
 #include "Core.h"
 

@@ -4,7 +4,7 @@
 
 #include "Foundation.h"
 #include "JobEnums.h"
-#include "ThirdParty/ConcurrentQueue/blockingconcurrentqueue.h"
+#include "blockingconcurrentqueue.h"
 
 namespace Vanguard
 {

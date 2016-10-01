@@ -22,5 +22,6 @@ namespace Vanguard
 	public:
 		// QWidgetOverrides
 		virtual QSize sizeHint() const override;
+		virtual void closeEvent(QCloseEvent *event) override;
 	};
 }

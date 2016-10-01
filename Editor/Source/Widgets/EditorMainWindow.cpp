@@ -1,5 +1,6 @@
 #include "EditorMainWindow.h"
 
+#include "EditorCore.h"
 #include "ClassBrowser.h"
 #include "Inspector.h"
 #include "LogViewer.h"
@@ -31,5 +32,10 @@ namespace Vanguard
 	QSize EditorMainWindow::sizeHint() const
 	{
 		return QSize(1280, 720);
+	}
+
+	void EditorMainWindow::closeEvent(QCloseEvent* event)
+	{
+		EditorCore::GetInstance()->ShutDown();
 	}
 }

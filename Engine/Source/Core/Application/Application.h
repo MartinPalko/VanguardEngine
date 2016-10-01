@@ -69,10 +69,14 @@ namespace Vanguard
 		static Int32ConfigVar resolutionY;
 		static BooleanConfigVar resizable;
 
-		friend Core;
+		friend class Core;
+		friend class EditorCore;
+
 	private:
 		static void SetApplicationArguments(int aArgC, char** aArgV);
 		static void ProcessNativeEvents();
+		static void DispatchNativeEvent(NativeEvent nativeEvent);
+
 	public:
 		static ApplicationArguments GetApplicationArguments();
 

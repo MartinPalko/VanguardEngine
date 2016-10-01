@@ -23,14 +23,18 @@ namespace Vanguard
 		for (size_t i = 0; i < nativeEventProcessors.Count(); i++)
 		{
 			NativeEvent nativeEvent;
-
 			while (nativeEventProcessors[i]->GetNextEvent(nativeEvent))
 			{
-				for (size_t h = 0; h < nativeEventHandlers.Count(); h++)
-				{
-					nativeEventHandlers[h]->HandleNativeEvent(nativeEvent);
-				}
+				DispatchNativeEvent(nativeEvent);
 			}
+		}
+	}
+
+	void Application::DispatchNativeEvent(NativeEvent nativeEvent)
+	{
+		for (size_t h = 0; h < nativeEventHandlers.Count(); h++)
+		{
+			nativeEventHandlers[h]->HandleNativeEvent(nativeEvent);
 		}
 	}
 

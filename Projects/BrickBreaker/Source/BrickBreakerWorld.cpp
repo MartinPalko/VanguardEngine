@@ -100,8 +100,6 @@ namespace BrickBreaker
 		// Update Gainput
 		inputManager->Update(aFrame->deltaTime.InMilliseconds());
 
-		LOG_MESSAGE("FPS: " + String::FromFloat(1.0f / aFrame->deltaTime.InSeconds()), "Brick Breaker");
-
 		if (inputMap->GetBool(eGameButton::Exit))
 		{
 			Core::GetInstance()->ShutDown();

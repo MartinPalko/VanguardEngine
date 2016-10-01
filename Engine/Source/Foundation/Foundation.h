@@ -4,8 +4,7 @@
 
 #include "Types/VanguardTypes.h"
 #include "Collections/Collections.h"
-#include "Utility/FileSystem.h"
-#include "Utility/MathFunctions.h"
+#include "Utility/Utility.h"
 #include "SystemInfo.h"
 
 #include "Foundation_Common.h"

@@ -21,5 +21,7 @@ namespace Vanguard
 		virtual ~RenderView() {}
 
 		virtual NativeWindow GetWindowHandle() = 0;
+		virtual void Resize(int aWidth, int aHeight) = 0;
+		virtual void GetSize(int& OutWidth, int& OutHeight) = 0;
 	};
 }

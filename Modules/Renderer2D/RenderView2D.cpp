@@ -62,4 +62,14 @@ namespace Vanguard
 
 		return nativeWindow;
 	}
+
+	void RenderView2D::Resize(int aWidth, int aHeight)
+	{
+		SDL_SetWindowSize(sdlWindow, aWidth, aHeight);
+	}
+
+	void RenderView2D::GetSize(int& OutWidth, int& OutHeight)
+	{
+		SDL_GetWindowSize(sdlWindow, &OutWidth, &OutHeight);
+	}
 }

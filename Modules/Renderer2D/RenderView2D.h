@@ -15,5 +15,7 @@ namespace Vanguard
 		~RenderView2D();
 
 		virtual NativeWindow GetWindowHandle() override;
+		virtual void Resize(int aWidth, int aHeight) override;
+		virtual void GetSize(int& OutWidth, int& OutHeight) override;
 	};
 }

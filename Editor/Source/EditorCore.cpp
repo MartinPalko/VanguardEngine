@@ -8,6 +8,12 @@
 
 namespace Vanguard
 {
+	bool EditorCore::nativeEventFilter(const QByteArray& eventType, void* message, long* result)
+	{
+		Application::DispatchNativeEvent((NativeEvent)message);
+		return false;
+	}
+
 	void EditorCore::Initialize(int aArgC, char** aArgV, const char* aProjectName)
 	{
 		Core::Initialize(aArgC, aArgV, aProjectName);
@@ -17,6 +23,8 @@ namespace Vanguard
 
 		mainWindow = new EditorMainWindow();
 		mainWindow->show();
+
+		QApplication::instance()->installNativeEventFilter(this);
 	}
 
 	void EditorCore::ShutDown()
@@ -26,10 +34,10 @@ namespace Vanguard
 
 	void EditorCore::ProcessEvents()
 	{
-		Core::ProcessEvents();
-
 		if (qApplication->hasPendingEvents())
-			qApplication->processEvents();		
+			qApplication->processEvents();	
+
+		Core::ProcessEvents();
 	}
 
 	World* EditorCore::GetEditorWorld()

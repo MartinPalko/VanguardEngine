@@ -30,6 +30,11 @@ namespace Vanguard
 		std::unordered_map<size_t, Type*>& hashMap = GetClassinfoHashMap();
 		nameMap.erase(StringID(this->className).GetHash());
 		hashMap.erase(this->runtimeHash);
+
+		//// We're responsible for deleting our properties
+		//for(auto p : properties)
+		//	delete p.second;
+		//properties.clear();
 	}
 
 	Type* Type::Register(IClassFactory* aClassFactory, size_t aRuntimeHash, const char * aClassName, const char * aBaseClassName)

@@ -23,13 +23,14 @@ int main(int argc, char **argv)
 	}
 
 	QString project = "";
+	int projectSelectorReturn;
 
 	{
 		Vanguard::ProjectSelector projectSelector(project);
-		projectSelector.exec();
+		projectSelectorReturn = projectSelector.exec();
 	}
 
-	if (project != "")
+	if (projectSelectorReturn && project != "")
 	{
 		// Create, initialize, and run EditorCore.
 		Vanguard::EditorCore EditorCore(&qApplication);

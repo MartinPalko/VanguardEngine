@@ -1,5 +1,5 @@
 #pragma once
-#include "VanguardObject.h"
+#include "WorldObject.h"
 #include "Log.h"
 #include "Component.h"
 #include "World.h"
@@ -11,11 +11,11 @@ namespace Vanguard
 	class World;
 	class Transform;
 
-	class CORE_API Entity : public VanguardObject
+	class CORE_API Entity : public WorldObject
 	{
 		friend World;
 
-		TYPE_DECLARATION(Entity, VanguardObject)
+		TYPE_DECLARATION(Entity, WorldObject)
 
 	private:
 		DynamicArray<Component*> components;

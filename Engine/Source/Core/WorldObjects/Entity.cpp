@@ -6,9 +6,9 @@
 
 namespace Vanguard
 {
-	TYPE_DEFINITION(Entity, VanguardObject)
+	TYPE_DEFINITION(Entity, WorldObject)
 
-	Entity::Entity() : VanguardObject()
+	Entity::Entity() : WorldObject()
 		, enabled(true)
 		, tickEnabled (false)
 		, tickRegistered (false)

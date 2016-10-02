@@ -2,7 +2,7 @@
 
 #include "Core_Common.h"
 #include "Type.h"
-#include "WorldObjects/VanguardObject.h"
+#include "WorldObjects/WorldObject.h"
 
 namespace Vanguard
 {
@@ -28,53 +28,53 @@ namespace Vanguard
 		World* GetWorld() { return world; }
 	};
 
-	class VanguardObjectEvent : public WorldEvent
+	class WorldObjectEvent : public WorldEvent
 	{
-		TYPE_DECLARATION(VanguardObjectEvent, WorldEvent);
-		VanguardObject* object;
+		TYPE_DECLARATION(WorldObjectEvent, WorldEvent);
+		WorldObject* object;
 
 	public:
 		// Need to have default constructor to work with the type system.
-		VanguardObjectEvent() : WorldEvent(nullptr)
+		WorldObjectEvent() : WorldEvent(nullptr)
 			, object(nullptr)
 		{}
 
-		VanguardObjectEvent(VanguardObject* aObject) : WorldEvent(aObject ? aObject->GetWorld() : nullptr)
+		WorldObjectEvent(WorldObject* aObject) : WorldEvent(aObject ? aObject->GetWorld() : nullptr)
 			, object(aObject)
 		{}
 
-		VanguardObject* GetObject() { return object; }
+		WorldObject* GetObject() { return object; }
 	};
 
-	class ObjectCreatedEvent : public VanguardObjectEvent
+	class ObjectCreatedEvent : public WorldObjectEvent
 	{
-		TYPE_DECLARATION(ObjectCreatedEvent, VanguardObjectEvent);
+		TYPE_DECLARATION(ObjectCreatedEvent, WorldObjectEvent);
 
-		ObjectCreatedEvent() : VanguardObjectEvent(nullptr) {}
-		ObjectCreatedEvent(VanguardObject* aObject) : VanguardObjectEvent(aObject) {}
+		ObjectCreatedEvent() : WorldObjectEvent(nullptr) {}
+		ObjectCreatedEvent(WorldObject* aObject) : WorldObjectEvent(aObject) {}
 	};
 
-	class ObjectDestroyedEvent : public VanguardObjectEvent
+	class ObjectDestroyedEvent : public WorldObjectEvent
 	{
-		TYPE_DECLARATION(ObjectDestroyedEvent, VanguardObjectEvent);
+		TYPE_DECLARATION(ObjectDestroyedEvent, WorldObjectEvent);
 
-		ObjectDestroyedEvent() : VanguardObjectEvent(nullptr) {}
-		ObjectDestroyedEvent(VanguardObject* aObject) : VanguardObjectEvent(aObject) {}
+		ObjectDestroyedEvent() : WorldObjectEvent(nullptr) {}
+		ObjectDestroyedEvent(WorldObject* aObject) : WorldObjectEvent(aObject) {}
 	};
 
-	class ObjectEnabledEvent : public VanguardObjectEvent
+	class ObjectEnabledEvent : public WorldObjectEvent
 	{
-		TYPE_DECLARATION(ObjectEnabledEvent, VanguardObjectEvent);
+		TYPE_DECLARATION(ObjectEnabledEvent, WorldObjectEvent);
 
-		ObjectEnabledEvent() : VanguardObjectEvent(nullptr) {}
-		ObjectEnabledEvent(VanguardObject* aObject) : VanguardObjectEvent(aObject) {}
+		ObjectEnabledEvent() : WorldObjectEvent(nullptr) {}
+		ObjectEnabledEvent(WorldObject* aObject) : WorldObjectEvent(aObject) {}
 	};
 
-	class ObjectDisabledEvent : public VanguardObjectEvent
+	class ObjectDisabledEvent : public WorldObjectEvent
 	{
-		TYPE_DECLARATION(ObjectDisabledEvent, VanguardObjectEvent);
+		TYPE_DECLARATION(ObjectDisabledEvent, WorldObjectEvent);
 
-		ObjectDisabledEvent() : VanguardObjectEvent(nullptr) {}
-		ObjectDisabledEvent(VanguardObject* aObject) : VanguardObjectEvent(aObject) {}
+		ObjectDisabledEvent() : WorldObjectEvent(nullptr) {}
+		ObjectDisabledEvent(WorldObject* aObject) : WorldObjectEvent(aObject) {}
 	};
 }

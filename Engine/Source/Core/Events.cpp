@@ -6,11 +6,11 @@ namespace Vanguard
 
 	ABSTRACT_TYPE_DEFINITION(WorldEvent, Event);
 
-	TYPE_DEFINITION(VanguardObjectEvent, WorldEvent);
+	TYPE_DEFINITION(WorldObjectEvent, WorldEvent);
 
-	TYPE_DEFINITION(ObjectCreatedEvent, VanguardObjectEvent);
-	TYPE_DEFINITION(ObjectDestroyedEvent, VanguardObjectEvent);
+	TYPE_DEFINITION(ObjectCreatedEvent, WorldObjectEvent);
+	TYPE_DEFINITION(ObjectDestroyedEvent, WorldObjectEvent);
 
-	TYPE_DEFINITION(ObjectEnabledEvent, VanguardObjectEvent);
-	TYPE_DEFINITION(ObjectDisabledEvent, VanguardObjectEvent);
+	TYPE_DEFINITION(ObjectEnabledEvent, WorldObjectEvent);
+	TYPE_DEFINITION(ObjectDisabledEvent, WorldObjectEvent);
 }

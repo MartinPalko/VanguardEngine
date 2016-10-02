@@ -3,5 +3,5 @@
 
 namespace Vanguard
 {
-	TYPE_DEFINITION(Component,VanguardObject)
+	TYPE_DEFINITION(Component,WorldObject)
 }

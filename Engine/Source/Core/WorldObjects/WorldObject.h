@@ -8,19 +8,19 @@ namespace Vanguard
 	class Entity;
 	class Component;
 
-	class CORE_API VanguardObject
+	class CORE_API WorldObject
 	{
 		friend World;
 		friend Entity;
 		friend Component;
 
-		BASETYPE_DECLARATION(VanguardObject)
+		BASETYPE_DECLARATION(WorldObject)
 		
 	private:
 		World* world = nullptr;
 	public:
-		VanguardObject(){}
-		virtual ~VanguardObject() {}
+		WorldObject(){}
+		virtual ~WorldObject() {}
 		World* GetWorld() { return world; }
 	};
 }

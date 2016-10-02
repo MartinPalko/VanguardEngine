@@ -111,9 +111,9 @@ namespace Vanguard
 		return newEntity;
 	}
 
-	DynamicArray<VanguardObject*> World::GetInstances(Type* aType, bool aIncludeInherited) const
+	DynamicArray<WorldObject*> World::GetInstances(Type* aType, bool aIncludeInherited) const
 	{
-		DynamicArray<VanguardObject*> found = objectTypemap.at(aType->GetRuntimeHash());
+		DynamicArray<WorldObject*> found = objectTypemap.at(aType->GetRuntimeHash());
 
 		if (aIncludeInherited)
 		{
@@ -188,7 +188,7 @@ namespace Vanguard
 		return new WorldTickJob(worldName + " Tick", aFrame, this);
 	}
 
-	void World::RegisterObject(VanguardObject * aObject)
+	void World::RegisterObject(WorldObject * aObject)
 	{
 		aObject->world = this;
 		objects.PushBack(aObject);

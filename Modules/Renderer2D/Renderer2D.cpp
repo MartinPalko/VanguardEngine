@@ -172,7 +172,7 @@ namespace Vanguard
 				worldView->clearColor
 			});
 
-			DynamicArray<VanguardObject*> sprites = aFrame->world->GetInstances(Type::GetType<SpriteRenderer>(), true);
+			DynamicArray<WorldObject*> sprites = aFrame->world->GetInstances(Type::GetType<SpriteRenderer>(), true);
 			renderJob->renderItems.Reserve(sprites.Count());
 			for (int s = 0; s < sprites.Count(); s++)
 			{

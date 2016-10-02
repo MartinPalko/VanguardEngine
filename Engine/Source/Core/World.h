@@ -28,9 +28,9 @@ namespace Vanguard
 		String worldName;
 
 		// Stores all objects in the world, in a contiguous array for fast iteration.
-		DynamicArray<VanguardObject*> objects;
+		DynamicArray<WorldObject*> objects;
 		// Stores all object in world, sorted by type.
-		std::map<size_t, DynamicArray<VanguardObject*>> objectTypemap;
+		std::map<size_t, DynamicArray<WorldObject*>> objectTypemap;
 
 		uint32 nextFrameNumber;
 		Timespan lastTickStartTime;
@@ -71,11 +71,11 @@ namespace Vanguard
 		Entity* SpawnEntity(const String& aEntityType);
 		Entity* SpawnEntity(Type* aRequestedClass);
 
-		DynamicArray<VanguardObject*> GetInstances (Type* aType, bool aIncludeInherited = false) const;
+		DynamicArray<WorldObject*> GetInstances (Type* aType, bool aIncludeInherited = false) const;
 		template <class T> DynamicArray<T*> GetInstances(bool aIncludeInherited = false) const
 		{
 			// Can't just cast, have to do an actual copy over
-			DynamicArray<VanguardObject*> objectArray(GetInstances(Type::GetType<T>()));
+			DynamicArray<WorldObject*> objectArray(GetInstances(Type::GetType<T>()));
 			DynamicArray<T*> returnArray(objectArray.Count());
 			for (int i = 0; i < objectArray.Count(); i++)
 			{
@@ -88,6 +88,6 @@ namespace Vanguard
 		virtual Timespan GetNextDesiredTickTime();
 		virtual void Tick(Frame* aFrame);
 		FrameJob* MakeTickJob(Frame* aFrame);
-		void RegisterObject(VanguardObject* aObject);
+		void RegisterObject(WorldObject* aObject);
 	};
 }

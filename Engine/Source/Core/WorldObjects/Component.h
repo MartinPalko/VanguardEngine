@@ -1,15 +1,15 @@
 #pragma once
-#include "VanguardObject.h"
+#include "WorldObject.h"
 
 namespace Vanguard
 {
 	class Entity;
 
-	class CORE_API Component : public VanguardObject
+	class CORE_API Component : public WorldObject
 	{
 		friend class Entity;
 
-		TYPE_DECLARATION(Component,VanguardObject)
+		TYPE_DECLARATION(Component,WorldObject)
 
 	private:
 		Entity* entity;

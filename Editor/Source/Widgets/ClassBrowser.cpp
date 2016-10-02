@@ -11,7 +11,7 @@ namespace Vanguard
 	{
 		treeView = new QTreeView(this);
 		treeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);		
-		treeView->setModel(new TypeHierarchyModel());
+		treeView->setModel(new TypeHierarchyModel(treeView));
 		treeView->expandAll();
 		setWidget(treeView);
 	}

@@ -159,6 +159,8 @@ namespace Vanguard
 						jobManager->HelpWithJob();
 					}
 
+					world->OnFrameFinished(frame);
+
 					// Dispatch any events posted while processing the frame.
 					ProcessEvents(false);
 
@@ -283,7 +285,7 @@ namespace Vanguard
 		{
 			for(auto listener : eventListeners)
 			{
-				listener->CoreEvent(aEvent);
+				listener->OnCoreEvent(aEvent);
 			}
 		}
 	}

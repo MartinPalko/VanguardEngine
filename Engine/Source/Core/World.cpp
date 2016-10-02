@@ -2,6 +2,7 @@
 #include "WorldObjects/Actor.h"
 #include "Jobs/Frame.h"
 #include "Core.h"
+#include "Events.h"
 
 namespace Vanguard
 {
@@ -50,7 +51,7 @@ namespace Vanguard
 
 		for (auto listener : eventListeners)
 		{
-			listener->WorldEvent(aEvent);
+			listener->OnWorldEvent(aEvent);
 		}
 	}
 
@@ -163,6 +164,11 @@ namespace Vanguard
 		aFrame->AddJobs(jobs, registeredTicks.Count());
 
 		delete[] jobs;
+	}
+
+	void World::OnFrameFinished(Frame* aFrame)
+	{
+		Core::GetInstance()->GetPrimaryRenderer()->Present(aFrame);
 	}
 
 	FrameJob* World::MakeTickJob(Frame* aFrame)

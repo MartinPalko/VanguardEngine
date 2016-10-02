@@ -22,5 +22,6 @@ namespace Vanguard
 		virtual String RendererName() override;
 		virtual RenderView* CreateRenderView(Camera* aCamera, WindowCreationParameters aWindowParameters) override;
 		virtual void StartRenderJob(Frame* aFrame) override;
+		virtual void Present(Frame* aFrame) override;
 	};
 }

@@ -149,16 +149,16 @@ namespace Vanguard
 				}
 
 			}
-			SDL_RenderPresent(renderView.renderer);
 		}
 	};
 
 	void Renderer2D::StartRenderJob(Frame* aFrame)
 	{
 		// Compose render job data
-		for (int i = 0; i < renderViews.Count(); i++)
+		for (RenderView2D* worldView : renderViews)
 		{
-			RenderView2D* worldView = renderViews[i];
+			if (worldView->viewCamera->GetWorld() != aFrame->GetWorld())
+				continue;
 
 			const Matrix4x4 projectionMatrix = worldView->viewCamera->GetProjectionMatrix();
 			const Matrix4x4 worldToCamera = Matrix4x4::CreateTranslation(worldView->viewCamera->GetTransform()->position).GetInverse();
@@ -200,6 +200,17 @@ namespace Vanguard
 			// Add job to frame & return
 			aFrame->AddJob(renderJob);
 		}
+	}
+
+	void Renderer2D::Present(Frame* aFrame)
+	{
+		for (RenderView2D* worldView : renderViews)
+		{
+			if (worldView->viewCamera->GetWorld() == aFrame->GetWorld())
+			{
+				SDL_RenderPresent(worldView->sdlRenderer);
+			}
+		}		
 	}
 
 	

@@ -78,7 +78,7 @@ namespace Vanguard
 
 	struct ICoreEventListener
 	{
-		virtual void CoreEvent(Event* aEvent) = 0;
+		virtual void OnCoreEvent(Event* aEvent) = 0;
 	};
 
 	class ModuleManager;

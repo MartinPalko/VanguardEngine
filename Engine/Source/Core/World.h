@@ -13,7 +13,7 @@ namespace Vanguard
 
 	struct IWorldEventListener
 	{
-		virtual void WorldEvent(WorldEvent* aEvent) = 0;
+		virtual void OnWorldEvent(WorldEvent* aEvent) = 0;
 	};
 
 	// A world contains all information about a running game. Typically, there is one world instance per game instance.
@@ -87,6 +87,7 @@ namespace Vanguard
 	protected:
 		virtual Timespan GetNextDesiredTickTime();
 		virtual void Tick(Frame* aFrame);
+		virtual void OnFrameFinished(Frame* aFrame);
 		FrameJob* MakeTickJob(Frame* aFrame);
 		void RegisterObject(WorldObject* aObject);
 	};

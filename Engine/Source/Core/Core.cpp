@@ -238,6 +238,10 @@ namespace Vanguard
 			delete loadedProject;
 			loadedProject = nullptr;
 
+			Event* e;
+			while (pendingEvents.try_dequeue(e))
+				delete e;
+
 			LOG_MESSAGE("Core shut down successfully", "Core");
 			state = CoreState::ShutDown;
 

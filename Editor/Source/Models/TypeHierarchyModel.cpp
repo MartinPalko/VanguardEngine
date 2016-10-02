@@ -1,7 +1,8 @@
 #include "TypeHierarchyModel.h"
 
 
-TypeHierarchyModel::TypeHierarchyModel(QObject *parent) : QAbstractItemModel(parent)
+TypeHierarchyModel::TypeHierarchyModel(Vanguard::Type* aRoot, QObject *parent) : QAbstractItemModel(parent)
+, root(aRoot)
 {
 }
 
@@ -14,13 +15,12 @@ QModelIndex TypeHierarchyModel::index(int row, int column, const QModelIndex &pa
 	if (!hasIndex(row, column, parent))
 		return QModelIndex();
 
-	if (!parent.isValid())
+	if (!parent.isValid()) // Root item
 	{
-		Vanguard::Type* childItem = Vanguard::Type::GetAllBaseTypes()[row];
-		if (childItem)
-			return createIndex(row, column, childItem);
+		if (root == nullptr)
+			return createIndex(row, column, Vanguard::Type::GetAllBaseTypes()[row]);
 		else
-			return QModelIndex();
+			return createIndex(row, column, root->GetDerivedClasses()[row]);
 	}
 	else
 	{
@@ -42,7 +42,7 @@ QModelIndex TypeHierarchyModel::parent(const QModelIndex &index) const
 	Vanguard::Type *childItem = static_cast<Vanguard::Type*>(index.internalPointer());
 	Vanguard::Type *parentItem = childItem->GetBaseClass();
 
-	if (parentItem == nullptr)
+	if (parentItem == root)
 		return QModelIndex();
 
 	int row = 0;
@@ -65,7 +65,10 @@ int TypeHierarchyModel::rowCount(const QModelIndex &parent) const
 
 	if (!parent.isValid())
 	{
-		return Vanguard::Type::GetAllBaseTypes().Count();
+		if (root == nullptr)
+			return Vanguard::Type::GetAllBaseTypes().Count();
+		else
+			return root->GetDerivedClasses().Count();
 	}
 	else
 	{

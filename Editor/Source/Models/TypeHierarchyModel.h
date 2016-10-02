@@ -5,10 +5,12 @@
 
 class TypeHierarchyModel : public QAbstractItemModel
 {
-	Q_OBJECT
+	Q_OBJECT;
+
+	Vanguard::Type* root;
 
 public:
-	explicit TypeHierarchyModel(QObject *parent = 0);
+	explicit TypeHierarchyModel(Vanguard::Type* aRoot, QObject *parent = 0);
 	~TypeHierarchyModel();
 
 	QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;

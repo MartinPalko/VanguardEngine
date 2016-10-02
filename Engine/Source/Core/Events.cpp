@@ -1,4 +1,5 @@
 #include "Events.h"
+#include "WorldObjects/WorldObject.h"
 
 namespace Vanguard
 {
@@ -8,9 +9,18 @@ namespace Vanguard
 
 	TYPE_DEFINITION(WorldObjectEvent, WorldEvent);
 
+	WorldObjectEvent::WorldObjectEvent(WorldObject* aObject) : WorldEvent(aObject ? aObject->GetWorld() : nullptr)
+		, object(aObject)
+	{}
+
 	TYPE_DEFINITION(ObjectCreatedEvent, WorldObjectEvent);
+
 	TYPE_DEFINITION(ObjectDestroyedEvent, WorldObjectEvent);
 
 	TYPE_DEFINITION(ObjectEnabledEvent, WorldObjectEvent);
+
 	TYPE_DEFINITION(ObjectDisabledEvent, WorldObjectEvent);
+
+
+
 }

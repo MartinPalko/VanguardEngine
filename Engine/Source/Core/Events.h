@@ -2,11 +2,14 @@
 
 #include "Core_Common.h"
 #include "Type.h"
-#include "WorldObjects/WorldObject.h"
+#include "Foundation_Common.h"
 
 namespace Vanguard
 {
 	class Entity;
+	class Frame;
+	class WorldObject;
+	class World;
 
 	class Event
 	{
@@ -39,9 +42,7 @@ namespace Vanguard
 			, object(nullptr)
 		{}
 
-		WorldObjectEvent(WorldObject* aObject) : WorldEvent(aObject ? aObject->GetWorld() : nullptr)
-			, object(aObject)
-		{}
+		WorldObjectEvent(WorldObject* aObject);
 
 		WorldObject* GetObject() { return object; }
 	};

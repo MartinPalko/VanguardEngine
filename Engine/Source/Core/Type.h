@@ -102,6 +102,7 @@ namespace Vanguard
 		}
 
 		bool IsA(Type* otherClass) const;
+		template<class T> bool IsA() { return IsA(GetType<T>()); }
 
 		template<class To, class From>
 		static To* SafeCast(From* aFrom)

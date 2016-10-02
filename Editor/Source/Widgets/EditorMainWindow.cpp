@@ -33,9 +33,4 @@ namespace Vanguard
 	{
 		return QSize(1280, 720);
 	}
-
-	void EditorMainWindow::closeEvent(QCloseEvent* event)
-	{
-		EditorCore::GetInstance()->ShutDown();
-	}
 }

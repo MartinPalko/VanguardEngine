@@ -117,7 +117,7 @@ namespace BrickBreaker
 
 		if (inputMap->GetBool(eGameButton::Exit))
 		{
-			Core::GetInstance()->ShutDown();
+			Core::GetInstance()->Quit();
 		}
 
 		float input = 0;

@@ -14,13 +14,18 @@ namespace Vanguard
 		friend Entity;
 		friend Component;
 
-		BASETYPE_DECLARATION(WorldObject)
+		ABSTRACT_BASETYPE_DECLARATION(WorldObject);
+
+		bool pendingDelete;
 		
 	private:
 		World* world = nullptr;
 	public:
-		WorldObject(){}
+		WorldObject();
 		virtual ~WorldObject() {}
 		World* GetWorld() { return world; }
+
+		void Destroy();
+		bool PendingDelete() { return pendingDelete; }
 	};
 }

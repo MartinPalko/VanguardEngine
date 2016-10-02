@@ -1,6 +1,22 @@
 #include "WorldObject.h"
+#include "World.h"
+#include "Events.h"
 
 namespace Vanguard
 {
-	BASETYPE_DEFINITION(WorldObject)
+	ABSTRACT_BASETYPE_DEFINITION(WorldObject);
+
+	WorldObject::WorldObject()
+		: pendingDelete(true)
+	{
+	}
+
+	void WorldObject::Destroy()
+	{
+		pendingDelete = true;
+		if(GetWorld())
+		{
+			GetWorld()->PostEvent(new ObjectDestroyedEvent(this));
+		}
+	}
 }

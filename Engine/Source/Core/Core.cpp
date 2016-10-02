@@ -200,61 +200,65 @@ namespace Vanguard
 
 	}
 
-	void Core::ShutDown()
+	void Core::Quit()
 	{
-		if (state < CoreState::Running)
-			throw Exception("Core has not yet been running, shut down is invalid.");
-
-		if (state >= CoreState::ShutDown)
-			throw Exception("Core has already shut down, calling shut down again is invalid.");
-
-		if (state == CoreState::StartingShutdown)
-		{
-			ASSERT_MAIN_THREAD;
-
-			state = CoreState::ShuttingDown;
-
-			LOG_MESSAGE("Shutting down Core", "Core");
-
-			for (int i = 0; i < worlds.Count(); i++)
-			{
-				delete worlds[i];
-			}
-			worlds.Clear();
-
-			delete profiler;
-			profiler = nullptr;
-
-			jobManager->JoinThreads();
-			delete jobManager;
-			jobManager = nullptr;
-
-			delete moduleManager;
-			moduleManager = nullptr;
-
-			if (clearTempDirectoryOnShutdown)
-				FileSystem::Delete(Directories::GetProjectTempDirectory());
-
-			delete loadedProject;
-			loadedProject = nullptr;
-
-			Event* e;
-			while (pendingEvents.try_dequeue(e))
-				delete e;
-
-			LOG_MESSAGE("Core shut down successfully", "Core");
-			state = CoreState::ShutDown;
-
-			// Want to flush the log as late as possible to make sure all entries get written to disk.
-			LOG_MESSAGE("Flushing log and joining IO Thread", "Core");
-			Log::Flush();
-			AsyncIO::JoinIOThread();			
-			instance = nullptr;
-		}
-		else if (state == CoreState::Running || state == CoreState::PendingShutdown)
+		if (state == CoreState::Running || state == CoreState::PendingShutdown)
 		{
 			state = CoreState::PendingShutdown;
 		}
+		else
+		{
+			LOG_EXCEPTION("Note in a valid state to have Quit() called", "Core");
+		}
+	}
+
+	void Core::ShutDown()
+	{
+		if (state != CoreState::StartingShutdown)
+		{
+			LOG_EXCEPTION("Note in a valid state to have ShutDown() called", "Core");
+		}
+
+		ASSERT_MAIN_THREAD;
+
+		state = CoreState::ShuttingDown;
+
+		LOG_MESSAGE("Shutting down Core", "Core");
+
+		for (int i = 0; i < worlds.Count(); i++)
+		{
+			delete worlds[i];
+		}
+		worlds.Clear();
+
+		delete profiler;
+		profiler = nullptr;
+
+		jobManager->JoinThreads();
+		delete jobManager;
+		jobManager = nullptr;
+
+		delete moduleManager;
+		moduleManager = nullptr;
+
+		if (clearTempDirectoryOnShutdown)
+			FileSystem::Delete(Directories::GetProjectTempDirectory());
+
+		delete loadedProject;
+		loadedProject = nullptr;
+
+		Event* e;
+		while (pendingEvents.try_dequeue(e))
+			delete e;
+
+		LOG_MESSAGE("Core shut down successfully", "Core");
+		state = CoreState::ShutDown;
+
+		// Want to flush the log as late as possible to make sure all entries get written to disk.
+		LOG_MESSAGE("Flushing log and joining IO Thread", "Core");
+		Log::Flush();
+		AsyncIO::JoinIOThread();			
+		instance = nullptr;
 	}
 
 	void Core::LoadModule(const char* aModuleName)

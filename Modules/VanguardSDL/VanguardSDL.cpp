@@ -85,7 +85,7 @@ namespace Vanguard
 		{
 			if (sdlEvent.type == SDL_QUIT)
 			{
-				Core::GetInstance()->ShutDown();
+				Core::GetInstance()->Quit();
 			}
 
 			if (sdlEvent.type == SDL_SYSWMEVENT)

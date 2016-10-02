@@ -20,8 +20,7 @@ namespace Vanguard
 		EditorMainWindow();
 
 	public:
-		// QWidgetOverrides
+		// QWidget Overrides
 		virtual QSize sizeHint() const override;
-		virtual void closeEvent(QCloseEvent *event) override;
 	};
 }

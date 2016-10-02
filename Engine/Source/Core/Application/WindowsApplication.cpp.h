@@ -19,7 +19,7 @@ namespace Vanguard
 			if (core)
 			{
 				// Exit core properly when console windows closes
-				core->ShutDown();
+				core->Quit();
 
 				// Wait for core to shut down.
 				while (core->GetState() < CoreState::ShutDown)

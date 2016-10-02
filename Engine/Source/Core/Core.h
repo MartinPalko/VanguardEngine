@@ -127,7 +127,7 @@ namespace Vanguard
 		// Enter the main application loop. This function will not return until Core has shut down.
 		virtual void Run() override;
 		// Shuts down and exits Core. Calling this while running will exit the main application loop.
-		virtual void ShutDown() override;
+		virtual void Quit() override;
 
 		virtual void LoadModule(const char* aModuleName) override;
 
@@ -150,6 +150,8 @@ namespace Vanguard
 		IRenderer* GetPrimaryRenderer();
 
 	protected:
+		virtual void ShutDown();
+
 		void AddWorld(World* aWorld);
 		void DestroyWorld(World* aWorld);
 	};

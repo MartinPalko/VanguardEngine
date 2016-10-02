@@ -12,16 +12,19 @@ namespace Vanguard
 	class EditorMainWindow;
 	class EditorWorld;
 
-	class EditorCore : public Core, private QAbstractNativeEventFilter
+	class EditorCore : public QObject, public Core, public QAbstractNativeEventFilter
 	{
-		QApplication* qApplication;
-		EditorMainWindow* mainWindow;
+		Q_OBJECT;
 
-		EditorWorld* editorWorld;
+		// Overide QObject
+		virtual bool eventFilter(QObject *watched, QEvent *event) override;
 
-	private:
 		// Implement QAbstractNativeEventFilter
 		virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) override;
+
+		QApplication* qApplication;
+		EditorMainWindow* mainWindow;
+		EditorWorld* editorWorld;
 
 	public:
 		EditorCore(QApplication* aQApplication) : Core()
@@ -30,6 +33,7 @@ namespace Vanguard
 
 		// Override Core
 		virtual void Initialize(int aArgC, char** aArgV, const char* aProjectName) override;
+		virtual void Run() override;
 		virtual void ShutDown() override;
 		virtual void ProcessEvents(bool aIncludeNativeEvents) override;
 

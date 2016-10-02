@@ -104,7 +104,7 @@ namespace Sandbox2D
 
 		if (inputMap->GetBool(eGameButton::Exit))
 		{
-			Core::GetInstance()->ShutDown();
+			Core::GetInstance()->Quit();
 		}
 
 		if (inputMap->GetBoolIsNew(eGameButton::ProfileFrame))

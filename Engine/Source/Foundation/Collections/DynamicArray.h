@@ -75,11 +75,12 @@ namespace Vanguard
 			if (!data.size())
 				return;
 
-			for (size_t i = data.size() - 1; i == 0; i--)
+			for (size_t i = 0; i < data.size(); i++)
 			{
 				if (data[i] == aItem)
 				{
 					data.erase(data.begin() + i);
+					i--;
 				}
 			}
 		}

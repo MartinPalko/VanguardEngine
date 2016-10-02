@@ -79,8 +79,7 @@ namespace BrickBreaker
 				else if (previousBallBounds.min.y > brickBounds.max.y && ballBounds.min.y <= brickBounds.max.y)
 					direction.y = 1; // Bottom of ball
 
-				// TODO: Disable/destroy brick
-				brick->Disable();
+				brick->Destroy();
 			}
 		}
 

@@ -30,13 +30,13 @@ namespace BrickBreaker
 		
 		// Apply movement force
 		float acceleration = (normalizedInput * movementForce) / mass;
-		velocity += acceleration * aFrame->deltaTime.InSeconds();
+		velocity += acceleration * aFrame->GetDeltaTime().InSeconds();
 
 		// Apply drag
-		velocity *= Math::Clamp(1.0f - (drag * (float)aFrame->deltaTime.InSeconds()), 0.0f, 1.0f);
+		velocity *= Math::Clamp(1.0f - (drag * (float)aFrame->GetDeltaTime().InSeconds()), 0.0f, 1.0f);
 
 		// Move by velocity
-		GetTransform()->position.x += velocity * aFrame->deltaTime.InSeconds();
+		GetTransform()->position.x += velocity * aFrame->GetDeltaTime().InSeconds();
 
 		const float maxX = (BrickBreakerWorld::PlayAreaSize.x - paddleWidth) / 2;
 		const float minX = -maxX;

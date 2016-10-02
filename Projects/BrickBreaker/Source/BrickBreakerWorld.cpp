@@ -113,7 +113,7 @@ namespace BrickBreaker
 
 
 		// Update Gainput
-		inputManager->Update(aFrame->deltaTime.InMilliseconds());
+		inputManager->Update(aFrame->GetDeltaTime().InMilliseconds());
 
 		if (inputMap->GetBool(eGameButton::Exit))
 		{

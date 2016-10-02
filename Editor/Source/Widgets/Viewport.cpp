@@ -25,11 +25,11 @@ namespace Vanguard
 	{
 		//const Vector2 normalizedInput = input.Normalize() * Math::Min(1.0f, input.Length());
 		const Vector3 normalizedInput = input;
-		const float deltaSeconds = (float)aFrame->deltaTime.InSeconds();
+		const float deltaSeconds = (float)aFrame->GetDeltaTime().InSeconds();
 
 		// Apply movement force
 		Vector3 acceleration = (normalizedInput * movementForce);
-		velocity += acceleration * aFrame->deltaTime.InSeconds();
+		velocity += acceleration * aFrame->GetDeltaTime().InSeconds();
 
 		// Apply drag
 		velocity *= Math::Clamp(1.0f - (drag * deltaSeconds), 0.0f, 1.0f);
@@ -42,7 +42,7 @@ namespace Vanguard
 
 		// Move by velocity
 		GetTransform()->position += velocity * deltaSeconds * (fov / 100);
-		fov -= velocity.z * aFrame->deltaTime.InSeconds() * (fov / 100) * zoomSpeed;
+		fov -= velocity.z * aFrame->GetDeltaTime().InSeconds() * (fov / 100) * zoomSpeed;
 	}
 
 	Viewport::Viewport(QWidget* parent) : QWidget(parent)

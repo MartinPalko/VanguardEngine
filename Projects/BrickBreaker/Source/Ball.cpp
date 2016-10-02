@@ -85,9 +85,9 @@ namespace BrickBreaker
 		}
 
 		// Move
-		speed += acceleration * aFrame->deltaTime.InSeconds();
+		speed += acceleration * aFrame->GetDeltaTime().InSeconds();
 		Vector3 velocity = direction.Normalize() * speed;
-		GetTransform()->position += velocity * aFrame->deltaTime.InSeconds();
+		GetTransform()->position += velocity * aFrame->GetDeltaTime().InSeconds();
 
 		previousBallBounds = ballBounds;
 	}

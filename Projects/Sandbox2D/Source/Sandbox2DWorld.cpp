@@ -98,9 +98,9 @@ namespace Sandbox2D
 	void Sandbox2DWorld::Tick(Vanguard::Frame* aFrame)
 	{
 		// Update Gainput
-		inputManager->Update(aFrame->deltaTime.InMilliseconds());
+		inputManager->Update(aFrame->GetDeltaTime().InMilliseconds());
 
-		LOG_MESSAGE("FPS: " + String::FromFloat(1.0f / aFrame->deltaTime.InSeconds()), "Brick Breaker");
+		LOG_MESSAGE("FPS: " + String::FromFloat(1.0f / aFrame->GetDeltaTime().InSeconds()), "Brick Breaker");
 
 		if (inputMap->GetBool(eGameButton::Exit))
 		{

@@ -92,7 +92,7 @@ namespace Vanguard
 
 		void DoJob() override
 		{
-			const World* world = frame->world;
+			const World* world = frame->GetWorld();
 
 			int screenX;
 			int screenY;
@@ -172,7 +172,7 @@ namespace Vanguard
 				worldView->clearColor
 			});
 
-			DynamicArray<WorldObject*> sprites = aFrame->world->GetInstances(Type::GetType<SpriteRenderer>(), true);
+			DynamicArray<WorldObject*> sprites = aFrame->GetWorld()->GetInstances(Type::GetType<SpriteRenderer>(), true);
 			renderJob->renderItems.Reserve(sprites.Count());
 			for (int s = 0; s < sprites.Count(); s++)
 			{

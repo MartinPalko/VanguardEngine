@@ -21,10 +21,11 @@ namespace Vanguard
 		std::atomic<bool> started;
 		DynamicArray<Job*> pendingJobs;
 		std::atomic<size_t> unfinishedJobs;
+
+		int frameNumber;
+		Timespan deltaTime;
+		World* world;
 	public:
-		const int frameNumber;
-		const Timespan deltaTime;
-		const World* world;
 
 		Frame(uint32 aFrameNumber, Timespan aDeltaTime, World* aWorld)
 			: frameNumber(aFrameNumber)
@@ -38,6 +39,10 @@ namespace Vanguard
 		~Frame()
 		{
 		}
+
+		int GetFrameNumber() { return frameNumber; }
+		Timespan GetDeltaTime() { return deltaTime; }
+		World* GetWorld() { return world; }
 
 		void AddJob(FrameJob* aJob);
 		void AddJobs(FrameJob** aJobs, size_t aNumJobs);

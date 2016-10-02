@@ -6,17 +6,36 @@ namespace Vanguard
 {
 	ABSTRACT_BASETYPE_DEFINITION(WorldObject);
 
-	WorldObject::WorldObject()
-		: pendingDelete(true)
+	void WorldObject::BroadcastEvent(WorldObjectEvent* aEvent)
 	{
+		for (auto listener : eventListeners)
+			listener->OnWorldObjectEvent(aEvent);
+	}
+
+	WorldObject::WorldObject()
+		: pendingDelete(false)
+	{
+	}
+
+	void WorldObject::RegisterEventListener(IWorldObjectEventListener* aListener)
+	{
+		eventListeners.PushBack(aListener);
+	}
+
+	void WorldObject::UnregisterEventListener(IWorldObjectEventListener* aListener)
+	{
+		eventListeners.Remove(aListener);
 	}
 
 	void WorldObject::Destroy()
 	{
-		pendingDelete = true;
-		if(GetWorld())
+		if (!pendingDelete)
 		{
-			GetWorld()->PostEvent(new ObjectDestroyedEvent(this));
+			pendingDelete = true;
+			if (GetWorld())
+			{
+				GetWorld()->PostEvent(new ObjectDestroyedEvent(this));
+			}
 		}
 	}
 }

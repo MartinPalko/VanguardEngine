@@ -131,6 +131,7 @@ namespace Vanguard
 			flushingLog = false;
 		}
 	}
+
 	void Log::RegisterListener(ILogListener* aListener)
 	{
 		logListeners.PushBack(aListener);

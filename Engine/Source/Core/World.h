@@ -2,6 +2,8 @@
 #include "Foundation.h"
 #include "WorldObjects/Entity.h"
 
+#include "concurrentqueue.h"
+
 namespace Vanguard
 {
 	class Frame;
@@ -19,7 +21,7 @@ namespace Vanguard
 	// A world contains all information about a running game. Typically, there is one world instance per game instance.
 	// It is possible to have multiple worlds exist simultaneously, but typically, they do not directly communicate.
 	// Eg. an Editor world, Play-in-editor world, and a game server world could all exist simultaneously, but should behave independently.
-	class CORE_API World
+	class CORE_API World : IWorldEventListener
 	{
 		friend class Core;
 		friend class Entity;
@@ -36,9 +38,11 @@ namespace Vanguard
 		Timespan lastTickStartTime;
 		Timespan minimumTickDelta;
 		Timespan maximumTickDelta;
-		// ODO: Use a linkedlist for the registeredTicks and eventListeners
+		// TODO: Use a linkedlist for the registeredTicks and eventListeners
 		DynamicArray<Entity*> registeredTicks; 
 		DynamicArray<IWorldEventListener*> eventListeners;
+
+		moodycamel::ConcurrentQueue<WorldObject*> deletionQueue;
 
 	public:
 		World(String aWorldName);
@@ -84,11 +88,15 @@ namespace Vanguard
 			return returnArray;
 		}
 
+		// Implement IWorldEventListener
+		virtual void OnWorldEvent(WorldEvent* aEvent) override;
+
 	protected:
 		virtual Timespan GetNextDesiredTickTime();
 		virtual void Tick(Frame* aFrame);
 		virtual void OnFrameFinished(Frame* aFrame);
 		FrameJob* MakeTickJob(Frame* aFrame);
 		void RegisterObject(WorldObject* aObject);
+		void UnregisterObject(WorldObject* aObject);
 	};
 }

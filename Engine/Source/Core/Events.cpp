@@ -20,7 +20,4 @@ namespace Vanguard
 	TYPE_DEFINITION(ObjectEnabledEvent, WorldObjectEvent);
 
 	TYPE_DEFINITION(ObjectDisabledEvent, WorldObjectEvent);
-
-
-
 }

@@ -19,6 +19,24 @@ namespace Vanguard
 	{
 	}
 
+	void Entity::Destroy()
+	{
+		WorldObject::Destroy();
+		for (auto component : components)
+		{
+			component->Destroy();
+		}
+	}
+
+	void Entity::OnWorldObjectEvent(WorldObjectEvent* aEvent)
+	{
+		if (!PendingDelete() && aEvent->GetType()->IsA<ObjectDestroyedEvent>())
+		{
+			components.Remove((Component*)aEvent->GetObject());
+			componentTypeMap.erase(aEvent->GetType()->GetRuntimeHash());
+		}
+	}
+
 	Component* Entity::GetComponent(Type* aComponentType)
 	{
 		Component* foundComponent = componentTypeMap[aComponentType->GetRuntimeHash()];
@@ -60,6 +78,8 @@ namespace Vanguard
 		componentTypeMap[aComponentType->GetRuntimeHash()] = newComponent;
 
 		ComponentAdded(newComponent);
+
+		newComponent->RegisterEventListener(this);
 
 		return newComponent;
 	}

@@ -16,6 +16,7 @@ namespace Vanguard
 		, maximumTickDelta(1.0 / 15.0) // 15 FPS
 		, registeredTicks()
 	{
+		RegisterEventListener(this);
 	}
 
 	World::~World()
@@ -26,6 +27,8 @@ namespace Vanguard
 			objects[i]->world = nullptr;
 			delete objects[i];
 		}
+
+		UnregisterEventListener(this);
 	}
 
 	void World::RegisterTick(Entity* aActor)
@@ -48,6 +51,11 @@ namespace Vanguard
 		ASSERT_MAIN_THREAD;
 
 		DEBUG_LOG("World Event: " + aEvent->GetType()->GetTypeName());
+
+		if (auto objectEvent = Type::SafeCast<WorldObjectEvent>(aEvent))
+		{
+			objectEvent->GetObject()->BroadcastEvent(objectEvent);
+		}
 
 		for (auto listener : eventListeners)
 		{
@@ -145,6 +153,14 @@ namespace Vanguard
 		}
 	};
 
+	void World::OnWorldEvent(WorldEvent* aEvent)
+	{
+		if (auto destroyedEvent = Type::SafeCast<ObjectDestroyedEvent>(aEvent))
+		{
+			deletionQueue.enqueue(destroyedEvent->GetObject());
+		}
+	}
+
 	Timespan World::GetNextDesiredTickTime()
 	{
 		return lastTickStartTime + minimumTickDelta;
@@ -168,6 +184,14 @@ namespace Vanguard
 
 	void World::OnFrameFinished(Frame* aFrame)
 	{
+		// Clean up any Objects pending deletion
+		WorldObject* object;
+		while (deletionQueue.try_dequeue(object))
+		{
+			UnregisterObject(object);
+			delete object;
+		}
+
 		Core::GetInstance()->GetPrimaryRenderer()->Present(aFrame);
 	}
 
@@ -194,11 +218,22 @@ namespace Vanguard
 		return new WorldTickJob(worldName + " Tick", aFrame, this);
 	}
 
-	void World::RegisterObject(WorldObject * aObject)
+	void World::RegisterObject(WorldObject* aObject)
 	{
 		aObject->world = this;
 		objects.PushBack(aObject);
 		objectTypemap[aObject->GetType()->GetRuntimeHash()].PushBack(aObject);
+	}
+
+	void World::UnregisterObject(WorldObject* aObject)
+	{
+		objects.Remove(aObject);
+		objectTypemap[aObject->GetType()->GetRuntimeHash()].Remove(aObject);
+
+		if (auto entity = Type::SafeCast<Entity>(aObject))
+		{
+			registeredTicks.Remove(entity);
+		}
 	}
 
 }

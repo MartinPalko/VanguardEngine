@@ -11,7 +11,7 @@ namespace Vanguard
 	class World;
 	class Transform;
 
-	class CORE_API Entity : public WorldObject
+	class CORE_API Entity : public WorldObject, public IWorldObjectEventListener
 	{
 		friend World;
 
@@ -31,6 +31,12 @@ namespace Vanguard
 	public:
 		Entity();
 		~Entity();
+
+		//Override WorldObject
+		virtual void Destroy() override;
+
+		// Implement IWorldObjectEventListener
+		virtual void OnWorldObjectEvent(WorldObjectEvent* aEvent) override;
 
 		inline size_t GetNumComponents() { return components.Count(); }
 		inline Component* GetComponent(size_t aIndex) { return components[aIndex]; }

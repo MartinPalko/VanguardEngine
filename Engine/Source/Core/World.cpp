@@ -37,6 +37,33 @@ namespace Vanguard
 		registeredTicks.Remove(aActor);
 	}
 
+	void World::PostEvent(WorldEvent* aEvent)
+	{
+		Core::GetInstance()->PostEvent(aEvent);
+	}
+
+	void World::BroadcastEvent(WorldEvent* aEvent)
+	{
+		ASSERT_MAIN_THREAD;
+
+		DEBUG_LOG("World Event: " + aEvent->GetType()->GetTypeName());
+
+		for (auto listener : eventListeners)
+		{
+			listener->WorldEvent(aEvent);
+		}
+	}
+
+	void World::RegisterEventListener(IWorldEventListener* aListener)
+	{
+		eventListeners.PushBack(aListener);
+	}
+
+	void World::UnregisterEventListener(IWorldEventListener* aListener)
+	{
+		eventListeners.Remove(aListener);
+	}
+
 	Entity* World::SpawnEntity(const String & aEntityType)
 	{
 		Type* requestedClass = Type::GetType(aEntityType);
@@ -60,17 +87,25 @@ namespace Vanguard
 		}
 
 		Entity* newEntity = static_cast<Entity*>(aRequestedClass->CreateInstance());
+		
+		// Register
 		RegisterObject(newEntity);
-
 		for (int i = 0; i < newEntity->GetNumComponents(); i++)
 		{
-			Component* component = newEntity->GetComponent(i);
-			RegisterObject(component);
+			RegisterObject(newEntity->GetComponent(i));
 		}
 
+		// Re-enable tick if it is meant to be disabled, now that we're registered.
 		if (newEntity->tickEnabled && !newEntity->tickRegistered)
 		{
 			newEntity->EnableTick();
+		}
+
+		// Post creation events
+		PostEvent(new ObjectCreatedEvent(newEntity));
+		for (int i = 0; i < newEntity->GetNumComponents(); i++)
+		{
+			PostEvent(new ObjectCreatedEvent(newEntity->GetComponent(i)));
 		}
 
 		return newEntity;

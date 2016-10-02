@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "World.h"
 #include "Transform.h"
+#include "Events.h"
 
 namespace Vanguard
 {
@@ -52,7 +53,8 @@ namespace Vanguard
 		newComponent->entity = this;
 		if (GetWorld())
 		{
-			world->RegisterObject(newComponent);
+			GetWorld()->RegisterObject(newComponent);
+			GetWorld()->PostEvent(new ObjectCreatedEvent(newComponent));
 		}
 		components.PushBack(newComponent);
 		componentTypeMap[aComponentType->GetRuntimeHash()] = newComponent;

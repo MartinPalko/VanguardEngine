@@ -31,7 +31,7 @@ namespace Vanguard
 		// Override Core
 		virtual void Initialize(int aArgC, char** aArgV, const char* aProjectName) override;
 		virtual void ShutDown() override;
-		virtual void ProcessEvents() override;
+		virtual void ProcessEvents(bool aIncludeNativeEvents) override;
 
 	public:
 		static EditorCore* GetInstance() { return static_cast<EditorCore*>(Core::GetInstance()); }

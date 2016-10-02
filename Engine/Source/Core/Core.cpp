@@ -114,7 +114,7 @@ namespace Vanguard
 		// Main engine loop
 		while (state == CoreState::Running)
 		{
-			ProcessEvents();
+			ProcessEvents(true);
 			jobManager->ServiceMainThreadJobs();
 
 			// Tick worlds
@@ -135,7 +135,7 @@ namespace Vanguard
 
 				if (deltaTime >= world->minimumTickDelta)
 				{
-					// Create a new frame for the world
+					// Create a new frame for the world.
 					Frame* frame = new Frame(world->nextFrameNumber, Math::Min(deltaTime, world->maximumTickDelta), world);
 					world->lastTickStartTime = currentTime;
 					world->nextFrameNumber++;
@@ -146,11 +146,11 @@ namespace Vanguard
 						profiler->BeginFrameProfile();
 					}
 
-					// Update the world
+					// Update the world.
 					frame->AddJob(world->MakeTickJob(frame));
 					frame->Start();
 
-					// Wait for the frame to finish
+					// Wait for the frame to finish.
 					while (!frame->Finished())
 					{
 						// Service main thread jobs dispatched by the frame.
@@ -158,6 +158,9 @@ namespace Vanguard
 						// Help out the worker threads while we wait.
 						jobManager->HelpWithJob();
 					}
+
+					// Dispatch any events posted while processing the frame.
+					ProcessEvents(false);
 
 					if (profiler->IsProfilingFrame())
 						profiler->EndFrameProfile(Directories::GetLogDirectory().GetRelative("ProfilerResults.json"));
@@ -255,27 +258,72 @@ namespace Vanguard
 		moduleManager->LoadModule(aModuleName);
 	}
 
-	void Core::ProcessEvents()
+	void Core::PostEvent(Event* aEvent)
 	{
-		Application::ProcessNativeEvents();
+		pendingEvents.enqueue(aEvent);
 	}
 
-	void Core::AddWorld(World* world)
+	void Core::BroadcastEvent(Event* aEvent)
 	{
-		worlds.PushBack(world);
+		ASSERT_MAIN_THREAD;
+
+		if(WorldEvent* worldEvent = Type::SafeCast<WorldEvent>(aEvent))
+		{
+			worldEvent->GetWorld()->BroadcastEvent(worldEvent);
+		}
+		else
+		{
+			for(auto listener : eventListeners)
+			{
+				listener->CoreEvent(aEvent);
+			}
+		}
+	}
+
+	void Core::RegisterEventListener(ICoreEventListener* aListener)
+	{
+		eventListeners.PushBack(aListener);
+	}
+
+	void Core::UnregisterEventListener(ICoreEventListener* aListener)
+	{
+		eventListeners.Remove(aListener);
+	}
+
+	void Core::ProcessEvents(bool aIncludeNativeEvents)
+	{
+		ASSERT_MAIN_THREAD;
+
+		if (aIncludeNativeEvents)
+			Application::ProcessNativeEvents();
+
+		Event* e;
+		while (pendingEvents.try_dequeue(e))
+		{
+			BroadcastEvent(e);
+			delete e;
+		}
+	}
+
+	void Core::AddWorld(World* aWorld)
+	{
+		ASSERT_MAIN_THREAD;
+		worlds.PushBack(aWorld);
 	}
 
 	void Core::DestroyWorld(World* aWorld)
 	{
+		ASSERT_MAIN_THREAD;
 		if (worlds.Contains(aWorld))
 		{
 			worlds.Remove(aWorld);
-			delete aWorld;			
+			delete aWorld;
 		}
 	}
 
 	void Core::RegisterResourceManager(ResourceManager* aResourceManager)
 	{
+		ASSERT_MAIN_THREAD;
 		if (!resourceManager)
 		{
 			resourceManager = aResourceManager;
@@ -288,6 +336,7 @@ namespace Vanguard
 
 	void Core::UnregisterResourceManager()
 	{
+		ASSERT_MAIN_THREAD;
 		if (resourceManager)
 		{
 			resourceManager = nullptr;
@@ -303,8 +352,9 @@ namespace Vanguard
 		return resourceManager;
 	}
 
-	void Core::RegisterRenderer(IRenderer * aRenderer)
+	void Core::RegisterRenderer(IRenderer* aRenderer)
 	{
+		ASSERT_MAIN_THREAD;
 		if (renderers.Contains(aRenderer))
 		{
 			LOG_WARNING("A renderer already registered!", "Core");
@@ -323,6 +373,7 @@ namespace Vanguard
 
 	void Core::UnregisterRenderer(IRenderer * aRenderer)
 	{
+		ASSERT_MAIN_THREAD;
 		if (aRenderer == primaryRenderer)
 		{
 			primaryRenderer = nullptr;

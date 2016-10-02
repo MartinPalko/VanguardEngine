@@ -7,8 +7,14 @@ namespace Vanguard
 	class Frame;
 	class FrameJob;
 	class RenderView;
+	class WorldEvent;
 
 	typedef std::function<void(Frame*)> TickFunction;
+
+	struct IWorldEventListener
+	{
+		virtual void WorldEvent(WorldEvent* aEvent) = 0;
+	};
 
 	// A world contains all information about a running game. Typically, there is one world instance per game instance.
 	// It is possible to have multiple worlds exist simultaneously, but typically, they do not directly communicate.
@@ -30,7 +36,9 @@ namespace Vanguard
 		Timespan lastTickStartTime;
 		Timespan minimumTickDelta;
 		Timespan maximumTickDelta;
-		DynamicArray<Entity*> registeredTicks; //TODO: Use a linkedlist for the registeredTicks
+		// ODO: Use a linkedlist for the registeredTicks and eventListeners
+		DynamicArray<Entity*> registeredTicks; 
+		DynamicArray<IWorldEventListener*> eventListeners;
 
 	public:
 		World(String aWorldName);
@@ -41,6 +49,11 @@ namespace Vanguard
 
 		void RegisterTick(Entity* aActor);
 		void UnregisterTick(Entity* aActor);
+
+		void PostEvent(WorldEvent* aEvent);
+		void BroadcastEvent(WorldEvent* aEvent);
+		virtual void RegisterEventListener(IWorldEventListener* aListener);
+		virtual void UnregisterEventListener(IWorldEventListener* aListener);
 
 		template <class T>		
 		T* SpawnEntity()

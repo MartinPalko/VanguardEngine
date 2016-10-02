@@ -12,6 +12,7 @@
 #include "Profiler.h"
 #include "Project.h"
 #include "Directories.h"
+#include "Events.h"
 
 #include "Entity/Actor.h"
 #include "Entity/Component.h"
@@ -25,6 +26,8 @@
 #include "Renderer/Camera.h"
 #include "Renderer/IRenderer.h"
 #include "Renderer/RenderView.h"
+
+#include "concurrentqueue.h"
 
 namespace Vanguard
 {
@@ -73,6 +76,11 @@ namespace Vanguard
 		ShutDown
 	};
 
+	struct ICoreEventListener
+	{
+		virtual void CoreEvent(Event* aEvent) = 0;
+	};
+
 	class ModuleManager;
 
 	// Core is the main class of the Engine. Only one instance of core can be initialized and running at a time.
@@ -99,6 +107,9 @@ namespace Vanguard
 
 		CoreState state = CoreState::NotInitialized;
 
+		moodycamel::ConcurrentQueue<Event*> pendingEvents;
+		DynamicArray<ICoreEventListener*> eventListeners;
+
 	public:
 		Core();
 		virtual ~Core() {};
@@ -120,7 +131,11 @@ namespace Vanguard
 
 		virtual void LoadModule(const char* aModuleName) override;
 
-		virtual void ProcessEvents();
+		void PostEvent(Event* aEvent);
+		void BroadcastEvent(Event* aEvent);
+		void RegisterEventListener(ICoreEventListener* aListener);
+		void UnregisterEventListener(ICoreEventListener* aListener);
+		virtual void ProcessEvents(bool aIncludeNativeEvents);
 
 		inline CoreState GetState(){ return state; }
 
@@ -135,7 +150,7 @@ namespace Vanguard
 		IRenderer* GetPrimaryRenderer();
 
 	protected:
-		void AddWorld(World* world);
+		void AddWorld(World* aWorld);
 		void DestroyWorld(World* aWorld);
 	};
 }

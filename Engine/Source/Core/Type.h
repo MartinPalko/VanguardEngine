@@ -87,7 +87,9 @@ namespace Vanguard
 		static DynamicArray<Type*> GetAllTypes();
 		static DynamicArray<Type*> GetAllBaseTypes();
 		static Type* GetType(const StringID& aTypeName);
-		template<class T>static Type* GetType()
+
+		template<class T>
+		static Type* GetType()
 		{
 			const size_t typeHash = typeid(T).hash_code();
 #if VANGUARD_DEBUG
@@ -100,6 +102,16 @@ namespace Vanguard
 		}
 
 		bool IsA(Type* otherClass) const;
+
+		template<class To, class From>
+		static To* SafeCast(From* aFrom)
+		{
+			if(aFrom->GetType()->IsA(GetType<To>()))
+			{
+				return (To*)aFrom;
+			}
+			return nullptr;
+		}
 
 		static void UpdateHierarchyReferences();
 	};

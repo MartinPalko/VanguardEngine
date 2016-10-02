@@ -32,12 +32,12 @@ namespace Vanguard
 		Core::ShutDown();
 	}
 
-	void EditorCore::ProcessEvents()
+	void EditorCore::ProcessEvents(bool aIncludeNativeEvents)
 	{
-		if (qApplication->hasPendingEvents())
+		if (aIncludeNativeEvents && qApplication->hasPendingEvents())
 			qApplication->processEvents();	
 
-		Core::ProcessEvents();
+		Core::ProcessEvents(aIncludeNativeEvents);
 	}
 
 	World* EditorCore::GetEditorWorld()

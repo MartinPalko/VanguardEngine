@@ -2,7 +2,7 @@
 
 #include "VanguardSDL.h"
 #include "RenderView2D.h"
-#include "Entity/Transform.h"
+#include "WorldObjects/Transform.h"
 #include "SDLImageResource.h"
 
 #define SPLIT_COLOR_RGBA(VanguardColor) VanguardColor.r, VanguardColor.g, VanguardColor.b, VanguardColor.a

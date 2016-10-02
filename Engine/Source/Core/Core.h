@@ -14,10 +14,10 @@
 #include "Directories.h"
 #include "Events.h"
 
-#include "Entity/Actor.h"
-#include "Entity/Component.h"
-#include "Entity/Entity.h"
-#include "Entity/Transform.h"
+#include "WorldObjects/Actor.h"
+#include "WorldObjects/Component.h"
+#include "WorldObjects/Entity.h"
+#include "WorldObjects/Transform.h"
 
 #include "Jobs/JobManager.h"
 #include "Jobs/Job.h"

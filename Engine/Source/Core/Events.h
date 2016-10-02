@@ -2,7 +2,7 @@
 
 #include "Core_Common.h"
 #include "Type.h"
-#include "Entity/VanguardObject.h"
+#include "WorldObjects/VanguardObject.h"
 
 namespace Vanguard
 {

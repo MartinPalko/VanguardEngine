@@ -1,5 +1,5 @@
 #include "World.h"
-#include "Entity/Actor.h"
+#include "WorldObjects/Actor.h"
 #include "Jobs/Frame.h"
 #include "Core.h"
 

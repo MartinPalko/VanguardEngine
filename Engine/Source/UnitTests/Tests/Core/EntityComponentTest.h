@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "World.h"
 
-#include "Entity/Transform.h"
+#include "WorldObjects/Transform.h"
 
 namespace Vanguard
 {

@@ -1,5 +1,5 @@
 #include "SpriteRenderer.h"
-#include "Entity/Actor.h"
+#include "WorldObjects/Actor.h"
 #include "ResourceManager.h"
 
 namespace Vanguard

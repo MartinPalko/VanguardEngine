@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Entity/Actor.h"
-#include "Entity/Transform.h"
+#include "WorldObjects/Actor.h"
+#include "WorldObjects/Transform.h"
 #include "Types/Matrix4x4.h"
 
 namespace Vanguard

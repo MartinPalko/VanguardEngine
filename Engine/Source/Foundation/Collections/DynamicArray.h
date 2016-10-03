@@ -28,14 +28,30 @@ namespace Vanguard
         {
         }
 
-		auto begin()
+		class iterator
 		{
-			return data.begin();
+		private:
+			DynamicArray* const dynamicArray;
+			size_t currentIndex;
+		public:
+			iterator(DynamicArray* const aDynamicArray, size_t aStartIndex = 0) 
+				: dynamicArray(aDynamicArray)
+				, currentIndex(aStartIndex)
+			{}
+			~iterator() {}
+			iterator& operator++() { currentIndex++; return *this;}
+			bool operator !=(const iterator& aOther) { return currentIndex != aOther.currentIndex || dynamicArray != aOther.dynamicArray; }
+			T operator*() { return dynamicArray->At(currentIndex);}
+		};
+
+		iterator begin()
+		{
+			return iterator(this, 0);
 		}
         
-		auto end()
+		iterator end()
 		{
-			return data.end();
+			return iterator(this, Count());
 		}
 
 		inline void PushBack(const T& aItem)
@@ -112,6 +128,11 @@ namespace Vanguard
 			data.reserve(aReserveSize);
 		}
 
+		inline T At(size_t aIndex) const
+		{
+			return data[aIndex];
+		}
+
 		inline DynamicArray& operator=(const DynamicArray& other)
 		{
 			if (this != &other)
@@ -126,9 +147,9 @@ namespace Vanguard
 			Concatenate(other);
 		}
 
-		inline T operator[] (const size_t index) const
+		inline T operator[] (const size_t aIndex) const
 		{
-			return data[index];
+			return data[aIndex];
 		}
 
 	};

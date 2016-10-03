@@ -169,7 +169,7 @@ public:\
 	{\
 		Type* t = Type::GetType<ClassIdentifier>();
 
-#define REGISTER_PROPERTY(ClassIdentifier, PropertyName) t->RegisterProperty(new Property(#PropertyName, sizeof(ClassIdentifier::PropertyName), typeid(ClassIdentifier::PropertyName).hash_code()));
+#define REGISTER_PROPERTY(ClassIdentifier, PropertyName) t->RegisterProperty(new Property(#PropertyName, offsetOf(&ClassIdentifier::PropertyName), typeid(&ClassIdentifier::PropertyName).hash_code()));
 
 #define FINISH_REGISTER_PROPERTIES(ClassIdentifier)\
 	}\

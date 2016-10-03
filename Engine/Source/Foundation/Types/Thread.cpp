@@ -21,12 +21,13 @@ namespace Vanguard
 	}
 
 	Thread::Thread(const String& aString)
+		: wantsJoin (false)
+		, running (true)
+		, threadID (0)
+		, stdThread (nullptr)
+		, name (aString)
+		, affinityMask (0)
 	{
-		wantsJoin = false;
-		running = true;
-		stdThread = nullptr;
-		name = aString;
-		affinityMask = 0;
 	}
 
 	Thread::~Thread()

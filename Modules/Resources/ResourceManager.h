@@ -7,8 +7,18 @@ namespace Vanguard
 {
 	class RESOURCES_API ResourceManager
 	{
+		class ResourceDirectory
+		{
+			std::unordered_map<StringID, std::map<Type*, ResourceID>*> data;
+		public:
+			~ResourceDirectory();
+
+			void Add(StringID aName, Type* aType, ResourceID& outID);
+			bool Lookup(StringID aName, Type* aType, ResourceID& outID);
+		};
+
 		std::unordered_map<ResourceID, Resource*> resources;
-		std::unordered_map<StringID, std::map<Type*, ResourceID>> resourceDirectory;
+		ResourceDirectory directory;
 
 	public:
 		ResourceManager();

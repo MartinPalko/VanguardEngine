@@ -15,7 +15,7 @@ namespace Vanguard
 		UUID id;
 
 	public:
-		Resource() {}
+		Resource();
 		virtual ~Resource();
 
 		FilePath GetResourcePath() { return resourcePath; }

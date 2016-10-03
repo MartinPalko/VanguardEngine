@@ -22,7 +22,7 @@ namespace Vanguard
 	{
 		UUID uuid;
 		String str = uuid.ToString();
-		UUID fromString(str);
+		UUID fromString = UUID::FromString(str);
 		EXPECT_EQ(uuid, fromString);
 	}
 }

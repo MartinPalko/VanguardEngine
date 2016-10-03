@@ -4,6 +4,39 @@
 
 namespace Vanguard
 {
+	ResourceManager::ResourceDirectory::~ResourceDirectory()
+	{
+		for (auto d : data)
+			delete d.second;
+	}
+
+	void ResourceManager::ResourceDirectory::Add(StringID aName, Type * aType, ResourceID & outID)
+	{
+		auto typemap = data[aName];
+		if (!typemap)
+		{
+			typemap = new std::map<Type*, ResourceID>();
+			data[aName] = typemap;
+		}
+
+		typemap->emplace(aType, outID);
+	}
+
+	bool ResourceManager::ResourceDirectory::Lookup(StringID aName, Type* aType, ResourceID& outID)
+	{
+		auto typemap = data[aName];
+		if (typemap)
+		{
+			auto existingResource = typemap->find(aType);
+			if (existingResource != typemap->end())
+			{
+				outID = existingResource->second;
+				return true;
+			}
+		}
+		return false;
+	}
+
 	ResourceManager::ResourceManager()
 	{
 	}
@@ -54,23 +87,16 @@ namespace Vanguard
 
 		const StringID resourceNameID = aResourceName;
 
-		// Check with resource directory to see if this resource already exists.
-		auto& existingResources = resourceDirectory.find(resourceNameID);
-		if (existingResources != resourceDirectory.end())
-		{
-			auto& existingResourceType = existingResources->second.find(aResourceType);
-			if (existingResourceType != existingResources->second.end())
-			{
-				return resources[existingResourceType->second];
-			}
-		}
+		ResourceID id;
+		if (directory.Lookup(aResourceName, aResourceType, id))
+			return resources[id];
 
 		// Create a new resource instance, register it, and return.
 		Resource* resource = static_cast<Resource*>(aResourceType->CreateInstance());
 		resource->resourcePath = resourcePath;
 
 		resources[resource->id] = resource;
-		resourceDirectory[resourceNameID][aResourceType] = resource->id;
+		directory.Add(aResourceName, aResourceType, resource->id);
 
 		resource->LoadResource();
 		return resource;

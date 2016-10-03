@@ -4,6 +4,7 @@
 #include <Rpc.h>
 #pragma comment(lib, "rpcrt4.lib")
 #else
+#include <cstring>
 #include <uuid/uuid.h>
 #endif
 
@@ -30,19 +31,21 @@ namespace Vanguard
 		static_assert(sizeof(::UUID) == sizeof(data), "Size of UUID data is incorrect");
 		CoCreateGuid((::UUID*)newUUID.data);
 #else
-		// TODO
 		static_assert(sizeof(uuid_t) == sizeof(data), "Size of UUID data is incorrect");
-		uuid_t uuid;
-		uuid_generate_random ( uuid );
+		uuid_generate_random (*(uuid_t*)newUUID.data);
 #endif
 		return newUUID;
 	}
 
 	UUID UUID::FromString(const String& aGUIDString)
-	{
+	{		
 		UUID newUUID;
+#if defined(VANGUARD_WINDOWS)
 		unsigned char* str = (unsigned char*)aGUIDString.GetCharPointer();
 		UuidFromString(str, (::UUID*)newUUID.data);
+#else
+		uuid_parse(aGUIDString.GetCharPointer(), *(uuid_t*)newUUID.data);
+#endif
 		return newUUID;
 	}
 
@@ -60,10 +63,9 @@ namespace Vanguard
 		RpcStringFree(&str);
 		return uuidString;
 #else
-		// TODO
-		//char s[37];
-		//uuid_unparse ( uuid, s );
-		return "";
+		char str[37];
+		uuid_unparse(*(uuid_t*)data, str);
+		return str;
 #endif
 	}
 

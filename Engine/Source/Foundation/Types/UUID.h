@@ -11,8 +11,11 @@ namespace Vanguard
 		byte data[16];
 	public:
 		UUID();
-		UUID(const String& aGUIDString);
+		UUID(const UUID& aOther);
 		~UUID();
+		static UUID CreateNew();
+		static UUID FromString(const String& aGUIDString);
+		static UUID Null();
 
 		String ToString();
 

@@ -9,28 +9,46 @@
 
 namespace Vanguard
 {
-	UUID::UUID()
+	UUID::UUID() : data{0}
 	{
+		
+	}
+
+	UUID::UUID(const UUID& aOther)
+	{
+		memcpy(data, aOther.data, sizeof(data));
+	}
+
+	UUID::~UUID()
+	{
+	}
+
+	UUID UUID::CreateNew()
+	{
+		UUID newUUID;
 #if defined(VANGUARD_WINDOWS)
 		static_assert(sizeof(::UUID) == sizeof(data), "Size of UUID data is incorrect");
-		CoCreateGuid((::UUID*)data);
+		CoCreateGuid((::UUID*)newUUID.data);
 #else
 		// TODO
 		static_assert(sizeof(uuid_t) == sizeof(data), "Size of UUID data is incorrect");
 		uuid_t uuid;
 		uuid_generate_random ( uuid );
-
 #endif
+		return newUUID;
 	}
 
-	UUID::UUID(const String& aGUIDString)
+	UUID UUID::FromString(const String& aGUIDString)
 	{
+		UUID newUUID;
 		unsigned char* str = (unsigned char*)aGUIDString.GetCharPointer();
-		UuidFromString(str, (::UUID*)data);
+		UuidFromString(str, (::UUID*)newUUID.data);
+		return newUUID;
 	}
 
-	UUID::~UUID()
+	UUID UUID::Null()
 	{
+		return UUID();
 	}
 
 	String UUID::ToString()

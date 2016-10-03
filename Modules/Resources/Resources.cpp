@@ -2,15 +2,15 @@
 
 namespace Vanguard
 {
-	VANGUARD_DECLARE_MODULE(VanguardSDL)
+	VANGUARD_DECLARE_MODULE(Resources)
 
-	void VanguardSDL::LoadModule()
+	void Resources::LoadModule()
 	{
 		resourceManager = new ResourceManager();
 		Core::GetInstance()->RegisterResourceManager(resourceManager);
 	}
 
-	void VanguardSDL::UnloadModule()
+	void Resources::UnloadModule()
 	{
 		Core::GetInstance()->UnregisterResourceManager();
 		delete resourceManager;

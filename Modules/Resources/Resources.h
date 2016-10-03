@@ -5,7 +5,7 @@
 
 namespace Vanguard
 {
-	class RESOURCES_API VanguardSDL : public IModule
+	class RESOURCES_API Resources : public IModule
 	{
 		ResourceManager* resourceManager;
 

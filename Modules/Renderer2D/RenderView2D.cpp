@@ -56,8 +56,12 @@ namespace Vanguard
 
 		NativeWindow nativeWindow;
 
-#if VANGUARD_WINDOWS
+#if defined(VANGUARD_WINDOWS)
 		nativeWindow.handle = windowInfo.info.win.window;
+#elif defined(VANGUARD_LINUX)
+		nativeWindow.handle = windowInfo.info.x11.window;
+#else
+		#error GetWindowHandle() not implemented on this platform
 #endif
 
 		return nativeWindow;

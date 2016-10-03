@@ -32,7 +32,7 @@ namespace Vanguard
 
 		template<class T> bool Is()
 		{
-			return typeid(T).hash_code() == typeID;
+			return typeid(T).hash_code() == typeId;
 		}
 
 		template<class T> T Get(void* aFromInstance)

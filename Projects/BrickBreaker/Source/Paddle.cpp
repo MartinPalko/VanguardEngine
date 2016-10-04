@@ -36,21 +36,24 @@ namespace BrickBreaker
 		velocity *= Math::Clamp(1.0f - (drag * (float)aFrame->GetDeltaTime().InSeconds()), 0.0f, 1.0f);
 
 		// Move by velocity
-		GetTransform()->position.x += velocity * aFrame->GetDeltaTime().InSeconds();
+		Vector3 newPosition = GetTransform()->GetPosition();
+		newPosition.x += velocity * aFrame->GetDeltaTime().InSeconds();
 
 		const float maxX = (BrickBreakerWorld::PlayAreaSize.x - paddleWidth) / 2;
 		const float minX = -maxX;
 
 		// Detect collision with sides
-		if (GetTransform()->position.x > maxX && velocity > 0)
+		if (newPosition.x > maxX && velocity > 0)
 		{
-			GetTransform()->position.x = maxX;
+			newPosition.x = maxX;
 			velocity *= -bounciness;
 		}
-		else if (GetTransform()->position.x < minX && velocity < 0)
+		else if (newPosition.x < minX && velocity < 0)
 		{
-			GetTransform()->position.x = minX;
+			newPosition.x = minX;
 			velocity *= -bounciness;
 		}
+
+		GetTransform()->SetPosition(newPosition);
 	}
 }

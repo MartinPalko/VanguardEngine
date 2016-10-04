@@ -28,25 +28,27 @@ namespace BrickBreaker
 		const Vector2 maxPos = (BrickBreakerWorld::PlayAreaSize - ballSize) / 2;
 		const Vector2 minPos = -maxPos;
 
-		if (GetTransform()->position.x > maxPos.x)
+		Vector3 position = GetTransform()->GetPosition();
+
+		if (position.x > maxPos.x)
 			direction.x = -1;
-		else if (GetTransform()->position.x < minPos.x)
+		else if (position.x < minPos.x)
 			direction.x = 1;
 
-		if (GetTransform()->position.y > maxPos.y)
+		if (position.y > maxPos.y)
 			direction.y = -1;
-		else if (GetTransform()->position.y < minPos.y)
+		else if (position.y < minPos.y)
 			direction.y = 1;
 
 		Box ballBounds = GetLocalBounds();
-		ballBounds.min += GetTransform()->position;
-		ballBounds.max += GetTransform()->position;
+		ballBounds.min += position;
+		ballBounds.max += position;
 
 		// Collide with paddle
 		Paddle* paddle = GetWorld()->GetInstances<Paddle>()[0];
 		Box paddleBounds = paddle->GetLocalBounds();
-		paddleBounds.min += paddle->GetTransform()->position;
-		paddleBounds.max += paddle->GetTransform()->position;
+		paddleBounds.min += paddle->GetTransform()->GetPosition();
+		paddleBounds.max += paddle->GetTransform()->GetPosition();
 
 		if (ballBounds.Intersects(paddleBounds))
 		{
@@ -63,8 +65,8 @@ namespace BrickBreaker
 				continue;
 
 			Box brickBounds = brick->GetLocalBounds();
-			brickBounds.min += brick->GetTransform()->position;
-			brickBounds.max += brick->GetTransform()->position;
+			brickBounds.min += brick->GetTransform()->GetPosition();
+			brickBounds.max += brick->GetTransform()->GetPosition();
 
 			if (ballBounds.Intersects(brickBounds))
 			{
@@ -86,8 +88,9 @@ namespace BrickBreaker
 		// Move
 		speed += acceleration * aFrame->GetDeltaTime().InSeconds();
 		Vector3 velocity = direction.Normalize() * speed;
-		GetTransform()->position += velocity * aFrame->GetDeltaTime().InSeconds();
+		position += velocity * aFrame->GetDeltaTime().InSeconds();
 
+		GetTransform()->SetPosition(position);
 		previousBallBounds = ballBounds;
 	}
 }

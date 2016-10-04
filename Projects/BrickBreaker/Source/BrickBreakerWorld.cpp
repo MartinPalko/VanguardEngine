@@ -43,13 +43,14 @@ namespace BrickBreaker
 
 		// Spawn the paddle
 		paddle = SpawnEntity<Paddle>();
-		paddle->GetTransform()->position = Vector3(0, -65.0f, 0);
+		paddle->GetTransform()->SetPosition(Vector3(0, -65.0f, 0));
 
 		// Spawn the ball
 		ball = SpawnEntity<Ball>();
-		ball->GetTransform()->position = Vector3(0, paddle->GetTransform()->position.y, 0);
-		ball->GetTransform()->position.y += paddle->GetLocalBounds().GetSize().y / 2;
-		ball->GetTransform()->position.y += ball->GetLocalBounds().GetSize().y / 2;
+		Vector3 ballPosition = Vector3(0, paddle->GetTransform()->GetPosition().y, 0);
+		ballPosition.y += paddle->GetLocalBounds().GetSize().y / 2;
+		ballPosition.y += ball->GetLocalBounds().GetSize().y / 2;
+		ball->GetTransform()->SetPosition(ballPosition);
 
 		// Spawn the bricks
 		const int bricksX = 12;
@@ -71,7 +72,7 @@ namespace BrickBreaker
 			for (int y = 0; y < bricksY; y++)
 			{
 				Brick* newBrick = SpawnEntity<Brick>();
-				newBrick->GetTransform()->position = Vector3((float)x * brickSpacing.x + brickOffset.x, (float)y * brickSpacing.y + brickOffset.y, 0);
+				newBrick->GetTransform()->SetPosition(Vector3((float)x * brickSpacing.x + brickOffset.x, (float)y * brickSpacing.y + brickOffset.y, 0));
 				newBrick->GetComponent<SpriteRenderer>()->SetColor(brickColors[y % (sizeof(brickColors) / sizeof(Color))]);
 			}
 		}

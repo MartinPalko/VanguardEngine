@@ -161,7 +161,7 @@ namespace Vanguard
 				continue;
 
 			const Matrix4x4 projectionMatrix = worldView->viewCamera->GetProjectionMatrix();
-			const Matrix4x4 worldToCamera = Matrix4x4::CreateTranslation(worldView->viewCamera->GetTransform()->position).GetInverse();
+			const Matrix4x4 worldToCamera = Matrix4x4::CreateTranslation(worldView->viewCamera->GetTransform()->GetPosition()).GetInverse();
 
 			RenderJob* renderJob = new RenderJob("Render Job", aFrame,
 			{
@@ -187,7 +187,7 @@ namespace Vanguard
 					RenderItem item = {
 						sprite->GetColor(),
 						sprite->GetDimensions(),
-						sprite->GetEntity()->GetComponent<Transform>()->position,
+						sprite->GetEntity()->GetComponent<Transform>()->GetPosition(),
 						0, // TODO: Support rotation from Transform
 						(SDL_RendererFlip)sprite->GetFlipped(),
 						sdlTexture,

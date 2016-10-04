@@ -35,7 +35,7 @@ namespace Sandbox2D
 		playerCamera = SpawnEntity<Sandbox2DCamera>();
 		playerCamera->SetFov(100);
 		playerCamera->SetOrthographic(true);
-		playerCamera->GetTransform()->position = Vector3(12, 5, 0);
+		playerCamera->GetTransform()->SetPosition(Vector3(12, 5, 0));
 
 		IRenderer* primaryRenderer = core->GetPrimaryRenderer();
 		playerView = core->GetPrimaryRenderer()->CreateRenderView(playerCamera);
@@ -62,7 +62,7 @@ namespace Sandbox2D
 		for (int i = 0; i < sizeof(testSpriteLocations) / sizeof(Vector3); i++)
 		{
 			Actor* testSpriteActor = SpawnEntity<Actor>();
-			testSpriteActor->GetTransform()->position = testSpriteLocations[i];
+			testSpriteActor->GetTransform()->SetPosition(testSpriteLocations[i]);
 			SpriteRenderer* testSprite = testSpriteActor->AddComponent<SpriteRenderer>();
 			testSprite->SetDimensions(Vector2(50, 50));
 			testSprite->SetImage("Sprite.png");

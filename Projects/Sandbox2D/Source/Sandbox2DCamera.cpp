@@ -35,7 +35,7 @@ namespace Sandbox2D
 		}
 
 		// Move by velocity
-		GetTransform()->position += velocity * deltaSeconds * (fov / 100);
+		GetTransform()->Move(velocity * deltaSeconds * (fov / 100));
 		fov -= velocity.z * aFrame->GetDeltaTime().InSeconds() * (fov / 100) * zoomSpeed;
 	}
 }

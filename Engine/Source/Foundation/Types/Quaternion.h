@@ -1,12 +1,12 @@
 #pragma once
 #include "Utility/MathFunctions.h"
 #include "Foundation_Common.h"
+#include "EulerAngles.h"
 
 namespace Vanguard
 {
-	class FOUNDATION_API Quaternion
+	struct FOUNDATION_API Quaternion
 	{
-	public:
 		float x;
 		float y;
 		float z;
@@ -19,12 +19,9 @@ namespace Vanguard
 
 		void Normalize();
 		Quaternion GetNormalized() const;
-		inline bool IsNormalized()
-		{
-			const float acceptableError = 0.001f;
-			const float sum = x*x + y*y + z*z - 1;
-			return (sum > -acceptableError && sum < acceptableError);
-		}
+		bool IsNormalized();
 
+		static Quaternion FromEuler(const EulerAngles& aEuler);
+		EulerAngles ToEuler();
 	};
 }

@@ -32,8 +32,31 @@ namespace Vanguard
 		EXPECT_FALSE(testQuat.IsNormalized());
 		testQuat.Normalize();
 		EXPECT_TRUE(testQuat.IsNormalized());
-
 	}
 
+	TEST_F(QuaternionTest, EulerAngles)
+	{
+		const float tolerance = 0.001f;
+
+		for (int i = 0; i < 1000; i++)
+		{
+			Quaternion testQuat(Math::FRandomRange(-100, 100), Math::FRandomRange(-100, 100), Math::FRandomRange(-100, 100), Math::FRandomRange(-100, 100));
+			testQuat.Normalize();
+
+			EulerAngles euler = testQuat.ToEuler();
+			Quaternion fromEuler = Quaternion::FromEuler(euler);
+			EulerAngles eulerAgain = fromEuler.ToEuler();
+
+			EXPECT_TRUE(Math::AboutEqual(euler.x, eulerAgain.x, tolerance));
+			EXPECT_TRUE(Math::AboutEqual(euler.y, eulerAgain.y, tolerance));
+			EXPECT_TRUE(Math::AboutEqual(euler.z, eulerAgain.z, tolerance));
+
+			// TODO: Fails if all quaternion values are negative to the one they're comparing against (which is actually the same rotation)
+			//EXPECT_TRUE(Math::AboutEqual(testQuat.x, fromEuler.x, tolerance));
+			//EXPECT_TRUE(Math::AboutEqual(testQuat.y, fromEuler.y, tolerance));
+			//EXPECT_TRUE(Math::AboutEqual(testQuat.z, fromEuler.z, tolerance));
+			//EXPECT_TRUE(Math::AboutEqual(testQuat.w, fromEuler.w, tolerance));
+		}
+	}
 
 }

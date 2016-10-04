@@ -130,6 +130,7 @@ namespace Vanguard
 // Declarations
 #define ABSTRACT_BASETYPE_DECLARATION(ClassIdentifier)\
 friend class Type;\
+friend class ClassIdentifier##_propertyRegistrar;\
 protected:\
 	static std::shared_ptr<Type> ClassIdentifier##_Type;\
 public:\

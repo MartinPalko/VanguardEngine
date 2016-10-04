@@ -4,6 +4,7 @@
 #include "Box.h"
 #include "Color.h"
 #include "DynamicLibrary.h"
+#include "EulerAngles.h"
 #include "FilePath.h"
 #include "Quaternion.h"
 #include "Rect.h"

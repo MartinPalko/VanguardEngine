@@ -42,6 +42,12 @@ namespace Vanguard
 		template<class T> T Min(const T& a, const T& b) { return (a < b) ? a : b; }
 		template<class T> T Clamp(const T& a, const T& lower, const T& upper) { return Min(Max(a, lower), upper); }
 
+		template<class T> bool AboutEqual(const T& a, const T& b, const T& tolerance)
+		{
+			const T diff = a - b;
+			return diff >= -tolerance && diff <= tolerance;
+		}
+
 		// Generates a random float between 0 and 1
 		FOUNDATION_API float FRandom();
 		FOUNDATION_API int32 IRandom();

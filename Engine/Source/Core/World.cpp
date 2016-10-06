@@ -50,8 +50,6 @@ namespace Vanguard
 	{
 		ASSERT_MAIN_THREAD;
 
-		DEBUG_LOG("World Event: " + aEvent->GetType()->GetTypeName());
-
 		if (auto objectEvent = Type::SafeCast<WorldObjectEvent>(aEvent))
 		{
 			objectEvent->GetObject()->BroadcastEvent(objectEvent);

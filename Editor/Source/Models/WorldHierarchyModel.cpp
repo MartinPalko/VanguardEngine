@@ -178,7 +178,7 @@ QVariant WorldHierarchyModel::headerData(int section, Qt::Orientation orientatio
 	if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
 	{
 		if (section == 0)
-			return "Type";
+			return "World Hierarchy";
 	}
 
 	return QVariant();

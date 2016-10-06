@@ -88,7 +88,7 @@ namespace Vanguard
 	// Core also provides a singleton for access. The singleton is set on initialization, and cleared on shutdown.
 	class CORE_API Core : public ICore
 	{
-	private:
+	protected:
 		static BooleanConfigVar clearTempDirectoryOnShutdown;
 		static BooleanConfigVar showConsoleOnStart;
 

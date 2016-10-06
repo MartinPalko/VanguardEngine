@@ -75,8 +75,8 @@ namespace Vanguard
 		Entity* SpawnEntity(const String& aEntityType);
 		Entity* SpawnEntity(Type* aRequestedClass);
 
-		DynamicArray<WorldObject*> GetInstances (Type* aType, bool aIncludeInherited = false) const;
-		template <class T> DynamicArray<T*> GetInstances(bool aIncludeInherited = false) const
+		DynamicArray<WorldObject*> GetInstances (Type* aType, bool aIncludeInherited = true) const;
+		template <class T> DynamicArray<T*> GetInstances(bool aIncludeInherited = true) const
 		{
 			// Can't just cast, have to do an actual copy over
 			DynamicArray<WorldObject*> objectArray(GetInstances(Type::GetType<T>(), aIncludeInherited));

@@ -122,7 +122,11 @@ namespace Vanguard
 
 	DynamicArray<WorldObject*> World::GetInstances(Type* aType, bool aIncludeInherited) const
 	{
-		DynamicArray<WorldObject*> found = objectTypemap.at(aType->GetRuntimeHash());
+		DynamicArray<WorldObject*> found;
+
+		auto it = objectTypemap.find(aType->GetRuntimeHash());
+		if (it != objectTypemap.end())
+			found = it->second;
 
 		if (aIncludeInherited)
 		{
@@ -223,10 +227,14 @@ namespace Vanguard
 		aObject->world = this;
 		objects.PushBack(aObject);
 		objectTypemap[aObject->GetType()->GetRuntimeHash()].PushBack(aObject);
+
+		PostEvent(new ObjectAddedEvent(aObject));
 	}
 
 	void World::UnregisterObject(WorldObject* aObject)
 	{
+		ASSERT_MAIN_THREAD;
+
 		objects.Remove(aObject);
 		objectTypemap[aObject->GetType()->GetRuntimeHash()].Remove(aObject);
 
@@ -234,6 +242,8 @@ namespace Vanguard
 		{
 			registeredTicks.Remove(entity);
 		}
+
+		BroadcastEvent(new ObjectRemovedEvent(aObject));
 	}
 
 }

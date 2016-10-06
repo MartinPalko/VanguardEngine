@@ -31,6 +31,32 @@ namespace Vanguard
 		World* GetWorld() { return world; }
 	};
 
+	class ObjectAddedEvent : public WorldEvent
+	{
+		TYPE_DECLARATION(ObjectAddedEvent, WorldEvent);
+		WorldObject* object;
+
+	public:
+		// Need to have default constructor to work with the type system.
+		ObjectAddedEvent() : ObjectAddedEvent(nullptr) {}
+		ObjectAddedEvent(WorldObject* aObject);
+
+		WorldObject* GetObject() { return object; }
+	};
+
+	class ObjectRemovedEvent : public WorldEvent
+	{
+		TYPE_DECLARATION(ObjectRemovedEvent, WorldEvent);
+		WorldObject* object;
+
+	public:
+		// Need to have default constructor to work with the type system.
+		ObjectRemovedEvent() : ObjectRemovedEvent(nullptr) {}
+		ObjectRemovedEvent(WorldObject* aObject);
+
+		WorldObject* GetObject() { return object; }
+	};
+
 	class WorldObjectEvent : public WorldEvent
 	{
 		TYPE_DECLARATION(WorldObjectEvent, WorldEvent);

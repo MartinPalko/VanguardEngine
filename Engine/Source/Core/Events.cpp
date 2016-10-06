@@ -7,6 +7,18 @@ namespace Vanguard
 
 	ABSTRACT_TYPE_DEFINITION(WorldEvent, Event);
 
+	TYPE_DEFINITION(ObjectAddedEvent, WorldEvent);
+
+	ObjectAddedEvent::ObjectAddedEvent(WorldObject* aObject) : WorldEvent(aObject ? aObject->GetWorld() : nullptr)
+		, object(aObject)
+	{}
+
+	TYPE_DEFINITION(ObjectRemovedEvent, WorldEvent);
+
+	ObjectRemovedEvent::ObjectRemovedEvent(WorldObject* aObject) : WorldEvent(aObject ? aObject->GetWorld() : nullptr)
+		, object(aObject)
+	{}
+
 	TYPE_DEFINITION(WorldObjectEvent, WorldEvent);
 
 	WorldObjectEvent::WorldObjectEvent(WorldObject* aObject) : WorldEvent(aObject ? aObject->GetWorld() : nullptr)

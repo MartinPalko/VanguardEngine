@@ -3,13 +3,19 @@
 
 #include <QDockWidget>
 
+class QTreeView;
+
 namespace Vanguard
 {
 	class WorldHierarchy : public QDockWidget
 	{
 		Q_OBJECT;
 
+	private:
+		World* rootWorld;
+		QTreeView* treeView;
+
 	public:
-		WorldHierarchy(QWidget* parent);
+		WorldHierarchy(World* aWorld, QWidget* parent);
 	};
 }

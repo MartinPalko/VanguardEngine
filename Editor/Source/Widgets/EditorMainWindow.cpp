@@ -25,7 +25,7 @@ namespace Vanguard
 		logViewer = new LogViewer(this);
 		addDockWidget(Qt::DockWidgetArea::BottomDockWidgetArea, logViewer);
 
-		worldHierarchy = new WorldHierarchy(this);
+		worldHierarchy = new WorldHierarchy(nullptr, this);
 		addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, worldHierarchy);
 	}
 

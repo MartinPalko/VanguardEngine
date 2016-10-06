@@ -75,4 +75,9 @@ namespace Vanguard
 		return editorWorld;
 	}
 
+	DynamicArray<World*> EditorCore::GetWorlds()
+	{
+		return worlds;
+	}
+
 }

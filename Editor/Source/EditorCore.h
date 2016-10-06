@@ -41,5 +41,7 @@ namespace Vanguard
 		static EditorCore* GetInstance() { return static_cast<EditorCore*>(Core::GetInstance()); }
 
 		World* GetEditorWorld();
+
+		DynamicArray<World*> GetWorlds();
 	};
 }

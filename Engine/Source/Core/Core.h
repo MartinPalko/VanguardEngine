@@ -132,7 +132,7 @@ namespace Vanguard
 		virtual void LoadModule(const char* aModuleName) override;
 
 		void PostEvent(Event* aEvent);
-		void BroadcastEvent(Event* aEvent);
+		virtual void BroadcastEvent(Event* aEvent);
 		void RegisterEventListener(ICoreEventListener* aListener);
 		void UnregisterEventListener(ICoreEventListener* aListener);
 		virtual void ProcessEvents(bool aIncludeNativeEvents);

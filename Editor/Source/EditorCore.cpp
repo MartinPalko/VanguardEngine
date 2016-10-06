@@ -2,6 +2,7 @@
 
 #include "EditorWorld.h"
 #include "Widgets/EditorMainWindow.h"
+#include "EditorEvents.h"
 
 #include <QApplication>
 #include <QMainWindow>
@@ -24,6 +25,11 @@ namespace Vanguard
 		Application::DispatchNativeEvent((NativeEvent)message);
 		return false;
 	}
+
+	EditorCore::EditorCore(QApplication* aQApplication) : Core()
+		, qApplication(aQApplication)
+		, selectedEntity(nullptr)
+	{}
 
 	void EditorCore::Initialize(int aArgC, char** aArgV, const char* aProjectName)
 	{
@@ -62,6 +68,24 @@ namespace Vanguard
 		QApplication::instance()->removeEventFilter(this);
 	}
 
+	void EditorCore::BroadcastEvent(Event* aEvent)
+	{
+		ASSERT_MAIN_THREAD;
+		DEBUG_LOG("Event: " + aEvent->GetType()->GetTypeName());
+
+		if(EditorEvent* editorEvent = Type::SafeCast<EditorEvent>(aEvent))
+		{
+			for (auto listener : editorEventListeners)
+			{
+				listener->OnEditorEvent(editorEvent);
+			}
+		}
+		else
+		{
+			Core::BroadcastEvent(aEvent);
+		}
+	}
+
 	void EditorCore::ProcessEvents(bool aIncludeNativeEvents)
 	{
 		if (aIncludeNativeEvents && qApplication->hasPendingEvents())
@@ -80,4 +104,33 @@ namespace Vanguard
 		return worlds;
 	}
 
+	void EditorCore::RegisterEventListener(IEditorEventListener* aListener)
+	{
+		editorEventListeners.PushBack(aListener);
+	}
+
+	void EditorCore::UnregisterEventListener(IEditorEventListener* aListener)
+	{
+		editorEventListeners.Remove(aListener);
+	}
+
+	void EditorCore::SelectEntity(Entity* aEntity)
+	{
+		if (selectedEntity)
+			ClearSelection();
+
+		selectedEntity = aEntity;
+		PostEvent(new EntitySelectedEvent(selectedEntity));
+	}
+
+	void EditorCore::ClearSelection()
+	{
+		PostEvent(new EntityUnselectedEvent(selectedEntity));
+		selectedEntity = nullptr;
+	}
+
+	Entity* EditorCore::GetSelectedEntity()
+	{
+		return selectedEntity;
+	}
 }

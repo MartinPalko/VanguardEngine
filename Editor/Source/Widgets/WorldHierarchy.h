@@ -2,6 +2,7 @@
 #include "Editor_Common.h"
 
 #include <QDockWidget>
+#include <QItemSelection>
 
 class QTreeView;
 
@@ -17,5 +18,9 @@ namespace Vanguard
 
 	public:
 		WorldHierarchy(World* aWorld, QWidget* parent);
+
+	private:
+		void OnSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+
 	};
 }

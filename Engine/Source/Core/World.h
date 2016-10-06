@@ -32,7 +32,7 @@ namespace Vanguard
 		// Stores all objects in the world, in a contiguous array for fast iteration.
 		DynamicArray<WorldObject*> objects;
 		// Stores all object in world, sorted by type.
-		std::map<size_t, DynamicArray<WorldObject*>> objectTypemap;
+		std::unordered_map<size_t, DynamicArray<WorldObject*>> objectTypemap;
 
 		uint32 nextFrameNumber;
 		Timespan lastTickStartTime;

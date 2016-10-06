@@ -9,6 +9,8 @@ namespace Vanguard
 	TYPE_DEFINITION(Entity, WorldObject)
 
 	Entity::Entity() : WorldObject()
+		, parent(nullptr)
+		, children()
 		, enabled(true)
 		, tickEnabled (false)
 		, tickRegistered (false)

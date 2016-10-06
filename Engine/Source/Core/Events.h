@@ -11,14 +11,14 @@ namespace Vanguard
 	class WorldObject;
 	class World;
 
-	class Event
+	class CORE_API Event
 	{
 		ABSTRACT_BASETYPE_DECLARATION(Event);
 
 		virtual ~Event() {}
 	};
 
-	class WorldEvent : public Event
+	class CORE_API WorldEvent : public Event
 	{
 		ABSTRACT_TYPE_DECLARATION(WorldEvent, Event);
 		World* world;
@@ -31,7 +31,7 @@ namespace Vanguard
 		World* GetWorld() { return world; }
 	};
 
-	class ObjectAddedEvent : public WorldEvent
+	class CORE_API ObjectAddedEvent : public WorldEvent
 	{
 		TYPE_DECLARATION(ObjectAddedEvent, WorldEvent);
 		WorldObject* object;
@@ -44,7 +44,7 @@ namespace Vanguard
 		WorldObject* GetObject() { return object; }
 	};
 
-	class ObjectRemovedEvent : public WorldEvent
+	class CORE_API ObjectRemovedEvent : public WorldEvent
 	{
 		TYPE_DECLARATION(ObjectRemovedEvent, WorldEvent);
 		WorldObject* object;
@@ -57,7 +57,7 @@ namespace Vanguard
 		WorldObject* GetObject() { return object; }
 	};
 
-	class WorldObjectEvent : public WorldEvent
+	class CORE_API WorldObjectEvent : public WorldEvent
 	{
 		TYPE_DECLARATION(WorldObjectEvent, WorldEvent);
 		WorldObject* object;
@@ -73,7 +73,7 @@ namespace Vanguard
 		WorldObject* GetObject() { return object; }
 	};
 
-	class ObjectCreatedEvent : public WorldObjectEvent
+	class CORE_API ObjectCreatedEvent : public WorldObjectEvent
 	{
 		TYPE_DECLARATION(ObjectCreatedEvent, WorldObjectEvent);
 
@@ -81,7 +81,7 @@ namespace Vanguard
 		ObjectCreatedEvent(WorldObject* aObject) : WorldObjectEvent(aObject) {}
 	};
 
-	class ObjectDestroyedEvent : public WorldObjectEvent
+	class CORE_API ObjectDestroyedEvent : public WorldObjectEvent
 	{
 		TYPE_DECLARATION(ObjectDestroyedEvent, WorldObjectEvent);
 
@@ -89,7 +89,7 @@ namespace Vanguard
 		ObjectDestroyedEvent(WorldObject* aObject) : WorldObjectEvent(aObject) {}
 	};
 
-	class ObjectEnabledEvent : public WorldObjectEvent
+	class CORE_API ObjectEnabledEvent : public WorldObjectEvent
 	{
 		TYPE_DECLARATION(ObjectEnabledEvent, WorldObjectEvent);
 
@@ -97,7 +97,7 @@ namespace Vanguard
 		ObjectEnabledEvent(WorldObject* aObject) : WorldObjectEvent(aObject) {}
 	};
 
-	class ObjectDisabledEvent : public WorldObjectEvent
+	class CORE_API ObjectDisabledEvent : public WorldObjectEvent
 	{
 		TYPE_DECLARATION(ObjectDisabledEvent, WorldObjectEvent);
 

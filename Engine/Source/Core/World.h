@@ -79,7 +79,7 @@ namespace Vanguard
 		template <class T> DynamicArray<T*> GetInstances(bool aIncludeInherited = false) const
 		{
 			// Can't just cast, have to do an actual copy over
-			DynamicArray<WorldObject*> objectArray(GetInstances(Type::GetType<T>()));
+			DynamicArray<WorldObject*> objectArray(GetInstances(Type::GetType<T>(), aIncludeInherited));
 			DynamicArray<T*> returnArray(objectArray.Count());
 			for (int i = 0; i < objectArray.Count(); i++)
 			{

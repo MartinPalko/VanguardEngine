@@ -29,8 +29,10 @@ namespace Vanguard
 		{
 			EditorCore::GetInstance()->ClearSelection();
 		}
-
-		Entity* selectedEntity = static_cast<Entity*>(current.internalPointer());
-		EditorCore::GetInstance()->SelectEntity(selectedEntity);
+		else
+		{
+			Entity* selectedEntity = static_cast<Entity*>(current.internalPointer());
+			EditorCore::GetInstance()->SelectEntity(selectedEntity);
+		}
 	}
 }

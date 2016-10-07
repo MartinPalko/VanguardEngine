@@ -18,6 +18,9 @@ namespace Vanguard
 		TYPE_DECLARATION(Entity, WorldObject)
 
 	private:
+		UUID uuid;
+		String name;
+
 		DynamicArray<Component*> components;
 		std::map<size_t, Component*> componentTypeMap;
 
@@ -38,6 +41,11 @@ namespace Vanguard
 		// Implement IWorldObjectEventListener
 		virtual void OnWorldObjectEvent(WorldObjectEvent* aEvent) override;
 
+		UUID GetUUID() { return uuid; }
+
+		String GetName() { return name; }
+		void SetName(String aName) { name = aName; }
+
 		inline size_t GetNumComponents() { return components.Count(); }
 		inline Component* GetComponent(size_t aIndex) { return components[aIndex]; }
 		
@@ -56,8 +64,9 @@ namespace Vanguard
 		template<class T> T* AddComponent() { return (T*)AddComponent(Type::GetType<T>()); }
 		virtual void ComponentAdded(Component* aComponent) {}
 
-		void Enable() { enabled = true; }
-		void Disable() { enabled = false; }
+		void SetEnabled(bool aEnabled) { enabled = aEnabled; }
+		void Enable() { SetEnabled(true); }
+		void Disable() { SetEnabled(false); }
 		bool Enabled() { return enabled; }
 
 		void EnableTick();

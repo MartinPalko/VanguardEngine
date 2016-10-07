@@ -9,6 +9,8 @@ namespace Vanguard
 	TYPE_DEFINITION(Entity, WorldObject)
 
 	Entity::Entity() : WorldObject()
+		, uuid()
+		, name()
 		, parent(nullptr)
 		, children()
 		, enabled(true)

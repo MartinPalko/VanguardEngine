@@ -1,5 +1,6 @@
 #pragma once
 #include "Core.h"
+#include "Conversions.h"
 
 #ifdef Renderer2D_EXPORTS
 #define EDITOR_API API_EXPORT

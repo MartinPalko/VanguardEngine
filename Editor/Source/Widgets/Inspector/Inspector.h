@@ -8,6 +8,7 @@ class QScrollArea;
 class QLineEdit;
 class QCheckBox;
 class QVBoxLayout;
+class QTimer;
 
 namespace Vanguard
 {
@@ -21,16 +22,20 @@ namespace Vanguard
 		QScrollArea* scrollArea;
 		QWidget* mainWidget;
 		QVBoxLayout* mainLayout;
+		QTimer* updateTimer;
 
 		EntityInspectorWidget* entityInspector;
 		DynamicArray<ComponentInspectorWidget*> componentInspectors;
 
 		// Implement IEditorEventListener
 		virtual void OnEditorEvent(EditorEvent* aEvent) override;
+
 	public:
 		Inspector(QWidget* parent);
 		~Inspector();
 		
+	public slots:
 		void SetEntity(Entity* aEntity);
+		virtual void Update();
 	};
 }

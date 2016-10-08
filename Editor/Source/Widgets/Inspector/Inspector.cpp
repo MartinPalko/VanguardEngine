@@ -8,6 +8,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QLayout>
+#include <QTimer>
 
 namespace Vanguard
 {
@@ -29,19 +30,24 @@ namespace Vanguard
 		, mainWidget(nullptr)
 		, mainLayout(nullptr)
 	{
-		setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
+		//setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
 
 		EditorCore::GetInstance()->RegisterEventListener(this);
 
 		scrollArea = new QScrollArea(this);
 		scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-		scrollArea->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
+		//scrollArea->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
+		scrollArea->setWidgetResizable(true);
 		setWidget(scrollArea);
 
 		mainWidget = new QWidget(scrollArea);
 		scrollArea->setWidget(mainWidget);
 		
+		updateTimer = new QTimer(this);
+		updateTimer->setInterval(200); // How often the inspector updates values
+		connect(updateTimer, &QTimer::timeout, this, &Inspector::Update);
+		updateTimer->start();
 	}
 
 	Inspector::~Inspector()
@@ -58,6 +64,7 @@ namespace Vanguard
 			mainWidget = nullptr;
 		}
 		componentInspectors.Clear();
+		entityInspector = nullptr;
 
 		if (aEntity)
 		{
@@ -82,5 +89,18 @@ namespace Vanguard
 		}
 
 		scrollArea->updateGeometry();
+	}
+
+	void Inspector::Update()
+	{
+		if (entityInspector)
+		{
+			entityInspector->UpdatePropertyWidgets();
+		}
+
+		for (ComponentInspectorWidget* componentInspector : componentInspectors)
+		{
+			componentInspector->UpdatePropertyWidgets();
+		}
 	}
 }

@@ -6,6 +6,7 @@
 #include <QAbstractNativeEventFilter>
 
 class QApplication;
+struct IPropertyWidgetFactory;
 
 namespace Vanguard
 {
@@ -33,6 +34,7 @@ namespace Vanguard
 		EditorWorld* editorWorld;
 		DynamicArray<IEditorEventListener*> editorEventListeners;
 		Entity* selectedEntity;
+		DynamicArray<IPropertyWidgetFactory*> propertyWidgetFactories;
 
 	public:
 		EditorCore(QApplication* aQApplication);
@@ -57,5 +59,9 @@ namespace Vanguard
 		void SelectEntity(Entity* aEntity);
 		void ClearSelection();
 		Entity* GetSelectedEntity();
+
+		void RegisterPropertyWidgetFactory(IPropertyWidgetFactory* aFactory);
+		void UnregisterPropertyWidgetFactory(IPropertyWidgetFactory* aFactory);
+		DynamicArray<IPropertyWidgetFactory*> GetPropertyWidgetFactories();
 	};
 }

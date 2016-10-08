@@ -2,7 +2,14 @@
 
 #include "EditorWorld.h"
 #include "Widgets/EditorMainWindow.h"
+#include "Widgets/PropertyWidgets/IPropertyWidget.h"
+#include "Widgets/PropertyWidgets/BoolWidget.h"
+#include "Widgets/PropertyWidgets/FloatWidget.h"
+#include "Widgets/PropertyWidgets/IntWidget.h"
+#include "Widgets/PropertyWidgets/QuaternionWidget.h"
+#include "Widgets/PropertyWidgets/Vector3Widget.h"
 #include "EditorEvents.h"
+
 
 #include <QApplication>
 #include <QMainWindow>
@@ -33,6 +40,13 @@ namespace Vanguard
 
 	void EditorCore::Initialize(int aArgC, char** aArgV, const char* aProjectName)
 	{
+		// Register built-in property widgets
+		RegisterPropertyWidgetFactory(new BoolWidgetFactory());
+		RegisterPropertyWidgetFactory(new FloatWidgetFactory());
+		//RegisterPropertyWidgetFactory(new IntWidgetFactory());
+		//RegisterPropertyWidgetFactory(new QuaternionWidgetFactory());
+		RegisterPropertyWidgetFactory(new Vector3WidgetFactory());
+
 		Core::Initialize(aArgC, aArgV, aProjectName);
 
 		editorWorld = new EditorWorld();
@@ -132,5 +146,20 @@ namespace Vanguard
 	Entity* EditorCore::GetSelectedEntity()
 	{
 		return selectedEntity;
+	}
+
+	void EditorCore::RegisterPropertyWidgetFactory(IPropertyWidgetFactory* aFactory)
+	{
+		propertyWidgetFactories.PushBack(aFactory);
+	}
+
+	void EditorCore::UnregisterPropertyWidgetFactory(IPropertyWidgetFactory* aFactory)
+	{
+		propertyWidgetFactories.Remove(aFactory);
+	}
+
+	DynamicArray<IPropertyWidgetFactory*> EditorCore::GetPropertyWidgetFactories()
+	{
+		return propertyWidgetFactories;
 	}
 }

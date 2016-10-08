@@ -162,7 +162,7 @@ QVariant WorldHierarchyModel::data(const QModelIndex &index, int role) const
 
 	Vanguard::Entity *item = static_cast<Vanguard::Entity*>(index.internalPointer());
 
-	return item->GetType()->GetTypeName().GetCharPointer();
+	return ToQString(item->GetName());
 }
 
 Qt::ItemFlags WorldHierarchyModel::flags(const QModelIndex &index) const

@@ -8,11 +8,19 @@ namespace BrickBreaker
 {
 	TYPE_DEFINITION(Ball, Actor)
 
+	START_REGISTER_PROPERTIES(Ball);
+	{
+		REGISTER_PROPERTY(Ball, speed);
+		REGISTER_PROPERTY(Ball, acceleration);
+		REGISTER_PROPERTY(Ball, direction);
+	}
+	FINISH_REGISTER_PROPERTIES(Ball);
+
 	Ball::Ball() : Actor()
-		, ballSize(1.f, 1.f)
+		, ballSize(1.0f, 1.0f)
 		, speed(40)
 		, acceleration(1)
-		, direction(Vector3(1,1,0))
+		, direction(Vector3(1.0f ,1.0f ,0.0f))
 		, previousBallBounds(Vector3(0.0f, 0.0f, 0.0f))
 	{
 		SpriteRenderer* spriteComponent = AddComponent<SpriteRenderer>();

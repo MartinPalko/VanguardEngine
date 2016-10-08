@@ -4,6 +4,15 @@ namespace Vanguard
 {
 	TYPE_DEFINITION(Camera, Actor);
 	
+	START_REGISTER_PROPERTIES(Camera);
+	{
+		REGISTER_PROPERTY(Camera, fov);
+		REGISTER_PROPERTY(Camera, orthographic);
+		REGISTER_PROPERTY(Camera, zNear);
+		REGISTER_PROPERTY(Camera, zFar);
+	}
+	FINISH_REGISTER_PROPERTIES(Camera);
+
 	Camera::Camera() : Actor()
 		, fov (60.0f)
 		, orthographic(false)

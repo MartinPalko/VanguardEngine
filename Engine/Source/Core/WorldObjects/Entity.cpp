@@ -8,6 +8,13 @@ namespace Vanguard
 {
 	TYPE_DEFINITION(Entity, WorldObject)
 
+	START_REGISTER_PROPERTIES(Entity);
+	{
+		REGISTER_PROPERTY(Entity, uuid);
+		REGISTER_PROPERTY(Entity, enabled);
+	}
+	FINISH_REGISTER_PROPERTIES(Entity);
+
 	Entity::Entity() : WorldObject()
 		, uuid()
 		, name()

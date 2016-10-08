@@ -82,14 +82,8 @@ namespace Vanguard
 		Type* GetBaseClass() const { return baseClass; }
 		DynamicArray<Type*> GetDerivedClasses() const;
 
-		Property* GetProperty(StringID aName) const 
-		{
-			if (properties.count(aName))
-			{
-				return properties.at(aName);
-			}
-			return nullptr;
-		}
+		Property* GetProperty(StringID aName) const;
+		DynamicArray<Property*> GetProperties() const;
 
 		static DynamicArray<Type*> GetAllTypes();
 		static DynamicArray<Type*> GetAllBaseTypes();

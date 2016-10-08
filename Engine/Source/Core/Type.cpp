@@ -70,6 +70,32 @@ namespace Vanguard
 		return derivedClasses;
 	}
 
+	Property* Type::GetProperty(StringID aName) const
+	{
+		if (properties.count(aName))
+		{
+			return properties.at(aName);
+		}
+		return nullptr;
+	}
+
+	DynamicArray<Property*> Type::GetProperties() const
+	{
+		DynamicArray<Property*> returnArray(properties.size());
+
+		if (baseClass)
+		{
+			returnArray.Concatenate(baseClass->GetProperties());
+		}
+
+		for (auto i : properties)
+		{
+			returnArray.PushBack(i.second);
+		}
+
+		return returnArray;
+	}
+
 	DynamicArray<Type*> Type::GetAllTypes()
 	{
 		DynamicArray<Type*> returnArray(GetClassinfoNameMap().size());

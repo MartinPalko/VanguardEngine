@@ -64,7 +64,7 @@ namespace Vanguard
 		template<class T> T* AddComponent() { return (T*)AddComponent(Type::GetType<T>()); }
 		virtual void ComponentAdded(Component* aComponent) {}
 
-		void SetEnabled(bool aEnabled) { enabled = aEnabled; }
+		void SetEnabled(bool aEnabled);
 		void Enable() { SetEnabled(true); }
 		void Disable() { SetEnabled(false); }
 		bool Enabled() { return enabled; }

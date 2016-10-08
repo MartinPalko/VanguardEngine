@@ -88,6 +88,25 @@ namespace Vanguard
 		return newComponent;
 	}
 
+	void Entity::SetEnabled(bool aEnabled)
+	{
+		if (aEnabled != enabled && tickEnabled && GetWorld())
+		{
+			if (aEnabled && !tickRegistered)
+			{
+				GetWorld()->RegisterTick(this);
+				tickRegistered = true;
+			}
+			else if (!aEnabled && tickRegistered)
+			{
+				GetWorld()->UnregisterTick(this);
+				tickRegistered = false;
+			}
+
+			enabled = aEnabled;
+		}
+	}
+
 	void Entity::EnableTick()
 	{
 		if (!tickRegistered)

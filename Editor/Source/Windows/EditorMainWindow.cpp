@@ -2,7 +2,7 @@
 
 #include "EditorCore.h"
 #include "ClassBrowser.h"
-#include "Inspector/Inspector.h"
+#include "Inspector.h"
 #include "LogViewer.h"
 #include "Viewport.h"
 #include "WorldHierarchy.h"

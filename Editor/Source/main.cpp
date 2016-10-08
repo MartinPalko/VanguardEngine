@@ -2,7 +2,7 @@
 #include "EditorCore.h"
 #include "EditorDirectories.h"
 
-#include "Widgets/ProjectSelector.h"
+#include "Windows/ProjectSelector.h"
 
 #include <QApplication>
 #include <QFile>

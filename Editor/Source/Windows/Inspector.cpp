@@ -1,7 +1,7 @@
 #include "Inspector.h"
 #include "EditorEvents.h"
-#include "EntityInspectorWidget.h"
-#include "ComponentInspectorWidget.h"
+#include "Widgets/Inspector/EntityInspectorWidget.h"
+#include "Widgets/Inspector/ComponentInspectorWidget.h"
 
 #include <QScrollArea>
 #include <QLabel>

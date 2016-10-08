@@ -1,7 +1,7 @@
 #include "EditorCore.h"
 
 #include "EditorWorld.h"
-#include "Widgets/EditorMainWindow.h"
+#include "Windows/EditorMainWindow.h"
 #include "Widgets/PropertyWidgets/IPropertyWidget.h"
 #include "Widgets/PropertyWidgets/BoolWidget.h"
 #include "Widgets/PropertyWidgets/FloatWidget.h"

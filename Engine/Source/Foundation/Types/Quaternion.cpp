@@ -2,6 +2,17 @@
 
 namespace Vanguard
 {
+	bool Quaternion::operator==(const Quaternion& aOther)
+	{
+		return (x == aOther.x && y == aOther.y && z == aOther.z && w == aOther.w) ||
+			(x == -aOther.x && y == -aOther.y && z == -aOther.z && w == -aOther.w);
+	}
+
+	bool Quaternion::operator!=(const Quaternion& aOther)
+	{
+		return !operator==(aOther);
+	}
+
 	void Quaternion::Normalize()
 	{
 		const float n = Math::FSqrt(x * x + y * y + z * z + w * w);

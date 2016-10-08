@@ -17,11 +17,15 @@ namespace Vanguard
 
 		Quaternion() : Quaternion(0, 0, 0, 0) {}
 
+		bool operator==(const Quaternion& aOther);
+		bool operator!=(const Quaternion& aOther);
+
 		void Normalize();
 		Quaternion GetNormalized() const;
 		bool IsNormalized();
 
 		static Quaternion FromEuler(const EulerAngles& aEuler);
+		static Quaternion FromEuler(float aX, float aY, float aZ) { return FromEuler(EulerAngles(aX, aY, aZ)); }
 		EulerAngles ToEuler();
 	};
 }

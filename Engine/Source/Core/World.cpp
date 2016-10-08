@@ -94,6 +94,8 @@ namespace Vanguard
 		}
 
 		Entity* newEntity = static_cast<Entity*>(aRequestedClass->CreateInstance());
+		newEntity->SetName(aRequestedClass->GetTypeName());
+		newEntity->uuid = UUID::CreateNew();
 		
 		// Register
 		RegisterObject(newEntity);
@@ -174,7 +176,7 @@ namespace Vanguard
 		Core::GetInstance()->GetPrimaryRenderer()->StartRenderJob(aFrame);
 
 		// Dispatch all ticks to the job system.
-		FrameJob** jobs = new FrameJob*[registeredTicks.Count()];		
+		FrameJob** jobs = new FrameJob*[registeredTicks.Count()];
 		for (size_t i = 0; i < registeredTicks.Count(); i++)
 		{
 			jobs[i] = new TickJob(registeredTicks[i]->GetType()->GetTypeName(), aFrame, registeredTicks[i]);

@@ -3,17 +3,12 @@
 #include "Editor_Common.h"
 #include "IPropertyWidget.h"
 
-#include "Editor_Common.h"
-#include "IPropertyWidget.h"
-
 #include <QWidget>
 
 class QDoubleSpinBox;
 
 class FloatWidget : public QWidget, public IPropertyWidget
 {
-	friend class Vector3WidgetFactory;
-
 	Q_OBJECT;
 
 	void* instance;

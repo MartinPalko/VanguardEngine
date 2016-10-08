@@ -1,19 +1,33 @@
 #include "Utility.h"
 
+#include "Platforms/Platform.h"
+
 #include <limits>
 
-
-float Vanguard::LowestFloat()
+namespace Vanguard
 {
-	return std::numeric_limits<float>::lowest();
-}
+	int32 MinInt32()
+	{
+		return std::numeric_limits<int32>::lowest();
+	}
 
-float Vanguard::MinFloat()
-{
-	return std::numeric_limits<float>::min();
-}
+	int32 MaxInt32()
+	{
+		return std::numeric_limits<int32>::max();
+	}
 
-float Vanguard::MaxFloat()
-{
-	return std::numeric_limits<float>::max();
+	float MinFloat()
+	{
+		return std::numeric_limits<float>::lowest();
+	}
+
+	float SmallestFloat()
+	{
+		return std::numeric_limits<float>::min();
+	}
+
+	float MaxFloat()
+	{
+		return std::numeric_limits<float>::max();
+	}
 }

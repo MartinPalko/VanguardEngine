@@ -16,11 +16,11 @@ namespace Vanguard
 	{
 		Q_OBJECT;
 
-	public:
-		ObjectInspectorWidget(QWidget* aParent);
 	protected:
 		DynamicArray<IPropertyWidget*> propertyWidgets;
-		
+
+	public:
+		ObjectInspectorWidget(QWidget* aParent);
 		void CreatePropertyWidgets(WorldObject* aObject, DynamicArray<Vanguard::String> aIgnoreProperties = DynamicArray<Vanguard::String>());
 		void UpdatePropertyWidgets();
 	};

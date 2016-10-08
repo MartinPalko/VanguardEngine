@@ -48,6 +48,7 @@ namespace Vanguard
 			}
 		}
 
+		updateGeometry();
 		UpdatePropertyWidgets();
 	}
 

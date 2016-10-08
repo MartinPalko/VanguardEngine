@@ -11,7 +11,7 @@ FloatWidget::FloatWidget(void* aInstance, Vanguard::Property* aProperty)
 	setLayout(new QHBoxLayout());
 
 	spinBox = new QDoubleSpinBox(this);
-	spinBox->setRange(Vanguard::LowestFloat(), Vanguard::MaxFloat());
+	spinBox->setRange(Vanguard::MinFloat(), Vanguard::MaxFloat());
 	connect(spinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &FloatWidget::OnSpinBoxChanged);
 	layout()->addWidget(spinBox);
 }
@@ -23,9 +23,11 @@ QWidget* FloatWidget::GetWidget()
 
 void FloatWidget::Update()
 {
-	float propertyValue = property->Get<float>(instance);
-
-	spinBox->setValue(propertyValue);
+	if (!spinBox->hasFocus())
+	{
+		float propertyValue = property->Get<float>(instance);
+		spinBox->setValue(propertyValue);
+	}
 }
 
 void FloatWidget::OnSpinBoxChanged(double aNewValue)

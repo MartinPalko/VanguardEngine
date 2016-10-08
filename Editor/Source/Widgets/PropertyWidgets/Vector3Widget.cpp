@@ -10,18 +10,23 @@ Vector3Widget::Vector3Widget(void* aInstance, Vanguard::Property* aProperty)
 	setLayout(new QHBoxLayout());
 
 	xSpinBox = new QDoubleSpinBox(this);
-	xSpinBox->setRange(Vanguard::LowestFloat(), Vanguard::MaxFloat());
-	connect(xSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &Vector3Widget::OnSpinBoxChanged);
+	xSpinBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);	
+	xSpinBox->setRange(Vanguard::MinFloat(), Vanguard::MaxFloat());
+	connect(xSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &Vector3Widget::OnXSpinBoxChanged);
 	layout()->addWidget(xSpinBox);
 
 	ySpinBox = new QDoubleSpinBox(this);
-	ySpinBox->setRange(Vanguard::LowestFloat(), Vanguard::MaxFloat());
-	connect(ySpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &Vector3Widget::OnSpinBoxChanged);
+	ySpinBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	ySpinBox->setRange(Vanguard::MinFloat(), Vanguard::MaxFloat());
+	ySpinBox->setMinimumWidth(20);
+	connect(ySpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &Vector3Widget::OnYSpinBoxChanged);
 	layout()->addWidget(ySpinBox);
 
 	zSpinBox = new QDoubleSpinBox(this);
-	zSpinBox->setRange(Vanguard::LowestFloat(), Vanguard::MaxFloat());
-	connect(zSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &Vector3Widget::OnSpinBoxChanged);
+	zSpinBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	zSpinBox->setRange(Vanguard::MinFloat(), Vanguard::MaxFloat());
+	zSpinBox->setMinimumWidth(20);
+	connect(zSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &Vector3Widget::OnZSpinBoxChanged);
 	layout()->addWidget(zSpinBox);
 }
 
@@ -34,19 +39,46 @@ void Vector3Widget::Update()
 {
 	Vanguard::Vector3 propertyValue = property->Get<Vanguard::Vector3>(instance);
 
-	xSpinBox->setValue(propertyValue.x);
-	ySpinBox->setValue(propertyValue.y);
-	zSpinBox->setValue(propertyValue.z);
+	if (!xSpinBox->hasFocus())
+		xSpinBox->setValue(propertyValue.x);
+
+	if (!ySpinBox->hasFocus())
+		ySpinBox->setValue(propertyValue.y);
+
+	if (!zSpinBox->hasFocus())
+		zSpinBox->setValue(propertyValue.z);
 }
 
-void Vector3Widget::OnSpinBoxChanged(double d)
+void Vector3Widget::OnXSpinBoxChanged(double aNewValue)
 {
-	Vanguard::Vector3 spinBoxValues = Vanguard::Vector3(xSpinBox->value(), ySpinBox->value(), zSpinBox->value());
+	Vanguard::Vector3 propertyValue = property->Get<Vanguard::Vector3>(instance);
+	
+	if (aNewValue != propertyValue.x)
+	{
+		propertyValue.x = aNewValue;
+		property->Set<Vanguard::Vector3>(propertyValue, instance);
+	}
+}
+
+void Vector3Widget::OnYSpinBoxChanged(double aNewValue)
+{
 	Vanguard::Vector3 propertyValue = property->Get<Vanguard::Vector3>(instance);
 
-	if (spinBoxValues != propertyValue)
+	if (aNewValue != propertyValue.y)
 	{
-		property->Set<Vanguard::Vector3>(spinBoxValues, instance);
+		propertyValue.y = aNewValue;
+		property->Set<Vanguard::Vector3>(propertyValue, instance);
+	}
+}
+
+void Vector3Widget::OnZSpinBoxChanged(double aNewValue)
+{
+	Vanguard::Vector3 propertyValue = property->Get<Vanguard::Vector3>(instance);
+
+	if (aNewValue != propertyValue.z)
+	{
+		propertyValue.z = aNewValue;
+		property->Set<Vanguard::Vector3>(propertyValue, instance);
 	}
 }
 

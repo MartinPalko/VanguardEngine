@@ -9,8 +9,6 @@ class QCheckBox;
 
 class BoolWidget : public QWidget, public IPropertyWidget
 {
-	friend class Vector3WidgetFactory;
-
 	Q_OBJECT;
 
 	void* instance;

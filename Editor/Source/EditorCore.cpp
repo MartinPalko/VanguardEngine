@@ -43,8 +43,8 @@ namespace Vanguard
 		// Register built-in property widgets
 		RegisterPropertyWidgetFactory(new BoolWidgetFactory());
 		RegisterPropertyWidgetFactory(new FloatWidgetFactory());
-		//RegisterPropertyWidgetFactory(new IntWidgetFactory());
-		//RegisterPropertyWidgetFactory(new QuaternionWidgetFactory());
+		RegisterPropertyWidgetFactory(new IntWidgetFactory());
+		RegisterPropertyWidgetFactory(new QuaternionWidgetFactory());
 		RegisterPropertyWidgetFactory(new Vector3WidgetFactory());
 
 		Core::Initialize(aArgC, aArgV, aProjectName);

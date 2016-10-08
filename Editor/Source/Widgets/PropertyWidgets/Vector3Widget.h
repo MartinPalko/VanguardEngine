@@ -9,7 +9,6 @@ class QDoubleSpinBox;
 
 class Vector3Widget : public QWidget, public IPropertyWidget
 {
-	friend class Vector3WidgetFactory;
 
 	Q_OBJECT;
 
@@ -28,7 +27,9 @@ public:
 	virtual void Update() override;
 
 private slots:
-	void OnSpinBoxChanged(double d);
+	void OnXSpinBoxChanged(double aNewValue);
+	void OnYSpinBoxChanged(double aNewValue);
+	void OnZSpinBoxChanged(double aNewValue);
 };
 
 class Vector3WidgetFactory : public IPropertyWidgetFactory

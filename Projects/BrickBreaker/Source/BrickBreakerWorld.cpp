@@ -127,7 +127,7 @@ namespace BrickBreaker
 		if (inputMap->GetBool(eGameButton::Right))
 			input += 1;
 
-		//if (!ball->TickEnabled() && input)
+		if (!ball->TickEnabled() && input)
 		{
 			ball->EnableTick();
 		}

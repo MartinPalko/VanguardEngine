@@ -10,4 +10,8 @@ namespace Vanguard
 	{
 		return (char*)&((T*)nullptr->*member) - (char*)nullptr;
 	}
+
+	FOUNDATION_API float LowestFloat();
+	FOUNDATION_API float MinFloat();
+	FOUNDATION_API float MaxFloat();
 }

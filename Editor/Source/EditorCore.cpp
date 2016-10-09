@@ -85,7 +85,6 @@ namespace Vanguard
 	void EditorCore::BroadcastEvent(Event* aEvent)
 	{
 		ASSERT_MAIN_THREAD;
-		DEBUG_LOG("Event: " + aEvent->GetType()->GetTypeName());
 
 		if(EditorEvent* editorEvent = Type::SafeCast<EditorEvent>(aEvent))
 		{

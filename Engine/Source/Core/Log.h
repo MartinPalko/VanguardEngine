@@ -120,7 +120,7 @@ namespace Vanguard
 	#define LOG_MESSAGE(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Message, channel);}
 	#define LOG_WARNING(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Warning, channel);}
 	#define LOG_ERROR(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Error, channel);}
-	#define LOG_EXCEPTION(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Exception, channel); throw Vanguard::Exception(String(message).GetCharPointer());}
+	#define LOG_EXCEPTION(message, channel) {Vanguard::Log::Write(message, Vanguard::LogEntryErrorLevel::Exception, channel); throw Vanguard::Exception(Vanguard::String(message).GetCharPointer());}
 #else
 	#define LOG_MESSAGE(message, channel)
 	#define LOG_WARNING(message, channel)

@@ -1,7 +1,23 @@
 #include "Vector3Widget.h"
 
 #include <QHBoxLayout>
-#include <QDoubleSpinBox>
+
+Vector3SpinBox::Vector3SpinBox(QWidget* aParent) : QDoubleSpinBox(aParent)
+{
+	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	setRange(Vanguard::MinFloat(), Vanguard::MaxFloat());
+}
+
+QString Vector3SpinBox::textFromValue(double value) const
+{
+	// Returning short strings here stops min and max values making the spinboxes way too wide.
+	if (value == Vanguard::MinFloat())
+		return "Min";
+	else if (value == Vanguard::MaxFloat())
+		return "Max";
+	else
+		return QDoubleSpinBox::textFromValue(value);
+}
 
 Vector3Widget::Vector3Widget(void* aInstance, Vanguard::Property* aProperty)
 	: instance (aInstance)
@@ -9,23 +25,15 @@ Vector3Widget::Vector3Widget(void* aInstance, Vanguard::Property* aProperty)
 {
 	setLayout(new QHBoxLayout());
 
-	xSpinBox = new QDoubleSpinBox(this);
-	xSpinBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);	
-	xSpinBox->setRange(Vanguard::MinFloat(), Vanguard::MaxFloat());
+	xSpinBox = new Vector3SpinBox(this);
 	connect(xSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &Vector3Widget::OnXSpinBoxChanged);
 	layout()->addWidget(xSpinBox);
 
-	ySpinBox = new QDoubleSpinBox(this);
-	ySpinBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	ySpinBox->setRange(Vanguard::MinFloat(), Vanguard::MaxFloat());
-	ySpinBox->setMinimumWidth(20);
+	ySpinBox = new Vector3SpinBox(this);
 	connect(ySpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &Vector3Widget::OnYSpinBoxChanged);
 	layout()->addWidget(ySpinBox);
 
-	zSpinBox = new QDoubleSpinBox(this);
-	zSpinBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	zSpinBox->setRange(Vanguard::MinFloat(), Vanguard::MaxFloat());
-	zSpinBox->setMinimumWidth(20);
+	zSpinBox = new Vector3SpinBox(this);
 	connect(zSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &Vector3Widget::OnZSpinBoxChanged);
 	layout()->addWidget(zSpinBox);
 }

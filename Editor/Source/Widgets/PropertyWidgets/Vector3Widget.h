@@ -5,7 +5,17 @@
 
 #include <QWidget>
 
-class QDoubleSpinBox;
+#include <QWidget>
+#include <QDoubleSpinBox>
+
+class Vector3SpinBox : public QDoubleSpinBox
+{
+	Q_OBJECT;
+
+public:
+	Vector3SpinBox(QWidget* aParent);
+	virtual QString textFromValue(double value) const override;
+};
 
 class Vector3Widget : public QWidget, public IPropertyWidget
 {
@@ -15,9 +25,9 @@ class Vector3Widget : public QWidget, public IPropertyWidget
 	void* instance;
 	Vanguard::Property* property;
 
-	QDoubleSpinBox* xSpinBox;
-	QDoubleSpinBox* ySpinBox;
-	QDoubleSpinBox* zSpinBox;
+	Vector3SpinBox* xSpinBox;
+	Vector3SpinBox* ySpinBox;
+	Vector3SpinBox* zSpinBox;
 
 public:
 	Vector3Widget(void* aInstance, Vanguard::Property* aProperty);

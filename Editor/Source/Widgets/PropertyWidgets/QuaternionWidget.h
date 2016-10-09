@@ -4,8 +4,16 @@
 #include "IPropertyWidget.h"
 
 #include <QWidget>
+#include <QDoubleSpinBox>
 
-class QDoubleSpinBox;
+class QuaternionSpinBox : public QDoubleSpinBox
+{
+	Q_OBJECT;
+
+public:
+	QuaternionSpinBox(QWidget* aParent);
+	virtual QString textFromValue(double value) const override;
+};
 
 class QuaternionWidget : public QWidget, public IPropertyWidget
 {
@@ -14,9 +22,9 @@ class QuaternionWidget : public QWidget, public IPropertyWidget
 	void* instance;
 	Vanguard::Property* property;
 
-	QDoubleSpinBox* xSpinBox;
-	QDoubleSpinBox* ySpinBox;
-	QDoubleSpinBox* zSpinBox;
+	QuaternionSpinBox* xSpinBox;
+	QuaternionSpinBox* ySpinBox;
+	QuaternionSpinBox* zSpinBox;
 
 public:
 	QuaternionWidget(void* aInstance, Vanguard::Property* aProperty);

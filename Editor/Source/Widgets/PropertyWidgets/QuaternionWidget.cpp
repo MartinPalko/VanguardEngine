@@ -1,10 +1,24 @@
 #include "QuaternionWidget.h"
 
-#include "Editor_Common.h"
-#include "IPropertyWidget.h"
-
 #include <QHBoxLayout>
-#include <QDoubleSpinBox>
+
+
+QuaternionSpinBox::QuaternionSpinBox(QWidget* aParent) : QDoubleSpinBox(aParent)
+{
+	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	setRange(Vanguard::MinFloat(), Vanguard::MaxFloat());
+}
+
+QString QuaternionSpinBox::textFromValue(double value) const
+{
+	// Returning short strings here stops min and max values making the spinboxes way too wide.
+	if (value == Vanguard::MinFloat())
+		return "Min";
+	else if (value == Vanguard::MaxFloat())
+		return "Max";
+	else
+		return QDoubleSpinBox::textFromValue(value);
+}
 
 QuaternionWidget::QuaternionWidget(void* aInstance, Vanguard::Property* aProperty)
 	: instance (aInstance)
@@ -12,21 +26,15 @@ QuaternionWidget::QuaternionWidget(void* aInstance, Vanguard::Property* aPropert
 {
 	setLayout(new QHBoxLayout());
 
-	xSpinBox = new QDoubleSpinBox(this);
-	xSpinBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	xSpinBox->setRange(Vanguard::MinFloat(), Vanguard::MaxFloat());
+	xSpinBox = new QuaternionSpinBox(this);
 	connect(xSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &QuaternionWidget::OnXSpinBoxChanged);
 	layout()->addWidget(xSpinBox);
 
-	ySpinBox = new QDoubleSpinBox(this);
-	ySpinBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	ySpinBox->setRange(Vanguard::MinFloat(), Vanguard::MaxFloat());
+	ySpinBox = new QuaternionSpinBox(this);
 	connect(ySpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &QuaternionWidget::OnYSpinBoxChanged);
 	layout()->addWidget(ySpinBox);
 
-	zSpinBox = new QDoubleSpinBox(this);
-	zSpinBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	zSpinBox->setRange(Vanguard::MinFloat(), Vanguard::MaxFloat());
+	zSpinBox = new QuaternionSpinBox(this);
 	connect(zSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &QuaternionWidget::OnZSpinBoxChanged);
 	layout()->addWidget(zSpinBox);
 }

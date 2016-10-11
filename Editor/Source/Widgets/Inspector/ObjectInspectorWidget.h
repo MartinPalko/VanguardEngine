@@ -22,6 +22,6 @@ namespace Vanguard
 	public:
 		ObjectInspectorWidget(QWidget* aParent);
 		void CreatePropertyWidgets(WorldObject* aObject, DynamicArray<Vanguard::String> aIgnoreProperties = DynamicArray<Vanguard::String>());
-		void UpdatePropertyWidgets();
+		virtual void UpdatePropertyWidgets();
 	};
 }

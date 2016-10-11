@@ -18,6 +18,9 @@ namespace Vanguard
 	public:
 		EntityInspectorWidget(Entity* aEntity, QWidget* aParent);
 
+		// Override ObjectInspectorWidget
+		virtual void UpdatePropertyWidgets();
+
 	private:
 		Entity* entity;
 

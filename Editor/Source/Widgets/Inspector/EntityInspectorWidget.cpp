@@ -29,8 +29,14 @@ namespace Vanguard
 
 		entityNameLineEdit->setText(aEntity->GetName().GetCharPointer());
 		entityEnabledCheckbox->setChecked(aEntity->Enabled());
+	void EntityInspectorWidget::UpdatePropertyWidgets()
+	{
+		if (!entityNameLineEdit->hasFocus())
+			entityNameLineEdit->setText(entity->GetName().GetCharPointer());
 
-		CreatePropertyWidgets(aEntity);
+		entityEnabledCheckbox->setChecked(entity->Enabled());
+
+		ObjectInspectorWidget::UpdatePropertyWidgets();
 	}
 
 	void EntityInspectorWidget::OnNameLineEditChanged()

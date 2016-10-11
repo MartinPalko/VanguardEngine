@@ -1,8 +1,230 @@
-$background_dark: #333;
-$background_light: #444;
+$background_dark: rgb(40, 40, 40);
+$background: rgb(48, 49, 51);
+$background_light: rgb(65, 67, 69);
+
+$foreground: rgb(194, 197, 204);
+$foreground_disabled:  rgb(123, 126, 131);
+
+$control_dark: rgb(41, 42, 43);
+$control_dark_disabled: rgb(50, 50, 50);
+
+$control_light:  rgb(75, 77, 79);
+$control_light_disabled:  rgb(194, 194, 204);
+
+$highlight_red: rgb(174, 85, 68);
+$highlight_green: rgb(116, 153, 110);
+$highlight_blue: rgb(86, 135, 153);
+$highlight_yellow: rgb(218, 188, 85);
+
+$corner_radius_small: 3px;
 
 QWidget 
 {
-	color: $background_dark;
+	color: $foreground;
+	background: transparent;
+	border: none;
+}
+
+@mixin control-field
+{
+	background: $control_dark;
+	border-radius: $corner_radius_small;
+
+	padding: 2px;
+	margin: 1px;
+}
+
+QMainWindow,
+QDialog
+{
+	background: $background;
+}
+
+QTextEdit
+{
+	@include control-field();
+}
+
+QLineEdit
+{
+	@include control-field();
+}
+
+QAbstractSpinBox
+{
+	@include control-field();
+	
+	&::up-button,
+	&::down-button
+	{
+		width: 7px;
+		margin: 0px;
+		margin-right: 3px;
+		border: none
+	}
+	
+	&::up-arrow
+	{
+		image: url(./Images/up_arrow_tiny.png);
+	}
+	&::down-arrow 
+	{
+		image: url(./Images/down_arrow_tiny.png);
+	}
+}
+
+QMenuBar
+{
 	background: $background_light;
 }
+
+QPushButton,
+{
+	background: $control_light;
+	border-radius: $corner_radius_small;
+	padding: 2px;
+	margin: 1px;
+}
+
+QMainWindow
+{
+	&::separator 
+	{
+		width: 4px; /* when vertical */
+		height: 4px; /* when horizontal */
+		
+		&:hover 
+		{
+			background: $background_dark;
+		}
+	}
+}
+
+QScrollBar
+{
+	 &:vertical 
+	 {
+		 border: none;
+		 background: transparent;
+		 width: 10px;
+		 margin: 0px
+	 }
+	 &:horizontal 
+	 {
+		 border: none;
+		 background: transparent;
+		 height: 10px;
+		 margin: 0px
+	 }
+	 &::handle:vertical,
+	 &::handle:horizontal
+	 {
+		 background: $control_light;
+		 border-radius: $corner_radius_small;
+	 }
+	 &::add-line:vertical,
+	 &::sub-line:vertical,
+	 &::add-line:horizontal,
+	 &::sub-line:horizontal
+	 {
+		 border: none;
+		 background: transparent;
+		 height: 0px;
+	 }
+	 &::add-page:vertical,
+	 &::sub-page:vertical,
+	 &::add-page:horizontal,
+	 &::sub-page:horizontal
+	 {
+		 background: none;
+	 }
+}
+
+QCheckBox
+{
+ 	&::indicator 
+	{
+		width: 13px;
+		height: 13px;
+		border: none;
+		background: $control_dark;
+		border-radius: $corner_radius_small;
+
+		&:checked 
+		{
+			image: url(./Images/checkbox_checkmark.png);
+		}
+
+		&:indeterminate:hover
+		{
+			&:hover
+			{
+				image: url(:/images/checkbox_indeterminate_hover.png);
+			}
+			&:pressed 
+			{
+				image: url(:/images/checkbox_indeterminate_pressed.png);
+			}
+		}
+	}
+}
+
+QDockWidget > QWidget
+{
+	background: $background_light;
+	border-radius: $corner_radius_small;
+	margin: 4px;
+}
+
+QDockWidget
+{
+	titlebar-close-icon: url(./Images/close_small.png);
+    titlebar-normal-icon: url(./Images/detach_small.png);
+}
+
+QDockWidget::title 
+{
+    background: $background;
+    padding-left: 4px;
+	padding-top: 4px;
+	color: red;
+}
+
+// ---- Widget Specifics ---- //
+
+QuaternionWidget,
+Vector3Widget 
+{	
+	&> QLabel
+	{
+		border-top-left-radius: $corner_radius_small;
+		border-bottom-left-radius: $corner_radius_small;
+		margin-left: 4px;
+		padding: 0px;
+		min-height: 20px;
+		max-height: 20px;
+	}
+	
+	&> QLabel[axis="x"]
+	{
+		background: $highlight_red;
+	}
+	
+	&> QLabel[axis="y"]
+	{
+		background: $highlight_green;
+	}
+	
+	&> QLabel[axis="z"]
+	{
+		background: $highlight_blue;
+	}
+	
+	&> QDoubleSpinBox
+	{
+		margin-left: 0px;
+		border-top-left-radius: 0px;
+		border-bottom-left-radius: 0px;
+	}
+}
+

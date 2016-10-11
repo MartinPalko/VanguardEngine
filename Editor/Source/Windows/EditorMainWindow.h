@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+class QMenu;
+
 namespace Vanguard
 {
 	class EditorMainWindow : public QMainWindow
@@ -16,11 +18,19 @@ namespace Vanguard
 		class Viewport* viewport;
 		class WorldHierarchy* worldHierarchy;
 
+		QMenu* fileMenu;
+		QMenu* editMenu;
+		QMenu* viewMenu;
+		QMenu* helpMenu;
+
 	public:
 		EditorMainWindow();
 
 	public:
 		// QWidget Overrides
 		virtual QSize sizeHint() const override;
+
+	private:
+		void OnReloadStyle();
 	};
 }

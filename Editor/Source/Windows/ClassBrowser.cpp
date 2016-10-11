@@ -13,6 +13,7 @@ namespace Vanguard
 		treeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		treeView->setModel(new TypeHierarchyModel(nullptr, treeView));
 		treeView->expandAll();
+		treeView->setHeaderHidden(true);
 		setWidget(treeView);
 	}
 }

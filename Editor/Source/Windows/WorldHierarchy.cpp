@@ -13,6 +13,7 @@ namespace Vanguard
 		treeView = new QTreeView(this);
 		treeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		treeView->setModel(new WorldHierarchyModel(aWorld, treeView));
+		treeView->setHeaderHidden(true);
 		setWidget(treeView);
 
 		connect(treeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &WorldHierarchy::OnSelectionChanged);

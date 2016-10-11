@@ -30,14 +30,11 @@ namespace Vanguard
 		, mainWidget(nullptr)
 		, mainLayout(nullptr)
 	{
-		//setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
-
 		EditorCore::GetInstance()->RegisterEventListener(this);
 
 		scrollArea = new QScrollArea(this);
-		scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 		scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-		//scrollArea->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
 		scrollArea->setWidgetResizable(true);
 		setWidget(scrollArea);
 
@@ -48,6 +45,8 @@ namespace Vanguard
 		updateTimer->setInterval(200); // How often the inspector updates values
 		connect(updateTimer, &QTimer::timeout, this, &Inspector::Update);
 		updateTimer->start();
+
+		SetEntity(nullptr);
 	}
 
 	Inspector::~Inspector()

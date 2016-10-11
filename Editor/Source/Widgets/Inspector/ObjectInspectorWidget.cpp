@@ -8,11 +8,18 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QLayout>
+#include <QRegExp>
 
 namespace Vanguard
 {
 	ObjectInspectorWidget::ObjectInspectorWidget(QWidget* aParent) : QWidget(aParent)
 	{
+	}
+
+	static QString FormatName(QString s)
+	{
+		s[0] = s.at(0).toUpper();
+		return s;
 	}
 
 	void ObjectInspectorWidget::CreatePropertyWidgets(WorldObject* aObject, DynamicArray<Vanguard::String> aIgnoreProperties)
@@ -39,10 +46,17 @@ namespace Vanguard
 			if (foundFactory)
 			{
 				IPropertyWidget* propertyWidget = foundFactory->CreatePropertyWidget(aObject, property);
-				auto propertyLayout = new QHBoxLayout();
-				propertyLayout->addWidget(new QLabel(ToQString(property->GetName()), this));
+				auto propertyLayout = new QHBoxLayout(this);
+				propertyLayout->setMargin(0);
+				propertyLayout->setSpacing(0);
+
+				QString propertyDisplayName = FormatName(ToQString(property->GetName()));
+
+				QLabel* label = new QLabel(propertyDisplayName, this);
+				propertyLayout->addWidget(label);
 				propertyWidgets.PushBack(propertyWidget);
 				propertyWidget->GetWidget()->setParent(this);
+
 				propertyLayout->addWidget(propertyWidget->GetWidget());
 				layout()->addItem(propertyLayout);
 			}

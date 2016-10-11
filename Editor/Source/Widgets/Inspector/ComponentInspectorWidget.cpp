@@ -14,6 +14,7 @@ namespace Vanguard
 		, component(aComponent)
 	{
 		setLayout(new QVBoxLayout());
+		layout()->setSpacing(5);
 		
 		componentTitlebarLayout = new QHBoxLayout();
 		layout()->addItem(componentTitlebarLayout);

@@ -14,21 +14,29 @@ namespace Vanguard
 		, entity(aEntity)
 	{
 		setLayout(new QVBoxLayout());
+		layout()->setSpacing(5);
 
-		auto nameEditLayout = new QHBoxLayout();	
-		auto nameLabel = new QLabel("Name", this);
-		nameEditLayout->addWidget(nameLabel);
+		auto nameEditLayout = new QHBoxLayout();
+
+		entityEnabledCheckbox = new QCheckBox(this);
+		connect(entityEnabledCheckbox, &QCheckBox::stateChanged, this, &EntityInspectorWidget::OnEnabledCheckboxChanged);
+		nameEditLayout->addWidget(entityEnabledCheckbox);
+
 		entityNameLineEdit = new QLineEdit(this);
 		connect(entityNameLineEdit, &QLineEdit::textChanged, this, &EntityInspectorWidget::OnNameLineEditChanged);
 		nameEditLayout->addWidget(entityNameLineEdit);
+
 		layout()->addItem(nameEditLayout);
 
-		entityEnabledCheckbox = new QCheckBox("Enabled", this);
-		connect(entityEnabledCheckbox, &QCheckBox::stateChanged, this, &EntityInspectorWidget::OnEnabledCheckboxChanged);
-		layout()->addWidget(entityEnabledCheckbox);
+		DynamicArray<Vanguard::String> ignoredProperties;
+		ignoredProperties.PushBack("enabled");
+
+		CreatePropertyWidgets(aEntity, ignoredProperties);
 
 		entityNameLineEdit->setText(aEntity->GetName().GetCharPointer());
 		entityEnabledCheckbox->setChecked(aEntity->Enabled());
+	}
+
 	void EntityInspectorWidget::UpdatePropertyWidgets()
 	{
 		if (!entityNameLineEdit->hasFocus())

@@ -8,6 +8,7 @@ IntWidget::IntWidget(void* aInstance, Vanguard::Property* aProperty)
 	, property (aProperty)
 {
 	setLayout(new QHBoxLayout());
+	layout()->setMargin(0);
 
 	spinBox = new QSpinBox(this);
 	spinBox->setRange(Vanguard::MinInt32(), Vanguard::MaxInt32());

@@ -8,6 +8,7 @@ BoolWidget::BoolWidget(void* aInstance, Vanguard::Property* aProperty)
 	, property (aProperty)
 {
 	setLayout(new QHBoxLayout());
+	layout()->setMargin(0);
 
 	checkBox = new QCheckBox(this);
 	connect(checkBox, &QCheckBox::stateChanged, this, &BoolWidget::OnCheckboxChanged);

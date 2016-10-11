@@ -25,6 +25,8 @@ QuaternionWidget::QuaternionWidget(void* aInstance, Vanguard::Property* aPropert
 	, property (aProperty)
 {
 	setLayout(new QHBoxLayout());
+	layout()->setSpacing(0);
+	layout()->setMargin(0);
 
 	xSpinBox = new QuaternionSpinBox(this);
 	connect(xSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &QuaternionWidget::OnXSpinBoxChanged);

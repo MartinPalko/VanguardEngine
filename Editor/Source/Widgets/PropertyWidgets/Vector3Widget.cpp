@@ -24,6 +24,8 @@ Vector3Widget::Vector3Widget(void* aInstance, Vanguard::Property* aProperty)
 	, property (aProperty)
 {
 	setLayout(new QHBoxLayout());
+	layout()->setSpacing(0);
+	layout()->setMargin(0);
 
 	xSpinBox = new Vector3SpinBox(this);
 	connect(xSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &Vector3Widget::OnXSpinBoxChanged);

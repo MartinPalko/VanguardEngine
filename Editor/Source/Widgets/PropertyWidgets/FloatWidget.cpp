@@ -9,6 +9,7 @@ FloatWidget::FloatWidget(void* aInstance, Vanguard::Property* aProperty)
 	, property (aProperty)
 {
 	setLayout(new QHBoxLayout());
+	layout()->setMargin(0);
 
 	spinBox = new QDoubleSpinBox(this);
 	spinBox->setRange(Vanguard::MinFloat(), Vanguard::MaxFloat());

@@ -29,22 +29,29 @@ namespace Vanguard
 
 	void LogViewer::OnMessageLogged(LogEntry aMessage)
 	{
+		QString messageHeader;
+		QString messageFooter;
+
 		switch (aMessage.GetWarningLevel())
 		{
 		case LogEntryErrorLevel::Warning:
-			textWidget->setTextColor(QColor(255, 220, 0));
+			messageHeader = "<font color=\"#ffff00\">"; // Yellow
+			messageFooter = "</font>";
 			break;
 		case LogEntryErrorLevel::Error:
 		case LogEntryErrorLevel::Exception:
-			textWidget->setTextColor(QColor(255, 0, 0));
+			messageHeader = "<font color=\"#ff0000\">"; // Red
+			messageFooter = "</font>";
 			break;
 		default:
 		case LogEntryErrorLevel::Message:
-			textWidget->setTextColor(QColor(0, 0, 0));
+			messageHeader = ""; // None
+			messageFooter = "";
 			break;
 		}
 
-		textWidget->append(aMessage.GetFormattedLogEntry().GetCharPointer());
+		textWidget->moveCursor(QTextCursor::MoveOperation::End);
+		textWidget->insertHtml(messageHeader + aMessage.GetFormattedLogEntry().GetCharPointer() + messageFooter + "<br>");
 
 		if (autoScroll)
 		{

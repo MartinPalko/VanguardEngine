@@ -1,7 +1,7 @@
 #include "QuaternionWidget.h"
 
 #include <QHBoxLayout>
-
+#include <QLabel>
 
 QuaternionSpinBox::QuaternionSpinBox(QWidget* aParent) : QDoubleSpinBox(aParent)
 {
@@ -28,13 +28,25 @@ QuaternionWidget::QuaternionWidget(void* aInstance, Vanguard::Property* aPropert
 	layout()->setSpacing(0);
 	layout()->setMargin(0);
 
+	QLabel* xLabel = new QLabel("X", this);
+	xLabel->setProperty("axis", "x");
+	layout()->addWidget(xLabel);
+
 	xSpinBox = new QuaternionSpinBox(this);
 	connect(xSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &QuaternionWidget::OnXSpinBoxChanged);
 	layout()->addWidget(xSpinBox);
 
+	QLabel* yLabel = new QLabel("Y", this);
+	yLabel->setProperty("axis", "y");
+	layout()->addWidget(yLabel);
+
 	ySpinBox = new QuaternionSpinBox(this);
 	connect(ySpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &QuaternionWidget::OnYSpinBoxChanged);
 	layout()->addWidget(ySpinBox);
+
+	QLabel* zLabel = new QLabel("Z", this);
+	zLabel->setProperty("axis", "z");
+	layout()->addWidget(zLabel);
 
 	zSpinBox = new QuaternionSpinBox(this);
 	connect(zSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &QuaternionWidget::OnZSpinBoxChanged);

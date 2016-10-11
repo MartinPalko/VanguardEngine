@@ -1,6 +1,7 @@
 #include "Vector3Widget.h"
 
 #include <QHBoxLayout>
+#include <QLabel>
 
 Vector3SpinBox::Vector3SpinBox(QWidget* aParent) : QDoubleSpinBox(aParent)
 {
@@ -27,13 +28,25 @@ Vector3Widget::Vector3Widget(void* aInstance, Vanguard::Property* aProperty)
 	layout()->setSpacing(0);
 	layout()->setMargin(0);
 
+	QLabel* xLabel = new QLabel("X", this);
+	xLabel->setProperty("axis", "x");
+	layout()->addWidget(xLabel);
+
 	xSpinBox = new Vector3SpinBox(this);
 	connect(xSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &Vector3Widget::OnXSpinBoxChanged);
 	layout()->addWidget(xSpinBox);
 
+	QLabel* yLabel = new QLabel("Y", this);
+	yLabel->setProperty("axis", "y");
+	layout()->addWidget(yLabel);
+
 	ySpinBox = new Vector3SpinBox(this);
 	connect(ySpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &Vector3Widget::OnYSpinBoxChanged);
 	layout()->addWidget(ySpinBox);
+
+	QLabel* zLabel = new QLabel("Z", this);
+	zLabel->setProperty("axis", "z");
+	layout()->addWidget(zLabel);
 
 	zSpinBox = new Vector3SpinBox(this);
 	connect(zSpinBox, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &Vector3Widget::OnZSpinBoxChanged);

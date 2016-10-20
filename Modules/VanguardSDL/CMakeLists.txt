@@ -1,1 +1,1 @@
-IMPLEMENT_MODULE(VanguardSDL "Core;SDL2;SDLImage" "")
+IMPLEMENT_MODULE(VanguardSDL "Core;SDL2;SDLImage;SDL2_ttf" "")

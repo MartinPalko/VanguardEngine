@@ -21,7 +21,14 @@ namespace Vanguard
 	{
 		if (moduleUsers[module] == 0)
 		{
-			SDL_InitSubSystem(module);
+			if (module == SDLModule::TTFFont)
+			{
+				TTF_Init();
+			}
+			else
+			{
+				SDL_InitSubSystem(module);
+			}
 			LOG_MESSAGE("SDL initialized " + moduleNames[module] + " subsystem", "SDL");
 		}
 
@@ -37,7 +44,14 @@ namespace Vanguard
 
 		if (moduleUsers[module] == 0)
 		{
-			SDL_QuitSubSystem(module);
+			if (module == SDLModule::TTFFont)
+			{
+				TTF_Quit();
+			}
+			else
+			{
+				SDL_QuitSubSystem(module);
+			}
 			LOG_MESSAGE("SDL quit " + moduleNames[module] + " subsystem", "SDL");
 		}
 	}
@@ -58,6 +72,7 @@ namespace Vanguard
 		moduleUsers[SDLModule::Haptic] = 0;
 		moduleUsers[SDLModule::GameController] = 0;
 		moduleUsers[SDLModule::Events] = 0;
+		moduleUsers[SDLModule::TTFFont] = 0;
 
 		// Keep hashtable of module names for debugging purposes.
 		moduleNames[SDLModule::Timer] = "Timer";
@@ -67,6 +82,7 @@ namespace Vanguard
 		moduleNames[SDLModule::Haptic] = "Haptic";
 		moduleNames[SDLModule::GameController] = "GameController";
 		moduleNames[SDLModule::Events] = "Events";
+		moduleNames[SDLModule::TTFFont] = "TTFFont";
 	}
 
 	void VanguardSDL::UnloadModule()

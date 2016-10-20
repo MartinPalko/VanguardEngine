@@ -16,7 +16,8 @@ namespace Vanguard
 			Joystick = SDL_INIT_JOYSTICK,
 			Haptic = SDL_INIT_HAPTIC,
 			GameController = SDL_INIT_GAMECONTROLLER,
-			Events = SDL_INIT_EVENTS
+			Events = SDL_INIT_EVENTS,
+			TTFFont = 0x01000000 // Not part of base SDL, but integrated into the same mecanism
 		};
 
 		static void RegisterModuleUse(SDLModule module);

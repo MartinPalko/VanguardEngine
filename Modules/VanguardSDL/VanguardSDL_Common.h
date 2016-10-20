@@ -14,3 +14,4 @@ using namespace Vanguard;
 #include <SDL_config.h>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>

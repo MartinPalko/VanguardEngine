@@ -39,6 +39,7 @@ namespace Vanguard
 	void Renderer2D::LoadModule()
 	{
 		VanguardSDL::RegisterModuleUse(VanguardSDL::Video);
+		VanguardSDL::RegisterModuleUse(VanguardSDL::TTFFont);
 		Core::GetInstance()->RegisterRenderer(this);
 
 		switch (defaultTextureFiltering)
@@ -66,6 +67,7 @@ namespace Vanguard
 
 		Core::GetInstance()->UnregisterRenderer(this);
 
+		VanguardSDL::UnregisterModuleUse(VanguardSDL::TTFFont);
 		VanguardSDL::UnregisterModuleUse(VanguardSDL::Video);
 	}
 
@@ -102,7 +104,6 @@ namespace Vanguard
 			const float aspectRatio = (float)screenX / (float)screenY;
 			Vector2 screenSize(screenX, screenY);
 			Vector2 aspectAdjustment = aspectRatio > 1 ? Vector2(1 / aspectRatio, 1) : Vector2(1, aspectRatio);
-
 
 			// Sort by Z-value
 			renderItems.Sort([](const RenderItem& a, const RenderItem& b)->bool{return a.position.z < b.position.z;});
@@ -153,7 +154,6 @@ namespace Vanguard
 					SDL_SetRenderDrawColor(renderView.renderer, SPLIT_COLOR_RGBA(renderItem.color));
 					SDL_RenderFillRect(renderView.renderer, &screenspaceRect);
 				}
-
 			}
 		}
 	};

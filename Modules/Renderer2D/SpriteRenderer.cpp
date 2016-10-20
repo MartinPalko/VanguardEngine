@@ -4,17 +4,19 @@
 
 namespace Vanguard
 {
-	TYPE_DEFINITION(SpriteRenderer, Component);
+	TYPE_DEFINITION(SpriteRenderer, RenderableComponent2D);
 
-	void SpriteRenderer::SetDimensions(Vector2 aDimensions)
-	{
-		dimensions = aDimensions;
-		if (GetEntity()->GetType()->IsA(Type::GetType<Actor>()))
-			static_cast<Actor*>(GetEntity())->UpdateBounds();
-	}
+	START_REGISTER_PROPERTIES(SpriteRenderer);
+		REGISTER_PROPERTY(SpriteRenderer, image);
+	FINISH_REGISTER_PROPERTIES(SpriteRenderer);
 
 	void SpriteRenderer::SetImage(const String & aImageName)
 	{
 		image = Core::GetInstance()->GetResourceManager()->LoadResource<SDLImageResource>(aImageName);
+	}
+
+	SDL_Texture* SpriteRenderer::GetSDLTexture(SDL_Renderer* aRenderer)
+	{
+		return image ? image->getSDLTexture(aRenderer) : nullptr;
 	}
 }

@@ -3,7 +3,6 @@
 #include "Interfaces/IModule.h"
 #include "Renderer/IRenderer.h"
 
-#include "SpriteRenderer.h"
 #include "RenderView2D.h"
 
 namespace Vanguard

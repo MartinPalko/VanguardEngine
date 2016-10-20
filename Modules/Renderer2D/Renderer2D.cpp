@@ -4,6 +4,8 @@
 #include "RenderView2D.h"
 #include "WorldObjects/Transform.h"
 #include "SDLImageResource.h"
+#include "ResourceManager.h"
+#include "RenderableComponent2D.h"
 
 #define SPLIT_COLOR_RGBA(VanguardColor) VanguardColor.r, VanguardColor.g, VanguardColor.b, VanguardColor.a
 #define SPLIT_COLOR_RGB(VanguardColor) VanguardColor.r, VanguardColor.g, VanguardColor.b
@@ -172,26 +174,22 @@ namespace Vanguard
 				worldView->clearColor
 			});
 
-			DynamicArray<WorldObject*> sprites = aFrame->GetWorld()->GetInstances(Type::GetType<SpriteRenderer>(), true);
-			renderJob->renderItems.Reserve(sprites.Count());
-			for (int s = 0; s < sprites.Count(); s++)
+			DynamicArray<WorldObject*> renderables = aFrame->GetWorld()->GetInstances(Type::GetType<RenderableComponent2D>(), true);
+			renderJob->renderItems.Reserve(renderables.Count());
+			for (int s = 0; s < renderables.Count(); s++)
 			{
-				SpriteRenderer* sprite = (SpriteRenderer*)sprites[s];
-				if (sprite->GetEntity()->Enabled())
+				RenderableComponent2D* renderable = static_cast<RenderableComponent2D*>(renderables[s]);
+				if (renderable->GetEntity()->Enabled())
 				{
-					SDL_Texture* sdlTexture = nullptr;
-					SDLImageResource* imageResource = sprite->GetImage();
-					if (imageResource)
-						sdlTexture = imageResource->getSDLTexture(worldView->sdlRenderer);
 
 					RenderItem item = {
-						sprite->GetColor(),
-						sprite->GetDimensions(),
-						sprite->GetEntity()->GetComponent<Transform>()->GetPosition(),
+						renderable->GetColor(),
+						renderable->GetDimensions(),
+						renderable->GetEntity()->GetComponent<Transform>()->GetPosition(),
 						0, // TODO: Support rotation from Transform
-						(SDL_RendererFlip)sprite->GetFlipped(),
-						sdlTexture,
-						(SDL_BlendMode)sprite->GetBlendMode()
+						(SDL_RendererFlip)renderable->GetFlipped(),
+						renderable->GetSDLTexture(worldView->sdlRenderer),
+						(SDL_BlendMode)renderable->GetBlendMode()
 					};
 					renderJob->renderItems.PushBack(item);
 				}
@@ -212,6 +210,4 @@ namespace Vanguard
 			}
 		}		
 	}
-
-	
 }

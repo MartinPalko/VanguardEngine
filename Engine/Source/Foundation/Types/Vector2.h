@@ -37,8 +37,8 @@ namespace Vanguard
 
 		inline Vector2 operator-() const { return Vector2(-x, -y); }
 
-		inline bool operator==(const Vector2& aV) { return x == aV.x && y == aV.y; }
-		inline bool operator!=(const Vector2& aV) { return x != aV.x || y != aV.y; }
+		inline bool operator==(const Vector2& aV) const { return x == aV.x && y == aV.y; }
+		inline bool operator!=(const Vector2& aV) const { return x != aV.x || y != aV.y; }
 
 		inline Vector2 operator+(const Vector2& aV) const { return Vector2(x + aV.x, y + aV.y); }
 		inline Vector2 operator-(const Vector2& aV) const { return Vector2(x - aV.x, y - aV.y); }

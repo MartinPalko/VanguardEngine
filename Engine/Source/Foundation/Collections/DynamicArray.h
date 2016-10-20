@@ -133,6 +133,38 @@ namespace Vanguard
 			return data[aIndex];
 		}
 
+		inline void Set(size_t aIndex, const T& aValue)
+		{
+			data[aIndex] = aValue;
+		}
+
+		inline void Sort(bool (*aCompare)(const T&, const T&))
+		{
+			const size_t arraySize = Count();
+			
+			if (arraySize <= 1)
+				return;
+
+			int finished = false;
+			
+			// Bubble sort
+			for(size_t pass = 1; (pass <= arraySize) && !finished; pass++)
+			{
+				finished = true;
+				for (size_t i = 0; i < (arraySize -1); i++)
+				{
+					if (aCompare(At(i + 1), At(i)))
+					{
+						// Swap elements
+						T temp = At(i);
+						Set(i, At(i+1));
+						Set(i + 1, temp);
+						finished = false;
+					}
+				}
+			}
+		}
+
 		inline DynamicArray& operator=(const DynamicArray& other)
 		{
 			if (this != &other)
@@ -151,6 +183,5 @@ namespace Vanguard
 		{
 			return data[aIndex];
 		}
-
 	};
 }

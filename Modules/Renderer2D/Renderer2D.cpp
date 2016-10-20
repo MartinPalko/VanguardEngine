@@ -103,6 +103,10 @@ namespace Vanguard
 			Vector2 screenSize(screenX, screenY);
 			Vector2 aspectAdjustment = aspectRatio > 1 ? Vector2(1 / aspectRatio, 1) : Vector2(1, aspectRatio);
 
+
+			// Sort by Z-value
+			renderItems.Sort([](const RenderItem& a, const RenderItem& b)->bool{return a.position.z < b.position.z;});
+
 			SDL_SetRenderDrawColor(renderView.renderer, SPLIT_COLOR_RGBA(renderView.clearColor));
 			SDL_RenderClear(renderView.renderer);
 

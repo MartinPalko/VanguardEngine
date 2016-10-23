@@ -20,12 +20,11 @@ QString LoadStyleSheet(Vanguard::FilePath aFilePath, bool aSass)
 
 	if (aSass)
 	{
-		Sass_File_Context* context = sass_make_file_context(aFilePath.GetFullPathName().GetCharPointer());
+		Vanguard::String fullPath = aFilePath.GetFullPathName();
+		Sass_File_Context* context = sass_make_file_context(fullPath.GetCharPointer());
 		Sass_Options* options = sass_file_context_get_options(context);
 		sass_option_set_precision(options, 1);
 		sass_option_set_source_comments(options, true);
-
-		sass_file_context_set_options(context, options);
 
 		Sass_Context* sass_context = sass_file_context_get_context(context);
 

@@ -41,7 +41,7 @@ QString LoadStyleSheet(Vanguard::FilePath aFilePath, bool aSass)
 
 		if (status)
 		{
-			LOG_ERROR(error, "scss");
+			LOG_ERROR(error, "SCSS");
 		}
 
 		// Release memory dedicated to the C compiler
@@ -67,7 +67,7 @@ StyleManager* StyleManager::GetInstance()
 {
 	if (!QApplication::instance())
 	{
-		DEBUG_EXCEPTION("A QApplication must exist before using the StyleManager", "StyleManager");
+		LOG_EXCEPTION("A QApplication must exist before using the StyleManager", "StyleManager");
 	}
 
 	static StyleManager instance;

@@ -176,4 +176,4 @@ public:\
 #define FINISH_REGISTER_PROPERTIES(ClassIdentifier)\
 	}\
 };\
-auto Transform_properties = ClassIdentifier##_propertyRegistrar();
+auto ClassIdentifier##_properties = ClassIdentifier##_propertyRegistrar();

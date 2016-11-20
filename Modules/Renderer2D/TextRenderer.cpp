@@ -16,7 +16,7 @@ namespace Vanguard
 		SetBlendMode(eSpriteBlendMode::Blend);
 
 		String fontPath = Core::GetInstance()->GetResourceManager()->FindAbsoluteResourcePath("Fonts/CourierCode-Roman.ttf");
-		font = TTF_OpenFont(fontPath.GetCharPointer(), 110);
+		font = TTF_OpenFont(fontPath.GetCharPointer(), 30);
 	}
 
 	TextRenderer::~TextRenderer()

@@ -100,8 +100,6 @@ namespace Sandbox2D
 		// Update Gainput
 		inputManager->Update(aFrame->GetDeltaTime().InMilliseconds());
 
-		LOG_MESSAGE("FPS: " + String::FromFloat(1.0f / aFrame->GetDeltaTime().InSeconds()), "Brick Breaker");
-
 		if (inputMap->GetBool(eGameButton::Exit))
 		{
 			Core::GetInstance()->Quit();

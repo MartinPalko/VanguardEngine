@@ -44,11 +44,15 @@ namespace Vanguard
 			if (sdlSurface)
 				SDL_FreeSurface(sdlSurface);
 
-			// Font is always rendered white, and colored when rendering.
+			// Font surface is always white, and colored when rendering.
 			sdlSurface = TTF_RenderText_Blended(font, text.GetCharPointer(), {255,255,255});
 			//sdlSurface = TTF_RenderText_Solid(font, text.GetCharPointer(), {255,255,255});
 
 			surfaceDirty = false;
+
+			// Mark all textures dirty
+			for (auto item : sdlTexturesDirty)
+				sdlTexturesDirty[item.first] = true;
 		}
 
 		bool textureDirty = sdlTexturesDirty.count(aRenderer) ? sdlTexturesDirty.at(aRenderer) : true;

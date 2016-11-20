@@ -2,8 +2,8 @@
 #include "Renderer2D_Common.h"
 #include "SDLImageResource.h"
 
-class SDL_Texture;
-class SDL_Renderer;
+struct SDL_Texture;
+struct SDL_Renderer;
 
 namespace Vanguard
 {

@@ -6,6 +6,7 @@
 #include "BrickBreaker.h"
 #include "WorldObjects/Transform.h"
 #include "SpriteRenderer.h"
+#include "TextRenderer.h"
 #include "BrickBreakerWorld.h"
 
 namespace eGameButton
@@ -25,6 +26,7 @@ namespace BrickBreaker
 	const Vector2 BrickBreakerWorld::PlayAreaSize = Vector2(100, 150);
 
 	BrickBreakerWorld::BrickBreakerWorld() : World("Brick Breaker")
+		, score(0)
 	{
 		Application::RegisterNativeEventHandler(this);
 
@@ -39,6 +41,7 @@ namespace BrickBreaker
 
 		// Background sprite
 		Actor* backgroundEntity = SpawnEntity<Actor>();
+		backgroundEntity->GetComponent<Transform>()->SetPosition(Vector3(0.0f, 0.0f, -10.0f));
 		SpriteRenderer* backgroundSprite = backgroundEntity->AddComponent<SpriteRenderer>();
 		backgroundSprite->SetDimensions(PlayAreaSize);
 		backgroundSprite->SetColor(Color(0x33, 0x33, 0x33));
@@ -79,6 +82,15 @@ namespace BrickBreaker
 			}
 		}
 
+		// Score display
+		Entity* scoreTextEntity = SpawnEntity<Actor>();
+		scoreTextEntity->SetName("Score");
+		scoreTextEntity->GetComponent<Transform>()->SetPosition(Vector3(-PlayAreaSize.x / 2 + 10, -PlayAreaSize.y / 2 + 2, 10.0f));
+		scoreText = scoreTextEntity->AddComponent<TextRenderer>();
+		scoreText->SetDimensions(Vector2(20,4));
+		scoreText->SetColor(Color(255,255,255));
+		scoreText->SetText("Score: 00");
+
 		// Setup Gainput
 		inputManager = new gainput::InputManager(false);
 		gainput::DeviceId keyboardId = inputManager->CreateDevice<gainput::InputDeviceKeyboard>();
@@ -96,6 +108,12 @@ namespace BrickBreaker
 		Application::UnregisterNativeEventHandler(this);
 		delete inputMap;
 		delete inputManager;
+	}
+
+	void BrickBreakerWorld::IncrementScore()
+	{
+		score++;
+		scoreText->SetText("Score: " + String::FromInt(score));
 	}
 
 	void BrickBreakerWorld::Tick(Vanguard::Frame* aFrame)

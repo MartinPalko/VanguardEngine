@@ -90,6 +90,12 @@ namespace BrickBreaker
 					direction.y = 1; // Bottom of ball
 
 				brick->Destroy();
+
+				if (auto brickWorld = Type::SafeCast<BrickBreakerWorld>(GetWorld()))
+				{
+					brickWorld->IncrementScore();
+				}
+
 			}
 		}
 

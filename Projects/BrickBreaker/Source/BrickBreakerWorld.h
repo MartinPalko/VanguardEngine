@@ -1,6 +1,7 @@
 #pragma once
 #include "BrickBreaker_Common.h"
 #include "Renderer/RenderView.h"
+#include "TextRenderer.h"
 
 #include "Paddle.h"
 #include "Brick.h"
@@ -25,6 +26,8 @@ namespace BrickBreaker
 		RenderView* playerView;
 		Paddle* paddle;
 		Ball* ball;
+		TextRenderer* scoreText;
+		int score;
 
 		gainput::InputManager* inputManager;
 		gainput::InputMap* inputMap;
@@ -32,6 +35,8 @@ namespace BrickBreaker
 	public:
 		BrickBreakerWorld();
 		~BrickBreakerWorld();
+
+		void IncrementScore();
 
 		// Override World
 	protected:

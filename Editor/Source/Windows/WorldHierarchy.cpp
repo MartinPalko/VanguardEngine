@@ -22,18 +22,11 @@ namespace Vanguard
 	void WorldHierarchy::OnSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 	{
 		QModelIndex current = treeView->currentIndex();
+		WorldHierarchyNode* node = static_cast<WorldHierarchyNode*>(current.internalPointer());
 
-		if (current.internalPointer() == EditorCore::GetInstance()->GetSelectedEntity())
-			return;
-
-		if (!current.internalPointer() || EditorCore::GetInstance()->GetWorlds().Contains((World*)current.internalPointer()))
-		{
-			EditorCore::GetInstance()->ClearSelection();
-		}
+		if (node->itemType == WorldHierarchyNode::eEntity)
+			EditorCore::GetInstance()->SelectEntity(node->item.entity);
 		else
-		{
-			Entity* selectedEntity = static_cast<Entity*>(current.internalPointer());
-			EditorCore::GetInstance()->SelectEntity(selectedEntity);
-		}
+			EditorCore::GetInstance()->ClearSelection();
 	}
 }

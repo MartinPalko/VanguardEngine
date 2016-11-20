@@ -54,17 +54,20 @@ namespace Vanguard
 		World* gameWorld = Core::GetInstance()->CreateProjectWorld();
 		renderView = gameWorld->GetPrimaryRenderView();
 
-		//viewportCamera = gameWorld->SpawnEntity<ViewportCamera>();
-		//viewportCamera->SetFov(100);
-		//viewportCamera->SetOrthographic(true);
-		//renderView = Core::GetInstance()->GetPrimaryRenderer()->CreateRenderView(viewportCamera);
-		
-		renderWindow = QWindow::fromWinId((WId)renderView->GetWindowHandle().handle);
-		containerWidget = QWidget::createWindowContainer(renderWindow, this);
-		containerWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
-		containerWidget->installEventFilter(this);
+		if (renderView)
+		{
+			//viewportCamera = gameWorld->SpawnEntity<ViewportCamera>();
+			//viewportCamera->SetFov(100);
+			//viewportCamera->SetOrthographic(true);
+			//renderView = Core::GetInstance()->GetPrimaryRenderer()->CreateRenderView(viewportCamera);
 
-		setLayout(new QVBoxLayout());
-		layout()->addWidget(containerWidget);
+			renderWindow = QWindow::fromWinId((WId)renderView->GetWindowHandle().handle);
+			containerWidget = QWidget::createWindowContainer(renderWindow, this);
+			containerWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+			containerWidget->installEventFilter(this);
+
+			setLayout(new QVBoxLayout());
+			layout()->addWidget(containerWidget);
+		}
 	}
 }

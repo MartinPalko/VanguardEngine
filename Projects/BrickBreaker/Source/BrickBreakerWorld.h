@@ -16,6 +16,8 @@ namespace BrickBreaker
 {
 	class BrickBreakerWorld : public World, public INativeEventHandler
 	{
+		TYPE_DECLARATION(BrickBreakerWorld, World)
+
 	public:
 		const static Vector2 PlayAreaSize;
 	private:

@@ -23,6 +23,8 @@ namespace Vanguard
 	// Eg. an Editor world, Play-in-editor world, and a game server world could all exist simultaneously, but should behave independently.
 	class CORE_API World : IWorldEventListener
 	{
+		ABSTRACT_BASETYPE_DECLARATION(World)
+
 		friend class Core;
 		friend class Entity;
 

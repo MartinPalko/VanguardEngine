@@ -6,6 +6,8 @@
 
 namespace Vanguard
 {
+	ABSTRACT_BASETYPE_DEFINITION(World)
+
 	World::World(String aWorldName)
 		: worldName(aWorldName)
 		, objects()

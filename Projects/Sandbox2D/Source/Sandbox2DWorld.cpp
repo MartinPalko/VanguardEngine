@@ -26,6 +26,8 @@ namespace eGameButton
 
 namespace Sandbox2D
 {
+	TYPE_DEFINITION(Sandbox2DWorld, World)
+
 	Sandbox2DWorld::Sandbox2DWorld() : World("Brick Breaker")
 	{
 		Application::RegisterNativeEventHandler(this);

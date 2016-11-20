@@ -14,6 +14,8 @@ namespace Sandbox2D
 
 	class Sandbox2DWorld : public World, public INativeEventHandler
 	{
+		TYPE_DECLARATION(Sandbox2DWorld, World)
+
 	private:
 		Sandbox2DCamera* playerCamera;
 		RenderView* playerView;

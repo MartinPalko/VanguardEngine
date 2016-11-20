@@ -20,6 +20,8 @@ namespace eGameButton
 
 namespace BrickBreaker
 {
+	TYPE_DEFINITION(BrickBreakerWorld, World)
+
 	const Vector2 BrickBreakerWorld::PlayAreaSize = Vector2(100, 150);
 
 	BrickBreakerWorld::BrickBreakerWorld() : World("Brick Breaker")

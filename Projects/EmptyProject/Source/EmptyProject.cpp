@@ -17,6 +17,6 @@ namespace EmptyProject
 	World* EmptyProject::CreateWorld()
 	{
 		// Return a new instance of your game world here.
-		return nullptr;
+		return new World("Empty World");
 	}
 }

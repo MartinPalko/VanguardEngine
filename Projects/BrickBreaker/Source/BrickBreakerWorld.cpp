@@ -90,8 +90,9 @@ namespace BrickBreaker
 		// Score display
 		Entity* scoreTextEntity = SpawnEntity<Actor>();
 		scoreTextEntity->SetName("Score");
-		scoreTextEntity->GetComponent<Transform>()->SetPosition(Vector3(-PlayAreaSize.x / 2 + 10, -PlayAreaSize.y / 2 + 2, 10.0f));
+		scoreTextEntity->GetComponent<Transform>()->SetPosition(Vector3(-PlayAreaSize.x / 2, -PlayAreaSize.y / 2, 10.0f));
 		scoreText = scoreTextEntity->AddComponent<TextRenderer>();
+		scoreText->SetAlignment(Alignment(eVerticalAlignment::Top, eHorizontalAlignment::Right));
 		scoreText->SetDimensions(Vector2(20,4));
 		scoreText->SetColor(Color(255,255,255));
 		scoreText->SetText("Score: 00");

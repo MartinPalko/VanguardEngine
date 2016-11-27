@@ -320,7 +320,11 @@ namespace Vanguard
 	void Core::AddWorld(World* aWorld)
 	{
 		ASSERT_MAIN_THREAD;
-		worlds.PushBack(aWorld);
+		if (!worlds.Contains(aWorld))
+		{
+			worlds.PushBack(aWorld);
+			BroadcastEvent(&WorldAddedEvent(aWorld));
+		}
 	}
 
 	void Core::DestroyWorld(World* aWorld)
@@ -329,6 +333,7 @@ namespace Vanguard
 		if (worlds.Contains(aWorld))
 		{
 			worlds.Remove(aWorld);
+			BroadcastEvent(&WorldRemovedEvent(aWorld));
 			delete aWorld;
 		}
 	}

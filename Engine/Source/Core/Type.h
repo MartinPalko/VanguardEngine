@@ -164,7 +164,7 @@ ClassIdentifier::Factory ClassIdentifier::ClassIdentifier##_Factory;\
 
 // Properties
 #define START_REGISTER_PROPERTIES(ClassIdentifier)\
-struct ClassIdentifier##_propertyRegistrar\
+class ClassIdentifier##_propertyRegistrar\
 {\
 public:\
 	ClassIdentifier##_propertyRegistrar()\

@@ -108,7 +108,9 @@ namespace Vanguard
 		if (!worlds.Count())
 		{
 			LOG_ERROR("No worlds have been registered, shutting down", "Core");
+			state = CoreState::StartingShutdown;
 			ShutDown();
+			return;
 		}
 
 		// Main engine loop

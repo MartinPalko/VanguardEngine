@@ -1,5 +1,6 @@
 #include "TypeHierarchyModel.h"
 
+#pragma warning(disable : 4267)
 
 TypeHierarchyModel::TypeHierarchyModel(Vanguard::Type* aRoot, QObject *parent) : QAbstractItemModel(parent)
 , root(aRoot)

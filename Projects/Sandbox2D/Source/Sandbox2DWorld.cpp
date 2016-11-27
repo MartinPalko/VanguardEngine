@@ -20,7 +20,9 @@ namespace eGameButton
 		CameraMoveUp,
 		CameraMoveDown,
 		CameraZoomIn,
-		CameraZoomOut
+		CameraZoomOut,
+		CameraRotateLeft,
+		CameraRotateRight
 	};
 }
 
@@ -66,10 +68,10 @@ namespace Sandbox2D
 			Actor* testSpriteActor = SpawnEntity<Actor>();
 			testSpriteActor->GetTransform()->SetPosition(testSpriteLocations[i]);
 			SpriteRenderer* testSprite = testSpriteActor->AddComponent<SpriteRenderer>();
-			testSprite->SetDimensions(Vector2(50, 50));
+			testSprite->SetDimensions(Vector2(10, 10));
 			testSprite->SetImage("Sprite.png");
 			testSprite->SetBlendMode(Vanguard::eSpriteBlendMode::Blend);
-		}
+		}	
 
 		// Setup Gainput
 		inputManager = new gainput::InputManager(false);
@@ -88,6 +90,8 @@ namespace Sandbox2D
 		inputMap->MapBool(eGameButton::CameraMoveDown, keyboardId, gainput::KeyS);
 		inputMap->MapBool(eGameButton::CameraZoomIn, keyboardId, gainput::KeyE);
 		inputMap->MapBool(eGameButton::CameraZoomOut, keyboardId, gainput::KeyQ);
+		inputMap->MapBool(eGameButton::CameraRotateLeft, keyboardId, gainput::KeyR);
+		inputMap->MapBool(eGameButton::CameraRotateRight, keyboardId, gainput::KeyT);
 	}
 
 	Sandbox2DWorld::~Sandbox2DWorld()
@@ -123,6 +127,11 @@ namespace Sandbox2D
 			input.z += 1;
 		if (inputMap->GetBool(eGameButton::CameraZoomOut))
 			input.z -= 1;
+
+		if (inputMap->GetBool(eGameButton::CameraRotateLeft))
+			playerCamera->GetTransform()->SetRotation2D(playerCamera->GetTransform()->GetRotation2D() + 0.2f * aFrame->GetDeltaTime().InSeconds());
+		if (inputMap->GetBool(eGameButton::CameraRotateRight))
+			playerCamera->GetTransform()->SetRotation2D(playerCamera->GetTransform()->GetRotation2D() - 0.2f * aFrame->GetDeltaTime().InSeconds());
 
 		playerCamera->SetInput(input);
 

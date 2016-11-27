@@ -9,6 +9,9 @@
 #include "Sandbox2DWorld.h"
 #include "Sandbox2DCamera.h"
 
+#include "RigidBody2D.h"
+#include "RectangleCollider.h"
+
 namespace eGameButton
 {
 	enum eType
@@ -50,17 +53,22 @@ namespace Sandbox2D
 		backgroundSprite->SetDimensions(Vector2(1000, 1000));
 		backgroundSprite->SetColor(Color(100, 149, 237));
 
+		Math::SeedRandom(DateAndTime::CurrentTimeMillis());
 
 		// TestSprites
 		Vector3 testSpriteLocations[] = {
-			Vector3(0,0,0),
-			Vector3(120,120,0),
-			Vector3(60,40,0),
-			Vector3(200,30,0),
-			Vector3(120,300,0),
-			Vector3(60,120,0),
-			Vector3(40,160,0),
-			Vector3(200,200,0)
+			Vector3(Math::FRandomRange(-50.0f, 50.0f), Math::FRandomRange(-50.0f, 50.0f), 0),
+			Vector3(Math::FRandomRange(-50.0f, 50.0f), Math::FRandomRange(-50.0f, 50.0f), 0),
+			Vector3(Math::FRandomRange(-50.0f, 50.0f), Math::FRandomRange(-50.0f, 50.0f), 0),
+			Vector3(Math::FRandomRange(-50.0f, 50.0f), Math::FRandomRange(-50.0f, 50.0f), 0),
+			Vector3(Math::FRandomRange(-50.0f, 50.0f), Math::FRandomRange(-50.0f, 50.0f), 0),
+			Vector3(Math::FRandomRange(-50.0f, 50.0f), Math::FRandomRange(-50.0f, 50.0f), 0),
+			Vector3(Math::FRandomRange(-50.0f, 50.0f), Math::FRandomRange(-50.0f, 50.0f), 0),
+			Vector3(Math::FRandomRange(-50.0f, 50.0f), Math::FRandomRange(-50.0f, 50.0f), 0),
+			Vector3(Math::FRandomRange(-50.0f, 50.0f), Math::FRandomRange(-50.0f, 50.0f), 0),
+			Vector3(Math::FRandomRange(-50.0f, 50.0f), Math::FRandomRange(-50.0f, 50.0f), 0),
+			Vector3(Math::FRandomRange(-50.0f, 50.0f), Math::FRandomRange(-50.0f, 50.0f), 0),
+			Vector3(Math::FRandomRange(-50.0f, 50.0f), Math::FRandomRange(-50.0f, 50.0f), 0)
 		};
 
 		for (int i = 0; i < sizeof(testSpriteLocations) / sizeof(Vector3); i++)
@@ -71,6 +79,8 @@ namespace Sandbox2D
 			testSprite->SetDimensions(Vector2(10, 10));
 			testSprite->SetImage("Sprite.png");
 			testSprite->SetBlendMode(Vanguard::eSpriteBlendMode::Blend);
+			RigidBody2D* testRigidBody = testSpriteActor->AddComponent<RigidBody2D>();
+			RectangleCollider* testRectCollider = testSpriteActor->AddComponent<RectangleCollider>();
 		}	
 
 		// Setup Gainput

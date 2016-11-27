@@ -30,6 +30,7 @@ namespace Sandbox2D
 		// Override World
 	protected:
 		virtual void Tick(Frame* aFrame) override;
+		virtual RenderView* GetPrimaryRenderView() override { return playerView; }
 
 		// Implement INativeEventHandler
 	public:

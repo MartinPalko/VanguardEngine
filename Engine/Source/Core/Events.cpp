@@ -5,7 +5,23 @@ namespace Vanguard
 {
 	ABSTRACT_BASETYPE_DEFINITION(Event);
 
+	TYPE_DEFINITION(WorldAddedEvent, Event);
+
+	TYPE_DEFINITION(WorldRemovedEvent, Event);
+
 	ABSTRACT_TYPE_DEFINITION(WorldEvent, Event);
+
+	TYPE_DEFINITION(PreTickEvent, Event);
+
+	PreTickEvent::PreTickEvent(World* aWorld) : WorldEvent(aWorld)
+	{
+	}
+
+	TYPE_DEFINITION(PostTickEvent, Event);
+
+	PostTickEvent::PostTickEvent(World* aWorld) : WorldEvent(aWorld)
+	{
+	}
 
 	TYPE_DEFINITION(ObjectAddedEvent, WorldEvent);
 
@@ -32,4 +48,5 @@ namespace Vanguard
 	TYPE_DEFINITION(ObjectEnabledEvent, WorldObjectEvent);
 
 	TYPE_DEFINITION(ObjectDisabledEvent, WorldObjectEvent);
+
 }

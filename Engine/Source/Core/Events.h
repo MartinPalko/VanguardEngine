@@ -18,6 +18,36 @@ namespace Vanguard
 		virtual ~Event() {}
 	};
 
+	class CORE_API WorldAddedEvent : public Event
+	{
+		TYPE_DECLARATION(WorldAddedEvent, Event);
+		World* world;
+
+	public:
+		// Need to have default constructor to work with the type system.
+		WorldAddedEvent() : WorldAddedEvent(nullptr) {}
+		WorldAddedEvent(World* aWorld) : Event()
+			, world(aWorld)
+		{}
+
+		World* GetWorld() { return world; }
+	};
+
+	class CORE_API WorldRemovedEvent : public Event
+	{
+		TYPE_DECLARATION(WorldRemovedEvent, Event);
+		World* world;
+
+	public:
+		// Need to have default constructor to work with the type system.
+		WorldRemovedEvent() : WorldRemovedEvent(nullptr) {}
+		WorldRemovedEvent(World* aWorld) : Event()
+			, world(aWorld)
+		{}
+
+		World* GetWorld() { return world; }
+	};
+
 	class CORE_API WorldEvent : public Event
 	{
 		ABSTRACT_TYPE_DECLARATION(WorldEvent, Event);
@@ -29,6 +59,26 @@ namespace Vanguard
 		{}
 
 		World* GetWorld() { return world; }
+	};
+
+	class CORE_API PreTickEvent : public WorldEvent
+	{
+		TYPE_DECLARATION(PreTickEvent, WorldEvent);
+
+	public:
+		// Need to have default constructor to work with the type system.
+		PreTickEvent() : PreTickEvent(nullptr) {}
+		PreTickEvent(World* aWorld);
+	};
+
+	class CORE_API PostTickEvent : public WorldEvent
+	{
+		TYPE_DECLARATION(PostTickEvent, WorldEvent);
+
+	public:
+		// Need to have default constructor to work with the type system.
+		PostTickEvent() : PostTickEvent(nullptr) {}
+		PostTickEvent(World* aWorld);
 	};
 
 	class CORE_API ObjectAddedEvent : public WorldEvent

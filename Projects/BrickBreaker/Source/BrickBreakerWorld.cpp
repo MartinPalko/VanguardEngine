@@ -9,6 +9,11 @@
 #include "TextRenderer.h"
 #include "BrickBreakerWorld.h"
 
+#if defined(VANGUARD_WINDOWS)
+#define WIN32_LEAN_AND_MEAN
+#include "Windows.h"
+#endif
+
 namespace eGameButton
 {
 	enum eType
@@ -161,8 +166,12 @@ namespace BrickBreaker
 	void BrickBreakerWorld::HandleNativeEvent(NativeEvent aEvent)
 	{
 		#if defined(VANGUARD_WINDOWS)
-			// Forward any input messages to Gainput
-			inputManager->HandleMessage((MSG*)aEvent);
+			// Forward any input messages sent to the player view window to Gainput
+			MSG* msg = (MSG*)aEvent;
+			if (msg->hwnd == playerView->GetWindowHandle().handle)
+			{
+				inputManager->HandleMessage(msg);
+			}
 		#elif defined(VANGUARD_LINUX)
 			inputManager->HandleEvent((XEvent*)aEvent);
 		#endif

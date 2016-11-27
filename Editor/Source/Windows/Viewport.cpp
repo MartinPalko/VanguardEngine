@@ -6,6 +6,10 @@
 #include <QLayout>
 #include <QResizeEvent>
 
+#ifdef VANGUARD_WINDOWS
+#include "Windows.h"
+#endif // VANGUARD_WINDOWS
+
 namespace Vanguard
 {
 	TYPE_DEFINITION(ViewportCamera, Camera)
@@ -47,8 +51,7 @@ namespace Vanguard
 
 	Viewport::Viewport(QWidget* parent) : QWidget(parent)
 	{
-		setFocusPolicy(Qt::FocusPolicy::StrongFocus);
-		setMouseTracking(true);
+		Application::RegisterNativeEventHandler(this);
 
 		// Temporary for now, just use the already created renderview.
 		World* gameWorld = Core::GetInstance()->CreateProjectWorld();
@@ -63,11 +66,34 @@ namespace Vanguard
 
 			renderWindow = QWindow::fromWinId((WId)renderView->GetWindowHandle().handle);
 			containerWidget = QWidget::createWindowContainer(renderWindow, this);
-			containerWidget->setFocusPolicy(Qt::FocusPolicy::NoFocus);
-			containerWidget->installEventFilter(this);
+			containerWidget->setFocusPolicy(Qt::FocusPolicy::ClickFocus);
+
+			setFocusProxy(containerWidget);
 
 			setLayout(new QVBoxLayout());
 			layout()->addWidget(containerWidget);
 		}
+	}
+
+	Viewport::~Viewport()
+	{
+		Application::UnregisterNativeEventHandler(this);
+	}
+
+	void Viewport::HandleNativeEvent(NativeEvent aEvent)
+	{
+#ifdef VANGUARD_WINDOWS
+		// Manually handle giving the container focus on windows.
+		MSG* msg = (MSG*)aEvent;
+		if (msg->message == WM_LBUTTONDOWN || msg->message == WM_RBUTTONDOWN)
+		{
+			HWND windowHandle = (HWND)renderWindow->winId();
+			if (msg->hwnd == windowHandle)
+			{
+				if (!(GetFocus() == windowHandle))
+					SetFocus(windowHandle);
+			}
+		}
+#endif // VANGUARD_WINDOWS
 	}
 }

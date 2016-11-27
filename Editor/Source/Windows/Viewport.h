@@ -22,7 +22,7 @@ namespace Vanguard
 		void SetInput(Vector3 aInput) { input = aInput; }
 	};
 
-	class Viewport : public QWidget
+	class Viewport : public QWidget, protected INativeEventHandler
 	{
 		Q_OBJECT;
 
@@ -34,5 +34,9 @@ namespace Vanguard
 
 	public:
 		Viewport(QWidget* parent);
+		~Viewport();
+
+	protected:
+		virtual void HandleNativeEvent(NativeEvent aEvent);
 	};
 }

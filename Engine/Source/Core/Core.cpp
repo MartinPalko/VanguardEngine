@@ -148,7 +148,9 @@ namespace Vanguard
 						profiler->BeginFrameProfile();
 					}
 
-					// Update the world.
+					// Tick the world.
+					world->BroadcastEvent(&PreTickEvent(world));
+
 					frame->AddJob(world->MakeTickJob(frame));
 					frame->Start();
 
@@ -165,6 +167,8 @@ namespace Vanguard
 
 					// Dispatch any events posted while processing the frame.
 					ProcessEvents(false);
+
+					world->BroadcastEvent(&PostTickEvent(world));
 
 					if (profiler->IsProfilingFrame())
 						profiler->EndFrameProfile(Directories::GetLogDirectory().GetRelative("ProfilerResults.json"));

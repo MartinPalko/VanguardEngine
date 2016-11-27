@@ -245,7 +245,7 @@ namespace Vanguard
 			registeredTicks.Remove(entity);
 		}
 
-		BroadcastEvent(new ObjectRemovedEvent(aObject));
+		BroadcastEvent(&ObjectRemovedEvent(aObject));
 	}
 
 }

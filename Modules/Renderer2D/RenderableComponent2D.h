@@ -39,6 +39,7 @@ namespace Vanguard
 		Color color;
 		eSpriteBlendMode::Type blendMode;
 		eSpriteFlip::Type flipped;
+		Alignment alignment;
 
 	public:
 		RenderableComponent2D();
@@ -54,6 +55,14 @@ namespace Vanguard
 
 		void SetFlipped(eSpriteFlip::Type aFlip) { flipped = aFlip; }
 		eSpriteFlip::Type GetFlipped() { return flipped; }
+
+		void SetAlignment(Alignment aAlignment) { alignment = aAlignment; }
+		void SetHorizontalAlignment(eHorizontalAlignment::Type aHorizontalAlignment) { alignment.SetHorizontal(aHorizontalAlignment); }
+		void SetVerticalAlignment(eVerticalAlignment::Type aVerticalAlignment) { alignment.SetVertical(aVerticalAlignment); }
+		
+		Alignment GetAlignment() { return alignment; }
+		eHorizontalAlignment::Type GetHorizontalAlignment() { return alignment.GetHorizontal(); }
+		eVerticalAlignment::Type GetVerticalAlignment() { return alignment.GetVertical(); }
 
 		// Override Component
 		virtual Box GetBounds() override { return Box(Vector3(dimensions.x, dimensions.y, 0)); }

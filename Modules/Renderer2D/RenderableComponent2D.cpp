@@ -16,6 +16,7 @@ namespace Vanguard
 		, color(255, 255, 255, 255)
 		, blendMode(eSpriteBlendMode::None)
 		, flipped(eSpriteFlip::None)
+		, alignment(eVerticalAlignment::Center, eHorizontalAlignment::Center)
 	{
 
 	}

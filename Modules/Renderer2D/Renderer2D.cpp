@@ -25,6 +25,7 @@ namespace Vanguard
 		SDL_RendererFlip flip;
 		SDL_Texture* texture;
 		SDL_BlendMode blendMode;
+		Alignment alignment;
 	};
 
 	struct JobRenderView
@@ -131,14 +132,50 @@ namespace Vanguard
 				ndcSpace.y = 1 - ndcSpace.y;
 
 				// Screenspace
-				Vector3 screenspace = ndcSpace * Vector3(screenX, screenY, 1);
+				Vector2 screenspace = Vector2(screenX * ndcSpace.x, screenY * ndcSpace.y);
 				Vector2 finalSize = renderItem.dimensions * scaleRelativeCamera * screenSize * aspectAdjustment;
 
-				SDL_Rect screenspaceRect;				
+				SDL_Rect screenspaceRect;
 				screenspaceRect.w = finalSize.x;
 				screenspaceRect.h = finalSize.y;
-				screenspaceRect.x = screenspace.x - screenspaceRect.w / 2;
-				screenspaceRect.y = screenspace.y - screenspaceRect.h / 2;
+
+				SDL_Point rotationPivot;
+
+				switch (renderItem.alignment.GetVertical())
+				{
+				case eVerticalAlignment::Top:
+					screenspaceRect.y = screenspace.y - screenspaceRect.h;
+					rotationPivot.y = screenspaceRect.h;
+					break;
+				case eVerticalAlignment::Bottom:
+					screenspaceRect.y = screenspace.y;
+					rotationPivot.y = 0;
+					break;
+				case eVerticalAlignment::Center:
+				default:
+					screenspaceRect.y = screenspace.y - screenspaceRect.h / 2;
+					rotationPivot.y = screenspaceRect.h / 2;
+					break;
+				}
+
+				switch (renderItem.alignment.GetHorizontal())
+				{
+				case eHorizontalAlignment::Left:
+					screenspaceRect.x = screenspace.x - screenspaceRect.w;
+					rotationPivot.x = screenspaceRect.h;
+					break;
+				case eHorizontalAlignment::Right:
+					screenspaceRect.x = screenspace.x;
+					rotationPivot.x = 0;
+					break;
+				case eHorizontalAlignment::Center:
+				default:
+					screenspaceRect.x = screenspace.x - screenspaceRect.w / 2;
+					rotationPivot.x = screenspaceRect.w / 2;
+					break;
+				}
+
+				double angle = (renderItem.rotation * 180) / Math::Pi;
 
 				if (renderItem.texture)
 				{
@@ -147,7 +184,7 @@ namespace Vanguard
 					SDL_SetTextureBlendMode(renderItem.texture, renderItem.blendMode);
 					SDL_SetTextureColorMod(renderItem.texture, SPLIT_COLOR_RGB(renderItem.color));
 					SDL_SetTextureAlphaMod(renderItem.texture, renderItem.color.a);
-					SDL_RenderCopyEx(renderView.renderer, renderItem.texture, NULL, &screenspaceRect, renderItem.rotation, &zeroPoint, renderItem.flip);
+					SDL_RenderCopyEx(renderView.renderer, renderItem.texture, NULL, &screenspaceRect, angle, &rotationPivot, renderItem.flip);
 				}
 				else
 				{
@@ -190,10 +227,11 @@ namespace Vanguard
 						renderable->GetColor(),
 						renderable->GetDimensions(),
 						renderable->GetEntity()->GetComponent<Transform>()->GetPosition(),
-						0, // TODO: Support rotation from Transform
+						renderable->GetEntity()->GetComponent<Transform>()->GetRotation2D(),
 						(SDL_RendererFlip)renderable->GetFlipped(),
 						renderable->GetSDLTexture(worldView->sdlRenderer),
-						(SDL_BlendMode)renderable->GetBlendMode()
+						(SDL_BlendMode)renderable->GetBlendMode(),
+						renderable->GetAlignment()
 					};
 					renderJob->renderItems.PushBack(item);
 				}

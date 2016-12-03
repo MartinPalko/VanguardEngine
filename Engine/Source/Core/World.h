@@ -1,6 +1,7 @@
 #pragma once
 #include "Foundation.h"
 #include "WorldObjects/Entity.h"
+#include "ISubsystem.h"
 
 #include "concurrentqueue.h"
 
@@ -21,7 +22,7 @@ namespace Vanguard
 	// A world contains all information about a running game. Typically, there is one world instance per game instance.
 	// It is possible to have multiple worlds exist simultaneously, but typically, they do not directly communicate.
 	// Eg. an Editor world, Play-in-editor world, and a game server world could all exist simultaneously, but should behave independently.
-	class CORE_API World : IWorldEventListener
+	class CORE_API World : protected IWorldEventListener, protected ISubsystem
 	{
 		ABSTRACT_BASETYPE_DECLARATION(World)
 
@@ -90,11 +91,14 @@ namespace Vanguard
 			return returnArray;
 		}
 
+	protected:
 		// Implement IWorldEventListener
 		virtual void OnWorldEvent(WorldEvent* aEvent) override;
 
-	protected:
-		virtual Timespan GetNextDesiredTickTime();
+		// Implement ISubsystem
+		virtual bool NeedsService(Timespan aCurrentTime, Timespan aLastServiced, Timespan& outEstNextServiceTime) override;
+		virtual void ServiceSubsystem(Timespan aCurrentTime) override;
+
 		virtual void Tick(Frame* aFrame);
 		virtual void OnFrameFinished(Frame* aFrame);
 		FrameJob* MakeTickJob(Frame* aFrame);

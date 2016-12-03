@@ -19,10 +19,13 @@ namespace Vanguard
 		, registeredTicks()
 	{
 		RegisterEventListener(this);
+		Core::GetInstance()->RegisterSubsystem(this);
 	}
 
 	World::~World()
 	{
+		Core::GetInstance()->UnregisterSubsystem(this);
+
 		for (int i = 0; i < objects.Count(); i++)
 		{
 			// We own these objects, so clean them up.
@@ -167,9 +170,60 @@ namespace Vanguard
 		}
 	}
 
-	Timespan World::GetNextDesiredTickTime()
+	bool World::NeedsService(Timespan aCurrentTime, Timespan aLastServiced, Timespan& outEstNextServiceTime)
 	{
-		return lastTickStartTime + minimumTickDelta;
+		outEstNextServiceTime = aLastServiced + minimumTickDelta;
+		return outEstNextServiceTime <= aCurrentTime;
+	}
+
+	void World::ServiceSubsystem(Timespan aCurrentTime)
+	{
+		Timespan deltaTime;
+		if (lastTickStartTime.InSeconds() != 0.0)
+			deltaTime = aCurrentTime - lastTickStartTime;
+		else // First service
+			deltaTime = minimumTickDelta;
+
+		lastTickStartTime = aCurrentTime;
+
+		// Create a new frame for the world.
+		Frame* frame = new Frame(nextFrameNumber, Math::Min(deltaTime, maximumTickDelta), this);		
+		nextFrameNumber++;
+
+		Profiler* profiler = Core::GetInstance()->GetProfiler();
+		if (profiler->profileNextFrame)
+		{
+			profiler->profileNextFrame = false;
+			profiler->BeginFrameProfile();
+		}
+
+		// Tick the world.
+		BroadcastEvent(&PreTickEvent(this));
+
+		frame->AddJob(MakeTickJob(frame));
+		frame->Start();
+
+		// Wait for the frame to finish.
+		JobManager* jobManager = Core::GetInstance()->GetJobManager();
+		while (!frame->Finished())
+		{
+			// Service main thread jobs dispatched by the frame.
+			jobManager->ServiceMainThreadJobs();
+			// Help out the worker threads while we wait.
+			jobManager->HelpWithJob();
+		}
+
+		OnFrameFinished(frame);
+
+		// Dispatch any events posted while processing the frame.
+		Core::GetInstance()->ProcessEvents(false);
+
+		BroadcastEvent(&PostTickEvent(this));
+
+		if (profiler->IsProfilingFrame())
+			profiler->EndFrameProfile(Directories::GetLogDirectory().GetRelative("ProfilerResults.json"));
+
+		delete frame;
 	}
 
 	void World::Tick(Frame* aFrame)

@@ -105,93 +105,36 @@ namespace Vanguard
 		LOG_MESSAGE("Core Running", "Core");
 		state = CoreState::Running;
 
-		if (!worlds.Count())
-		{
-			LOG_ERROR("No worlds have been registered, shutting down", "Core");
-			state = CoreState::StartingShutdown;
-			ShutDown();
-			return;
-		}
-
 		// Main engine loop
 		while (state == CoreState::Running)
 		{
 			ProcessEvents(true);
 			jobManager->ServiceMainThreadJobs();
 
-			// Tick worlds
-			for (World* world : worlds)
+			Timespan nextServiceDue = Timespan::GetElapsedSystemTime() + Timespan(10.0); // Max time to sleep between checking on subsystems
+
+			// Service Subsystems
+			for (ISubsystem* subsystem : subsystems)
 			{
-				Timespan currentTime(Timespan::GetElapsedSystemTime());
-				Timespan deltaTime;
-				if (world->lastTickStartTime.InSeconds() != 0.0)
+				Timespan currentTime = Timespan::GetElapsedSystemTime();
+				Timespan aLastServiced = subsystemLastServicedTimes[subsystem];
+				Timespan estNextServiceTime;
+
+				if (subsystem->NeedsService(currentTime, aLastServiced, estNextServiceTime))
 				{
-					deltaTime = currentTime - world->lastTickStartTime;
-				}
-				else
-				{
-					// First tick
-					deltaTime = world->minimumTickDelta;
-					world->lastTickStartTime = currentTime - deltaTime;
+					subsystem->ServiceSubsystem(currentTime);
 				}
 
-				if (deltaTime >= world->minimumTickDelta)
-				{
-					// Create a new frame for the world.
-					Frame* frame = new Frame(world->nextFrameNumber, Math::Min(deltaTime, world->maximumTickDelta), world);
-					world->lastTickStartTime = currentTime;
-					world->nextFrameNumber++;
-
-					if (profiler->profileNextFrame)
-					{
-						profiler->profileNextFrame = false;
-						profiler->BeginFrameProfile();
-					}
-
-					// Tick the world.
-					world->BroadcastEvent(&PreTickEvent(world));
-
-					frame->AddJob(world->MakeTickJob(frame));
-					frame->Start();
-
-					// Wait for the frame to finish.
-					while (!frame->Finished())
-					{
-						// Service main thread jobs dispatched by the frame.
-						jobManager->ServiceMainThreadJobs();
-						// Help out the worker threads while we wait.
-						jobManager->HelpWithJob();
-					}
-
-					world->OnFrameFinished(frame);
-
-					// Dispatch any events posted while processing the frame.
-					ProcessEvents(false);
-
-					world->BroadcastEvent(&PostTickEvent(world));
-
-					if (profiler->IsProfilingFrame())
-						profiler->EndFrameProfile(Directories::GetLogDirectory().GetRelative("ProfilerResults.json"));
-
-					delete frame;
-				}
+				nextServiceDue = Math::Min(nextServiceDue, estNextServiceTime);
 			}
 
-			if (worlds.Count())
+			if (subsystems.Count())
 			{
-				// Estimate how long we can sleep,until the next frame needs to be done.
-				Timespan nextFrameTime = worlds[0]->GetNextDesiredTickTime();
-				for (int i = 1; i < worlds.Count(); i++)
-				{
-					nextFrameTime = Math::Min(nextFrameTime, worlds[i]->GetNextDesiredTickTime());
-				}
-
 				const Timespan currentTime = Timespan::GetElapsedSystemTime();
-				if (currentTime < nextFrameTime)
+				if (currentTime < nextServiceDue)
 				{
-					auto sleepTime = (nextFrameTime - currentTime).InMilliseconds();
-					// And sleep
-					std::this_thread::sleep_for(std::chrono::microseconds((currentTime - nextFrameTime).InMicroseconds()));
+					// Sleep until the next subsystem needs service
+					std::this_thread::sleep_for(std::chrono::microseconds((currentTime - nextServiceDue).InMicroseconds()));
 				}
 			}
 			else
@@ -412,6 +355,32 @@ namespace Vanguard
 	IRenderer* Core::GetPrimaryRenderer()
 	{
 		return primaryRenderer;
+	}
+
+	void Core::RegisterSubsystem(ISubsystem* aSubsystem)
+	{
+		ASSERT_MAIN_THREAD;
+		if (subsystems.Contains(aSubsystem))
+		{
+			LOG_WARNING("Subsystem is already registered!", "Core");
+			return;
+		}
+
+		subsystems.PushBack(aSubsystem);
+		subsystemLastServicedTimes[aSubsystem] = Timespan(MinFloat()); // A long time ago, to guarantee it gets serviced the first time.
+	}
+
+	void Core::UnregisterSubsystem(ISubsystem* aSubsystem)
+	{
+		ASSERT_MAIN_THREAD;
+		if (!subsystems.Contains(aSubsystem))
+		{
+			LOG_WARNING("Cannot unregister subsystem, it is not currently registered!", "Core");
+			return;
+		}
+
+		subsystems.Remove(aSubsystem);
+		subsystemLastServicedTimes.erase(aSubsystem);
 	}
 
 	JobManager* Core::GetJobManager()

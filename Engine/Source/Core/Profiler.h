@@ -9,7 +9,7 @@ namespace Vanguard
 {
 	class CORE_API Profiler
 	{
-		friend class Core;
+		friend class World;
 
 	public:
 		struct JobProfile

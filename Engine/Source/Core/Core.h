@@ -3,6 +3,8 @@
 #include "Interfaces/ICore.h"
 #include "Core_Common.h"
 
+#include "ISubsystem.h"
+
 #include "Config/Config.h"
 #include "World.h"
 #include "Type.h"
@@ -101,6 +103,8 @@ namespace Vanguard
 		Project* loadedProject;
 		ModuleManager* moduleManager;
 		DynamicArray<World*> worlds;
+		DynamicArray<ISubsystem*> subsystems;
+		std::unordered_map<ISubsystem*, Timespan> subsystemLastServicedTimes;
 		class DynamicArray<IRenderer*> renderers;
 		IRenderer* primaryRenderer;
 		ProjectModule* projectModule;
@@ -148,6 +152,9 @@ namespace Vanguard
 		void RegisterRenderer(IRenderer* aRenderer);
 		void UnregisterRenderer(IRenderer* aRenderer);
 		IRenderer* GetPrimaryRenderer();
+
+		void RegisterSubsystem(ISubsystem* aSubsystem);
+		void UnregisterSubsystem(ISubsystem* aSubsystem);
 
 	protected:
 		virtual void ShutDown();

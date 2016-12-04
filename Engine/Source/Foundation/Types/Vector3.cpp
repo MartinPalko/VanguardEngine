@@ -1,4 +1,5 @@
 #include "Vector3.h"
+#include "Vector2.h"
 
 namespace Vanguard
 {
@@ -10,4 +11,9 @@ namespace Vanguard
 	const Vector3 Vector3::Back = Vector3(0.0f, -1.0f, 0.0f);
 	const Vector3 Vector3::Zero = Vector3(0.0f, 0.0f, 0.0f);
 	const Vector3 Vector3::One = Vector3(1.0f, 1.0f, 1.0f);
+	
+	Vector3::operator Vector2() const
+	{
+		return Vector2(x, y);
+	}
 }

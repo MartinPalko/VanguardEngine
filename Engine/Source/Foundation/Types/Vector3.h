@@ -5,6 +5,8 @@
 
 namespace Vanguard
 {
+	struct Vector2;
+
 	struct FOUNDATION_API Vector3
 	{
 	public:
@@ -65,6 +67,8 @@ namespace Vanguard
 		inline void operator-=(const float& aF) { x -= aF; y -= aF; z -= aF;}
 		inline void operator*=(const float& aF) { x *= aF; y *= aF; z *= aF;}
 		inline void operator/=(const float& aF) { x /= aF; y /= aF; z /= aF;}
+
+		operator Vector2() const;
 
 		// Static Functions
 

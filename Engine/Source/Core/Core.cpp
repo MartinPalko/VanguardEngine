@@ -123,6 +123,7 @@ namespace Vanguard
 				if (subsystem->NeedsService(currentTime, aLastServiced, estNextServiceTime))
 				{
 					subsystem->ServiceSubsystem(currentTime);
+					subsystemLastServicedTimes[subsystem] = currentTime;
 				}
 
 				nextServiceDue = Math::Min(nextServiceDue, estNextServiceTime);

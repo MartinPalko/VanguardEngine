@@ -12,7 +12,7 @@ namespace Sandbox2D
 {
 	class Sandbox2DCamera;
 
-	class Sandbox2DWorld : public World, public INativeEventHandler
+	class Sandbox2DWorld : public World, public INativeEventHandler, IDebugDraw
 	{
 		TYPE_DECLARATION(Sandbox2DWorld, World)
 
@@ -32,8 +32,11 @@ namespace Sandbox2D
 		virtual void Tick(Frame* aFrame) override;
 		virtual RenderView* GetPrimaryRenderView() override { return playerView; }
 
-		// Implement INativeEventHandler
 	public:
+		// Implement INativeEventHandler
 		virtual void HandleNativeEvent(NativeEvent aEvent) override;
+
+		// Implement IDebugDraw
+		virtual void DebugDraw(IDebugCanvas* aCanvas);
 	};
 }

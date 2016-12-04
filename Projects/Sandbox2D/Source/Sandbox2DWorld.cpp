@@ -31,7 +31,7 @@ namespace eGameButton
 
 namespace Sandbox2D
 {
-	TYPE_DEFINITION(Sandbox2DWorld, World)
+	TYPE_DEFINITION(Sandbox2DWorld, World);
 
 	Sandbox2DWorld::Sandbox2DWorld() : World("Brick Breaker")
 	{
@@ -103,10 +103,15 @@ namespace Sandbox2D
 		inputMap->MapBool(eGameButton::CameraZoomOut, keyboardId, gainput::KeyQ);
 		inputMap->MapBool(eGameButton::CameraRotateLeft, keyboardId, gainput::KeyR);
 		inputMap->MapBool(eGameButton::CameraRotateRight, keyboardId, gainput::KeyT);
+
+		// Register debug draw
+		Core::GetInstance()->GetPrimaryRenderer()->RegisterDebugDraw(this);
 	}
 
 	Sandbox2DWorld::~Sandbox2DWorld()
 	{
+		Core::GetInstance()->GetPrimaryRenderer()->UnregisterDebugDraw(this);
+
 		Application::UnregisterNativeEventHandler(this);
 		delete inputMap;
 		delete inputManager;
@@ -158,5 +163,21 @@ namespace Sandbox2D
 		#elif defined(VANGUARD_LINUX)
 			inputManager->HandleEvent((XEvent*)aEvent);
 		#endif
+	}
+
+	void Sandbox2DWorld::DebugDraw(IDebugCanvas* aCanvas)
+	{
+		//aCanvas->DrawCircle(Vector2(100, 100), 50, Color(255,0,255), false);
+
+		//aCanvas->DrawPoint(Vector2(200, 100), 10, Color(255,0,255));
+
+		//aCanvas->DrawLine(Vector2(300, 100), Vector2(400, 120), Color(255,0,255));
+
+		//DynamicArray<Vector2> polygonVerts;
+		//polygonVerts.PushBack(Vector2(500, 100));
+		//polygonVerts.PushBack(Vector2(600, 100));
+		//polygonVerts.PushBack(Vector2(600, 200));
+		//polygonVerts.PushBack(Vector2(500, 200));
+		//aCanvas->DrawPolygon(polygonVerts, Color(255,0,0), false);
 	}
 }

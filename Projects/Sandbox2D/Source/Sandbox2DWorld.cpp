@@ -81,6 +81,7 @@ namespace Sandbox2D
 			testSprite->SetBlendMode(Vanguard::eSpriteBlendMode::Blend);
 			RigidBody2D* testRigidBody = testSpriteActor->AddComponent<RigidBody2D>();
 			RectangleCollider* testRectCollider = testSpriteActor->AddComponent<RectangleCollider>();
+			testRectCollider->SetDimensions(Vector2(3,5));
 		}	
 
 		// Setup Gainput

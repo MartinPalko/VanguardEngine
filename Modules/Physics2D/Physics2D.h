@@ -14,6 +14,9 @@ namespace Vanguard
 	protected:
 		std::unordered_map<World*, PhysicsWorld2D*> physicsWorlds;
 
+		void CreatePhysicsWorld(World* aVanguardWorld);
+		void DestroyPhysicsWorld(World* aVanguardWorld);
+
 	public:
 		Physics2D();
 		~Physics2D();
@@ -24,6 +27,5 @@ namespace Vanguard
 
 		// ICoreEventListener Implementation
 		virtual void OnCoreEvent(Event* aEvent) override;
-
 	};
 }

@@ -2,13 +2,20 @@
 
 #include "Physics2D_Common.h"
 #include "RigidBody2D.h"
+#include "ISubsystem.h"
 
 class b2World;
 
 namespace Vanguard
 {
-	class PhysicsWorld2D : protected IWorldEventListener
+	class PhysicsWorld2D : protected IWorldEventListener, protected ISubsystem
 	{
+	private:
+		Timespan timeStep;
+		int32 velocityIterations;
+		int32 positionIterations;
+		float gravity;
+
 	protected:
 		b2World* box2DWorld;
 		World* vanguardWorld;
@@ -23,5 +30,9 @@ namespace Vanguard
 
 		// IWorldEventListener Implementation
 		virtual void OnWorldEvent(WorldEvent* aEvent) override;
+
+		// ISubsystem Implementation
+		virtual bool NeedsService(Timespan aCurrentTime, Timespan aLastServiced, Timespan& outEstNextServiceTime) override;
+		virtual void ServiceSubsystem(Timespan aCurrentTime) override;
 	};
 }

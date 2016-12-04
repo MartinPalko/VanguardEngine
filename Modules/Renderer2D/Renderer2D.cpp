@@ -6,6 +6,7 @@
 #include "SDLImageResource.h"
 #include "ResourceManager.h"
 #include "RenderableComponent2D.h"
+#include "DebugCanvas2D.h"
 
 #define SPLIT_COLOR_RGBA(VanguardColor) VanguardColor.r, VanguardColor.g, VanguardColor.b, VanguardColor.a
 #define SPLIT_COLOR_RGB(VanguardColor) VanguardColor.r, VanguardColor.g, VanguardColor.b
@@ -26,15 +27,6 @@ namespace Vanguard
 		SDL_Texture* texture;
 		SDL_BlendMode blendMode;
 		Alignment alignment;
-	};
-
-	struct JobRenderView
-	{
-		Matrix4x4 projectionMatrix;
-		Matrix4x4 worldToCamera;
-		SDL_Window* window;
-		SDL_Renderer* renderer;
-		Color clearColor;
 	};
 
 	void Renderer2D::LoadModule()
@@ -84,15 +76,32 @@ namespace Vanguard
 		return newView;
 	}
 
+	void Renderer2D::RegisterDebugDraw(IDebugDraw* aDebugDraw)
+	{
+		ASSERT_MAIN_THREAD;
+
+		if (!debugDraws.Contains(aDebugDraw))
+			debugDraws.PushBack(aDebugDraw);
+	}
+
+	void Renderer2D::UnregisterDebugDraw(IDebugDraw* aDebugDraw)
+	{
+		ASSERT_MAIN_THREAD;
+
+		debugDraws.Remove(aDebugDraw);
+	}
+
 	class RenderJob : public FrameJob
 	{
 	public:
 		JobRenderView renderView;
 		DynamicArray<RenderItem> renderItems;
+		DynamicArray<IDebugDraw*> debugDraws;
 
 		RenderJob(const String& aName, Frame* aFrame, const JobRenderView& aView) : FrameJob(aName, aFrame, true)
 			, renderView(aView)
 			, renderItems()
+			, debugDraws()
 		{}
 
 		void DoJob() override
@@ -192,6 +201,13 @@ namespace Vanguard
 					SDL_RenderFillRect(renderView.renderer, &screenspaceRect);
 				}
 			}
+
+			// Render DebugDraws
+			DebugCanvas2D canvas(&renderView);
+			for (IDebugDraw* debugDraw : debugDraws)
+			{
+				debugDraw->DebugDraw(&canvas);
+			}
 		}
 	};
 
@@ -236,6 +252,8 @@ namespace Vanguard
 					renderJob->renderItems.PushBack(item);
 				}
 			}
+
+			renderJob->debugDraws = debugDraws;
 
 			// Add job to frame & return
 			aFrame->AddJob(renderJob);

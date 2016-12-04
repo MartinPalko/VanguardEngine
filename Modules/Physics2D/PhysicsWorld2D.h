@@ -8,7 +8,7 @@ class b2World;
 
 namespace Vanguard
 {
-	class PhysicsWorld2D : protected IWorldEventListener, protected ISubsystem
+	class PhysicsWorld2D : protected IWorldEventListener, protected ISubsystem, protected IDebugDraw
 	{
 	private:
 		Timespan timeStep;
@@ -34,5 +34,8 @@ namespace Vanguard
 		// ISubsystem Implementation
 		virtual bool NeedsService(Timespan aCurrentTime, Timespan aLastServiced, Timespan& outEstNextServiceTime) override;
 		virtual void ServiceSubsystem(Timespan aCurrentTime) override;
+
+		// IDebugDraw Implementation
+		virtual void DebugDraw(IDebugCanvas* aCanvas) override;
 	};
 }

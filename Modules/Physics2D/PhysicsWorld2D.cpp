@@ -3,6 +3,8 @@
 #include "PhysicsWorld2D.h"
 #include "Collider2D.h"
 
+#include "B2DrawImplementation.h"
+
 namespace Vanguard
 {
 	PhysicsWorld2D::PhysicsWorld2D(World* aWorld)
@@ -20,19 +22,24 @@ namespace Vanguard
 
 		for (RigidBody2D* rigidBody : vanguardWorld->GetInstances<RigidBody2D>())
 		{
-			RegisterRigidbody(rigidBody);
+			//RegisterRigidbody(rigidBody);
 		}
+
+		Core::GetInstance()->GetPrimaryRenderer()->RegisterDebugDraw(this);
 
 		// TEMP
 		b2BodyDef groundBodyDef;
 		groundBodyDef.position.Set(0.0f, -70.0f);
 		b2Body* groundBody = box2DWorld->CreateBody(&groundBodyDef);
 		b2PolygonShape groundBox;
-		groundBox.SetAsBox(80.0f, 10.0f);		groundBody->CreateFixture(&groundBox, 0.0f);
+		groundBox.SetAsBox(80.0f, 10.0f);
+		groundBody->CreateFixture(&groundBox, 0.0f);
 	}
 
 	PhysicsWorld2D::~PhysicsWorld2D()
 	{
+		Core::GetInstance()->GetPrimaryRenderer()->UnregisterDebugDraw(this);
+
 		for (RigidBody2D* rigidBody : vanguardWorld->GetInstances<RigidBody2D>())
 		{
 			UnregisterRigidbody(rigidBody);
@@ -52,8 +59,7 @@ namespace Vanguard
 		b2BodyDef bodyDef;
 		bodyDef.type = b2_dynamicBody;
 		bodyDef.position.Set(rbPos.x, rbPos.y);
-		bodyDef.angle = rbTransform->GetRotation2D();
-		bodyDef.allowSleep = false; // TEMP
+		bodyDef.angle = -rbTransform->GetRotation2D();
 
 		aRigidBody->box2DBody = box2DWorld->CreateBody(&bodyDef);
 
@@ -80,7 +86,7 @@ namespace Vanguard
 
 				b2Vec2 position = rigidBody->box2DBody->GetPosition();
 				transform->SetPosition2D(Vector2(position.x, position.y));
-				transform->SetRotation2D(rigidBody->box2DBody->GetAngle());
+				transform->SetRotation2D(-rigidBody->box2DBody->GetAngle());
 			}
 		}
 		else if (auto postTickEvent = Type::SafeCast<PostTickEvent>(aEvent))
@@ -116,5 +122,16 @@ namespace Vanguard
 	void PhysicsWorld2D::ServiceSubsystem(Timespan aCurrentTime)
 	{
 		box2DWorld->Step(timeStep.InSeconds(), velocityIterations, positionIterations);
+	}
+
+	void PhysicsWorld2D::DebugDraw(IDebugCanvas* aCanvas)
+	{
+		B2DrawImplementation b2Drawer(aCanvas);
+
+		b2Drawer.SetFlags(b2Draw::e_shapeBit || b2Draw::e_jointBit || b2Draw::e_centerOfMassBit);
+
+		box2DWorld->SetDebugDraw(&b2Drawer);
+		box2DWorld->DrawDebugData();
+		box2DWorld->SetDebugDraw(nullptr);
 	}
 }

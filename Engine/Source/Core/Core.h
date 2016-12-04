@@ -156,6 +156,8 @@ namespace Vanguard
 		void RegisterSubsystem(ISubsystem* aSubsystem);
 		void UnregisterSubsystem(ISubsystem* aSubsystem);
 
+		DynamicArray<World*> GetWorlds();
+
 	protected:
 		virtual void ShutDown();
 

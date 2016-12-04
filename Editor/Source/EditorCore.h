@@ -51,8 +51,6 @@ namespace Vanguard
 
 		World* GetEditorWorld();
 
-		DynamicArray<World*> GetWorlds();
-
 		void RegisterEventListener(IEditorEventListener* aListener);
 		void UnregisterEventListener(IEditorEventListener* aListener);
 

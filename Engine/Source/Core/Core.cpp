@@ -384,6 +384,11 @@ namespace Vanguard
 		subsystemLastServicedTimes.erase(aSubsystem);
 	}
 
+	DynamicArray<World*> Core::GetWorlds()
+	{
+		return worlds;
+	}
+
 	JobManager* Core::GetJobManager()
 	{
 		return jobManager;

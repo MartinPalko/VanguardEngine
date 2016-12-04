@@ -112,11 +112,6 @@ namespace Vanguard
 		return editorWorld;
 	}
 
-	DynamicArray<World*> EditorCore::GetWorlds()
-	{
-		return worlds;
-	}
-
 	void EditorCore::RegisterEventListener(IEditorEventListener* aListener)
 	{
 		editorEventListeners.PushBack(aListener);
